@@ -176,7 +176,7 @@ It is about time we jump to another session attack called Cross-Site Request For
 # Question
 ---
 
-![](Pasted image 20250219124916.png)
+![](Pasted%20image%2020250219124916.png)
 
 Answer is:
 

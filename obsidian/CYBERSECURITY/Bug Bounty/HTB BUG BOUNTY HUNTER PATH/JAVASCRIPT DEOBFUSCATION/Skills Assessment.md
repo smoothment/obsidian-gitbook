@@ -3,17 +3,17 @@ sticker: lucide//code-2
 ---
 During our Penetration Test, we came across a web server that contains JavaScript and APIs. We need to determine their functionality to understand how it can negatively affect our customer.
 
-![](Pasted image 20250130135545.png)
+![](Pasted%20image%2020250130135545.png)
 ## 1
 ---
 
 Let's start by visiting the website:
 
-![](Pasted image 20250130135630.png)
+![](Pasted%20image%2020250130135630.png)
 
 If we check source code we can see the following:
 
-![](Pasted image 20250130135707.png)
+![](Pasted%20image%2020250130135707.png)
 
 So, first answer is: `api.min.js`
 
@@ -28,7 +28,7 @@ eval(function (p, a, c, k, e, d) { e = function (c) { return c.toString(36) }; i
 
 Let's use [JsConsole](https://jsconsole.com/):
 
-![](Pasted image 20250130135846.png)
+![](Pasted%20image%2020250130135846.png)
 
 Got the flag: `HTB{j4v45cr1p7_3num3r4710n_15_k3y}`
 
@@ -37,7 +37,7 @@ Got the flag: `HTB{j4v45cr1p7_3num3r4710n_15_k3y}`
 
 Let's deobfuscate the code:
 
-![](Pasted image 20250130140233.png)
+![](Pasted%20image%2020250130140233.png)
 
 We get the following JS code:
 
@@ -129,5 +129,5 @@ HTB{r34dy_70_h4ck_my_w4y_1n_2_HTB}
 Got the final flag: `HTB{r34dy_70_h4ck_my_w4y_1n_2_HTB}`
 
 
-![](Pasted image 20250130142032.png)
+![](Pasted%20image%2020250130142032.png)
 

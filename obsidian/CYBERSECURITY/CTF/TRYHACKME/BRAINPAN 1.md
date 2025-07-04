@@ -48,7 +48,7 @@ bin                     [Status: 301, Size: 0, Words: 1, Lines: 1, Duration: 182
 
 Inside of `/bin` we can find this:
 
-![](Pasted image 20250531142913.png)
+![](Pasted%20image%2020250531142913.png)
 
 We got the `brainpan.exe` file, this is the same file running on port `9999`, we can test this by using netcat:
 
@@ -264,7 +264,7 @@ s.close()
 
 Ok, we got the exploit, let's send it and check our listener then:
 
-![](Pasted image 20250531145124.png)
+![](Pasted%20image%2020250531145124.png)
 
 As seen, we get a reverse shell as `puck`, let's proceed with privilege escalation.
 
@@ -285,11 +285,11 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](Pasted image 20250531145244.png)
+![](Pasted%20image%2020250531145244.png)
 
 Nice, with everything in order, let's check for a PE vector, we can use `linpeas` for that:
 
-![](Pasted image 20250531145442.png)
+![](Pasted%20image%2020250531145442.png)
 
 We can see we got a binary named `anansi_util` on here that we can run as sudo without a password, let's check it out:
 
@@ -304,7 +304,7 @@ Where [action] is one of:
 
 The PE vector on this binary is the use of `manual` command, the man command on Linux is used to display the user manual of any command we run on the terminal, the issue on this, is that we can exploit it to get a root as shell, let's refer to `GTFOBINS` to check the PE:
 
-![](Pasted image 20250531145755.png)
+![](Pasted%20image%2020250531145755.png)
 
 So, in order to exploit this, we need to do:
 
@@ -315,11 +315,11 @@ sudo /home/anansi/bin/anansi_util manual id # ID CAN BE REPLACED WITH ANY COMMAN
 
 Once we do that, we get:
 
-![](Pasted image 20250531145921.png)
+![](Pasted%20image%2020250531145921.png)
 
 We got a shell as root. Inside of root's directory, we can find `b.txt`:
 
-![](Pasted image 20250531150016.png)
+![](Pasted%20image%2020250531150016.png)
 
-![](Pasted image 20250531150056.png)
+![](Pasted%20image%2020250531150056.png)
 

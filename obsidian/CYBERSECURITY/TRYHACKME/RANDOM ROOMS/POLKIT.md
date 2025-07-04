@@ -128,10 +128,10 @@ Now let's finish this! 5 milliseconds worked last time, so it should work here t
 With a hop, su, and a `sudo -s`, we have root!
 
 
-![](Pasted image 20250107154644.png)
+![](Pasted%20image%2020250107154644.png)
 
 We have root flag, we must submit it to the flag system and we will get our normal flag:
 
-![](Pasted image 20250107154738.png)
+![](Pasted%20image%2020250107154738.png)
 
 So, our flag would be: `THM{N2I0MTgzZTE4ZWQ0OGY0NjdiNTQ0NTZi}`

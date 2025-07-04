@@ -162,11 +162,11 @@ Our request successfully returns the same data we got with cURL. `Try to search
 # Question
 
 
-![](Pasted image 20250122155257.png)
+![](Pasted%20image%2020250122155257.png)
 
 We already got the credentials, let's simply log in, and get the cookie:
 
-![](Pasted image 20250122155352.png)
+![](Pasted%20image%2020250122155352.png)
 
 We got it: `PHPSESSID=mu7v746ceongdd2p8705ucplkp`, let's use curl and do a request to read the flag:
 
@@ -174,7 +174,7 @@ We got it: `PHPSESSID=mu7v746ceongdd2p8705ucplkp`, let's use curl and do a reque
 
 We can use `jq` to view in a better format and `-s` flag to make it silent:
  
-![](Pasted image 20250122155716.png)
+![](Pasted%20image%2020250122155716.png)
 
 
 Got the flag: `HTB{p0$t_r3p34t3r}`

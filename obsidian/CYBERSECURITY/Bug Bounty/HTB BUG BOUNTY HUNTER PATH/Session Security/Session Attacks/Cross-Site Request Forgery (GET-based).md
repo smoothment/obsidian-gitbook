@@ -69,4 +69,4 @@ In the next section, we will attack an application submitting the CSRF token via
 
 # Question
 ----
-![](Pasted image 20250219130218.png)
+![](Pasted%20image%2020250219130218.png)

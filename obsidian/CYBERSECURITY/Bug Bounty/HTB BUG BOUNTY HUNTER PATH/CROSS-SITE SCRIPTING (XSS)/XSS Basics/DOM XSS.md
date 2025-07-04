@@ -84,7 +84,7 @@ To target a user with this DOM XSS vulnerability, we can once again copy the URL
 # Question
 ----
 
-![](Pasted image 20250130164345.png)
+![](Pasted%20image%2020250130164345.png)
 
 We can use the following payload:
 
@@ -92,7 +92,7 @@ We can use the following payload:
 <img src="" onerror=alert(document.cookie)>
 ```
 
-![](Pasted image 20250130164432.png)
+![](Pasted%20image%2020250130164432.png)
 
 Got the flag: `HTB{pur3ly_cl13n7_51d3}`
 

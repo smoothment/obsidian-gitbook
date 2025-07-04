@@ -79,15 +79,15 @@ fonts                   [Status: 301, Size: 310, Words: 20, Lines: 10, Duration:
 
 If we go inside the `js` directory, we can find this:
 
-![](Pasted image 20250401144159.png)
+![](Pasted%20image%2020250401144159.png)
 
 If we check the first one, we can see this:
 
-![](Pasted image 20250401144226.png)
+![](Pasted%20image%2020250401144226.png)
 
 The code is pretty messy, let's use a beautifier to look at it better:
 
-![](Pasted image 20250401144258.png)
+![](Pasted%20image%2020250401144258.png)
 
 If we check at the code, we can find a hidden subdomain:
 
@@ -98,15 +98,15 @@ broadcast.vulnnet.thm
 
 Let's check it out:
 
-![](Pasted image 20250401144421.png)
+![](Pasted%20image%2020250401144421.png)
 
 We got a login prompt, since we don't have credentials, we need to leave it like that for now, if we remember correctly, we got another `js` file, let's read it too:
 
-![](Pasted image 20250401145736.png)
+![](Pasted%20image%2020250401145736.png)
 
 If we check this, we got a hidden parameter at `index.php`, it is `referer=`, we can test this parameter to check its behavior, for example, if this is not correctly configured, we could exploit this to achieve `LFI` in order to read configuration files, let's submit the request to our proxy:
 
-![](Pasted image 20250401145938.png)
+![](Pasted%20image%2020250401145938.png)
 
 There we go, we can read files, Let's begin exploitation.
 
@@ -118,7 +118,7 @@ There we go, we can read files, Let's begin exploitation.
 
 Since we got LFI, we can try reading some standard files like `/var/www/html/config.php`, if we do this, we get the following:
 
-![](Pasted image 20250401160803.png)
+![](Pasted%20image%2020250401160803.png)
 
 Even while trying a php filter, output does not appear, which means this file may not exist or may not be readable, let's try some other stuff, for example, since we are dealing with apache2, we can try reading the configuration file for it:
 
@@ -126,7 +126,7 @@ Even while trying a php filter, output does not appear, which means this file ma
 ../../../../../../etc/apache2/apache2.conf
 ```
 
-![](Pasted image 20250401161052.png)
+![](Pasted%20image%2020250401161052.png)
 
 Output does not appear, maybe we need to apply some other technique, what about double slashes: `//`:
 
@@ -135,7 +135,7 @@ Output does not appear, maybe we need to apply some other technique, what about 
 ```
 
 
-![](Pasted image 20250401161201.png)
+![](Pasted%20image%2020250401161201.png)
 
 There we go, with this we now that we are able to read configuration files from apache2, now, let's go back to our context, for example, we are dealing with another subdomain called `broadcast.vulnnet.thm`, we are able to read web configurations in the `/etc/apache2/sites-enabled/000-default.conf` file, let's check it out:
 
@@ -143,7 +143,7 @@ There we go, with this we now that we are able to read configuration files from 
 ..//..//..//..//..//..///etc/apache2/sites-enabled/000-default.conf
 ```
 
-![](Pasted image 20250401161443.png)
+![](Pasted%20image%2020250401161443.png)
 
 
 We can see that we are able to read the `.htpasswd` file, The `.htpasswd` file is commonly used in web servers to store usernames and password pairs for basic authentication. It is typically used in conjunction with the Apache HTTP Server, but can be used with other web servers as well. The file contains encrypted passwords, which are used to verify the identity of users attempting to access restricted areas of a website, knowing this, we now that reading this file can get us access to the other subdomain:
@@ -153,7 +153,7 @@ We can see that we are able to read the `.htpasswd` file, The `.htpasswd` file i
 ..//..//..//..//..//..///etc/apache2/.htpasswd
 ```
 
-![](Pasted image 20250401161643.png)
+![](Pasted%20image%2020250401161643.png)
 
 
 We get the following credentials:
@@ -193,23 +193,23 @@ developers:9972761drmfsls
 
 With the credentials, we are now able to log into the `broadcast.vulnnet.thm` subdomain:
 
-![](Pasted image 20250401162216.png)
+![](Pasted%20image%2020250401162216.png)
 
 
 We are inside something called `ClipBucket`, let's search the version in the source code:
 
-![](Pasted image 20250401162351.png)
+![](Pasted%20image%2020250401162351.png)
 
 So, `ClipBucket 4.0`, let's search for an exploit:
 
 
-![](Pasted image 20250401162441.png)
+![](Pasted%20image%2020250401162441.png)
 
 
 There we go, we can upload files, if we check `exploit-db`, we can check the following PoC:
 
 
-![](Pasted image 20250401162859.png)
+![](Pasted%20image%2020250401162859.png)
 
 
 
@@ -231,7 +231,7 @@ We get this response:
 ```
 
 
-![](Pasted image 20250402125929.png)
+![](Pasted%20image%2020250402125929.png)
 
 We can now visit the following URL:
 
@@ -241,16 +241,16 @@ http://broadcast.vulnnet.thm/files/photos/
 
 We notice this:
 
-![](Pasted image 20250402130005.png)
+![](Pasted%20image%2020250402130005.png)
 
 There's a directory, if we follow it, we get to this:
 
-![](Pasted image 20250402130032.png)
+![](Pasted%20image%2020250402130032.png)
 
 
 This is our reverse shell, let's set up our listener and get the connection:
 
-![](Pasted image 20250402130104.png)
+![](Pasted%20image%2020250402130104.png)
 
 Let's proceed to privilege escalation.
 
@@ -271,15 +271,15 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](Pasted image 20250402130331.png)
+![](Pasted%20image%2020250402130331.png)
 
 If we look around, we can find this inside of `/var/backups`:
 
-![](Pasted image 20250402132010.png)
+![](Pasted%20image%2020250402132010.png)
 
 We got a `ssh-backup.tar.gz`, if we look at the `home` directory, we find there's an user called `server-managment`, if we are able to unzip this file, we may be able to get either the credentials or the `id_rsa` of this user, let's get it in our local machine:
 
-![](Pasted image 20250402132117.png)
+![](Pasted%20image%2020250402132117.png)
 
 There we go, we got the `id_rsa`:
 
@@ -328,7 +328,7 @@ oneTWO3gOyac     (id_rsa)
 
 There we go, we got our passphrase, let's go into ssh now:
 
-![](Pasted image 20250402132444.png)
+![](Pasted%20image%2020250402132444.png)
 
 We are now able to read `user.txt`:
 
@@ -339,7 +339,7 @@ THM{907e420d979d8e2992f3d7e16bee1e8b}
 
 We can use `linpeas` to check for a way to get into root:
 
-![](Pasted image 20250402132806.png)
+![](Pasted%20image%2020250402132806.png)
 
 ```
 server-management@vulnnet:~$ cat /var/opt/backupsrv.sh
@@ -389,7 +389,7 @@ nc -lvnp PORT
 
 Now, if we wait up 2 minutes and check our listener, this happens:
 
-![](Pasted image 20250402134609.png)
+![](Pasted%20image%2020250402134609.png)
 
 There we go, we got root and can finally read `root.txt`:
 
@@ -399,5 +399,5 @@ THM{220b671dd8adc301b34c2738ee8295ba}
 ```
 
 
-![](Pasted image 20250402134654.png)
+![](Pasted%20image%2020250402134654.png)
 

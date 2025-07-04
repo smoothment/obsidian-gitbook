@@ -230,9 +230,9 @@ In such cases, a user is also advised to include the switchÂ `--exclude-sysdbs`Â
 # Question
 ---
 
-![](Pasted image 20250204172820.png)
+![](Pasted%20image%2020250204172820.png)
 
-![](Pasted image 20250204172853.png)
+![](Pasted%20image%2020250204172853.png)
 
 Let's save case 1 and do the following command:
 

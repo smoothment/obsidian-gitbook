@@ -35,7 +35,7 @@ In the above example, the `-w` argument selects the file's location on the com
 Using previous command in the TryHackMe machine, I got the following:
 
 
-![](Pasted image 20241105145759.png)
+![](Pasted%20image%2020241105145759.png)
 
 So, seems we have 4 users: `admin` `robert` `simon` `steve`, let's proceed with the machine
 
@@ -69,7 +69,7 @@ This ffuf command is a little different to the previous one in Task 2. Previousl
 ## POC
 
 
-![](Pasted image 20241105150754.png)
+![](Pasted%20image%2020241105150754.png)
 
 So, seems like correct credentials were:
 

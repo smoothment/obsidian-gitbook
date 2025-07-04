@@ -83,12 +83,12 @@ On Windows, both `../` and `..\` are valid directory traversal sequences. The fo
 https://insecure-website.com/loadImage?filename=..\..\..\windows\win.ini 
 
 # PORTSWIGGER LAB:
-![](Pasted image 20240918135245.png)
+![](Pasted%20image%2020240918135245.png)
 The moment we enter the website, a lot of GET requests start going through our burp, if we pick any of them, we will find something interesting, a /image?filename=file.jpg, this is the path where we'll be injecting our path traversal
 
 ### Sending to repeater
 
-![](Pasted image 20240918135455.png)
+![](Pasted%20image%2020240918135455.png)
 
 If we send it to repeater, we can perform: `filename=../../../etc/passwd`
 
@@ -115,17 +115,17 @@ You might be able to use an absolute path from the filesystem root, such as file
 
 ### LAB
 
-![](Pasted image 20240923130540.png)
+![](Pasted%20image%2020240923130540.png)
 Capturing the request:
 
-![](Pasted image 20240923131517.png)
+![](Pasted%20image%2020240923131517.png)
 Sending to repeater:
-![](Pasted image 20240923131533.png)
+![](Pasted%20image%2020240923131533.png)
 
 If we change the filename destination to `/etc/passwd` we'll be able to read the file.
 
 
-![](Pasted image 20240923131652.png)
+![](Pasted%20image%2020240923131652.png)
 
 
 ### Common obstacles to exploiting path traversal vulnerabilities - Continued
@@ -134,18 +134,18 @@ You might be able to use nested traversal sequences, such as ....// or ....\/. T
 
 #### LAB
 
-![](Pasted image 20240923131751.png)
+![](Pasted%20image%2020240923131751.png)
 Request:
 
-![](Pasted image 20240923131902.png)
+![](Pasted%20image%2020240923131902.png)
 
 Lets modify filename parameter, to see if we can read /etc/passwd file, if we try this: `....//....//....//etc/passwd` we will be able to read it!:
 
-![](Pasted image 20240923132302.png)
+![](Pasted%20image%2020240923132302.png)
 
 Just like that, we finished the lab.
 
-![](Pasted image 20240923132340.png)
+![](Pasted%20image%2020240923132340.png)
 
 #### Common obstacles to exploiting path traversal vulnerabilities - Continued
 
@@ -153,17 +153,17 @@ In some contexts, such as in a URL path or the filename parameter of a multipart
 
 For Burp Suite Professional users, Burp Intruder provides the predefined payload list Fuzzing - path traversal. This contains some encoded path traversal sequences that you can try.
 ##### LAB
-![](Pasted image 20240923132530.png)
+![](Pasted%20image%2020240923132530.png)
 
 Request:
-![](Pasted image 20240923132625.png)
+![](Pasted%20image%2020240923132625.png)
 
 For this lab, when i tried standard URL encoding, i got an error, so i tried with double URL encoding and could read `/etc/passwd`. Used payload was:
 
 `%252e%252e%252f%252e%252e%252f%252e%252e%252fetc/passwd`
 
-![](Pasted image 20240923133129.png)
-![](Pasted image 20240923133206.png)
+![](Pasted%20image%2020240923133129.png)
+![](Pasted%20image%2020240923133206.png)
 
 ##### Common obstacles to exploiting path traversal vulnerabilities - Continued
 
@@ -173,16 +173,16 @@ An application may require the user-supplied filename to start with the expected
 
 ###### LAB
 
-![](Pasted image 20240923133719.png)
+![](Pasted%20image%2020240923133719.png)
 
 Request:
-![](Pasted image 20240923133959.png)
+![](Pasted%20image%2020240923133959.png)
 Lets modify filename parameter into a path traversal:
 
-![](Pasted image 20240923133941.png)
+![](Pasted%20image%2020240923133941.png)
 Just like that, i was able to read `/etc/passwd` file.
 
-![](Pasted image 20240923134102.png)
+![](Pasted%20image%2020240923134102.png)
 
 ###### Common obstacles to exploiting path traversal vulnerabilities - Continued
 
@@ -194,16 +194,16 @@ An application may require the user-supplied filename to end with an expected fi
 ###### LAB
 
 
-![](Pasted image 20240923134247.png)
+![](Pasted%20image%2020240923134247.png)
 Request:
 
-![](Pasted image 20240923134353.png)
+![](Pasted%20image%2020240923134353.png)
 
 Injecting null byte:
 
-![](Pasted image 20240923134522.png)
+![](Pasted%20image%2020240923134522.png)
 
-![](Pasted image 20240923134600.png)
+![](Pasted%20image%2020240923134600.png)
 
 
 ## How to prevent a path traversal attack
@@ -224,7 +224,7 @@ if (file.getCanonicalPath().startsWith(BASE_DIRECTORY)) {
 } 
 ```
 
-![](Pasted image 20240923134826.png)
+![](Pasted%20image%2020240923134826.png)
 
 
 

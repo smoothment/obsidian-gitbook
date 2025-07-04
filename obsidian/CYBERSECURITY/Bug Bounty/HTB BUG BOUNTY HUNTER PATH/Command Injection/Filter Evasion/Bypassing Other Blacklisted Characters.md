@@ -93,7 +93,7 @@ Exercise: Try to use the the character shifting technique to produce a semi-colo
 # Question
 ---
 
-![](Pasted image 20250205141832.png)
+![](Pasted%20image%2020250205141832.png)
 
 We can do the following payload:
 

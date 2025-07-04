@@ -104,16 +104,16 @@ As the above message mentions, we may use `--help all` to print a more detaile
 
 # Question
 
-![](Pasted image 20250121160721.png)
+![](Pasted%20image%2020250121160721.png)
 
 We need to perform curl on: `83.136.253.73:44167`, if we go to the cheatsheet, we can see the following command:
 
-![](Pasted image 20250121160850.png)
+![](Pasted%20image%2020250121160850.png)
 
 So, we need to do: `curl -s -O 83.136.253.73:44167/download.php`
 
 Just like that, we'll have the file:
 
-![](Pasted image 20250121160937.png)
+![](Pasted%20image%2020250121160937.png)
 
 Flag is: `HTB{64$!c_cURL_u$3r}`

@@ -59,6 +59,6 @@ We still get an `invalid input`, error meaning that a semi-colon is blacklisted
 # Question
 ----
 
-![](Pasted image 20250205140047.png)
+![](Pasted%20image%2020250205140047.png)
 
 Answer for this question is `new-line`.

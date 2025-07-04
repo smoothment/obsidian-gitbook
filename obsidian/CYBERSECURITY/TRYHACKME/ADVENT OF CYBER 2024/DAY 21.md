@@ -3,7 +3,7 @@ sticker: emoji//1f384
 ---
 
 
-![](Pasted image 20241221130944.png)
+![](Pasted%20image%2020241221130944.png)
 
 
 _McSkidy’s alert dashboard lit up with an unusual alert. A file-sharing web application built by Glitch had triggered a security warning. Glitch had been working hard during this season's SOC-mas after the last scare with the Yule Log Exploit, but this new alert caused McSkidy to question his intentions._
@@ -230,26 +230,26 @@ Now that we have some practice, join McSkidy and help investigate the alerts com
 
 ## Questions
 ---
-![](Pasted image 20241221135220.png)
+![](Pasted%20image%2020241221135220.png)
 
 Let's start with the reverse engineering process to answer those questions:
 
 First, let's open the file in `ILspy`, once open, this is the route we need to follow:
 
-![](Pasted image 20241221135645.png)
+![](Pasted%20image%2020241221135645.png)
 
 Right there is our main, these are the contents of it:
 
-![](Pasted image 20241221135719.png)
+![](Pasted%20image%2020241221135719.png)
 
 
 Let's keep on checking the other ones, for example, these are the contents of form1:
 
-![](Pasted image 20241221135901.png)
+![](Pasted%20image%2020241221135901.png)
 
 First, it checks if the environment is a Windows environment, if its not a windows environment, it prints a message indicating this is not a windows machine, else, it sets a timer1 and starts it, let's keep on reading the code:
 
-![](Pasted image 20241221140014.png)
+![](Pasted%20image%2020241221140014.png)
 
 
 Now, since the timer's been set with an interval of 3000, assuming it consists of milliseconds, once that 3 seconds have passed, the timer will stop, it will hide the executable and call in the `DownloadAndExecuteFile` function, being this, our first answer.
@@ -259,13 +259,13 @@ Now, if we keep reading the code, we will see the download function, it assigns 
 
 To answer the fourth question, we must download the file from the c2 server and analyze it using `ILspy` too:
 
-![](Pasted image 20241221140841.png)
+![](Pasted%20image%2020241221140841.png)
 
 Let's analyze it:
 
-![](Pasted image 20241221141024.png)
+![](Pasted%20image%2020241221141024.png)
 
-![](Pasted image 20241221141032.png)
+![](Pasted%20image%2020241221141032.png)
 
 Well, we got our C# code now, let's break into it:
 
@@ -285,14 +285,14 @@ So, looking at the code, we know that the answer for the 4th question is: `Colle
 For the last question, we check that the main calls for the `UploadFileToServer` function, if we decompile that function, we see the following:
 
 
-![](Pasted image 20241221141637.png)
+![](Pasted%20image%2020241221141637.png)
 
 So, the C2 server would be: `anonymousc2.thm`
 
 
 Questions would end up like this:
 
-![](Pasted image 20241221141735.png)
+![](Pasted%20image%2020241221141735.png)
 
 Just like that, day 21 is done!
 

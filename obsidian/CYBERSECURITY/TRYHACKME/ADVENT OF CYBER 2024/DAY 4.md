@@ -45,7 +45,7 @@ As a blue teamer, it would be our dream to prevent all attacks at the start of t
 ## MITRE ATT&CK
 ----
 A popular framework for understanding the different techniques and tactics that threat actors perform through the kill chain is the [MITRE ATT&CK framework](https://attack.mitre.org/). The framework is a collection of tactics, techniques, and procedures that have been seen to be implemented by real threat actors. The framework provides a [navigator tool](https://mitre-attack.github.io/attack-navigator/) where these TTPs can be investigated:
-![](Pasted image 20241204120042.png)
+![](Pasted%20image%2020241204120042.png)
 
 However, the framework primarily discusses these TTPs in a theoretical manner. Even if we know we have a gap for a specific TTP, we don't really know how to test the gap or close it down. This is where the Atomics come in!
 
@@ -175,7 +175,7 @@ Write-Host "You will need to install Microsoft Word manually to meet this requir
 
 The output above is clearly split up into multiple parts, each matching a test. Let's examine what type of information is provided in a test. We will use the test we want to run as an example.
 
-![](Pasted image 20241204120717.png)
+![](Pasted%20image%2020241204120717.png)
 
 
 ### Phishing: Spearphishing Attachment T1566.001 Emulated
@@ -223,7 +223,7 @@ Next, go to the Event Viewer and right-click on the Operational log on the left-
 
 Click on each event to see the details. When you select an event, you should see a detailed overview of all the data collected for that event. Click on the Details tab to show all the EventData in a readable format. Let us take a look at the details of these events below. The data highlighted is valuable for incident response and creating alerting rules
 
-![](Pasted image 20241204122856.png)
+![](Pasted%20image%2020241204122856.png)
 
 Navigate to the directory `C:\Users\Administrator\AppData\Local\Temp`\, and open the file `PhishingAttachment.txt`. The flag included is the answer to question 1. Make sure to answer the question now, as the cleanup command will delete this file.
 
@@ -295,22 +295,22 @@ Now that Glitch has shown us his intentions, let's continue with his work and ru
 As Glitch continues to prepare for SOC-mas and fortifies Wareville's security, he decides to conduct an attack simulation that would mimic a ransomware attack across the environment. He is unsure of the correct detection metrics to implement for this test and asks you for help. Your task is to identify the correct atomic test to run that will take advantage of a command and scripting interpreter, conduct the test, and extract valuable artefacts that would be used to craft a detection rule.
 
 ```ad-summary
-![](Pasted image 20241204123428.png)
+![](Pasted%20image%2020241204123428.png)
 
 So, let's begin with the challenge:
 
 
 1. For the ATT&CK ID we'd be interested in, we can just google it and this will show up: 
 
-![](Pasted image 20241204124018.png)
+![](Pasted%20image%2020241204124018.png)
 
 So, answer would be: `T1059`
 
 2. For the subtechnique ID, we can use the same site, and this will pop up:
 
-![](Pasted image 20241204124120.png)
+![](Pasted%20image%2020241204124120.png)
 
-![](Pasted image 20241204124155.png)
+![](Pasted%20image%2020241204124155.png)
 
 So, the answer would be: `T1059.003`
 
@@ -319,20 +319,20 @@ So, the answer would be: `T1059.003`
 Once we've passed in the command, we can see the following output:
 
 
-![](Pasted image 20241204124401.png)
+![](Pasted%20image%2020241204124401.png)
 
 So, answer would be: `Simulate BlackByte Ransomware Print Bombing`
 
 4. For the name of the file, we can check using the same command as before, this would output:
 
-![](Pasted image 20241204124531.png)
+![](Pasted%20image%2020241204124531.png)
 
 So, name of the file would be: `Wareville_Ransomware.txt`
 
 
 5. Let's just read the file located at: `C:\Tools\AtomicRedTeam\atomics\T1059.003\src\Wareville_Ransomware.txt`
 
-![](Pasted image 20241204124710.png)
+![](Pasted%20image%2020241204124710.png)
 
 Flag would be: `THM{R2xpdGNoIGlzIG5vdCB0aGUgZW5lbXk=}`
 ```
