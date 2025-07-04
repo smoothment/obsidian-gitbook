@@ -1,2 +1,0 @@
-# Webtiming1.gif
-
