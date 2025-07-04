@@ -45,18 +45,18 @@ At first, we are already given some credentials:
 We can start with some basic SMB enumeration:
 
 ```ad-hint
-![](cybersecurity/images/Pasted%2520image%252020250114171402.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114171402.png)
 We got a few shares, most interesting one would be `Accounting Deparment` one, let's take a look at it:
 
-![](cybersecurity/images/Pasted%2520image%252020250114171518.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114171518.png)
 
 We have two files, let's download them both and check the contents:
 
-![](cybersecurity/images/Pasted%2520image%252020250114172631.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114172631.png)
 
 Since they are zip files, we need to unzip them and review the contents:
 
-![](cybersecurity/images/Pasted%2520image%252020250114172708.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114172708.png)
 
 After an extensive search, we can see that `xl/sharedStrings.xml` is a file that contains credentials to `mssql`, we can connect using the `mssqlclient.py` script from [impacket](https://github.com/fortra/impacket)
 ```
@@ -71,10 +71,10 @@ Let's connect:
 ---
 `mssqlclient.py 'sa:MSSQLP@ssw0rd!'@10.10.11.51`
 
-![](cybersecurity/images/Pasted%2520image%252020250114173718.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114173718.png)
 
 We can now begin with enumeration, for this, we can use help to check which commands are available:
-![](cybersecurity/images/Pasted%2520image%252020250114174132.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114174132.png)
 
 It seems like we can enable some sort of shell, I asked chatgpt about it and it said I must follow these steps:
 
@@ -84,18 +84,18 @@ It seems like we can enable some sort of shell, I asked chatgpt about it and it 
 
 Once I did that, this happened:
 
-![](cybersecurity/images/Pasted%2520image%252020250114174247.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114174247.png)
 We get some sort of `RCE`, let's try to enumerate `C:\` folder:
 
-![](cybersecurity/images/Pasted%2520image%252020250114174329.png)
-![](cybersecurity/images/Pasted%2520image%252020250114174556.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114174329.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114174556.png)
 We got an user: `ryan`, tried to check the contents but it was empty, we can follow another route, we already know we have a `SQL2019` directory, there must be a SQL configuration file we can read and get some credentials:
 
-![](cybersecurity/images/Pasted%2520image%252020250114174929.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114174929.png)
 
 That's right, let's read the configuration file:
 
-![](cybersecurity/images/Pasted%2520image%252020250114174959.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114174959.png)
 
 
 We got credentials for another user.
@@ -109,17 +109,17 @@ We got credentials for another user.
 
 Since we also know the domain is called `SEQUEL`, we can use `evil-winrm` to log in:
 
-![](cybersecurity/images/Pasted%2520image%252020250114193709.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114193709.png)
 
 We are unable to log with those credentials, but remember we have another user, `ryan`, let's try with that username:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250114193750.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114193750.png)
 
 And we're in, let's read `user.txt`:
 
 ```ad-important
-![](cybersecurity/images/Pasted%2520image%252020250114193939.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114193939.png)
 
 User: `1c3847c8cc30b9afd12ff6c2bc86f0db`
 ```
@@ -154,7 +154,7 @@ So, explanation of this PRIVESC is that we're abusing the CA:
 With this, we are able to obtain a certificate as administrator, thus, obtaining the hash for Admin user, making us able to perform [Pass the hash](https://www.beyondtrust.com/resources/glossary/pass-the-hash-pth-attack)
 Like that, we can read root flag:
 
-![](cybersecurity/images/Pasted%2520image%252020250115141448.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250115141448.png)
 
 ```ad-important
 Root: `63404c844597a9eef0c7a440b65564a3`

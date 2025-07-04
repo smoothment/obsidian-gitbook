@@ -89,7 +89,7 @@ At the end of the DHCP process, our device would have received all the configu
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101145235.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101145235.png)
 
 
 # ARP: BRIDGING LAYER 3 ADDRESSING TO LAYER 2 ADDRESSING
@@ -138,7 +138,7 @@ ARP is considered layer 2 because it deals with MAC addresses. Others would arg
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101145407.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101145407.png)
 
 # ICMP: TROUBLESHOOTING NETWORKS
 
@@ -213,7 +213,7 @@ The traversed route might change as we rerun the command.
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101145525.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101145525.png)
 
 # ROUTING
 
@@ -237,7 +237,7 @@ The routing algorithms are beyond the scope of this room; however, we will brief
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101145818.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101145818.png)
 
 # NAT
 
@@ -255,5 +255,5 @@ In the diagram below, multiple devices access the Internet via a router that sup
 ## QUESTIONS
 
 
-![](cybersecurity/images/Pasted%2520image%252020241101145903.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101145903.png)
 

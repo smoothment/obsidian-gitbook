@@ -352,7 +352,7 @@ Using a combination of the above approaches is an excellent approach to protect 
 ## EXERCISE
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020241112134435.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112134435.png)
 
 ### HYDRA COMMAND
 
@@ -364,7 +364,7 @@ hydra -l lazie -P /usr/share/wordlists/rockyou.txt 10.10.135.163 imap
 
 #### Output
 
-![](cybersecurity/images/Pasted%2520image%252020241112134546.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112134546.png)
 
 ```
 

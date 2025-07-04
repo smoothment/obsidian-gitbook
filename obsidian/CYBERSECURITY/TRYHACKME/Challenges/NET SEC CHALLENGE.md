@@ -6,7 +6,7 @@ sticker: lucide//wifi
 ### What is the highest port number being open less than 10,000?
 
 ---
-![](cybersecurity/images/Pasted%2520image%252020241112135121.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112135121.png)
 
 Highest open port is `8080`
 
@@ -14,7 +14,7 @@ Highest open port is `8080`
 ---
 
 
-![](cybersecurity/images/Pasted%2520image%252020241112135224.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112135224.png)
 
 It is port `10021`
 
@@ -28,7 +28,7 @@ It is port `10021`
 
 ### Output
 
-![](cybersecurity/images/Pasted%2520image%252020241112135413.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112135413.png)
 
 
 ```
@@ -49,7 +49,7 @@ Flag is `THM{web_server_25352}`
 
 ### Output
 
-![](cybersecurity/images/Pasted%2520image%252020241112135624.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112135624.png)
 
 
 ```
@@ -67,7 +67,7 @@ Flag is `THM{946219583339}
 
 ### Output
 
-![](cybersecurity/images/Pasted%2520image%252020241112135935.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112135935.png)
 
 
 ```
@@ -93,7 +93,7 @@ We need to use -s flag to specify the non-standard port
 
 ### Output
 
-![](cybersecurity/images/Pasted%2520image%252020241112140422.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112140422.png)
 
 
 ```
@@ -102,7 +102,7 @@ We need to use -s flag to specify the non-standard port
 
 Let's log into ftp with our credentials to check if we are able to retrieve the flag:
 
-![](cybersecurity/images/Pasted%2520image%252020241112140445.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112140445.png)
 
 Nothing useful, let's proceed with the other username
 
@@ -117,17 +117,17 @@ Nothing useful, let's proceed with the other username
 
 ### Output
 
-![](cybersecurity/images/Pasted%2520image%252020241112140547.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112140547.png)
 
 ```
 
 Let's log into ftp and get our flag:
 
-![](cybersecurity/images/Pasted%2520image%252020241112140700.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112140700.png)
 
 Reading the flag, we get this:
 
-![](cybersecurity/images/Pasted%2520image%252020241112140744.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112140744.png)
 
 So, flag is `THM{321452667098}`
 
@@ -135,7 +135,7 @@ So, flag is `THM{321452667098}`
 ### Browsing to `http://10.10.4.229:8080` displays a small challenge that will give you a flag once you solve it. What is the flag?
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020241112140846.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112140846.png)
 
 So, using our notes from [[CYBERSECURITY/RECONNAISSANCE/NMAP/ADVANCED PORT SCANS.md|nmap advanced port scans]], we can perform a IDS evasion scan in the following way:
 
@@ -172,7 +172,7 @@ A **TCP Null scan** is a type of scan where Nmap sends a **TCP packet** with **n
 
 ### Output from Null Scan
 
-![](cybersecurity/images/Pasted%2520image%252020241112141757.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112141757.png)
 
 
 

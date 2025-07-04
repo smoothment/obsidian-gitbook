@@ -123,15 +123,15 @@ This works since the query evaluate to `true` irrespective of the username or 
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250131143341.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250131143341.png)
 
 Let's go into the site:
 
-![](cybersecurity/images/Pasted%2520image%252020250131143354.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250131143354.png)
 
 At first sight, we encounter a login page, we can pass the following query to check if it's vulnerable to SQLI:
 
-![](cybersecurity/images/Pasted%2520image%252020250131143614.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250131143614.png)
 
 We can breakdown the command in the following way:
 
@@ -205,7 +205,7 @@ Or we can shorten the command by simply using:
 
 Like this, we'd be able to bypass the login page:
 
-![](cybersecurity/images/Pasted%2520image%252020250131144251.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250131144251.png)
 
 
 Flag is: `202a1d1a8b195d5e9a57e434cc16000c`

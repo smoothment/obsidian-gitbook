@@ -335,7 +335,7 @@ From the output, it seems the following was the timeline of the attack:
 ## Questions
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020241217215719.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241217215719.png)
 
 Check out this video for explanation, didn't have much time today either:
 

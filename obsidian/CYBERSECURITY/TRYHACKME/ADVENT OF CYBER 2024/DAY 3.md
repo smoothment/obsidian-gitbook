@@ -347,14 +347,14 @@ Please note you will need to add `10.10.52.168 frostypines.thm` to your host's
 ---
 
 
-![](cybersecurity/images/Pasted%2520image%252020241203124306.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203124306.png)
 
 
 So, let's answer these questions for blue team, first, we need to filter out for `message: "shell"`:
 
 
 
-![](cybersecurity/images/Pasted%2520image%252020241203125258.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203125258.png)
 
 We are able to see the `RCE` performed by the attacker, we can also see the IP of the attacker too, so, these are the answers:
 
@@ -371,17 +371,17 @@ We are able to see the `RCE` performed by the attacker, we can also see the IP o
 Now, let's begin with red section, the question is to retrieve the contents of `flag.txt`, first, let's add `frostypines.thm` to `/etc/hosts`
 
 
-![](cybersecurity/images/Pasted%2520image%252020241203125638.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203125638.png)
 
 First thing we are able to see right here is that this is a resort reservation page, since we need to get RCE by uploading a webshell, let's create an account and login:
 
-![](cybersecurity/images/Pasted%2520image%252020241203125919.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203125919.png)
 
-![](cybersecurity/images/Pasted%2520image%252020241203125958.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203125958.png)
 
 I used credentials: `hacker@hacker.com`: `hacker123`, so, once we've logged in, we need some sort of way to upload the webshell, my guess would be that the account section is vulnerable to uploading the webshell:
 
-![](cybersecurity/images/Pasted%2520image%252020241203130252.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203130252.png)
 
 After searching for a while, I couldn't find anything useful, so I thought, there was some sort of way to log in as the admin user without knowing the credentials beforehand, so, I read the room again and found this:
 
@@ -398,17 +398,17 @@ Below are some examples of weak/default credentials that attackers might try:
 
 Maybe, this site is vulnerable to some of these, since we need to log in using the email and password, I figured that credentials for this site would be: `admin@frostypines.thm`:`admin`
 
-![](cybersecurity/images/Pasted%2520image%252020241203130504.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203130504.png)
 
-![](cybersecurity/images/Pasted%2520image%252020241203130513.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203130513.png)
 
 And I was right! We were able to log in as admin user, now, let's search for a way to upload the web shell:
 
-![](cybersecurity/images/Pasted%2520image%252020241203130555.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203130555.png)
 
 Going into the admin part, we found some stuff, most relevant one here would be the `add new room` site, since, once we investigate further, we can see the following:
 
-![](cybersecurity/images/Pasted%2520image%252020241203130657.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203130657.png)
 
 There's a image file upload in there! 
 
@@ -436,29 +436,29 @@ The shell I'll be using is the one provided by the room itself, but, we can use 
 </html>
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020241203131016.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203131016.png)
 
 Let's upload the file!
 
 Nice, we've uploaded the file now, we only need to know where this is being uploaded in order to visit the file and get the RCE, in order to do this, we need to go to the network tab, reload the page, and see the way it behaves:
 
-![](cybersecurity/images/Pasted%2520image%252020241203131212.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203131212.png)
 
 As we can see, our `shell.php` file appears in there, if we check the request, we can see the following:
 
-![](cybersecurity/images/Pasted%2520image%252020241203131249.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203131249.png)
 
 Let's visit the page:
 
-![](cybersecurity/images/Pasted%2520image%252020241203131302.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203131302.png)
 
 Here we are!!
 
 Let's get the contents of our `flag.txt`:
 
-![](cybersecurity/images/Pasted%2520image%252020241203131332.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203131332.png)
 
-![](cybersecurity/images/Pasted%2520image%252020241203131343.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241203131343.png)
 
 So, the answer for this question would be: `THM{Gl1tch_Was_H3r3}`
 

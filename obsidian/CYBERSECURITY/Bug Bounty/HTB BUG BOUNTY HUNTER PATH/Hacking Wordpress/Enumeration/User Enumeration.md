@@ -83,5 +83,5 @@ smoothment@htb[/htb]$ curl http://blog.inlanefreight.com/wp-json/wp/v2/users | j
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250220132754.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220132754.png)
 

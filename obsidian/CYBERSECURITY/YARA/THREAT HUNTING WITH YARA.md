@@ -168,7 +168,7 @@ rule M_APT_Downloader_WINELOADER_2
 
 ### Question Section
 ---
-![](cybersecurity/images/Pasted%2520image%252020241115125856.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241115125856.png)
 
 
 # Opportunities for Threat Hunting
@@ -231,7 +231,7 @@ We will use the provided YARA rules for this room to hunt for the WINELOADER mal
 ## Question section
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020241115130918.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241115130918.png)
 
 
 # YARA: Introduction
@@ -590,7 +590,7 @@ Now that we have covered the two most important parts of a YARA rule, let’s mo
 ## Question Section
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020241115132332.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241115132332.png)
 
 # YARA: How To Use YARA Rules To Hunt for Indicators of Compromise
 ---
@@ -646,7 +646,7 @@ This rule searches for the string `tryhackme` in the `C:\TMP\` directory. Enter 
 
 The result of running this rule should be as follows:
 
-![](cybersecurity/images/Pasted%2520image%252020241115132957.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241115132957.png)
 
 
 ```ad-summary
@@ -665,15 +665,15 @@ Open a PowerShell administrator window and enter the following command to hunt f
 
 The following result should be displayed:
 
-![](cybersecurity/images/Pasted%2520image%252020241115133114.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241115133114.png)
 
 ```ad-summary
 - The first line is the command.
 - The second line shows a match, indicating that a sample of WINELOADER has been found.
 - Now do the same for the other rules `WINELOADER2.yar` and `ROOTSAW.yar`
 
-![](cybersecurity/images/Pasted%2520image%252020241115133237.png)
-![](cybersecurity/images/Pasted%2520image%252020241115133302.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241115133237.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241115133302.png)
 
 ```
 
@@ -754,8 +754,8 @@ After discovering a true positive Indicator of Compromise on a system, the first
 
 You will likely first have to notify the team responsible. He will follow the IR policy and get the IR team together to start all required IR activities. On the practical side, an incident response framework like DAIR (Dynamic Approach to Incident Response) is likely part of the IR policy. Based on this framework, you will likely receive follow-up tasks including but not limited to further analysis of the compromised machine, preserving evidence by calculating hashes, taking the machine offline, and more. More details involving the IR policy, team, and activities are discussed in the Intro to IR and IM room.
 
-![](cybersecurity/images/Pasted%2520image%252020241115144041.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241115144041.png)
 
 While doing threat hunting, it is always important to document all your findings. This information is crucial in case of an incident and can save time later in the IR process. Time is a critical factor in responding to incidents. If you look at the Cyber Kill Chain below, it could be the difference between being in the C2 phase and being in the Actions on Objectives phase.
 
-![](cybersecurity/images/Pasted%2520image%252020241115144107.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241115144107.png)

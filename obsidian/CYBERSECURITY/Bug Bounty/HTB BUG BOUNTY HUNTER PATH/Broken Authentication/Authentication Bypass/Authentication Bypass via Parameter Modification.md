@@ -39,11 +39,11 @@ Note that many more advanced vulnerabilities can also lead to an authentication 
 
 # Question
 ---
-![](cybersecurity/images/Pasted%2520image%252020250214182725.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214182725.png)
 
 Once we've authenticated, we can see the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250214182813.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214182813.png)
 
 We get assigned an user id in the URL and we're also told we don't have admin privileges, we can brute-force the admin id in the following way:
 
@@ -91,7 +91,7 @@ ________________________________________________
 
 So, admin user's id is `372`, let's log into admin panel:
 
-![](cybersecurity/images/Pasted%2520image%252020250214183900.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214183900.png)
 
 Flag is:
 

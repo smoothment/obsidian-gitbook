@@ -3,12 +3,12 @@ sticker: emoji//1f97c
 ---
 Based on the previous note: [[HOW TO CONSTRUCT A BASIC CLICKJACKING ATTACK|NOTE]]
 
-![](cybersecurity/images/Pasted%2520image%252020241021153605.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241021153605.png)
 
 
 If we use the delete function from the account and send the request to the repeater, we get the following CRSR token:
 
-![](cybersecurity/images/Pasted%2520image%252020241021155644.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241021155644.png)
 
 ```ad-info
 token:0XvopQRGgqPlwC8auzHR7owrONVjuWJf
@@ -35,5 +35,5 @@ Next, what we need to do is craft our Clickjacking malicious code, I used the fo
 <iframe src="YOUR-LAB-ID.web-security-academy.net/my-account"></iframe>
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020241021162011.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241021162011.png)
 Once we send the exploit to the victim, lab's solved

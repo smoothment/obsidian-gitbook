@@ -623,11 +623,11 @@ http://10.10.118.217:8080/
 
 We need to start a python server to be able to host the file, once we start the file, we can download it into the target machine with:
 
-![](cybersecurity/images/Pasted%2520image%252020250512151130.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512151130.png)
 
 Make sure to change `IP` to your `tun0` ip, once it downloads, it will automatically execute in our listener:
 
-![](cybersecurity/images/Pasted%2520image%252020250512151205.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512151205.png)
 As seen, we get a shell as `desktop-1au6nt4\thm`, let's read our flag:
 
 ```

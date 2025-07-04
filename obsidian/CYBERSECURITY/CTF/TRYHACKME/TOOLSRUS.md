@@ -8,7 +8,7 @@ sticker: emoji//1f9f0
 ## OPEN PORTS
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020241119144825.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119144825.png)
 
 | PORT | STATE | SERVICE |
 | :--- | :---- | :------ |
@@ -33,11 +33,11 @@ Knowing all this, let's proceed with the fuzzing of both websites.
 ### Port 80
 
 
-![](cybersecurity/images/Pasted%2520image%252020241119150643.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150643.png)
 
 Simple server, page source ain't have anything useful, let's fuzz:
 
-![](cybersecurity/images/Pasted%2520image%252020241119150835.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150835.png)
 
 ```ad-hint
 
@@ -48,24 +48,24 @@ Simple server, page source ain't have anything useful, let's fuzz:
 
 #### `/guidelines`
 
-![](cybersecurity/images/Pasted%2520image%252020241119150923.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150923.png)
 
 Found something useful, seems like a username, let's save it: `bob`
 
 #### `/protected`
 
-![](cybersecurity/images/Pasted%2520image%252020241119151214.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119151214.png)
 
 Login page, seems like we need to brute force the login with hydra, let's leave that for the reconnaissance.
 
 ```
 ### Port 1234
 
-![](cybersecurity/images/Pasted%2520image%252020241119150045.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150045.png)
 
 Seems like a simple Apache Tomcat, let's fuzz it
 
-![](cybersecurity/images/Pasted%2520image%252020241119145958.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119145958.png)
 
 ```ad-hint
 
@@ -79,17 +79,17 @@ Let's explore them
 
 #### `/docs`
 
-![](cybersecurity/images/Pasted%2520image%252020241119150200.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150200.png)
 
 Nothing useful.
 
 #### `/examples`
 
-![](cybersecurity/images/Pasted%2520image%252020241119150228.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150228.png)
 
 #### `/manager`
 
-![](cybersecurity/images/Pasted%2520image%252020241119150412.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150412.png)
 
 A prompt asking for credentials is asked in order to log in the site.
 ```
@@ -115,7 +115,7 @@ So, for this machine, command would be the following:
 #### Output
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020241119151849.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119151849.png)
 
 We got our user and password
 
@@ -127,7 +127,7 @@ We got our user and password
 
 Once we log into the website, this is shown:
 
-![](cybersecurity/images/Pasted%2520image%252020241119152106.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119152106.png)
 
 So, we need to move forward with the other port, `1234`, room tells us to use `nikto` and perform another scan in this port using the credentials we found, so, command would be the following:
 
@@ -145,7 +145,7 @@ So, for this case, command would be:
 #### Output
 ----
 
-![](cybersecurity/images/Pasted%2520image%252020241119153501.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119153501.png)
 
 Found five documentation files, also, we need to scan for the server version, for this, let's use nmap:
 
@@ -157,7 +157,7 @@ Found five documentation files, also, we need to scan for the server version, fo
 #### Output Scan
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020241119153846.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119153846.png)
 Server is running a `apache/2.4.18`, let's look for anything in metasploit
 
 ```
@@ -174,21 +174,21 @@ Lets search for the following query in msfconsole: `search tomcat`
 
 This brings up a lot of output, but the most interesting one is this:
 
-![](cybersecurity/images/Pasted%2520image%252020241119154236.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119154236.png)
 An Apache Tomcat Manager Authenticated Upload Code Execution, this seems perfect in order to get a shell, let's choose it:
 
-![](cybersecurity/images/Pasted%2520image%252020241119154932.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119154932.png)
 Let's enter the needed options:
 
-![](cybersecurity/images/Pasted%2520image%252020241119155028.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119155028.png)
 
 And, send the payload:
 
-![](cybersecurity/images/Pasted%2520image%252020241119155049.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119155049.png)
 
 We got a shell!
 
-![](cybersecurity/images/Pasted%2520image%252020241119155132.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119155132.png)
 
 We got a shell as root!
 ```
@@ -207,7 +207,7 @@ Since we got a shell as root, there's no need to perform a privilege escalation,
 
 ```ad-note
 
-![](cybersecurity/images/Pasted%2520image%252020241119155246.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119155246.png)
 
 `flag`: `ff1fc4a81affcc7688cf89ae7dc6e0e1`
 ```

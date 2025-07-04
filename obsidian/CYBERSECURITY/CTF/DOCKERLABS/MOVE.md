@@ -6,7 +6,7 @@ sticker: emoji//1f6b6
 
 ## OPEN PORTS
 
-![](cybersecurity/images/Pasted%2520image%252020241025014342.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025014342.png)
 
 
 ```ad-note
@@ -21,14 +21,14 @@ OPEN PORTS
 
 First, we need to log into ftp taking advantage of that anonymous login that's enabled:
 
-![](cybersecurity/images/Pasted%2520image%252020241025014539.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025014539.png)
 We have a directory called `mantenimiento`, inside of this directory, we can find the following:
 
-![](cybersecurity/images/Pasted%2520image%252020241025014619.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025014619.png)
 
 A `database.kdbx` file is found inside of it, let's download it to our host machine and inspect it:
 
-![](cybersecurity/images/Pasted%2520image%252020241025014823.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025014823.png)
 
 If we try to use `keepass2` on the file, it is protected by a password, let's start with our websites enumeration to get that password.
 
@@ -38,11 +38,11 @@ We have two websites, let's try to enumerate them further using fuzzing and othe
 
 ### PORT 80 WEBSITE
 
-![](cybersecurity/images/Pasted%2520image%252020241025014929.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025014929.png)
 
 Found a `/maintenance.html` directory that may be useful, let's visit it:
 
-![](cybersecurity/images/Pasted%2520image%252020241025015023.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025015023.png)
 
 So, seems like the password is in the `/tmp` directory, seems like we need to perform a path traversal in some sort of way to get that, let's enumerate the other website
 
@@ -50,20 +50,20 @@ So, seems like the password is in the `/tmp` directory, seems like we need to pe
 
 ### PORT 3000 WEBSITE
 
-![](cybersecurity/images/Pasted%2520image%252020241025013600.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025013600.png)
 A lot came from it, so, fuzzing seems pretty useless here, let's visit the website:
 
-![](cybersecurity/images/Pasted%2520image%252020241025013631.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025013631.png)
 
 Default page is a login page, something interest I found was this:
 
 
-![](cybersecurity/images/Pasted%2520image%252020241025015156.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025015156.png)
 
 
 Seems like it is running a `grafana` om the `v8.3.0`, let's search for some exploit in this version
 
-![](cybersecurity/images/Pasted%2520image%252020241025015326.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025015326.png)
 
 Perfect, found exactly what I needed, a [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/PATH TRAVERSAL|path traversal]] vulnerability that allow us to read that `/tmp/pass.txt` file:
 
@@ -186,10 +186,10 @@ if __name__ == '__main__':
 
 So, with the exploit in our hands, let's start with the next stage, let's launch the attack and try to read `/etc/passwd` to check if it works:
 
-![](cybersecurity/images/Pasted%2520image%252020241025015835.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025015835.png)
 And it works correctly, let's read our `/tmp/pass.txt` file!
 
-![](cybersecurity/images/Pasted%2520image%252020241025015908.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025015908.png)
 
 ```ad-hint
 `/tmp/pass.txt`: `t9sH76gpQ82UFeZ3GXZS`
@@ -198,7 +198,7 @@ And it works correctly, let's read our `/tmp/pass.txt` file!
 
 Nice, we got what we needed, let's log in ssh using that password and the user `freddy` we previously read in that `/etc/passwd` file:
 
-![](cybersecurity/images/Pasted%2520image%252020241025020149.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025020149.png)
 
 Nice, we got access, let's start with the privilege escalation.
 
@@ -208,15 +208,15 @@ Nice, we got access, let's start with the privilege escalation.
 
 ## SUDO -L
 
-![](cybersecurity/images/Pasted%2520image%252020241025020240.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025020240.png)
 
 Seems like we have a `/opt/maintenance.py` file we can exploit in order to get root access, let's check at the code:
 
-![](cybersecurity/images/Pasted%2520image%252020241025020359.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025020359.png)
 
 Something simple, just a print statement on it, let's check if we can write in it:
 
-![](cybersecurity/images/Pasted%2520image%252020241025020446.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025020446.png)
 
 And we can indeed write in it, let's escalate our privileges, for this, I used this code:
 
@@ -227,6 +227,6 @@ os.system("/usr/bin/python3 -c 'import os; os.system(\"/bin/bash\")'")
 
 This will pop a new shell with root privileges:
 
-![](cybersecurity/images/Pasted%2520image%252020241025020740.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025020740.png)
 
 And just like that, the CTF is done!

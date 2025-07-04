@@ -211,5 +211,5 @@ The following section will focus on identifying and bypassing weak CSRF tokens t
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250219130520.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219130520.png)
 

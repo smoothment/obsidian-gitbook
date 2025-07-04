@@ -77,12 +77,12 @@ A listing and comparison of common JavaScript frameworks can be found [here](ht
 
 # Question
 
-![](cybersecurity/images/Pasted%2520image%252020250122181504.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250122181504.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250122181527.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250122181527.png)
 
 We find this page, let's just check source code:
 
-![](cybersecurity/images/Pasted%2520image%252020250122181549.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250122181549.png)
 
 Answer is: `HiddenInPlainSight`

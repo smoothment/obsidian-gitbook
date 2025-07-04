@@ -6,7 +6,7 @@ We are performing internal penetration testing for a local company. As you come 
 # Questions
 ----
 
-![](cybersecurity/images/Pasted%2520image%252020250124140539.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124140539.png)
 
 ## 1
 ----
@@ -14,15 +14,15 @@ We are performing internal penetration testing for a local company. As you come 
 Let's visit the site first and send a request to burp:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250124140718.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124140718.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250124141130.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124141130.png)
 
 What we need to do is the following: 
 
 ```ad-summary
 1. Do intercept -> Response to this request.
-2. Change getflag value to enabled: ![](cybersecurity/images/Pasted%2520image%252020250124141225.png)
+2. Change getflag value to enabled: ![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124141225.png)
 3. Forward the request.
 4. Turn off proxy, wait for the page to load and turn intercept again.
 5. Click on the button, and intercept the POST request.
@@ -32,7 +32,7 @@ What we need to do is the following:
 
 If we follow those steps, we get the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250124141428.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124141428.png)
 
 Flag would be: `HTB{d154bl3d_bu770n5_w0n7_570p_m3}`
 
@@ -41,30 +41,30 @@ Flag would be: `HTB{d154bl3d_bu770n5_w0n7_570p_m3}`
 
 Let's visit `/admin.php` and intercept the request:
 
-![](cybersecurity/images/Pasted%2520image%252020250124141615.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124141615.png)
 
 We can use CyberChef for this:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250124141735.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124141735.png)
 
 # 3
 ----
 
 It is a MD5 hash but if we look closely, it is missing a character, we need to fuzz, send the request to intruder and do the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250124141933.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124141933.png)
 
 Add the `alphanum-case.txt` dictionary with these encoding options, we need to do `Base64 Encode` and `Encode as ASCII hex` since this is the way the cookie is encoded in first place.
 
 
-![](cybersecurity/images/Pasted%2520image%252020250124142952.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124142952.png)
 
 
 Now, if we filter by length and check responses, we can see the following:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250124143255.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124143255.png)
 
 There it is, flag is: `HTB{burp_1n7rud3r_n1nj4!}`
 
@@ -73,7 +73,7 @@ There it is, flag is: `HTB{burp_1n7rud3r_n1nj4!}`
 
 Let's use the module:
 
-![](cybersecurity/images/Pasted%2520image%252020250124143624.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124143624.png)
 
 Once we send exploit, we can see that the endpoint is: `CFIDE`
 

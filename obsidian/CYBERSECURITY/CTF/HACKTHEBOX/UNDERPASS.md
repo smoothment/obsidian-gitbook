@@ -24,7 +24,7 @@ sticker: emoji//1f3ce-fe0f
 Let's go into the website:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250120155437.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120155437.png)
 
 Simple apache2 webpage, source code seems normal too, fuzzing does not bring anything useful, there's something else we need to enumerate.
 
@@ -34,7 +34,7 @@ Since I already checked for TCP ports, let's do some UDP port check:
 `sudo nmap -sU --top-ports 100 10.10.11.48`
 
 
-![](cybersecurity/images/Pasted%2520image%252020250120155642.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120155642.png)
 
 There it is, we had ports open on UDP, so, the open ports table would actually be:
 
@@ -49,18 +49,18 @@ There it is, we had ports open on UDP, so, the open ports table would actually b
 | 1813 | raddact |
 If we check on the internet about SNMP, we find the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250120155817.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120155817.png)
 
 It could be useful trying to enumerate this protocol, to our luck, Metasploit can help us with it:
 
-![](cybersecurity/images/Pasted%2520image%252020250120155941.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120155941.png)
 
 
-![](cybersecurity/images/Pasted%2520image%252020250120160017.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120160017.png)
 
 So, we find about something called `Daloradius` 
 
-![](cybersecurity/images/Pasted%2520image%252020250120160052.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120160052.png)
 
 Let's add `underpass.htb` to `/etc/hosts`:
 
@@ -69,7 +69,7 @@ Let's add `underpass.htb` to `/etc/hosts`:
 
 If we go back to the website and search for the `daloradius` directory, we find this:
 
-![](cybersecurity/images/Pasted%2520image%252020250120160325.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120160325.png)
 
 I think we need to fuzz, let's begin exploitation.
 
@@ -87,13 +87,13 @@ In order to fuzz, let's use [dirsearch](https://github.com/maurosoria/dirsearch)
 
 `dirsearch -u "http://underpass.htb/daloradius/" -t 50`
 
-![](cybersecurity/images/Pasted%2520image%252020250120160709.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120160709.png)
 
 We found something important `/app`, let's try to fuzz for that:
 
 `dirsearch -u "http://underpass.htb/daloradius/app" -t 50`
 
-![](cybersecurity/images/Pasted%2520image%252020250120160853.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120160853.png)
 
 ```
 
@@ -101,31 +101,31 @@ We found something important `/app`, let's try to fuzz for that:
 We found a login page, let's check it out:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250120160957.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120160957.png)
 
 We can try `SQLI` and check if we're lucky:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250120161050.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161050.png)
 
 What about default credentials?:
 
-![](cybersecurity/images/Pasted%2520image%252020250120161124.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161124.png)
 
 
-![](cybersecurity/images/Pasted%2520image%252020250120161142.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161142.png)
 
 
 Still no luck, let's try to fuzz a bit more to check if we miss something useful, let's change our wordlist too:
 
 `dirsearch -u "http://underpass.htb/daloradius/app" -t 50 -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt`
 
-![](cybersecurity/images/Pasted%2520image%252020250120161314.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161314.png)
 
 We found something new `/operators`, let's check it out:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250120161421.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161421.png)
 
 This is a different login page than the other one, let's try default creds:
 
@@ -133,14 +133,14 @@ This is a different login page than the other one, let's try default creds:
 `administrator`:`radius`
 
 
-![](cybersecurity/images/Pasted%2520image%252020250120161500.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161500.png)
 
 Nice, we got access, let's look around:
 
-![](cybersecurity/images/Pasted%2520image%252020250120161530.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161530.png)
 
 In the users section, we find the following, an user called `svcMosh` and a password that is hashed, let's decrypt that:
-![](cybersecurity/images/Pasted%2520image%252020250120161644.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161644.png)
 
 We got credentials finally:
 
@@ -151,11 +151,11 @@ We got credentials finally:
 Let's log in using ssh:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250120161747.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161747.png)
 
 Now we can read `user.txt`:
 
-![](cybersecurity/images/Pasted%2520image%252020250120161803.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161803.png)
 
 ```ad-important
 User: `49e125d2a39790c0c0ce8593bb14b103`
@@ -169,11 +169,11 @@ Let's start PRIVESC
 
 We can check our sudo privileges first:
 
-![](cybersecurity/images/Pasted%2520image%252020250120161903.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161903.png)
 
 We have sudo permissions on some binary called `mosh-server`
 
-![](cybersecurity/images/Pasted%2520image%252020250120161956.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120161956.png)
 
 Let's search for anything related on how to exploit this to get a root session:
 
@@ -190,12 +190,12 @@ We can do the following in order to get a root shell:
 
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250120162643.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120162643.png)
 
 Let's read `root.txt`:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250120162658.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120162658.png)
 
 ```ad-important
 Root: `33b5ffcbd7913b1b7a369ebe6843e711`
@@ -203,5 +203,5 @@ Root: `33b5ffcbd7913b1b7a369ebe6843e711`
 
 Just like that, machine is done!
 
-![](cybersecurity/images/Pasted%2520image%252020250120162731.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250120162731.png)
 

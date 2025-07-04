@@ -17,16 +17,16 @@ Curiosity gets the better of you, and you try changing the user_id value to 1000
 ## POC
 
 
-![](cybersecurity/images/Pasted%2520image%252020241105160722.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241105160722.png)
 
 We need to check the email about the order confirmation, seems like this one is vulnerable to IDOR:
 
-![](cybersecurity/images/Pasted%2520image%252020241105160804.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241105160804.png)
 
 Let's send the request:
 
 
-![](cybersecurity/images/Pasted%2520image%252020241105160853.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241105160853.png)
 
 And just like that, we exploited a simple IDOR
 
@@ -103,19 +103,19 @@ This page returns in JSON format your user id, username and email address. We ca
 
 Using burp, we can see the call to the `/api/v1/customer?`:
 
-![](cybersecurity/images/Pasted%2520image%252020241105170248.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241105170248.png)
 
 Let's change that parameter to different users:
 
 ### ID 1
 
-![](cybersecurity/images/Pasted%2520image%252020241105170239.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241105170239.png)
 
 Username is `adam84`
 
 ### ID 2
 
-![](cybersecurity/images/Pasted%2520image%252020241105170302.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241105170302.png)
 
 
 
@@ -123,7 +123,7 @@ Username is `test-account`
 
 ### ID 3
 
-![](cybersecurity/images/Pasted%2520image%252020241105170317.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241105170317.png)
 
 
 Username is `john911`

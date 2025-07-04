@@ -109,5 +109,5 @@ Though not the most popular web server, many big organizations use `IIS` as th
 Aside from these 3 web servers, there are many other commonly used web servers, like [Apache Tomcat](https://tomcat.apache.org/) for `Java` web applications, and [Node.JS](https://nodejs.org/en/) for web applications developed using `JavaScript` on the back end.
 
 
-![](cybersecurity/images/Pasted%2520image%252020250122183655.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250122183655.png)
 

@@ -36,7 +36,7 @@ This type of access is called `Directory Indexing`. It allows us to navigate th
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250220130304.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220130304.png)
 
 Let's use `wpscan`:
 

@@ -97,25 +97,25 @@ We can see from the response that this page is indeed accessible by us. There ar
 
 # Question
 ---
-![](cybersecurity/images/Pasted%2520image%252020250124124608.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124124608.png)
 
 Let's intercept the request using zap, then go to `Attack>Fuzz`:
-![](cybersecurity/images/Pasted%2520image%252020250124124929.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124124929.png)
 
 add the cookie, and the dictionary, set processors: `HASH MD5` and fuzz:
 
-![](cybersecurity/images/Pasted%2520image%252020250124132718.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124132718.png)
 
 We can now filter for `Resp.Body` size:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250124132843.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124132843.png)
 
 Got the cookie: `ee11cbb19052e40b07aac0ca060c23ee`
 
 Let's use this cookie:
 
-![](cybersecurity/images/Pasted%2520image%252020250124132935.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124132935.png)
 
 
 Got the flag: `HTB{fuzz1n6_my_f1r57_c00k13}`

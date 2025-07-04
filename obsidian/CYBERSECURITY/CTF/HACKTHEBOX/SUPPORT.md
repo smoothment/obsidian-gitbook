@@ -30,12 +30,12 @@ sticker: emoji//1f469-200d-1f4bb
 
 We got SMB enabled, let's check if anonymous login is enabled:
 
-![](cybersecurity/images/Pasted%2520image%252020250421130457.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421130457.png)
 
 We got some shares, most interesting one is `support-tools` one, let's check it out:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250421130627.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421130627.png)
 
 We got some common tools but there is one file that is not one of them:
 
@@ -46,19 +46,19 @@ UserInfo.exe.zip
 
 Let's get it on our local machine and analyze it:
 
-![](cybersecurity/images/Pasted%2520image%252020250421130853.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421130853.png)
 
 We got a bunch of files, since we got a `.exe`, we can use `ILSPY` to perform reverse engineering in order to find anything valuable:
 
-![](cybersecurity/images/Pasted%2520image%252020250421132553.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421132553.png)
 
 There's an `ldapQuery()` function which seems to be interesting it uses `getPassword` function, maybe we can find some credentials if we look further:
 
-![](cybersecurity/images/Pasted%2520image%252020250421132710.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421132710.png)
 
 We got something called `enc_password`:
 
-![](cybersecurity/images/Pasted%2520image%252020250421132746.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421132746.png)
 
 There we go, we got a password, since it is encrypted, we can craft a simple python script to decrypt it:
 
@@ -122,7 +122,7 @@ ldapsearch -H ldap://support.htb -x -D 'ldap@support.htb' -w 'nvEfEK16^1aM4$e7Ac
 
 Since it outputs us a lot of stuff, we can either use grep or submit the output to a file and analyze it with a code editor, I analyzed it with `vscode` and found this:
 
-![](cybersecurity/images/Pasted%2520image%252020250421135556.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421135556.png)
 
 We got a password for an user named `support`:
 
@@ -138,7 +138,7 @@ evil-winrm -i 'support.htb' -u 'support' -p 'Ironside47pleasure40Watchful'
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020250421135830.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421135830.png)
 
 With this shell, we can get `user.txt`:
 
@@ -182,7 +182,7 @@ Now, we can proceed with the exploitation, let's do the following:
 New-MachineAccount -MachineAccount PWNED -Password $(ConvertTo-SecureString 'Password123' -AsPlainText -Force)
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250421164453.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421164453.png)
 
 2. Set `msds-AllowedToActOnBehalfOfOtherIdentity`:
 
@@ -306,7 +306,7 @@ Now, we can use `psexec.py` to get a shell:
 python3 psexec.py support.htb/administrator@dc.support.htb -k -no-pass
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250421165540.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421165540.png)
 
 As we can see, we got our shell as `nt authority/system` and can finally read `root.txt`:
 

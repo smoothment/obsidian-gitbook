@@ -84,8 +84,8 @@ The reason behind this is `code obfuscation`. What is it? How is it done? Where
 
 # Question
 ---
-![](cybersecurity/images/Pasted%2520image%252020250130132433.png)
-![](cybersecurity/images/Pasted%2520image%252020250130132455.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130132433.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130132455.png)
 
 
 Flag is: `HTB{4lw4y5_r34d_7h3_50urc3}`

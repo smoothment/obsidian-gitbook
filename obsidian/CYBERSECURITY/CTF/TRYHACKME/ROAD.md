@@ -20,16 +20,16 @@ sticker: emoji//1f6e3-fe0f
 # RECONNAISSANCE
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250502152628.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502152628.png)
 
 
 
-![](cybersecurity/images/Pasted%2520image%252020250502152636.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502152636.png)
 
 We got some stuff in here, a `Track Order` functionality and a contact form, I tried `XSS` on the contact form but no luck, if we try `test` on the `Track Order`, we can see this:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250502152734.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502152734.png)
 
 We get this URL format:
 
@@ -73,32 +73,32 @@ v2                      [Status: 301, Size: 307, Words: 20, Lines: 10, Duration:
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020250502152831.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502152831.png)
 
 If we go to `v2`, we can see this, let's register a test account:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250502152959.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502152959.png)
 
 Now, we can login with our test credentials:
 
-![](cybersecurity/images/Pasted%2520image%252020250502153027.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153027.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250502153032.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153032.png)
 
 
 We got a lot of options, If we go to our profile, we can notice this:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250502153146.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153146.png)
 
 We got an admin email `admin@sky.thm`, if we check the options, we can notice this:
 
-![](cybersecurity/images/Pasted%2520image%252020250502153207.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153207.png)
 
 We got a `ResetUser` functionality, let's check it out:
 
-![](cybersecurity/images/Pasted%2520image%252020250502153307.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153307.png)
 
 We can reset passwords, let's proceed to exploitation.
 
@@ -109,36 +109,36 @@ We can reset passwords, let's proceed to exploitation.
 If we submit a test password to our proxy, we can see the following request:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250502153425.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153425.png)
 
 If we can modify the `uname` parameter, we can maybe perform `account takeover` on the admin user to set a new password:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250502153527.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153527.png)
 
 It says password changed, let's try logging in the admin account:
 
-![](cybersecurity/images/Pasted%2520image%252020250502153606.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153606.png)
 
 
-![](cybersecurity/images/Pasted%2520image%252020250502153616.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153616.png)
 
 There we go, account takeover worked, if we remember the `profile`, we can upload images, we can maybe embed a reverse shell and gain access:
 
-![](cybersecurity/images/Pasted%2520image%252020250502153910.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153910.png)
 
 
 
-![](cybersecurity/images/Pasted%2520image%252020250502154001.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154001.png)
 
 
 If we click on `Edit Profile`, the request goes through, if we capture the request, we can get to know the destination path:
 
-![](cybersecurity/images/Pasted%2520image%252020250502154228.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154228.png)
 
 We need to go to `/v2/profileimages`
 
-![](cybersecurity/images/Pasted%2520image%252020250502154317.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154317.png)
 
 So, let's simply go to:
 
@@ -149,7 +149,7 @@ http://10.10.167.2/v2/profileimages/thm_shell.php
 If we have our listener ready, we can receive the connection:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250502154354.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154354.png)
 
 Let's proceed with privilege escalation.
 
@@ -169,16 +169,16 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250502154453.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154453.png)
 
 Let's use linpeas:
 
-![](cybersecurity/images/Pasted%2520image%252020250502154957.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154957.png)
 
 There are some suspicious connections on here, if we check what's the port `27017`
 used for:
 
-![](cybersecurity/images/Pasted%2520image%252020250502155127.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502155127.png)
 
 As seen, this port may be used by `mongodb`, let's go inside of it:
 
@@ -243,7 +243,7 @@ webdeveloper:BahamasChapp123!@#
 
 We can go into ssh with those:
 
-![](cybersecurity/images/Pasted%2520image%252020250502155718.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502155718.png)
 
 We are now able to read `user.txt`:
 
@@ -320,7 +320,7 @@ sudo LD_PRELOAD=./exploit.so /usr/bin/sky_backup_utility
 
 Once we use it, we get a root shell:
 
-![](cybersecurity/images/Pasted%2520image%252020250502161151.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502161151.png)
 
 Let's get root flag and finish the CTF:
 
@@ -329,5 +329,5 @@ root@sky:/tmp# cat /root/root.txt
 3a62d897c40a815ecbe267df2f533ac6
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250502161303.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502161303.png)
 

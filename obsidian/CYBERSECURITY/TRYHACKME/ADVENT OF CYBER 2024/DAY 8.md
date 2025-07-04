@@ -55,7 +55,7 @@ Before we start, review some important concepts to help you better understand th
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020241208144201.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241208144201.png)
 
 ## Generating Shellcode
 ---
@@ -258,7 +258,7 @@ $thandle = [CrtThread]::CreateThread(0, 0, $addr, 0, 0, 0)
 
 If you've done it properly, the PowerShell terminal in the VM will look like the screenshot below:
 
-![](cybersecurity/images/Pasted%2520image%252020241208144640.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241208144640.png)
 
 Once you execute the final line in the PowerShell terminal and press `Enter`, you will get a reverse shell in the AttackBox, giving you complete access to the computer even if the Windows Defender is enabled. Now you can issue any command, like issuing `dir`, which will list all the directories.
 
@@ -283,12 +283,12 @@ Can you help Glitch identify and update the shellcode with the correct IP and po
 ---
 
 
-![](cybersecurity/images/Pasted%2520image%252020241208144730.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241208144730.png)
 
 
 First, let's create the shellcode in order to start the steps to get a reverse shell:
 
-![](cybersecurity/images/Pasted%2520image%252020241208145857.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241208145857.png)
 
 
 Now, let's paste this code into windows to receive the connection once we've set up the listener:
@@ -340,14 +340,14 @@ $thandle = [CrtThread]::CreateThread(0, 0, $addr, 0, 0, 0)
 
 We have to copy it step by step in order to avoid the AV, let's paste it and get the connection:
 
-![](cybersecurity/images/Pasted%2520image%252020241208151804.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241208151804.png)
 
-![](cybersecurity/images/Pasted%2520image%252020241208151833.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241208151833.png)
 
 And like that, we got a reverse shell, flag in this case is: `AOC{GOT_MY_ACCESS_B@CK007}`
 
 
-![](cybersecurity/images/Pasted%2520image%252020241208151925.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241208151925.png)
 
 
 Just like that, day 8 is done!
