@@ -69,4 +69,4 @@ In the next section, we will attack an application submitting the CSRF token via
 
 # Question
 ----
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219130218.png)
+![](Pasted image 20250219130218.png)

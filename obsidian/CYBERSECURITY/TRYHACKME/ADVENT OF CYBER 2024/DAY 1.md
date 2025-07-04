@@ -43,15 +43,15 @@ You'll now see two extracted two files: `song.mp3` and `somg.mp3`.
 
 To quickly determine the file's contents, double-click on the "Terminal" icon on the desktop then run the `file` command on each one. First, let's try checking `song.mp3`.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201140254.png)
+![](Pasted image 20241201140254.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201140326.png)
+![](Pasted image 20241201140326.png)
 
 There doesn't seem to be anything suspicious, according to the output. As expected, this is just an MP3 file.
 
 How about the second file `somg.mp3`? From the filename alone, we can tell something is not right. Still, let's confirm by running the `file` command on it anyway.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201140345.png)
+![](Pasted image 20241201140345.png)
 
 Now, this is more interesting!
 
@@ -59,7 +59,7 @@ The output tells us that instead of an MP3, the file is an "MS Windows shortcut"
 
 There are multiple ways to inspect `.lnk`  files to reveal the embedded commands and attributes. For this room, however, we'll use `ExifTool`, which is already installed on this machine.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201140434.png)
+![](Pasted image 20241201140434.png)
 
 ```ad-info
 What this PowerShell command does:
@@ -174,7 +174,7 @@ If you look through the search results, you can be able infer the malicious acto
 
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201141051.png)
+![](Pasted image 20241201141051.png)
 
 Aha! Looks like this user has made a critical mistake.
 
@@ -227,7 +227,7 @@ If you've thoroughly investigated the GitHub search result, you should have unco
 
 We know the attacker left a distinctive signature in the PowerShell code (MM). This allowed us to search for related repositories and issues pages on GitHub. We then discovered an Issues page where the attacker engaged in discussions, providing more context and linking their activity to other projects.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201141322.png)
+![](Pasted image 20241201141322.png)
 
 In this discussion, they responded to a query about modifying the code. This response, paired with their unique handle, was another critical slip-up, leaving behind a trail of evidence that can be traced back to them. By analyzing the timestamps, usernames, and the nature of their interactions, we can now attribute the mastermind behind the attack to MM.
 
@@ -257,29 +257,29 @@ Even though all signs on the website seemed to point to Glitch as the author, it
 ---
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201141430.png)
+![](Pasted image 20241201141430.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201141441.png)
+![](Pasted image 20241201141441.png)
 
 We got `Tyler Ramsbey`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201141458.png)
+![](Pasted image 20241201141458.png)
 
 Analyzing the GitHub conversation between MM and the other user, we found this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201141526.png)
+![](Pasted image 20241201141526.png)
 
 C2 server URL is: `http://papash3ll.thm/data`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201141555.png)
+![](Pasted image 20241201141555.png)
 
 Let's take a look at MM's GitHub profile:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201141642.png)
+![](Pasted image 20241201141642.png)
 
 We found two repositories, first one is the malware we've already analyzed, second one is a repository containing the configuration files for MM's GitHub profile, let's check it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241201141738.png)
+![](Pasted image 20241201141738.png)
 
 We found that M.M is known as `Mayor Malware`
 

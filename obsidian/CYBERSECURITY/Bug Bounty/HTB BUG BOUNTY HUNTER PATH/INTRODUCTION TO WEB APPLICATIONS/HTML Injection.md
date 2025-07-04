@@ -60,12 +60,12 @@ In this example, as everything is being carried out on the front end, refreshing
 
 # Question
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250122182012.png)
+![](Pasted image 20250122182012.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250122182036.png)
+![](Pasted image 20250122182036.png)
 
 The text that appears is the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250122182120.png)
+![](Pasted image 20250122182120.png)
 
 Then, answer is: `Your name is Click Me`

@@ -232,7 +232,7 @@ This payload is a lot more specific than the above examples. This would be about
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106101715.png)
+![](Pasted image 20241106101715.png)
 
 
 ## Reflected XSS
@@ -274,7 +274,7 @@ You'll need to test every possible point of entry; these include:
 - URL File Path
 - Sometimes HTTP Headers (although unlikely exploitable in practice)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106102130.png)
+![](Pasted image 20241106102130.png)
 
 
 ## Stored XSS
@@ -405,8 +405,8 @@ Now when you click the enter button, you'll get an alert popup with the string 
 
 And then, you'll get a confirmation message that your payload was successful with a link to the next level.  
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106104749.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106104830.png)
+![](Pasted image 20241106104749.png)
+![](Pasted image 20241106104830.png)
 
 #### **Level Two:**  
 
@@ -422,7 +422,7 @@ Viewing the page source, you can see your name reflected inside the value attrib
   
 It wouldn't work if you were to try the previous JavaScript payload because you can't run it from inside the input tag. Instead, we need to escape the input tag first so the payload can run properly. You can do this with the following payload: `"><script>alert('THM');</script>` 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106104937.png)
+![](Pasted image 20241106104937.png)
 
 
 The important part of the payload is the `">` which closes the value parameter and then closes the input tag.  
@@ -433,7 +433,7 @@ This now closes the input tag properly and allows the JavaScript payload to run:
 
 Now when you click the enter button, you'll get an alert popup with the string THM. And then, you'll get a confirmation message that your payload was successful with a link to the next level.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106104949.png)
+![](Pasted image 20241106104949.png)
 
   
 #### **Level Three:**
@@ -454,12 +454,12 @@ Into This:
 
 The important part of the above payload is `</textarea>`, which causes the textarea element to close so the script will run. 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106105040.png)
+![](Pasted image 20241106105040.png)
 
 
 Now when you click the enter button, you'll get an alert popup with the string THM. And then, you'll get a confirmation message that your payload was successful with a link to the next level.  
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106105052.png)
+![](Pasted image 20241106105052.png)
 
 
 
@@ -475,11 +475,11 @@ You'll have to escape the existing JavaScript command, so you're able to run you
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5efe36fb68daf465530ca761/room-content/17c6b9717f16af910557438017be9c53.png)  
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106105148.png)
+![](Pasted image 20241106105148.png)
 
 Now when you click the enter button, you'll get an alert popup with the string THM. And then, you'll get a confirmation message that your payload was successful with a link to the next level.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106105158.png)
+![](Pasted image 20241106105158.png)
 
   
 ##### **Level Five:**
@@ -515,7 +515,7 @@ When a word gets removed from a string, there's a helpful trick that you can try
 
 `<sscriptcript>alert('THM');</sscriptcript>`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106105313.png)
+![](Pasted image 20241106105313.png)
 
 ```
   
@@ -523,7 +523,7 @@ When a word gets removed from a string, there's a helpful trick that you can try
 Try entering the payload `<sscriptcript>alert('THM');</sscriptcript>`
 and click the enter button, you'll get an alert popup with the string THM. And then, you'll get a confirmation message that your payload was successful with a link to the next level.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106105406.png)
+![](Pasted image 20241106105406.png)
 
 
 
@@ -545,9 +545,9 @@ Let's change our payload to reflect this `/images/cat.jpg" onload="alert('THM')
 
 Now when you click the enter button, you'll get an alert popup with the string THM. And then, you'll get a confirmation message that your payload was successful; with this being the last level, you'll receive a flag that can be entered below.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106105522.png)
+![](Pasted image 20241106105522.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241106105533.png)
+![](Pasted image 20241106105533.png)
 
 
 

@@ -167,17 +167,17 @@ I'll be using the same channel that I used in the [[XPATH INJECTION|XPATH INJECT
 <iframe width="800" height="545" src="https://www.youtube.com/embed/bqPtLEltBp4" title="Curso Bug Bounty  |  LDAP Injection- Capitulo 4-1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 Imagine we have this lab:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011170436.png)
+![](Pasted image 20241011170436.png)
 Login page with OpenLDAP server, if pass in a simple request, we get this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011170511.png)
+![](Pasted image 20241011170511.png)
 
 Seems like a simple POST request, we can follow the redirection to view this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011170548.png)
+![](Pasted image 20241011170548.png)
 
 So, we can log in, let's begin to test payloads to exploit the LDAP injection, for example, if we modify the values to `*`, we get this:
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011170642.png)
+![](Pasted image 20241011170642.png)
 
 Let's imagine the LDAP server injects the user input directly into the server, if so, an attacker could follow this guideline:
 
@@ -189,13 +189,13 @@ So, if we follow our previous example, when we use `*` in both parameters, this 
 
 We would be performing that search filter, `*` performs as as "wildcard", which means, we are not searching for a specific user instead, we are looking up for every attribute in which `uid` exists, the same goes for `userPassword`, this is the simplest way to exploit a LDAP injection, let's send the request to burp to see its result:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011171402.png)
+![](Pasted image 20241011171402.png)
 
 And we were able to log in even without credentials, this is the severity of the vulnerability, if the code is vulnerable, we can even authenticate using a simple injection.
 
 Now imagine we want to login as an specific user, we can change the request like this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011171520.png)
+![](Pasted image 20241011171520.png)
 
 Change the username to the user we want to authenticate as, imagine we know the user for the admin of the server, we can log in using that, for the example, let's imagine user `coco` is the admin of the server, the search filter would go like this:
 
@@ -210,8 +210,8 @@ Not really, we could use the search filter even if we only know one letter, we c
 
 				`(&(uid=h*)(userPassword=*))`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011171901.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011171911.png)
+![](Pasted image 20241011171901.png)
+![](Pasted image 20241011171911.png)
 We were able to log in, even without knowing the user, seems like a critical vulnerability, doesn't it?
 
 ### SENDING IT TO INTRUDER:
@@ -219,17 +219,17 @@ We were able to log in, even without knowing the user, seems like a critical vul
 
 If we send our request to intruder, we can brute force and see the length and response codes, let's see the example from the video:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011172444.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011172456.png)
+![](Pasted image 20241011172444.png)
+![](Pasted image 20241011172456.png)
 
 For example, in that lab, we got this the moment we filtered the length:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011172606.png)
+![](Pasted image 20241011172606.png)
 We already know the h contains an user, being it `htb-student`, but what about the s:
 
 
 
-**![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011172731.png)
+**![](Pasted image 20241011172731.png)
 
 Seems like we've logged in as super user!
 
@@ -356,7 +356,7 @@ intitle:"phpLDAPadmin" inurl:cmd.php
 
 For this vid lab, we follow the same thing as the previous section, if we use the same payload as before, we get:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011174044.png)
+![](Pasted image 20241011174044.png)
 
 So, seems like the server is vulnerable to BLIND LDAP injection, if we pass in the following payload, we get what we saw in the previous image, let's try to create another payload:
 
@@ -366,8 +366,8 @@ So, seems like the server is vulnerable to BLIND LDAP injection, if we pass in t
 
 If we pass this to our proxy, we get the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011174442.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241011174518.png)
+![](Pasted image 20241011174442.png)
+![](Pasted image 20241011174518.png)
 
 We can even create our own tools for the enumeration and exploitation of this vulnerability.
 

@@ -71,7 +71,7 @@ In reality, you need more cryptography to verify that the person you’re talkin
 
 ## QUESTION
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101153820.png)
+![](Pasted image 20241101153820.png)
 
 # RSA
 
@@ -132,7 +132,7 @@ Crypto CTF challenges often present you with a set of these values, and you need
 
 ## QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101153916.png)
+![](Pasted image 20241101153916.png)
 
 
 # Diffie-Hellman Key Exchange
@@ -167,7 +167,7 @@ Diffie-Hellman Key Exchange is often used alongside RSA public key cryptography.
 ## QUESTIONS
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101154150.png)
+![](Pasted image 20241101154150.png)
 
 # SSH
 
@@ -284,7 +284,7 @@ During CTFs, penetration testing, and red teaming exercises, SSH keys are an e
 
 # QUESTION
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101154310.png)
+![](Pasted image 20241101154310.png)
 
 # Digital Signatures and Certificates
 
@@ -314,7 +314,7 @@ Let’s say you have a website and want to use HTTPS. This step requires having 
 ## QUESTIONS
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101154417.png)
+![](Pasted image 20241101154417.png)
 
 
 # PGP AND GPG
@@ -383,5 +383,5 @@ Let’s say you got a new computer. All you need to do is import your key, and y
 
 # QUESTION
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101154527.png)
+![](Pasted image 20241101154527.png)
 

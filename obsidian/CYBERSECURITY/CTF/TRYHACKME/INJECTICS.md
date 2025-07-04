@@ -20,7 +20,7 @@ sticker: lucide//syringe
 # RECONNAISSANCE
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506130424.png)
+![](Pasted image 20250506130424.png)
 
 
 
@@ -67,20 +67,20 @@ functions.php           [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 262
 If we to the login page, we can see this:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506130452.png)
+![](Pasted image 20250506130452.png)
 
 Let's try basic injection on the email:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506130521.png)
+![](Pasted image 20250506130521.png)
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506130529.png)
+![](Pasted image 20250506130529.png)
 
 As seen, we got an alert saying invalid keywords are detected, Let's submit the request to our proxy:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506130854.png)
+![](Pasted image 20250506130854.png)
 
 As seen, there seems to be some sort of filter, let's try encoding it in a more advanced way:
 
@@ -88,11 +88,11 @@ As seen, there seems to be some sort of filter, let's try encoding it in a more 
 %27%20||%201=1%20--+
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506131047.png)
+![](Pasted image 20250506131047.png)
 
 As seen, we are able to bypass the filter, let's forward the request and check the panel:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506131153.png)
+![](Pasted image 20250506131153.png)
 
 We can edit actions, let's proceed to exploitation.
 
@@ -102,12 +102,12 @@ We can edit actions, let's proceed to exploitation.
 
 If we go to the edit section, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506131238.png)
+![](Pasted image 20250506131238.png)
 
 Let's send a basic request to view the format of it:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506131513.png)
+![](Pasted image 20250506131513.png)
 
 As seen, it says that there was an error updating there must be another way, let's try to close the `sql` statement by using `;` and drop the users table:
 
@@ -115,12 +115,12 @@ As seen, it says that there was an error updating there must be another way, let
 1; drop table users -- -
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506132247.png)
+![](Pasted image 20250506132247.png)
 
 
 Seems like we are missing something, as it says, the table `users` got deleted, let's go back to our main application and check everything:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506132415.png)
+![](Pasted image 20250506132415.png)
 
 I forgot to check the source code, it says we got a file named `mail.log`, let's check it out:
 
@@ -154,7 +154,7 @@ dev@injectics.thm
 Now we understand, it seems that, by deleting the `users` table, we can use those default credentials to get access as the admin user on the panel, let's try:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506142732.png)
+![](Pasted image 20250506142732.png)
 
 There we go, we got in as admin and got our first flag:
 
@@ -169,20 +169,20 @@ THM{INJECTICS_ADMIN_PANEL_007}
 Now, as we can see, a new option was added to our dashboard, we can see the `profile` section:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506142950.png)
+![](Pasted image 20250506142950.png)
 
 As seen, we are able to update our email, first name and last name, let's send the request to our proxy so we can analyze it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506143115.png)
+![](Pasted image 20250506143115.png)
 
 Since we can see that `admin` is reflected on the dashboard main page, if we change the `fname` to something else, it could be reflected on there again, if this works, we are dealing with `SSTI`, let's test it out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506143213.png)
+![](Pasted image 20250506143213.png)
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506143224.png)
+![](Pasted image 20250506143224.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506143243.png)
+![](Pasted image 20250506143243.png)
 
 As seen, this is vulnerable to `SSTI`, now, we must identify the template engine, let's do it:
 
@@ -192,7 +192,7 @@ As seen, this is vulnerable to `SSTI`, now, we must identify the template engine
 
 After using that payload, i got this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506143500.png)
+![](Pasted image 20250506143500.png)
 
 This means that the template engine we are dealing with is `jinja2`, based on that, we can achieve `rce` by doing:
 
@@ -200,7 +200,7 @@ This means that the template engine we are dealing with is `jinja2`, based on th
 {{['id',""]|sort('passthru')}}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506143705.png)
+![](Pasted image 20250506143705.png)
 
 As seen we can achieve `rce`, let's send a reverse shell using:
 
@@ -210,7 +210,7 @@ As seen we can achieve `rce`, let's send a reverse shell using:
 
 If we check our listener:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506144244.png)
+![](Pasted image 20250506144244.png)
 
 ```
 www-data@injectics:/var/www/html$ ls -la
@@ -255,6 +255,6 @@ www-data@injectics:/var/www/html$ cat flags/5d8af1dc14503c7e4bdc8e51a3469f48.txt
 THM{5735172b6c147f4dd649872f73e0fdea}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250506144758.png)
+![](Pasted image 20250506144758.png)
 
 

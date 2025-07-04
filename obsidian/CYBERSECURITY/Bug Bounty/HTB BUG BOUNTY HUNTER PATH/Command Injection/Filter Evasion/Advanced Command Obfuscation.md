@@ -166,7 +166,7 @@ In addition to the techniques we discussed, we can utilize numerous other method
 ---
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205144449.png)
+![](Pasted image 20250205144449.png)
 
 We can do the following payload:
 

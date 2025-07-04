@@ -44,7 +44,7 @@ echo '10.10.153.131 jack.thm' | sudo tee -a /etc/hosts
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125606.png)
+![](Pasted image 20250617125606.png)
 
 Time to fuzz, let's find anything hidden on here:
 
@@ -82,7 +82,7 @@ login                   [Status: 302, Size: 0, Words: 1, Lines: 1, Duration: 235
 
 Not much, the scan said that `robots.txt` entrance is allowed, let's check:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125947.png)
+![](Pasted image 20250617125947.png)
 
 Since we got `wp-admin`, we know that we are dealing with a WordPress installation, no need to check the login page since we don't have credentials yet, instead, let's use `wpscan` to enumerate the web application:
 
@@ -217,7 +217,7 @@ wpscan -U users.txt -P /usr/share/wordlists/fasttrack.txt --url http://jack.thm
 
 After a couple minutes of wait, we get credentials for Wendy, if you want to speed up the process, just use Wendy as the username:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617132550.png)
+![](Pasted image 20250617132550.png)
 
 
 ```
@@ -227,25 +227,25 @@ wendy:changelater
 
 Let's login:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617132639.png)
+![](Pasted image 20250617132639.png)
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617132721.png)
+![](Pasted image 20250617132721.png)
 
 Unfortunately for us, we cannot do much to get a reverse shell yet, we need to exploit this: 
  
 `EXPLOIT: https://www.exploit-db.com/exploits/44595`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617153937.png)
+![](Pasted image 20250617153937.png)
 
 
 Basically, we need to intercept the request and change a parameter, let's do it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617154114.png)
+![](Pasted image 20250617154114.png)
 
 Click on Update Profile:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617154612.png)
+![](Pasted image 20250617154612.png)
 
 On here we need to add:
 
@@ -254,15 +254,15 @@ On here we need to add:
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617154700.png)
+![](Pasted image 20250617154700.png)
 
 Once we send the request, we notice our dashboard changed:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617154828.png)
+![](Pasted image 20250617154828.png)
 
 We got new functionalities, we can get a shell through the `plugin editor`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617154915.png)
+![](Pasted image 20250617154915.png)
 
 We can simply add this on top:
 
@@ -271,22 +271,22 @@ We can simply add this on top:
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617155345.png)
+![](Pasted image 20250617155345.png)
 
 
 
 Save it and now we need to trigger it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617155131.png)
+![](Pasted image 20250617155131.png)
 
 To trigger it, we need to go to `Installed Plugins` and activate it:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617155159.png)
+![](Pasted image 20250617155159.png)
 
 If we check our listener:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617155405.png)
+![](Pasted image 20250617155405.png)
 
 Ok time for privilege escalation.
 
@@ -307,32 +307,32 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617155558.png)
+![](Pasted image 20250617155558.png)
 
 Now we're good to go, let's check users:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617155642.png)
+![](Pasted image 20250617155642.png)
 
 We only got `jack`, let's check his home:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617155725.png)
+![](Pasted image 20250617155725.png)
 
 We got a `reminder.txt` file:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617155949.png)
+![](Pasted image 20250617155949.png)
 
 They talking bout some backups, let's use linpeas to check that:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617161259.png)
+![](Pasted image 20250617161259.png)
 
 As seen, inside of `/var/backups` we can find the `id_rsa` for jack, let's grab it and get into ssh:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617161410.png)
+![](Pasted image 20250617161410.png)
 
 Nice, it works, we can run linpeas again and `pspy` to check active processes and any other relevant info that may help us to get into root:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617161855.png)
+![](Pasted image 20250617161855.png)
 
 Every minute, a `/opt/statuscheck/checker.py` script runs as root, let's check what it does and if we can modify it:
 
@@ -347,9 +347,9 @@ As seen, this runs `os.system` and  uses curl to save a log, we don't have write
 
 Once we use linpeas, we notice we are part of the family group, this group has write permissions over `/usr/lib/python 2.7`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617162155.png)
+![](Pasted image 20250617162155.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617162303.png)
+![](Pasted image 20250617162303.png)
 
 What we can do is modify the `os.py` file to embed a reverse shell that will triggers once the cronjob scripts runs, let's do it, we need to modify:
 
@@ -376,11 +376,11 @@ dup2(s.fileno(),2)
 pty.spawn("/bin/bash")
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617162534.png)
+![](Pasted image 20250617162534.png)
 
 Now, save it and start the listener, once the script runs again, we will receive a shell:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617162645.png)
+![](Pasted image 20250617162645.png)
 
 We can now read both flags and end the CTF:
 
@@ -392,5 +392,5 @@ root@jack:~# cat /root/root.txt
 b8b63a861cc09e853f29d8055d64bffb
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617162752.png)
+![](Pasted image 20250617162752.png)
 

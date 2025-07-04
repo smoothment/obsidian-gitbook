@@ -447,7 +447,7 @@ user@thm$  python3 cupp.py -a
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512164644.png)
+![](Pasted image 20250512164644.png)
 
 
 # Offline Attacks - Dictionary and Brute-Force
@@ -591,7 +591,7 @@ Stopped: Mon Oct 11 10:54:08 2021
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512164845.png)
+![](Pasted image 20250512164845.png)
 
 
 
@@ -722,7 +722,7 @@ $password0
 
 Now it's practice time to create your own rule.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512165303.png)
+![](Pasted image 20250512165303.png)
 
 
 # Deploy the VM
@@ -875,7 +875,7 @@ Finally, it is worth it to check other online password attacks tools to expand y
 
 ### FTP
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512170011.png)
+![](Pasted image 20250512170011.png)
 
 Let's brute-force the ftp login first:
 
@@ -928,7 +928,7 @@ THM{d0abe799f25738ad739c20301aed357b}
 
 ### Rule-Based
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512170320.png)
+![](Pasted image 20250512170320.png)
 
 
 We need to add rules to our `/etc/john/john.conf` file, then expand it and run hydra against `smtp`, let's automate all of the process using bash:
@@ -971,16 +971,16 @@ After a while, we get the password:
 ### Login-Get
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512182549.png)
+![](Pasted image 20250512182549.png)
 
 Let's go to the page and check it out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512174207.png)
+![](Pasted image 20250512174207.png)
 
 We need to check the behavior of the request, let's submit it to our proxy:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512174314.png)
+![](Pasted image 20250512174314.png)
 With all this information, we can now craft a hydra command:
 
 ```
@@ -1011,7 +1011,7 @@ hydra -l phillips -P clinic.lst 10.10.131.98 http-get-form "/login-get/index.php
 We got a bunch of passwords, after trying them, the right one is `Paracetamol`:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512181201.png)
+![](Pasted image 20250512181201.png)
 
 We got our flag:
 
@@ -1022,9 +1022,9 @@ THM{33c5d4954da881814420f3ba39772644}
 
 ### Login-Post
 ---
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512182539.png)
+![](Pasted image 20250512182539.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512182604.png)
+![](Pasted image 20250512182604.png)
 
 Based on the same stuff as before, we need to submit the request to our proxy and simply build the command, for the sake of time, I'll simply provide the hydra command:
 
@@ -1040,7 +1040,7 @@ OxytocinnicotyxO
 
 If we login, we can see the flag:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512182630.png)
+![](Pasted image 20250512182630.png)
 
 ```
 THM{f8e3750cc0ccbb863f2706a3b2933227}

@@ -74,7 +74,7 @@ As we can see this time, the scan took much longer, sent almost six times the nu
 
 # Question
 ---
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129144015.png)
+![](Pasted image 20250129144015.png)
 
 We can use the following command:
 
@@ -82,7 +82,7 @@ We can use the following command:
 
 If we wait, we'll find a page called `forum/flag.php`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129145846.png)
+![](Pasted image 20250129145846.png)
 
 Got the flag:
 

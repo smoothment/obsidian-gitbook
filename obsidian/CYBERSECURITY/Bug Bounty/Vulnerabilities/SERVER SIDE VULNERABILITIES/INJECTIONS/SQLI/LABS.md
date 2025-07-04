@@ -3,15 +3,15 @@ sticker: emoji//1f9ea
 ---
 # Lab: SQL injection UNION attack, determining the number of columns returned by the query
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030154632.png)
+![](Pasted image 20241030154632.png)
 
 To begin with this lab let's take a look at the page:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030154840.png)
+![](Pasted image 20241030154840.png)
 
 We have a `refine your search` section, let's send the request to burp to analyze it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030155112.png)
+![](Pasted image 20241030155112.png)
 
 We have a `filter?category=` section, I believe this is our injectable section, let's begin with the SQLI:
 
@@ -19,18 +19,18 @@ We have a `filter?category=` section, I believe this is our injectable section, 
 For this, I will use the notes from [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/INJECTIONS/SQLI/SQL INJECTION (SQLI).md|SQLI]], let's send our request to intruder and start the attack in the following way:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030155422.png)
+![](Pasted image 20241030155422.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030155739.png)
+![](Pasted image 20241030155739.png)
 
 Let's launch the attack:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030155927.png)
+![](Pasted image 20241030155927.png)
 Judging based on the status code and response, we can pretty much visualize `' ORDER BY 3--` was the successful payload, let's look at the response:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030160033.png)
+![](Pasted image 20241030160033.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030160134.png)
+![](Pasted image 20241030160134.png)
 
 
 Now, knowing that 3 is the right one, let's use the UNION attack:
@@ -65,7 +65,7 @@ Now, knowing that 3 is the right one, let's use the UNION attack:
 Let's use intruder again the test our payloads:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030161904.png)
+![](Pasted image 20241030161904.png)
 
 So, the payload that worked was this:
 
@@ -78,7 +78,7 @@ Let's send the request and finish the lab:
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030162009.png)
+![](Pasted image 20241030162009.png)
 
 ## EXPLANATION VIDEO
 
@@ -89,11 +89,11 @@ Let's send the request and finish the lab:
 # Lab: SQL injection UNION attack, finding a column containing text
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030162905.png)
+![](Pasted image 20241030162905.png)
 
 ## SENDING THE REQUEST
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030171439.png)
+![](Pasted image 20241030171439.png)
 
 So, taking advantage of the notes I took previously, this is what could work:
 
@@ -127,7 +127,7 @@ Let's try, first, let's send the request to intruder and launch the attack:
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030173119.png)
+![](Pasted image 20241030173119.png)
 
 If we launch the attack, we realize that:
 
@@ -136,7 +136,7 @@ If we launch the attack, we realize that:
 Was successful:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030173318.png)
+![](Pasted image 20241030173318.png)
 
 So, we can finish the lab by sending the following request:
 
@@ -149,7 +149,7 @@ But since we need to send it encoded, this would be what we need to send:
 `%27%20UNION%20select%20NULL%2C%270lrAqo%27%2CNULL--`
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241030173523.png)
+![](Pasted image 20241030173523.png)
 
 
 ## EXPLANATION VIDEO

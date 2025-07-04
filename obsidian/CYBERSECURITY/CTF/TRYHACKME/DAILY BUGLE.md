@@ -16,18 +16,18 @@ sticker: emoji//1f577-fe0f
 
 We got 3 open ports, let's take a look at the website:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121165122.png)
+![](Pasted image 20241121165122.png)
 
 Seems like a simple website, let's try to fuzz in order to find anything, if not, I think that login part is interesting and we could go back to check any vulnerability in it
 
 ## FUZZING
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121165255.png)
+![](Pasted image 20241121165255.png)
 
 We found a lot of directories, let's take a look at `/administrator`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121170507.png)
+![](Pasted image 20241121170507.png)
 
 Got a login page for admin in this, if we look around the page source, we are able to identify this is `Joomla 3.7.0`
 
@@ -35,7 +35,7 @@ Got a login page for admin in this, if we look around the page source, we are ab
 # RECONNAISSANCE
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121170613.png)
+![](Pasted image 20241121170613.png)
 Searching up for an exploit related to this version, we find this, a [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/INJECTIONS/SQLI/SQL INJECTION (SQLI).md|SQL Injection]] vulnerability, let's take a look at the exploit itself:
 
 
@@ -85,7 +85,7 @@ We can either use sqlmap or an exploit developed in python, I used the exploit a
 ##### Output
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121171916.png)
+![](Pasted image 20241121171916.png)
 
 We got the user `jonah` and a password in a hash formato, let's crack that hash using `john`
 
@@ -95,14 +95,14 @@ hash: `$2y$10$0veO/JSFh4389Lluc4Xya.dfy2MF.bZhz0jVMw.V.d3p12kBtZutm`
 #### John
 ----
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121174205.png)
+![](Pasted image 20241121174205.png)
 
 got password `spiderman123`
 
 
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121175307.png)
+![](Pasted image 20241121175307.png)
 
 We are inside the panel, let's begin with exploitation to get our reverse shell
 
@@ -114,31 +114,31 @@ Once we are inside the panel, if we go to templates, we see the following:
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121175454.png)
+![](Pasted image 20241121175454.png)
 
 If we dig up further, we notice we are able to modify the `index.php` in order to put a reverse shell:
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121175549.png)
+![](Pasted image 20241121175549.png)
 
 Put the reverse shell, set up listener, refresh the page and get the shell:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121180244.png)
+![](Pasted image 20241121180244.png)
 
 Once we got our shell, let's [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stabilize]] it and try to get anything useful:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121180409.png)
+![](Pasted image 20241121180409.png)
 
 We have now an stable shell, let's take a look at how many users are in this machine:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121180459.png)
+![](Pasted image 20241121180459.png)
 
 Two users, `jjameson` and `root`, we need some sort of way to get jameson's password to switch into that user, if we take a look at previous pictures, we have a `configuration.php` file, let's `cat` on it:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121180633.png)
+![](Pasted image 20241121180633.png)
 
 Nice, we found the password, let's switch users:
 
@@ -151,7 +151,7 @@ Nice, we found the password, let's switch users:
 `jjameson` : `nv5uz9r3ZEDzVjNu` 
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121180958.png)
+![](Pasted image 20241121180958.png)
 
 Nice, we were able to switch users. Let's proceed with privilege escalation
 
@@ -166,11 +166,11 @@ Nice, we were able to switch users. Let's proceed with privilege escalation
 If we use `sudo -l` on `jjameson`, we get the following:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121181128.png)
+![](Pasted image 20241121181128.png)
 
 We are able to run sudo in `/usr/bin/yum`, if we check what [GTFOBINS](https://gtfobins.github.io/) have for us, we get this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121181231.png)
+![](Pasted image 20241121181231.png)
 
 So, in order to get a root shell, we need to do the following:
 
@@ -200,7 +200,7 @@ So, in order to get a root shell, we need to do the following:
 #### PoC
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241121181849.png)
+![](Pasted image 20241121181849.png)
 
 Got a shell as root and like that, CTF is over.
 

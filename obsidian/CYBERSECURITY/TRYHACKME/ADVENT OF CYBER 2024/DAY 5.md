@@ -21,7 +21,7 @@ This is the continuation of [[CYBERSECURITY/TRYHACKME/ADVENT OF CYBER 2024/DAY 4
 - Understand remediation measures
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205130237.png)
+![](Pasted image 20241205130237.png)
 
 ## Important Concepts
 --- 
@@ -113,15 +113,15 @@ Now that you understand the basic concepts related to XML and XXE, we will anal
 ---
 
 As a penetration tester, it is important to first analyze the flow of the application. First, the user will browse through the products and add items of interest to their wishlist at `http://10.10.163.220/product.php`. Click on the `Add to Wishlist` under `Wareville's Jolly Cap`, as shown below:
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205131850.png)
+![](Pasted image 20241205131850.png)
 
 After adding products to the wishlist, click the `Cart` button or visit `http://10.10.163.220/cart.php` to see the products added to the cart. On the `Cart` page, click the `Proceed to Checkout` button to buy the items as shown below:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205131902.png)
+![](Pasted image 20241205131902.png)
 
 Enter any name of your choice and address, and click on `Complete Checkout` to place the wish. Once you complete the wish, you will be shown the message **"Wish successful. Your wish has been saved as Wish #21"**, as shown below:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205131942.png)
+![](Pasted image 20241205131942.png)
 
 **Wish #21** indicates the wishes placed by a user on the website. Once you click on **Wish #21**, you will see a forbidden page because the details are only accessible to `admins`. But can we try to bypass this and access other people's wishes? This is what we will try to perform in this task.
 
@@ -144,7 +144,7 @@ Now, when you visit the URL, `http://10.10.163.220/product.php`, and click `Ad
 </wishlist>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205132120.png)
+![](Pasted image 20241205132120.png)
 
 In the above XML, **<product_id>** tag contains the ID of the product, which is **1** in this case. Now, let's review the `Add to Wishlist` request logged in Burp Suite's `HTTP History` option under the proxy tab. As discussed above, the request contains XML being forwarded as a `POST` request, as shown below:
 
@@ -184,11 +184,11 @@ What if we update the XML request to include references for external entities?
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205132404.png)
+![](Pasted image 20241205132404.png)
 
 After we send the request, this was the response:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205132451.png)
+![](Pasted image 20241205132451.png)
 
 So, we were able to get the `/etc/hosts` of this server, making it vulnerable to XXE
 
@@ -214,11 +214,11 @@ Now that our objective is clear, let's leverage the vulnerability we discovered 
 </wishlist>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205132645.png)
+![](Pasted image 20241205132645.png)
 
 The payload worked, we got lucky, let's see if we can uncover more files, let's try with `wish_2.txt`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205132730.png)
+![](Pasted image 20241205132730.png)
 
 As a result, we were able to view the next wish. You may observe that we just incremented the number by one. Given this, you may continue checking the other wishes and see all the wishes stored in the application.
 
@@ -237,29 +237,29 @@ As soon as the vulnerability was discovered, McSkidy promptly coordinated with t
 
 After discovering the vulnerability, McSkidy immediately remembered that a CHANGELOG file exists within the web application, stored at the following endpoint: [http://10.10.163.220/CHANGELOG](http://10.10.163.220/CHANGELOG). After checking, it can be seen that someone pushed the vulnerable code within the application after Software's team.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205132850.png)
+![](Pasted image 20241205132850.png)
 
 We got a flag: `THM{m4y0r_m4lw4r3_b4ckd00rs}`
 
 ## Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205132919.png)
+![](Pasted image 20241205132919.png)
 
 Let's keep on navigating through the wishes to find the flag, for an easier navigation, we can send the request to intruder and change the payload like this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205133007.png)
+![](Pasted image 20241205133007.png)
 
 Just add a simple list to 21, since we suppose we made the last request and had ticket 21, once we send the attack we have to make sure to check the responses:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205133249.png)
+![](Pasted image 20241205133249.png)
 
 
 
 Let's send the attack:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205133352.png)
+![](Pasted image 20241205133352.png)
 
 Wish `15` was the one with the flag: `THM{Brut3f0rc1n6_mY_w4y}`
 

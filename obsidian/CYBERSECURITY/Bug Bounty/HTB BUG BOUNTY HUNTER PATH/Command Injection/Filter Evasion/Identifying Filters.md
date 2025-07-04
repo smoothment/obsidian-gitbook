@@ -59,6 +59,6 @@ We still get an `invalid input`, error meaning that a semi-colon is blacklisted
 # Question
 ----
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205140047.png)
+![](Pasted image 20250205140047.png)
 
 Answer for this question is `new-line`.

@@ -26,7 +26,7 @@ Active Directory is also the component that allows your school/university to res
 
 ## FIRST SECTION QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028141322.png)
+![](Pasted image 20241028141322.png)
 
 
 # ACTIVE DIRECTORY
@@ -107,7 +107,7 @@ You are probably wondering why we have both groups and OUs. While both are used 
 
 ## SECOND SECTION QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028142439.png)
+![](Pasted image 20241028142439.png)
 
 # MANAGING USERS IN AD
 
@@ -206,7 +206,7 @@ Since we are tidying up our AD, let's create two separate OUs for `Workstations
 
 ![final OU structure](https://tryhackme-images.s3.amazonaws.com/user-uploads/5ed5961c6276df568891c3ea/room-content/09405010962071f21c6dee7b4eb8c59a.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028143158.png)
+![](Pasted image 20241028143158.png)
 # GROUP POLICIES
 
 
@@ -302,7 +302,7 @@ We will set the inactivity limit to 5 minutes so that computers get locked autom
 ![Linking Auto Lock Screen GPO](https://tryhackme-images.s3.amazonaws.com/user-uploads/5ed5961c6276df568891c3ea/room-content/fcfc77d126991ffee8c927202b4dde37.png)
 ## QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028143558.png)
+![](Pasted image 20241028143558.png)
 
 
 # AUTHENTICATION METHODS
@@ -364,7 +364,7 @@ The described process applies when using a domain account. If a local account is
 ```
 
 ## QUESTIONS
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028144020.png)
+![](Pasted image 20241028144020.png)
 
 
 # TREES, FORESTS AND TRUSTS
@@ -416,4 +416,4 @@ It is important to note that having a trust relationship between domains doesn't
 ## QUESTIONS
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028143946.png)
+![](Pasted image 20241028143946.png)

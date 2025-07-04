@@ -23,7 +23,7 @@ sticker: emoji//1f4da
 
 We got two web applications, if we visit the web application at port `80`, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424125335.png)
+![](Pasted image 20250424125335.png)
 
 We can try fuzzing:
 
@@ -56,12 +56,12 @@ old                     [Status: 301, Size: 310, Words: 20, Lines: 10, Duration:
 
 We got an `old` directory, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424125832.png)
+![](Pasted image 20250424125832.png)
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424125854.png)
+![](Pasted image 20250424125854.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424125908.png)
+![](Pasted image 20250424125908.png)
 
 We can try fuzzing further on the directory:
 
@@ -96,7 +96,7 @@ templates               [Status: 301, Size: 320, Words: 20, Lines: 10, Duration:
 
 We got a `.git` folder, let's get it using `GitHack` and check the contents:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424130921.png)
+![](Pasted image 20250424130921.png)
 
 There seems to be a password showing functionality on the other port web application, let's check the logs with:
 
@@ -120,15 +120,15 @@ We got some sort of key, it says it can be used at the forgot password functiona
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424131726.png)
+![](Pasted image 20250424131726.png)
 
 Let's submit the request to our proxy:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424131923.png)
+![](Pasted image 20250424131923.png)
 
 As seen, we need the key we found earlier, let's use it and send the request again:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424132020.png)
+![](Pasted image 20250424132020.png)
 
 It changed, let's proceed to exploitation.
 
@@ -141,7 +141,7 @@ It changed, let's proceed to exploitation.
 Since I used a test username: `1`, we can notice it says `Invalid Username`, let's use `caido` automate function to brute force the username:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424132423.png)
+![](Pasted image 20250424132423.png)
 
 Let's start the attack, we can use the following query:
 
@@ -149,12 +149,12 @@ Let's start the attack, we can use the following query:
 resp.raw.ncont:"Invalid"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424132609.png)
+![](Pasted image 20250424132609.png)
 
 
 If we check the request:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424132623.png)
+![](Pasted image 20250424132623.png)
 
 There we go, we got credentials:
 
@@ -164,12 +164,12 @@ tommy:DevMakesStuff01
 
 These credentials don't work at the login page:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424132817.png)
+![](Pasted image 20250424132817.png)
 
 We can try them out at `ssh`:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424132948.png)
+![](Pasted image 20250424132948.png)
 
 They worked, let's proceed with privilege escalation.
 
@@ -186,15 +186,15 @@ tommy@incognito:~$ cat user.txt
 
 Let's use `linpeas` to search any PE vector:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424133902.png)
+![](Pasted image 20250424133902.png)
 
 We got another user called `carlJ`, let's check if we can visualize its home:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424133944.png)
+![](Pasted image 20250424133944.png)
 
 We got a `.mozilla` folder, with this, we can use a tool called `firefox-decrypt`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424134900.png)
+![](Pasted image 20250424134900.png)
 
 Let's clone it to our machine and do the following:
 
@@ -203,7 +203,7 @@ git clone https://github.com/unode/firefox_decrypt
 scp -r tommy@IP:/home/carlJ/.mozilla/firefox .
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424135714.png)
+![](Pasted image 20250424135714.png)
 
 We get prompt with a password, we can try some basic password and notice the password for this is:
 
@@ -227,11 +227,11 @@ Password: 'Pas$w0RD59247'
 
 We got credentials, let's change our ssh session:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424140529.png)
+![](Pasted image 20250424140529.png)
 
 We can now visualize the `mailing` directory:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424143437.png)
+![](Pasted image 20250424143437.png)
 
 We got a binary named `smail` in here, let's check the strings:
 
@@ -325,7 +325,7 @@ setuid@@GLIBC_2.2.5
 We can try `ret2libc` buffer overflow, this is due to the message `limit(80)`, if we use the binary and do this, we can see the following:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424145012.png)
+![](Pasted image 20250424145012.png)
 
 We got `segmentation fault (core dumped)`, we can do the following to get each address:
 
@@ -366,7 +366,7 @@ exploit.sendline(payload)
 exploit.interactive()
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424145727.png)
+![](Pasted image 20250424145727.png)
 
 If we get this, we need to go to `~/.pwn.conf` and add:
 
@@ -377,7 +377,7 @@ interval=never
 
 Let's run the script again:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424145803.png)
+![](Pasted image 20250424145803.png)
 
 There we go, let's read root flag and finish:
 
@@ -386,5 +386,5 @@ $ cat /root/root.txt
 f21979de76c0302154cc001884143ab2
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250424145835.png)
+![](Pasted image 20250424145835.png)
 

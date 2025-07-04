@@ -129,7 +129,7 @@ As we can see, because we could reverse the hashing technique used on the object
 # Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217155044.png)
+![](Pasted image 20250217155044.png)
 
 We can see the following request:
 
@@ -162,7 +162,7 @@ Priority: u=0, i
 
 As seen, the `contract=` is base64 encoded, it decodes to `MQ==` which also decodes to `1`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217160101.png)
+![](Pasted image 20250217160101.png)
 
 So, after understanding the behavior of the contract, we can create a bash script to enumerate and get the flag:
 

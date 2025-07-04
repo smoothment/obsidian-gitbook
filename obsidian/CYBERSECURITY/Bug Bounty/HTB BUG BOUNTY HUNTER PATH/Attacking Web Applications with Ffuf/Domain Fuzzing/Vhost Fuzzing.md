@@ -63,11 +63,11 @@ We see that all words in the wordlist are returning `200 OK`! This is expected,
 
 # Question
 ---
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129154127.png)
+![](Pasted image 20250129154127.png)
 
 After running an initial scan to the target, we can check that the size is `986`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129154503.png)
+![](Pasted image 20250129154503.png)
 
 So, we need to filter in the following way:
 

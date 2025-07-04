@@ -182,12 +182,12 @@ Once we set our cookie, we can refresh the page and we will get access as the vi
 # Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130174323.png)
+![](Pasted image 20250130174323.png)
 
 Let's go to the `/hijacking` page:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130175150.png)
+![](Pasted image 20250130175150.png)
 
 Let's fill in some random data and use this payload at the Profile Picture URL:
 
@@ -240,10 +240,10 @@ We will see the following output in our server:
 We successfully managed to steal the cookie, let's visit `/login.php` and use the cookie:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130175924.png)
+![](Pasted image 20250130175924.png)
 
 We'll successfully log in:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130175943.png)
+![](Pasted image 20250130175943.png)
 
 Flag is `HTB{4lw4y5_53cur3_y0ur_c00k135}`

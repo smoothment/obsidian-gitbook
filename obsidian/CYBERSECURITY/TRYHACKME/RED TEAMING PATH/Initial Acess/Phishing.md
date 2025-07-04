@@ -318,7 +318,7 @@ Expanding Brian's details and then viewing the details for the submitted data, y
 
 Once we follow all steps, we will see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250513180553.png)
+![](Pasted image 20250513180553.png)
 
 We got the password for Brian.
 
@@ -419,15 +419,15 @@ An example of this is [CVE-2021-40444](https://msrc.microsoft.com/update-guide/
 Now that you've learnt what goes into a phishing email campaign, let's see if you're able to spot them! Click the green "View Site" button to launch the Phishing Test website. Examine each email, including where it's from, its links and attachments and decide whether you think the email is safe or not.
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250513181254.png)
+![](Pasted image 20250513181254.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250513181319.png)
+![](Pasted image 20250513181319.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250513181350.png)
+![](Pasted image 20250513181350.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250513181404.png)
+![](Pasted image 20250513181404.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250513181418.png)
+![](Pasted image 20250513181418.png)
 
 We got our flag:
 

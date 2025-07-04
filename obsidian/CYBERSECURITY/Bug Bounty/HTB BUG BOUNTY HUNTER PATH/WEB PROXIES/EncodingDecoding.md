@@ -64,27 +64,27 @@ We can then copy the base64 encoded string and use it with our request in Burp 
 
 # Question
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124102806.png)
+![](Pasted image 20250124102806.png)
 
 Let's get the file:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124102909.png)
+![](Pasted image 20250124102909.png)
 
 We can use the decoder tool in burp:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124103054.png)
+![](Pasted image 20250124103054.png)
 
 We need to start decoding using Base64:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124103120.png)
+![](Pasted image 20250124103120.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124103129.png)
+![](Pasted image 20250124103129.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124103140.png)
+![](Pasted image 20250124103140.png)
 
 In this point, we need to use URL decode:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124103205.png)
+![](Pasted image 20250124103205.png)
 
 We got the flag: `HTB{3nc0d1n6_n1nj4}`
 

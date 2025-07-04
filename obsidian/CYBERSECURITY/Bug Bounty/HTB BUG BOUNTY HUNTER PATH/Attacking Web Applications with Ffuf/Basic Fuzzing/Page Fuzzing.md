@@ -102,15 +102,15 @@ We get a couple of hits; both have an HTTP code 200, meaning we can access them.
 # Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129143449.png)
+![](Pasted image 20250129143449.png)
 
 If we fuzz for the blog directory, we find the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129143734.png)
+![](Pasted image 20250129143734.png)
 
 We found a `home.php` directory, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129143814.png)
+![](Pasted image 20250129143814.png)
 
 Got the flag: `HTB{bru73_f0r_c0mm0n_p455w0rd5}`
 

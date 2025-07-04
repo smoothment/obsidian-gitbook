@@ -114,11 +114,11 @@ We get an empty page, indicating that the directory does not have a dedicated pa
 # Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129141123.png)
+![](Pasted image 20250129141123.png)
 
 If we fuzz we find the following directory:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129141134.png)
+![](Pasted image 20250129141134.png)
 
 Answer is `forum`
 
