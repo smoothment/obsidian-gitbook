@@ -166,7 +166,7 @@ In addition to the techniques we discussed, we can utilize numerous other method
 ---
 
 
-![](Pasted%20image%2020250205144449.png)
+![](images/Pasted%20image%2020250205144449.png)
 
 We can do the following payload:
 

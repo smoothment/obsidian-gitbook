@@ -623,11 +623,11 @@ http://10.10.118.217:8080/
 
 We need to start a python server to be able to host the file, once we start the file, we can download it into the target machine with:
 
-![](Pasted%20image%2020250512151130.png)
+![](images/Pasted%20image%2020250512151130.png)
 
 Make sure to change `IP` to your `tun0` ip, once it downloads, it will automatically execute in our listener:
 
-![](Pasted%20image%2020250512151205.png)
+![](images/Pasted%20image%2020250512151205.png)
 As seen, we get a shell as `desktop-1au6nt4\thm`, let's read our flag:
 
 ```

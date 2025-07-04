@@ -39,5 +39,5 @@ The API is undoubtedly vulnerable to ReDoS attacks.
 
 # Question
 ---
-![](Pasted%20image%2020250219172202.png)
+![](images/Pasted%20image%2020250219172202.png)
 

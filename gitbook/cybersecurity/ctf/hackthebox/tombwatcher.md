@@ -295,33 +295,33 @@ DETACH DELETE n
 ```
 
 
-![](Pasted%20image%2020250615225510.png)
+![](images/Pasted%20image%2020250615225510.png)
 First of all and how I explained it earlier, we can perform a kerberoast attack on `Alfred`, 
 
 
-![](Pasted%20image%2020250615225549.png)
+![](images/Pasted%20image%2020250615225549.png)
 
 For more info on this attack, refer to:
 
 Kerberoast: https://notes.benheater.com/books/active-directory/page/kerberoasting
 
-![](Pasted%20image%2020250615225921.png)
+![](images/Pasted%20image%2020250615225921.png)
 We can add ourselves as `alfred` to `infrastructure`:
 
-![](Pasted%20image%2020250615225950.png)
+![](images/Pasted%20image%2020250615225950.png)
 
-![](Pasted%20image%2020250615230018.png)
+![](images/Pasted%20image%2020250615230018.png)
 We got `ReadGMSAPassword` over `Ansible_devs`:
 
-![](Pasted%20image%2020250615230202.png)
+![](images/Pasted%20image%2020250615230202.png)
 
 We can exploit that path to force the password change for `sam` user:
 
-![](Pasted%20image%2020250615230230.png)
+![](images/Pasted%20image%2020250615230230.png)
 
 This user has `WriteOwner` over `John`, and if we check `John`, we can find this: 
 
-![](Pasted%20image%2020250615230726.png)
+![](images/Pasted%20image%2020250615230726.png)
 
 We got `GenericAll` over `ADCS` which means we may able to get a certificate to leverage admin access, let's proceed to exploitation to check our exploitation path.
 
@@ -357,7 +357,7 @@ graph TD
     class K,L,M,N,O success
 ```
 
-![](Pasted%20image%2020250615231654.png)
+![](images/Pasted%20image%2020250615231654.png)
 
 We must begin from the bottom, first in our diagram is to perform the `kerberoast` attack, let's do it:
 
@@ -454,7 +454,7 @@ Nice, let's go into evil-winrm:
 evil-winrm -i dc01.tombwatcher.htb -u john -p 'P@ssw0rd123!'
 ```
 
-![](Pasted%20image%2020250615234025.png)
+![](images/Pasted%20image%2020250615234025.png)
 
 We can now begin privilege escalation.
 
@@ -664,7 +664,7 @@ As we can notice, we find `ESC15`, on internet we can find info on how to exploi
 
 ESC15: https://medium.com/@offsecdeer/adcs-exploitation-series-part-2-certificate-mapping-esc15-6e19a6037760
 
-![](Pasted%20image%2020250616000743.png)
+![](images/Pasted%20image%2020250616000743.png)
 
 
 Let's recreate the PoC:
@@ -706,7 +706,7 @@ Password changed successfully!
 
 Nice, we can finally use `evil-winrm` to get into admin:
 
-![](Pasted%20image%2020250616001107.png)
+![](images/Pasted%20image%2020250616001107.png)
 
 Let's get our flags and finish the CTF:
 
@@ -719,6 +719,6 @@ Let's get our flags and finish the CTF:
 ```
 
 
-![](Pasted%20image%2020250616001257.png)
+![](images/Pasted%20image%2020250616001257.png)
 
 

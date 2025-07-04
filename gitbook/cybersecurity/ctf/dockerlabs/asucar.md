@@ -6,30 +6,30 @@ sticker: emoji//1f36c
 
 ## OPEN PORTS
 
-![](Pasted%20image%2020241031135702.png)
+![](images/Pasted%20image%2020241031135702.png)
 2 open ports, one is a website and the other is ssh, let's fuzz the website
 
 ## FUZZING
 
-![](Pasted%20image%2020241031135726.png)
+![](images/Pasted%20image%2020241031135726.png)
 
 Seems like a WordPress page, let's take a look at it:
 
 
-![](Pasted%20image%2020241031135814.png)
+![](images/Pasted%20image%2020241031135814.png)
 
 First part seems off, let's look at the source code:
 
-![](Pasted%20image%2020241031135908.png)
+![](images/Pasted%20image%2020241031135908.png)
 
 Nothing too weird, let's save it in case we need it further, now, let's take a look at 
 `wp-login.php`:
 
-![](Pasted%20image%2020241031140023.png)
+![](images/Pasted%20image%2020241031140023.png)
 
 We need to add `asucar.dl` to `/etc/hosts`:
 
-![](Pasted%20image%2020241031140104.png)
+![](images/Pasted%20image%2020241031140104.png)
 
 
 Knowing that the site uses WordPress, let's use `wpscan` to enumerate the website:
@@ -142,11 +142,11 @@ So, important info would be the following:
 
 So, once we've enumerated all the info in the WordPress website, let's begin with exploitation, first, let's use `searchsploit` to lookup any exploit regarding that site editor version:
 
-![](Pasted%20image%2020241031142025.png)
+![](images/Pasted%20image%2020241031142025.png)
 
 Nice, we got a [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/FILE INCLUSION VULNERABILITIES/LOCAL FILE INCLUSION (LFI)|LFI]]regarding this version, let's take a look at the exploit:
 
-![](Pasted%20image%2020241031142212.png)
+![](images/Pasted%20image%2020241031142212.png)
 
 So, the usage would be:
 
@@ -165,7 +165,7 @@ So, the usage would be:
 
 Let's exploit it:
 
-![](Pasted%20image%2020241031142325.png)
+![](images/Pasted%20image%2020241031142325.png)
 
 Nice, we were able to execute the [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/FILE INCLUSION VULNERABILITIES/LOCAL FILE INCLUSION (LFI)|LFI]], we found user `curiosito`
 
@@ -180,14 +180,14 @@ Let's use hydra and try to bruteforce the ssh login:
 
 ##### OUTPUT
 
-![](Pasted%20image%2020241031142628.png)
+![](images/Pasted%20image%2020241031142628.png)
 
 
 ```
 
 Simple password, seems like the user didn't have that much security, let's log in to ssh:
 
-![](Pasted%20image%2020241031142733.png)
+![](images/Pasted%20image%2020241031142733.png)
 
 Nice, we can begin with PRIVESC
 
@@ -200,7 +200,7 @@ Nice, we can begin with PRIVESC
 
 ## SUDO -L
 
-![](Pasted%20image%2020241031142756.png)
+![](images/Pasted%20image%2020241031142756.png)
 
 We can run `puttygen`, `puttygen` is used to generate ssh keys, let's generate one for root user:
 
@@ -222,7 +222,7 @@ We can run `puttygen`, `puttygen` is used to generate ssh keys, let's generate o
 
 ##### OUTPUT
 
-![](Pasted%20image%2020241031143301.png)
+![](images/Pasted%20image%2020241031143301.png)
 
 
 ```

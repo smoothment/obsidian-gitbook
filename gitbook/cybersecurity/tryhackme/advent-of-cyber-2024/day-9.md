@@ -137,48 +137,48 @@ By doing a third-party risk assessment, McSkidy and Glitch are reducing potentia
 # Questions
 ---
 
-![](Pasted%20image%2020241209142638.png)
+![](images/Pasted%20image%2020241209142638.png)
 
 GRC stands for: `Governance, Risk, and Compliance`
 
 
 For the next part, let's check at the practical exercise, we need to identify the risks, do a simple review of what consequences this could have and put in the impact level and the likelihood level:
 
-![](Pasted%20image%2020241209142823.png)
+![](images/Pasted%20image%2020241209142823.png)
 
 Explanation is that since AES-256 is very secure, if somehow the data was captured and then decrypted, then the impact would be too high, but since this is very unlikely to happen, its not a big issue.
 
 
-![](Pasted%20image%2020241209144008.png)
+![](images/Pasted%20image%2020241209144008.png)
 
 Simple to explain, if a threat actor somehow manages to get access to the data, a massive data breach can happen, so, a critical risk is involved in here.
 
-![](Pasted%20image%2020241209144238.png)
+![](images/Pasted%20image%2020241209144238.png)
 
 Same as before, possible data breach due to the client's data being saved from 1 to 2 weeks.
 
 
-![](Pasted%20image%2020241209144713.png)
+![](images/Pasted%20image%2020241209144713.png)
 
 As shown, same case as before but the lack of security at rest, is a high vulnerability.
 
-![](Pasted%20image%2020241209144823.png)
+![](images/Pasted%20image%2020241209144823.png)
 
 Same as before, data breach and unauthorized access.
 
 
-![](Pasted%20image%2020241209144930.png)
+![](images/Pasted%20image%2020241209144930.png)
 
 Even if its one week, a data breach can occur and cause damage.
 
 
-![](Pasted%20image%2020241209145032.png)
+![](images/Pasted%20image%2020241209145032.png)
 
 Same as before, questions tend to repeat after a while.
 
 Next questions were the same, so, I'll skip them in this note.
 
-![](Pasted%20image%2020241209145210.png)
+![](images/Pasted%20image%2020241209145210.png)
 
 
 Flag is: `THM{R15K_M4N4G3D}`

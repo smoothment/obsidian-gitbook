@@ -110,7 +110,7 @@ Also you password is insecure, could you please change it? It is all over the pl
 
 Ok, let's check the web application:
 
-![](Pasted%20image%2020250607151404.png)
+![](images/Pasted%20image%2020250607151404.png)
 
 
 ```
@@ -150,7 +150,7 @@ Starting gobuster in directory enumeration mode
 
 Not much on here, we can find a `simeon` directory on here:
 
-![](Pasted%20image%2020250607151510.png)
+![](images/Pasted%20image%2020250607151510.png)
 
 If we remember the message, it said that this user's password was weak, maybe we can use `cewl` and bruteforce ssh to get a session, let's go to exploitation.
 
@@ -181,7 +181,7 @@ simeon:scelerisque
 ```
 
 
-![](Pasted%20image%2020250607152053.png)
+![](images/Pasted%20image%2020250607152053.png)
 Let's begin privilege escalation.
 
 # PRIVILEGE ESCALATION
@@ -220,14 +220,14 @@ drwxr-x---.  2 automation theodore  30 Nov 23  2021 scripts
 
 We cannot access any of them, time to use `linpeas` then:
 
-![](Pasted%20image%2020250607153801.png)
+![](images/Pasted%20image%2020250607153801.png)
 
 - `cap_net_admin`: Allow us to configure interfaces, firewalls, routing tables.
 - `cap_net_raw`: Allow us socket usage (sniffing traffic, crafting packets).
 
 Let's use `pspy` to check active processes, in there we may be able to find something to sniff:
 
-![](Pasted%20image%2020250607154454.png)
+![](images/Pasted%20image%2020250607154454.png)
 
 As seen, there's a script running on here, let's use tcpdump to capture the traffic:
 
@@ -253,11 +253,11 @@ We need to use `lo` interface:
 tcpdump -i lo -A
 ```
 
-![](Pasted%20image%2020250607154637.png)
+![](images/Pasted%20image%2020250607154637.png)
 
 We got `Authorization: Basic dGhlb2RvcmU6UmlqeWFzd2FoZWJjZWliYXJqaWs= `, let's decode it:
 
-![](Pasted%20image%2020250607154713.png)
+![](images/Pasted%20image%2020250607154713.png)
 
 There we go, we found credentials:
 
@@ -265,7 +265,7 @@ There we go, we found credentials:
 theodore:Rijyaswahebceibarjik
 ```
 
-![](Pasted%20image%2020250607154741.png)
+![](images/Pasted%20image%2020250607154741.png)
 
 ```
 [theodore@aratus ~]$ cat user.txt
@@ -416,6 +416,6 @@ As of today: June 2025, room is bugged on the privesc section, if you're not abl
 THM{d8afc85983603342f6c6979b200e06f6}
 ```
 
-![](Pasted%20image%2020250607172504.png)
+![](images/Pasted%20image%2020250607172504.png)
 
 

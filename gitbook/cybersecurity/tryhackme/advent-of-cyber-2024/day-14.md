@@ -142,7 +142,7 @@ Intercepting user traffic in progress...
 ```
 
 
-![](Pasted%20image%2020241214142204.png)
+![](images/Pasted%20image%2020241214142204.png)
 
 
 **Pwn the Scheduler**
@@ -159,12 +159,12 @@ There is a triumphant gleam in Mayor Malware’s eyes while he stares intently a
 ## Questions
 ---
 
-![](Pasted%20image%2020241214142258.png)
+![](images/Pasted%20image%2020241214142258.png)
 
 ### 1
 ---
 
-![](Pasted%20image%2020241214142344.png)
+![](images/Pasted%20image%2020241214142344.png)
 
 The name of the CA is `THM`
 
@@ -172,7 +172,7 @@ The name of the CA is `THM`
 ### 2
 ---
 
-![](Pasted%20image%2020241214142955.png)
+![](images/Pasted%20image%2020241214142955.png)
 
 Password for user `snowballelf` is `c4rrotn0s3`
 
@@ -182,13 +182,13 @@ Password for user `snowballelf` is `c4rrotn0s3`
 
 I used the following credentials: `sugarplumelf`:`xm4sc4ndy`, when I logged in, this was the flag that showed up:
 
-![](Pasted%20image%2020241214142926.png)
+![](images/Pasted%20image%2020241214142926.png)
 
 Flag: `THM{AoC-3lf0nth3Sh3lf}`
 ### 4
 ---
 
-![](Pasted%20image%2020241214142543.png)
+![](images/Pasted%20image%2020241214142543.png)
 
 `Marta_mayware`'s password is: `H0llyJ0llySOCMAS!`
 
@@ -196,7 +196,7 @@ Flag: `THM{AoC-3lf0nth3Sh3lf}`
 ### 5
 ---
 
-![](Pasted%20image%2020241214142743.png)
+![](images/Pasted%20image%2020241214142743.png)
 
 After logging into `marta_mayware` account, we get that the flag is: `THM{AoC-h0wt0ru1nG1ftD4y}`
 

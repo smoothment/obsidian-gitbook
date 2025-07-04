@@ -291,7 +291,7 @@ Although we didn’t get any reply and could not figure out which hosts are onli
 ## QUESTIONS
 ---
 
-![](Pasted%20image%2020241108154602.png)
+![](images/Pasted%20image%2020241108154602.png)
 
 # Nmap Host Discovery Using TCP and UDP
 ---
@@ -416,7 +416,7 @@ On a side note, Masscan uses a similar approach to discover the available system
 
 ---
 
-![](Pasted%20image%2020241108154836.png)
+![](images/Pasted%20image%2020241108154836.png)
 
 # Using Reverse-DNS Lookup
 
@@ -430,7 +430,7 @@ By default, Nmap will look up online hosts; however, you can use the option `
 ## QUESTION
 ---
 
-![](Pasted%20image%2020241108154953.png)
+![](images/Pasted%20image%2020241108154953.png)
 
 
 # SUMMARY

@@ -447,7 +447,7 @@ user@thm$  python3 cupp.py -a
 ```
 
 
-![](Pasted%20image%2020250512164644.png)
+![](images/Pasted%20image%2020250512164644.png)
 
 
 # Offline Attacks - Dictionary and Brute-Force
@@ -591,7 +591,7 @@ Stopped: Mon Oct 11 10:54:08 2021
 ```
 
 
-![](Pasted%20image%2020250512164845.png)
+![](images/Pasted%20image%2020250512164845.png)
 
 
 
@@ -722,7 +722,7 @@ $password0
 
 Now it's practice time to create your own rule.
 
-![](Pasted%20image%2020250512165303.png)
+![](images/Pasted%20image%2020250512165303.png)
 
 
 # Deploy the VM
@@ -875,7 +875,7 @@ Finally, it is worth it to check other online password attacks tools to expand y
 
 ### FTP
 
-![](Pasted%20image%2020250512170011.png)
+![](images/Pasted%20image%2020250512170011.png)
 
 Let's brute-force the ftp login first:
 
@@ -928,7 +928,7 @@ THM{d0abe799f25738ad739c20301aed357b}
 
 ### Rule-Based
 
-![](Pasted%20image%2020250512170320.png)
+![](images/Pasted%20image%2020250512170320.png)
 
 
 We need to add rules to our `/etc/john/john.conf` file, then expand it and run hydra against `smtp`, let's automate all of the process using bash:
@@ -971,16 +971,16 @@ After a while, we get the password:
 ### Login-Get
 ---
 
-![](Pasted%20image%2020250512182549.png)
+![](images/Pasted%20image%2020250512182549.png)
 
 Let's go to the page and check it out:
 
-![](Pasted%20image%2020250512174207.png)
+![](images/Pasted%20image%2020250512174207.png)
 
 We need to check the behavior of the request, let's submit it to our proxy:
 
 
-![](Pasted%20image%2020250512174314.png)
+![](images/Pasted%20image%2020250512174314.png)
 With all this information, we can now craft a hydra command:
 
 ```
@@ -1011,7 +1011,7 @@ hydra -l phillips -P clinic.lst 10.10.131.98 http-get-form "/login-get/index.php
 We got a bunch of passwords, after trying them, the right one is `Paracetamol`:
 
 
-![](Pasted%20image%2020250512181201.png)
+![](images/Pasted%20image%2020250512181201.png)
 
 We got our flag:
 
@@ -1022,9 +1022,9 @@ THM{33c5d4954da881814420f3ba39772644}
 
 ### Login-Post
 ---
-![](Pasted%20image%2020250512182539.png)
+![](images/Pasted%20image%2020250512182539.png)
 
-![](Pasted%20image%2020250512182604.png)
+![](images/Pasted%20image%2020250512182604.png)
 
 Based on the same stuff as before, we need to submit the request to our proxy and simply build the command, for the sake of time, I'll simply provide the hydra command:
 
@@ -1040,7 +1040,7 @@ OxytocinnicotyxO
 
 If we login, we can see the flag:
 
-![](Pasted%20image%2020250512182630.png)
+![](images/Pasted%20image%2020250512182630.png)
 
 ```
 THM{f8e3750cc0ccbb863f2706a3b2933227}

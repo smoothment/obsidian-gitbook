@@ -176,7 +176,7 @@ One scenario where these three scan types can be efficient is when scanning a ta
 
 ## QUESTIONS
 
-![](Pasted%20image%2020241108175148.png)
+![](images/Pasted%20image%2020241108175148.png)
 
 
 # TCP Maimon Scan
@@ -340,7 +340,7 @@ You can launch a decoy scan by specifying a specific or random IP address afterÂ
 
 ---
 
-![](Pasted%20image%2020241108180517.png)
+![](images/Pasted%20image%2020241108180517.png)
 
 
 # Fragmented Packets

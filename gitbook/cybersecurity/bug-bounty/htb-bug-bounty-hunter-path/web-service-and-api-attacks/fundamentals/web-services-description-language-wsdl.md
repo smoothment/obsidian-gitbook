@@ -351,5 +351,5 @@ In the `SOAP Action Spoofing` section, later on, we will see how we can levera
 # Question
 ---
 
-![](Pasted%20image%2020250219153252.png)
+![](images/Pasted%20image%2020250219153252.png)
 

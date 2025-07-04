@@ -199,7 +199,7 @@ With this, we are able to perform all 4 `CRUD` operations through cURL. In a r
 
 # Question
 
-![](Pasted%20image%2020250122161026.png)
+![](images/Pasted%20image%2020250122161026.png)
 
 Let's follow these steps:
 
@@ -222,6 +222,6 @@ Let's follow these steps:
 
 Like that, we get this flag:
 
-![](Pasted%20image%2020250122162359.png)
+![](images/Pasted%20image%2020250122162359.png)
 
 `HTB{crud_4p!_m4n!pul4t0r}`

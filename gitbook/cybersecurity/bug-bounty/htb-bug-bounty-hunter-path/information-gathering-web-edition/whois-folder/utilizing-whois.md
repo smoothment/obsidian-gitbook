@@ -130,17 +130,17 @@ While the WHOIS record provides contact information for domain-related issues, i
 # Questions
 ----
 
-![](Pasted%20image%2020250127130725.png)
+![](images/Pasted%20image%2020250127130725.png)
 
 Let's perform WHOIS on `paypal.com`:
 
-![](Pasted%20image%2020250127134316.png)
+![](images/Pasted%20image%2020250127134316.png)
 
 Answer is: `292`
 
 Let's perform WHOIS on `tesla.com`:
 
-![](Pasted%20image%2020250127134358.png)
+![](images/Pasted%20image%2020250127134358.png)
 
 Answer is: `admin@dnstinations.com`
 

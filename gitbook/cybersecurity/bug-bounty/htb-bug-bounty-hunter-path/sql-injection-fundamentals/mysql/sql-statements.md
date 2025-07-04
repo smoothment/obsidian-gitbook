@@ -218,7 +218,7 @@ Note: we have to specify the 'WHERE' clause with UPDATE, in order to specify whi
 # Question
 ----
 
-![](Pasted%20image%2020250131135106.png)
+![](images/Pasted%20image%2020250131135106.png)
 
 We can do the following steps:
 
@@ -233,7 +233,7 @@ We can do the following steps:
 
 If we follow the steps we see the following:
 
-![](Pasted%20image%2020250131135655.png)
+![](images/Pasted%20image%2020250131135655.png)
 
 So, answer is `d005`.
 

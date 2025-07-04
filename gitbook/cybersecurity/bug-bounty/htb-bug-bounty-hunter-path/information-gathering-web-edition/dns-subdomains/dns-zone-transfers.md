@@ -78,7 +78,7 @@ canberra-office.zonetransfer.me. 7200 IN A	202.14.81.230
 # Questions
 ---
 
-![](Pasted%20image%2020250127145216.png)
+![](images/Pasted%20image%2020250127145216.png)
 ## 1
 ----
 
@@ -88,7 +88,7 @@ Let's perform the zone transfer:
 
 If we scroll down, we can find the amount of records:
 
-![](Pasted%20image%2020250128122043.png)
+![](images/Pasted%20image%2020250128122043.png)
 
 Answer is `22`.
 
@@ -100,7 +100,7 @@ We can grep the output from previously:
 
 `dig axfr @10.129.232.148 inlanefreight.htb | grep 'ftp.admin.inlanefreight.htb'`
 
-![](Pasted%20image%2020250128122156.png)
+![](images/Pasted%20image%2020250128122156.png)
 
 Answer is `10.10.34.2`
 
@@ -111,7 +111,7 @@ Answer is `10.10.34.2`
 We can also grep for the IP range in this case:
 
 `dig axfr @10.129.232.148 inlanefreight.htb | grep '10.10.200'`
-![](Pasted%20image%2020250128122312.png)
+![](images/Pasted%20image%2020250128122312.png)
 
 The one that worked for me was: `10.10.200.14`
 
