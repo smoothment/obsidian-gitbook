@@ -2,7 +2,7 @@
 
 Cross-site request forgery (also known as CSRF) is a web security vulnerability that allows an attacker to induce users to perform actions that they do not intend to perform. It allows an attacker to partly circumvent the same origin policy, which is designed to prevent different websites from interfering with each other. 
 
-![[Pasted image 20241001165747.png]]
+![](../images/Pasted%20image%2020241001165747.png)
 # What is the impact of a CSRF attack?
 
 In a successful CSRF attack, the attacker causes the victim user to carry out an action unintentionally. For example, this might be to change the email address on their account, to change their password, or to make a funds transfer. Depending on the nature of the action, the attacker might be able to gain full control over the user's account. If the compromised user has a privileged role within the application, then the attacker might be able to take full control of all the application's data and functionality.
@@ -69,7 +69,7 @@ Manually creating the HTML needed for a CSRF exploit can be cumbersome, particul
 
 ## LAB
 
-![[Pasted image 20241001171625.png]]
+![](../images/Pasted%20image%2020241001171625.png)
 For this lab, since I do not have Burp pro edition, I will go for the community solution, for example, I created my own **CSRF** code for this lab:
 
 ```html
@@ -87,12 +87,12 @@ For this lab, since I do not have Burp pro edition, I will go for the community 
 
 Let's go to our exploit server and store the html code:
 
-![[Pasted image 20241001172707.png]]
-![[Pasted image 20241001172740.png]]
+![](../images/Pasted%20image%2020241001172707.png)
+![](../images/Pasted%20image%2020241001172740.png)
 So if we look at our email, it changed to `pwned@user.com` since this is the value we entered in the html code, let's deliver the malicious code to our victim:
 
-![[Pasted image 20241001172904.png]]
-![[Pasted image 20241001173045.png]]
+![](../images/Pasted%20image%2020241001172904.png)
+![](../images/Pasted%20image%2020241001173045.png)
 
 # How to deliver a CSRF exploit
 
@@ -161,15 +161,15 @@ Cookie: session=2yQIDcpia41WrATfjPqvm9tOkDvkMvLm
 
 #### LAB
 
-![[Pasted image 20241002135107.png]]
+![](../images/Pasted%20image%2020241002135107.png)
 
 As the lab says, the moment we try to change the email from an user we don't have the **csrf** **token**, we'll get the following response:
 
 
-![[Pasted image 20241002141557.png]]
+![](../images/Pasted%20image%2020241002141557.png)
 That's why, we'll change the request method: 
-![[Pasted image 20241002141626.png]]
-![[Pasted image 20241002141636.png]]
+![](../images/Pasted%20image%2020241002141626.png)
+![](../images/Pasted%20image%2020241002141636.png)
 Now, the bad request error does not appear, let's create an exploit for this vulnerability:
 
 ```html
@@ -190,6 +190,6 @@ Now, the bad request error does not appear, let's create an exploit for this vul
 
 As I lack Burp pro edition, I created my own payload from scratch, let's test it:
 
-![[Pasted image 20241002142553.png]]
+![](../images/Pasted%20image%2020241002142553.png)
 And it worked, we were able to change email.
 

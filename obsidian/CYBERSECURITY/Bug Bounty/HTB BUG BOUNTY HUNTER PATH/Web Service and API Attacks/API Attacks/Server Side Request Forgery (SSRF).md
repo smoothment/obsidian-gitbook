@@ -69,5 +69,5 @@ Connection: close
 
 # Question
 ---
-![[Pasted image 20250219172102.png]]
+![](../images/Pasted%20image%2020250219172102.png)
 

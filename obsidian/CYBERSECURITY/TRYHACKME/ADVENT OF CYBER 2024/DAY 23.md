@@ -86,7 +86,7 @@ Opening a password-protected document is impossible unless we know or can find t
 
 Of course, users might get a little bit creative and might replace a character with a symbol. They might append the current year, a memorable date, or a few random characters or numbers to the original word. Knowing that Mayor Malware has a cat called Fluffy, some passwords we expect him to come up with are `f1uffyc4t` and `fluffy2024` unless he uses his name or title and creates a password such as `m4y0r2024`.
 
-![[Pasted image 20241223134454.png]]
+![](../images/Pasted%20image%2020241223134454.png)
 
 
 You can also access the virtual machine using SSH at the IP address `10.10.136.127` using the following credentials:
@@ -199,7 +199,7 @@ Adding the option `--rules=worldlist` to your `john` command line generates 
 
 ##### Output
 ---
-![[Pasted image 20241223135022.png]]
+![](../images/Pasted%20image%2020241223135022.png)
 
 Password is: `fluffycat12`
 ```
@@ -258,7 +258,7 @@ And save it as `wordlist.txt`. We have saved the above words in the `/home/use
 ##### Output
 ----
 
-![[Pasted image 20241223135507.png]]
+![](../images/Pasted%20image%2020241223135507.png)
 
 ```
 
@@ -268,13 +268,13 @@ Now, you have gained all the necessary knowledge to tackle the questions below a
 
 ## Questions
 ---
-![[Pasted image 20241223135530.png]]
+![](../images/Pasted%20image%2020241223135530.png)
 
 We know that the first question answer is: `fluffycat12`
 
 
 Now, let's access the pdf with the previous known password we found using john:
 
-![[Pasted image 20241223135743.png]]
+![](../images/Pasted%20image%2020241223135743.png)
 
 We found the flag, it is: `THM{do_not_GET_CAUGHT}`

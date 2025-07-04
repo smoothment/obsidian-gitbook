@@ -62,9 +62,9 @@ payroll                 [Status: 200, Size: 70, Words: 9, Lines: 2, Duration: 16
 We found another subdomains, let's check it out:
 
 
-![[Pasted image 20250331143446.png]]
+![](../images/Pasted%20image%2020250331143446.png)
 
-![[Pasted image 20250331144920.png]]
+![](../images/Pasted%20image%2020250331144920.png)
 
 Since the page is only available through the internal VPN, we can check if it's vulnerable to `subdomain takeover`:
 
@@ -75,7 +75,7 @@ dig payroll.futurevera.thm CNAME +short
 
 No output occurs, so, this is not the intended path to take, maybe we missed something, for example, let's check the main page:
 
-![[Pasted image 20250331144822.png]]
+![](../images/Pasted%20image%2020250331144822.png)
 
 Nothing interesting on here too, but, remember we got a `https` site, let's fuzz by `https` instead of `http`:
 
@@ -111,7 +111,7 @@ blog                    [Status: 200, Size: 3838, Words: 1326, Lines: 81, Durati
 
 We can go into `support.futurevera.thm`:
 
-![[Pasted image 20250331145623.png]]
+![](../images/Pasted%20image%2020250331145623.png)
 
 
 # EXPLOITATION
@@ -119,11 +119,11 @@ We can go into `support.futurevera.thm`:
 
 The moment we enter the `support.futurevera.thm`, it says it uses a `self-signed` certificate, let's check it out:
 
-![[Pasted image 20250331145727.png]]
+![](../images/Pasted%20image%2020250331145727.png)
 
 We find this, another subdomain hidden, let's add it too and check it out, we need to access this through port `80`:
 
-![[Pasted image 20250331150148.png]]
+![](../images/Pasted%20image%2020250331150148.png)
 
 We got our flag:
 

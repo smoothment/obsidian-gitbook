@@ -74,7 +74,7 @@ Server-side request forgery is a web security vulnerability that allows an attac
 
 In a typical SSRF attack, the attacker might cause the server to make a connection to internal-only services within the organization's infrastructure. In other cases, they may be able to force the server to connect to arbitrary external systems. This could leak sensitive data, such as authorization credentials. 
 
-![[Pasted image 20240919153000.png]] 
+![](../images/Pasted%20image%2020240919153000.png) 
 
 ## SSRF attacks against the server
 
@@ -116,15 +116,15 @@ Why do applications behave in this way, and implicitly trust requests that come 
 These kind of trust relationships, where requests originating from the local machine are handled differently than ordinary requests, often make SSRF into a critical vulnerability.
 
 ### LAB
-![[Pasted image 20240919153543.png]]
+![](../images/Pasted%20image%2020240919153543.png)
 
 For this lab, we need to go into a product, and check stock, once we've done that, we can capture the request using burp and modify the stockAPI into `/localhost/admin`
 
-![[Pasted image 20240919154556.png]]
+![](../images/Pasted%20image%2020240919154556.png)
 Once we've done that, we can get a prior access to admin panel, if we try to delete carlos user, we'll fail, so, we need now to change the stockAPI to the url we get once we try to delete the user, being that: `/localhost/admin/delete?username=carlos`, and like that, we will finish the lab
-![[Pasted image 20240919154631.png]]
-![[Pasted image 20240919154917.png]]
-![[Pasted image 20240919154954.png]]
+![](../images/Pasted%20image%2020240919154631.png)
+![](../images/Pasted%20image%2020240919154917.png)
+![](../images/Pasted%20image%2020240919154954.png)
 
 ## SSRF attacks against other back-end systems
 
@@ -140,39 +140,39 @@ stockApi=http://192.168.0.68/admin
 ```
 
 ### LAB
-![[Pasted image 20240919155630.png]]
+![](../images/Pasted%20image%2020240919155630.png)
 
 Send the request to intruder to brute force the ip:
-![[Pasted image 20240919155926.png]]
-![[Pasted image 20240919162207.png]]
+![](../images/Pasted%20image%2020240919155926.png)
+![](../images/Pasted%20image%2020240919162207.png)
 So, the IP address is: 192.168.0.80, lets modify the request in burp to delete carlos username:
-![[Pasted image 20240919162331.png]]
-![[Pasted image 20240919162504.png]]
+![](../images/Pasted%20image%2020240919162331.png)
+![](../images/Pasted%20image%2020240919162504.png)
 
 # TRYHACKME EXPLANATION
 
 
 ## SSRF EXAMPLES
 
-![[Pasted image 20241106093933.png]]
+![](../images/Pasted%20image%2020241106093933.png)
 
 #### WITH A LITTLE BIT OF PATH TRAVERSAL
 
-![[Pasted image 20241106094005.png]]
+![](../images/Pasted%20image%2020241106094005.png)
 
 
 #### MAKING USE OF &X=
 
-![[Pasted image 20241106094026.png]]
+![](../images/Pasted%20image%2020241106094026.png)
 
 #### TAKEOVER
 ---
-![[Pasted image 20241106094119.png]]
+![](../images/Pasted%20image%2020241106094119.png)
 
 ### PRACTICAL EXAMPLE
 ---
 
-![[Pasted image 20241106094211.png]]
+![](../images/Pasted%20image%2020241106094211.png)
 
 For this practical example, we need some sort of way to ignore the rest of the URL, for example, if we input this:
 
@@ -180,7 +180,7 @@ For this practical example, we need some sort of way to ignore the rest of the U
 
 We get this request:
 
-![[Pasted image 20241106094312.png]]
+![](../images/Pasted%20image%2020241106094312.png)
 
 So, in order to retrieve the data from the url, we need to ignore the rest of the url using our special character:
 
@@ -192,7 +192,7 @@ So, in order to retrieve the data from the url, we need to ignore the rest of th
 
 ##### OUTPUT
 
-![[Pasted image 20241106094410.png]]
+![](../images/Pasted%20image%2020241106094410.png)
 
 
 
@@ -250,7 +250,7 @@ An allow list is where all requests get denied unless they appear on a list or m
 --- 
 If the above bypasses do not work, there is one more trick up the attacker's sleeve, the open redirect. An open redirect is an endpoint on the server where the website visitor gets automatically redirected to another website address. Take, for example, the link https://website.thm/link?url=https://tryhackme.com. This endpoint was created to record the number of times visitors have clicked on this link for advertising/marketing purposes. But imagine there was a potential SSRF vulnerability with stringent rules which only allowed URLs beginning with https://website.thm/. An attacker could utilize the above feature to redirect the internal HTTP request to a domain of the attacker's choice.
 
-![[Pasted image 20241106095157.png]]
+![](../images/Pasted%20image%2020241106095157.png)
 
 
 ## SSRF PRACTICAL
@@ -329,12 +329,12 @@ Viewing the page source of the avatar form, you'll see the currently set avatar 
 
 #### CREATING THE ACCOUNT
 
-![[Pasted image 20241106095947.png]]
+![](../images/Pasted%20image%2020241106095947.png)
 
 #### GOING TO `/customers/new-account-page`
 
 
-![[Pasted image 20241106100041.png]]
+![](../images/Pasted%20image%2020241106100041.png)
 
 #### CHANGING VALUE TO PRIVATE
 
@@ -344,16 +344,16 @@ If we change value to `private` only, we will be unable to read the contents of 
 
 
 
-![[Pasted image 20241106100642.png]]
+![](../images/Pasted%20image%2020241106100642.png)
 
 Nice, let's update the avatar and see the page source:
 
 
-![[Pasted image 20241106100711.png]]
+![](../images/Pasted%20image%2020241106100711.png)
 
 We got a `base64` we need to decode, let's use [cyberchef](https://gchq.github.io/CyberChef/):
 
-![[Pasted image 20241106100748.png]]
+![](../images/Pasted%20image%2020241106100748.png)
 
 And just like that, we exploited the SSRF vulnerability
 

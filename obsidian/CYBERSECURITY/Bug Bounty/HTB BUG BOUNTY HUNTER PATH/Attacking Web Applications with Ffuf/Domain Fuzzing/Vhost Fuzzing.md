@@ -63,11 +63,11 @@ We see that all words in the wordlist are returning `200 OK`! This is expected,
 
 # Question
 ---
-![[Pasted image 20250129154127.png]]
+![](../images/Pasted%20image%2020250129154127.png)
 
 After running an initial scan to the target, we can check that the size is `986`:
 
-![[Pasted image 20250129154503.png]]
+![](../images/Pasted%20image%2020250129154503.png)
 
 So, we need to filter in the following way:
 

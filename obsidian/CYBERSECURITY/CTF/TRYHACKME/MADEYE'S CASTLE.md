@@ -24,26 +24,26 @@ sticker: emoji//1f3f0
 
 We can begin by checking the smb protocol, maybe anonymous login is enabled:
 
-![[Pasted image 20250404171325.png]]
+![](../images/Pasted%20image%2020250404171325.png)
 
 There we go, we got an interesting share: `sambashare`, let's check the files inside of it:
 
 
-![[Pasted image 20250404171351.png]]
+![](../images/Pasted%20image%2020250404171351.png)
 
 We got two files, let's read them:
 
 
-![[Pasted image 20250404171408.png]]
+![](../images/Pasted%20image%2020250404171408.png)
 
 `spellnames.txt` is a wordlist, it seems like we need to bruteforce some sort of login page, let's check the web application:
 
-![[Pasted image 20250404171441.png]]
+![](../images/Pasted%20image%2020250404171441.png)
 
 Simple apache2 page, if we check source code, we can see the following:
 
 
-![[Pasted image 20250404171510.png]]
+![](../images/Pasted%20image%2020250404171510.png)
 
 We got a subdomain, let's add it to `/etc/hosts`:
 
@@ -53,7 +53,7 @@ echo '10.10.196.103 hogwartz-castle.thm' | sudo tee -a /etc/hosts
 
 If we go inside the subdomain, we can check this:
 
-![[Pasted image 20250404171657.png]]
+![](../images/Pasted%20image%2020250404171657.png)
 
 We got the login page, based on that, we can craft the following hydra command to bruteforce:
 
@@ -167,9 +167,9 @@ madeye
 
 Nothing important, we are missing something, for example, we only tested for brute force in the login page but nothing else, what about `SQLI`:
 
-![[Pasted image 20250404173656.png]]
+![](../images/Pasted%20image%2020250404173656.png)
 
-![[Pasted image 20250404173707.png]]
+![](../images/Pasted%20image%2020250404173707.png)
 
 There we go, `SQLI` is possible in this website, let's proceed to exploitation.
 
@@ -214,7 +214,7 @@ harry:wingardiumleviosa123
 
 We can now go into ssh using those credentials:
 
-![[Pasted image 20250404182627.png]]
+![](../images/Pasted%20image%2020250404182627.png)
 
 ```
 harry@hogwartz-castle:~$ cat user1.txt
@@ -246,7 +246,7 @@ User harry may run the following commands on hogwartz-castle:
 
 Weird, we can run `/usr/bin/pico` as user`hermonine`, let's check this on `gtfobins`:
 
-![[Pasted image 20250404182759.png]]
+![](../images/Pasted%20image%2020250404182759.png)
 
 Let's do this:
 
@@ -256,7 +256,7 @@ ctrl R ctrl X
 reset; sh 1>&0 2>&0
 ```
 
-![[Pasted image 20250404183940.png]]
+![](../images/Pasted%20image%2020250404183940.png)
 
 Let's get a more comfortable shell:
 
@@ -264,7 +264,7 @@ Let's get a more comfortable shell:
 /usr/bin/script -qc /bin/bash /dev/null
 ```
 
-![[Pasted image 20250404183955.png]]
+![](../images/Pasted%20image%2020250404183955.png)
 
 ```
 hermonine@hogwartz-castle:/home/hermonine$ cat user2.txt
@@ -274,11 +274,11 @@ RME{p1c0-iZ-oLd-sk00l-nANo-64e977c63cb574e6}
 
 If we check `find / -perm -4000 2>/dev/null`, we can see this:
 
-![[Pasted image 20250404184310.png]]
+![](../images/Pasted%20image%2020250404184310.png)
 
 Interesting, there's something called `/srv/time-turner/swagger`, let's take a look:
 
-![[Pasted image 20250404184352.png]]
+![](../images/Pasted%20image%2020250404184352.png)
 
 It seems like some sort of RNG is happening behind this, we can analyze it with `ghidra` or test this other stuff:
 
@@ -299,7 +299,7 @@ echo '111' | /srv/time-turner/swagger | grep "of" | cut -f5 -d' ' | /srv/time-tu
     By extracting the output number and piping it back into the binary, the attacker forces the RNG into a deterministic sequence. This bypasses randomness.
 
 
-![[Pasted image 20250404184846.png]]
+![](../images/Pasted%20image%2020250404184846.png)
 
 
 We can use the following to get `root.txt`, we can change the method and get our `authorized` to gain a shell as root, to the simplicity of things, let's simply read the flag:
@@ -327,5 +327,5 @@ RME{M@rK-3veRy-hOur-0135d3f8ab9fd5bf}
 ```
 
 
-![[Pasted image 20250404185921.png]]
+![](../images/Pasted%20image%2020250404185921.png)
 

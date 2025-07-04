@@ -51,16 +51,16 @@ For invalid files, the error message is different:
 # Question
 ---
 
-![[Pasted image 20250212123042.png]]
+![](../images/Pasted%20image%2020250212123042.png)
 
 We know we are dealing with blind SSRF, when we try to point at an invalid resource of the server, we can see this:
 
 
-![[Pasted image 20250212123247.png]]
+![](../images/Pasted%20image%2020250212123247.png)
 
 We get an error message saying `Something went wrong!`, what about if we point at a valid resource:
 
-![[Pasted image 20250212123337.png]]
+![](../images/Pasted%20image%2020250212123337.png)
 
 We get a different error message, since we need to enumerate ports, we can use ffuf in the following way:
 

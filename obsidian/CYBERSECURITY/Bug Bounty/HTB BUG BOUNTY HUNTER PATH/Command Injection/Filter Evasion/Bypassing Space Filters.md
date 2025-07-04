@@ -68,7 +68,7 @@ As we can see, the command was successfully executed without having spaces in it
 # Question
 ---
 
-![[Pasted image 20250205141609.png]]
+![](../images/Pasted%20image%2020250205141609.png)
 
 We can use the following:
 

@@ -184,7 +184,7 @@ SQL injection vulnerabilities can affect APIs as well. That _id_ parameter loo
 # Questions
 ---
 
-![[Pasted image 20250219154858.png]]
+![](../images/Pasted%20image%2020250219154858.png)
 
 Let's use this script to answer the first question:
 

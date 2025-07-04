@@ -247,7 +247,7 @@ This basically means that everything accessible will be retrieved, potentially r
 # Questions
 ---
 
-![[Pasted image 20250204173240.png]]
+![](../images/Pasted%20image%2020250204173240.png)
 
 ## First
 ---

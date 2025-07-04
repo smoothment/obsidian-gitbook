@@ -274,12 +274,12 @@ Nmap done: 1 IP address (1 host up) scanned in 1.78 seconds
 
 ## QUESTIONS
 ---
-![[Pasted image 20241111150351.png]]
+![](../images/Pasted%20image%2020241111150351.png)
 
 ### POC OF LAST QUESTION
 ---
 
-![[Pasted image 20241111150416.png]]
+![](../images/Pasted%20image%2020241111150416.png)
 
 # Saving the Output
 ---

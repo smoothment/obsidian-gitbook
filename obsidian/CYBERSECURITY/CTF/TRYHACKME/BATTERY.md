@@ -20,7 +20,7 @@ sticker: emoji//1f50b
 # RECONNAISSANCE
 ---
 
-![[Pasted image 20250425124706.png]]
+![](../images/Pasted%20image%2020250425124706.png)
 
 Let's fuzz:
 
@@ -172,16 +172,16 @@ __cxa_finalize@@GLIBC_2.2.5
 
 Seems weird, let's use `ghidra`:
 
-![[Pasted image 20250425125111.png]]
+![](../images/Pasted%20image%2020250425125111.png)
 
 We got some active users, let's check other functions:
 
-![[Pasted image 20250425125133.png]]
+![](../images/Pasted%20image%2020250425125133.png)
 
-![[Pasted image 20250425125224.png]]
+![](../images/Pasted%20image%2020250425125224.png)
 
 
-![[Pasted image 20250425125242.png]]
+![](../images/Pasted%20image%2020250425125242.png)
 
 
 We got hardcoded guest credentials, we can use these to interact with the binary:
@@ -199,7 +199,7 @@ Let's begin exploitation.
 
 Let's interact with the binary:
 
-![[Pasted image 20250425125457.png]]
+![](../images/Pasted%20image%2020250425125457.png)
 
 We can check users:
 
@@ -257,30 +257,30 @@ dashboard.php           [Status: 302, Size: 908, Words: 87, Lines: 56, Duration:
 
 Let's go to `register.php`:
 
-![[Pasted image 20250425125731.png]]
+![](../images/Pasted%20image%2020250425125731.png)
 
 Let's submit the request to our proxy to handle it better:
 
 
-![[Pasted image 20250425130038.png]]
+![](../images/Pasted%20image%2020250425130038.png)
 
 As we can notice, it does not allow us to register with `admin@bank.a`, but, if we recall the strings correctly, this is using `system()`, which mean that if we are able to do it correctly, our commands may be interpreted and we can inject stuff like `%0A` or `%09`, let's try it out:
 
 
-![[Pasted image 20250425130239.png]]
+![](../images/Pasted%20image%2020250425130239.png)
 
 There we go `%0A` seems to do the trick, let's go inside the admin panel:
 
-![[Pasted image 20250425130320.png]]
+![](../images/Pasted%20image%2020250425130320.png)
 
 
 The `command` one seems odd, let's check it out:
 
-![[Pasted image 20250425130350.png]]
+![](../images/Pasted%20image%2020250425130350.png)
 
 Once again, let's submit to our proxy:
 
-![[Pasted image 20250425130433.png]]
+![](../images/Pasted%20image%2020250425130433.png)
 
 The format of it may suggest it is vulnerable to `XXE`, let's try some stuff then, for example, a basic `LFI`:
 
@@ -297,7 +297,7 @@ The format of it may suggest it is vulnerable to `XXE`, let's try some stuff the
 </root>
 ```
 
-![[Pasted image 20250425131018.png]]
+![](../images/Pasted%20image%2020250425131018.png)
 
 We got LFI, `expect` wrapper is not enabled so we cannot get `RCE`, but, we can read other system file, for example, if we click on `My Account`, we get a `GET` request to `acc.php`, we can maybe get more info if we read this file, we need to use `php://filter`:
 
@@ -314,7 +314,7 @@ We got LFI, `expect` wrapper is not enabled so we cannot get `RCE`, but, we can 
 </root>
 ```
 
-![[Pasted image 20250425131503.png]]
+![](../images/Pasted%20image%2020250425131503.png)
 
 Let's decode these contents:
 
@@ -437,7 +437,7 @@ We got some credentials:
 cyber:super#secure&password!
 ```
 
-![[Pasted image 20250425131719.png]]
+![](../images/Pasted%20image%2020250425131719.png)
 
 
 Let's begin PrivEsc.
@@ -492,7 +492,7 @@ sudo /usr/bin/python3 /home/cyber/run.py
 
 If we check `/bin/bash`:
 
-![[Pasted image 20250425132224.png]]
+![](../images/Pasted%20image%2020250425132224.png)
 
 There we go, we can simply do:
 
@@ -500,7 +500,7 @@ There we go, we can simply do:
 /bin/bash -p
 ```
 
-![[Pasted image 20250425132249.png]]
+![](../images/Pasted%20image%2020250425132249.png)
 
 We can find all flags now, there are three flags on this CTF:
 
@@ -538,5 +538,5 @@ THM{db12b4451d5e70e2a177880ecfe3428d}
 ```
 
 
-![[Pasted image 20250425133033.png]]
+![](../images/Pasted%20image%2020250425133033.png)
 

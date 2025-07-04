@@ -19,12 +19,12 @@ sticker: emoji//1f513
 
 Let's check the web application:
 
-![[Pasted image 20250611130401.png]]
+![](../images/Pasted%20image%2020250611130401.png)
 
 
 As seen, we can login with the username and an invite code, we can also check the `API` documentation:
 
-![[Pasted image 20250611130505.png]]
+![](../images/Pasted%20image%2020250611130505.png)
 
 We need the password for the API, seems like we need to fuzz in order to find anything that may be hidden:
 
@@ -67,16 +67,16 @@ logs                    [Status: 301, Size: 318, Words: 20, Lines: 10, Duration:
 
 `logs` seem interesting:
 
-![[Pasted image 20250611131017.png]]
+![](../images/Pasted%20image%2020250611131017.png)
 
 We can find that info inside of it, we get an invite code but can't do anything with it, let's go to `js`:
 
 
-![[Pasted image 20250611131058.png]]
+![](../images/Pasted%20image%2020250611131058.png)
 
 We can find `api.js`:
 
-![[Pasted image 20250611131115.png]]
+![](../images/Pasted%20image%2020250611131115.png)
 
 We can use `beautifier` to check the contents better:
 
@@ -208,7 +208,7 @@ j(0x169)
 
 We get:
 
-![[Pasted image 20250611133521.png]]
+![](../images/Pasted%20image%2020250611133521.png)
 
 **Why it returns "H7gY2tJ9wQzD4rS1" instead of "5228dijopu":**
 
@@ -229,9 +229,9 @@ With this we can now go into the API documentation and begin exploitation.
 
 Once we access the API we can find this:
 
-![[Pasted image 20250611133729.png]]
+![](../images/Pasted%20image%2020250611133729.png)
 
-![[Pasted image 20250611133736.png]]
+![](../images/Pasted%20image%2020250611133736.png)
 
 We can see the way the token is being generated, it uses the following function:
 
@@ -336,9 +336,9 @@ NDYxNTg5ODkx
 We got our code, let's login:
 
 
-![[Pasted image 20250611142753.png]]
+![](../images/Pasted%20image%2020250611142753.png)
 
-![[Pasted image 20250611142801.png]]
+![](../images/Pasted%20image%2020250611142801.png)
 
 Nice, got our first flag:
 
@@ -353,11 +353,11 @@ Let's get our second flag.
 
 If we check the source code of the dashboard, we can see this:
 
-![[Pasted image 20250611143233.png]]
+![](../images/Pasted%20image%2020250611143233.png)
 
 We got a hidden input type named date, if we use it, this happens:
 
-![[Pasted image 20250611143331.png]]
+![](../images/Pasted%20image%2020250611143331.png)
 
 The error `Padding error: error:0606506D:digital envelope routines:EVP_DecryptFinal_ex:wrong final block length` indicates that the application is **vulnerable to a Padding Oracle Attack (POA)**. This occurs when the server leaks information about padding validation during decryption.
 
@@ -383,7 +383,7 @@ PADRE: https://github.com/glebarez/padre
 
 In order to use the tool, we need cookies, let's submit the request to our proxy:
 
-![[Pasted image 20250611144442.png]]
+![](../images/Pasted%20image%2020250611144442.png)
 
 Get both cookies and use padre:
 
@@ -413,7 +413,7 @@ padre -cookie 'PHPSESSID=bvm7a460lof8s58df1cr0kq9cm; role=d057af5933d8acebfe290f
 
 Now, let's try it and check the response:
 
-![[Pasted image 20250611145137.png]]
+![](../images/Pasted%20image%2020250611145137.png)
 
 Nice, as seen we achieved RCE, let's get our final flag then:
 
@@ -430,7 +430,7 @@ padre -cookie 'PHPSESSID=bvm7a460lof8s58df1cr0kq9cm; role=d057af5933d8acebfe290f
 
 We get:
 
-![[Pasted image 20250611150141.png]]
+![](../images/Pasted%20image%2020250611150141.png)
 
 
 Got our flag:
@@ -439,5 +439,5 @@ Got our flag:
 THM{GOT_COMMAND_EXECUTION001}
 ```
 
-![[Pasted image 20250611150206.png]]
+![](../images/Pasted%20image%2020250611150206.png)
 

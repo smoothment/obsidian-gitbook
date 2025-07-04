@@ -24,7 +24,7 @@ echo '10.10.11.37 instant.htb' | sudo tee -a /etc/hosts
 # RECONNAISSANCE
 ---
 
-![[Pasted image 20250228153935.png]]
+![](../images/Pasted%20image%2020250228153935.png)
 
 Let's try to fuzz for subdomains:
 
@@ -51,7 +51,7 @@ javascript              [Status: 301, Size: 315, Words: 20, Lines: 10, Duration:
 Nothing useful too, let's proceed by analyzing the source code and the functionalities of the web application:
 
 
-![[Pasted image 20250228155330.png]]
+![](../images/Pasted%20image%2020250228155330.png)
 
 A good approach would analyzing the apk we installed, for this, let's use the apktool installed in kali:
 
@@ -82,7 +82,7 @@ We can check the network security configuration at `/instant/res/xml`:
 
 We can see two subdomains, let's add them and proceed to analyze them:
 
-![[Pasted image 20250228172047.png]]
+![](../images/Pasted%20image%2020250228172047.png)
 
 Let's start exploitation.
 
@@ -92,12 +92,12 @@ Let's start exploitation.
 
 At first site, the second subdomain has got this:
 
-![[Pasted image 20250228172118.png]]
+![](../images/Pasted%20image%2020250228172118.png)
 
 
 Let's check how to register an user:
 
-![[Pasted image 20250228172149.png]]
+![](../images/Pasted%20image%2020250228172149.png)
 
 
 Let's try registering an user:
@@ -113,11 +113,11 @@ curl -X POST "http://swagger-ui.instant.htb/api/v1/register" -H  "accept: applic
 
 We can now login and check our details:
 
-![[Pasted image 20250228172525.png]]
+![](../images/Pasted%20image%2020250228172525.png)
 
 We got an access token, let's decode it:
 
-![[Pasted image 20250228172641.png]]
+![](../images/Pasted%20image%2020250228172641.png)
 
 We can see our role, we are not admin user obviously but this helps us understand that if we get the token of an admin user, we can interact with the application more, let's go back to our `/instant` directory
 
@@ -161,22 +161,22 @@ Let's read it:
 
 If we decode the jwt:
 
-![[Pasted image 20250228173322.png]]
+![](../images/Pasted%20image%2020250228173322.png)
 
 Nice, this is the admin token, let's authorize with the token and use this:
 
 
-![[Pasted image 20250228173451.png]]
+![](../images/Pasted%20image%2020250228173451.png)
 
 
 Now, if I'm right, we can read files from the server, let's read `/etc/passwd`, we need to apply some path traversal:
 
 
-![[Pasted image 20250228173614.png]]
+![](../images/Pasted%20image%2020250228173614.png)
 
 There we are, we find the user `shirohige`, let's try reading this user `id_rsa`:
 
-![[Pasted image 20250228173728.png]]
+![](../images/Pasted%20image%2020250228173728.png)
 
 Nice, this is the `id_rsa`:
 
@@ -300,12 +300,12 @@ Time to begin PRIVESC.
 Let's use linpeas and check the output:
 
 
-![[Pasted image 20250228174817.png]]
+![](../images/Pasted%20image%2020250228174817.png)
 
 
 Linpeas finds the following:
 
-![[Pasted image 20250228175049.png]]
+![](../images/Pasted%20image%2020250228175049.png)
 
 We got an admin hash for a db:
 
@@ -323,11 +323,11 @@ instant.db                                                    100%   36KB 113.0K
 
 Now, let's open it then, for this, let's use `sqlitebrowser` to have a GUI:
 
-![[Pasted image 20250228175541.png]]
+![](../images/Pasted%20image%2020250228175541.png)
 
 This algorithm would take a ridiculous amount of time to crack, let's search for something more, looking back at the linpeas scan, we find another thing:
 
-![[Pasted image 20250228175731.png]]
+![](../images/Pasted%20image%2020250228175731.png)
 
 We got a backups folder, let's take a look:
 
@@ -384,6 +384,6 @@ root@instant:/opt/backups/Solar-PuTTY# cat /root/root.txt
 ```
 
 
-![[Pasted image 20250228180726.png]]
+![](../images/Pasted%20image%2020250228180726.png)
 
 

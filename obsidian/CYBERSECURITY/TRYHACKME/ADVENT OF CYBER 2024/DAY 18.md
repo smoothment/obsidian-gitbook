@@ -1,7 +1,7 @@
 ---
 sticker: emoji//1f384
 ---
-![[Pasted image 20241218124441.png]]
+![](../images/Pasted%20image%2020241218124441.png)
 
 ## Storyline
 
@@ -159,24 +159,24 @@ Then, on the WareWise application, let's provide a command that will lead to the
 _Please note, the reverse shell **may** take a few attempts to successfully connect back._
 
 
-![[Pasted image 20241218133023.png]]
+![](../images/Pasted%20image%2020241218133023.png)
 
 We got the shell, let's answer the questions:
 
-![[Pasted image 20241218133549.png]]
+![](../images/Pasted%20image%2020241218133549.png)
 
 Once we got the shell, let's try to [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stabilize]] it and look up for the flag:
 
-![[Pasted image 20241218133615.png]]
+![](../images/Pasted%20image%2020241218133615.png)
 
 Now, let's use `find / -name flag.txt 2>/dev/null`:
 
 
-![[Pasted image 20241218133725.png]]
+![](../images/Pasted%20image%2020241218133725.png)
 
 Flag is located at `/home/analyst/flag.txt`
 
-![[Pasted image 20241218133752.png]]
+![](../images/Pasted%20image%2020241218133752.png)
 
 Flag is: `THM{WareW1se_Br3ach3d}`
 

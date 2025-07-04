@@ -83,7 +83,7 @@ In web development, the request-response cycle is when a user's browser (the cli
 
 ## QUESTION
 
-![[Pasted image 20241101160736.png]]
+![](../images/Pasted%20image%2020241101160736.png)
 
 # JavaScript Overview
 
@@ -144,7 +144,7 @@ Congratulations! You’ve successfully created your first program in JS. This is
 
 ## QUESTIONS
 
-![[Pasted image 20241101160811.png]]
+![](../images/Pasted%20image%2020241101160811.png)
 
 
 # Integrating JavaScript in HTML
@@ -251,7 +251,7 @@ For a practical example, visit [https://tryhackme.com](https://tryhackme.com/)�
 
 ## QUESTIONS
 
-![[Pasted image 20241101161130.png]]
+![](../images/Pasted%20image%2020241101161130.png)
 
 
 # Abusing Dialogue Functions
@@ -320,7 +320,7 @@ Imagine if a bad actor sent you a similar file, but instead of displaying the al
 
 ## QUESTIONS
 
-![[Pasted image 20241101161223.png]]
+![](../images/Pasted%20image%2020241101161223.png)
 
 
 # Bypassing Control Flow Statements
@@ -374,7 +374,7 @@ When you double-click the file and open it in your browser, it will prompt you f
 
 ## QUESTIONS
 
-![[Pasted image 20241101161307.png]]
+![](../images/Pasted%20image%2020241101161307.png)
 
 
 # Exploring Minified Files
@@ -469,7 +469,7 @@ You have seen how easily we deobfuscated and retrieved our original code.
 
 ## QUESTIONS
 
-![[Pasted image 20241101161358.png]]
+![](../images/Pasted%20image%2020241101161358.png)
 
 
 # BEST PRACTICES
@@ -501,5 +501,5 @@ Minifying and obfuscating JS code reduces its size, improves load time, and make
 
 ## QUESTION
 
-![[Pasted image 20241101161444.png]]
+![](../images/Pasted%20image%2020241101161444.png)
 

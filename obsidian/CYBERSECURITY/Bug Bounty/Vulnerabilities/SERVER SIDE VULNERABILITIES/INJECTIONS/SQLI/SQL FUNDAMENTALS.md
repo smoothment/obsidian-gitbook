@@ -84,7 +84,7 @@ Once a table has been defined and populated, more data may need to be stored. Fo
 ## QUESTIONS
 
 
-![[Pasted image 20241101161706.png]]
+![](../images/Pasted%20image%2020241101161706.png)
 
 
 # SQL
@@ -156,7 +156,7 @@ With that covered, you are ready to start using (and learning) SQL!
 
 ## QUESTIONS
 
-![[Pasted image 20241101161807.png]]
+![](../images/Pasted%20image%2020241101161807.png)
 
 
 ## SOME QUERIES
@@ -702,7 +702,7 @@ These operations enable us to effectively manage and manipulate data within a da
 
 ## QUESTIONS
 
-![[Pasted image 20241101162212.png]]
+![](../images/Pasted%20image%2020241101162212.png)
 
 # CLAUSES
 
@@ -870,7 +870,7 @@ In the example above, we can observe that the query returns the books with the n
 
 ## QUESTIONS
 
-![[Pasted image 20241101162318.png]]
+![](../images/Pasted%20image%2020241101162318.png)
 
 # OPERATORS
 
@@ -1150,7 +1150,7 @@ The query above returns books that were **published on or after November 2, 202
 
 ## QUESTIONS
 
-![[Pasted image 20241101162405.png]]
+![](../images/Pasted%20image%2020241101162405.png)
 
 # FUNCTIONS
 
@@ -1354,7 +1354,7 @@ The query above retrieves the earliest publication (minimum value) date from the
 
 ## QUESTIONS
 
-![[Pasted image 20241101162512.png]]
+![](../images/Pasted%20image%2020241101162512.png)
 
 # IMPORTANT
 

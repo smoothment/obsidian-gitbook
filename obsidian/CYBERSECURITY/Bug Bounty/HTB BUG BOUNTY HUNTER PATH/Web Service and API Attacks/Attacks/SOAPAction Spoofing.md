@@ -298,5 +298,5 @@ $
 
 Answer is: 
 
-![[Pasted image 20250219153436.png]]
+![](../images/Pasted%20image%2020250219153436.png)
 

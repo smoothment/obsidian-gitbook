@@ -229,7 +229,7 @@ You are installing the modules from an untrusted repository. If you trust this r
 
 ## QUESTIONS
 
-![[Pasted image 20241101143009.png]]
+![](../images/Pasted%20image%2020241101143009.png)
 
 
 # NAVIGATING THE FILE SYSTEM AND WORKING WITH FILES
@@ -338,7 +338,7 @@ Don't touch my hat!
 
 ## QUESTIONS
 
-![[Pasted image 20241101143227.png]]
+![](../images/Pasted%20image%2020241101143227.png)
 
 
 # PIPING, FILTERING AND SORTING DATA
@@ -449,7 +449,7 @@ The `Select-String` cmdlet fully supports the use of regular expressions ([reg
 
 ## QUESTIONS
 
-![[Pasted image 20241101143407.png]]
+![](../images/Pasted%20image%2020241101143407.png)
 
 
 # SYSTEM AND NETWORK INFORMATION
@@ -553,7 +553,7 @@ These cmdlets give IT professionals the ability to quickly access crucial system
 
 ## QUESTIONS
 
-![[Pasted image 20241101143556.png]]
+![](../images/Pasted%20image%2020241101143556.png)
 
 # REAL-TIME SYSTEM ANALYSIS
 
@@ -635,7 +635,7 @@ These cmdlets collectively provide a comprehensive set of tools for real-time sy
 ## QUESTIONS
 
 
-![[Pasted image 20241101143652.png]]
+![](../images/Pasted%20image%2020241101143652.png)
 
 # SCRIPTING
 
@@ -698,7 +698,7 @@ The second example demonstrates that we don't need to know how to script to bene
 
 ## QUESTION
 
-![[Pasted image 20241101143924.png]]
+![](../images/Pasted%20image%2020241101143924.png)
 
 
 

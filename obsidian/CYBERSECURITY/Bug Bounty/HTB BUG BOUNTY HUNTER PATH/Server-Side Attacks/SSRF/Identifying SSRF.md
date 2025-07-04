@@ -74,23 +74,23 @@ The results show that the web server runs a service on port `3306`, typically u
 # Question
 ----
 
-![[Pasted image 20250210181120.png]]
+![](../images/Pasted%20image%2020250210181120.png)
 
 Let's check the website:
 
-![[Pasted image 20250210181150.png]]
+![](../images/Pasted%20image%2020250210181150.png)
 
 We find this is we check the website for a while:
 
-![[Pasted image 20250210181131.png]]
+![](../images/Pasted%20image%2020250210181131.png)
 
 Let's check the request in burp:
 
-![[Pasted image 20250210182951.png]]
+![](../images/Pasted%20image%2020250210182951.png)
 
 We can see something weird in the request, a `dateserver` parameter that makes a call to a resource called `availabilty.php`, let's try changing that to make a call to the localhost and check if the request gets passed through us:
 
-![[Pasted image 20250211142012.png]]
+![](../images/Pasted%20image%2020250211142012.png)
 
 
 We got a flag surprisingly, flag is: 

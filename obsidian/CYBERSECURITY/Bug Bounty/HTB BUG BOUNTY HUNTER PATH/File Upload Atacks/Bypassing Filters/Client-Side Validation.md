@@ -130,23 +130,23 @@ If we can click on the above link, we will get to our uploaded web shell, which 
 # Question
 ---
 
-![[Pasted image 20250206145934.png]]
+![](../images/Pasted%20image%2020250206145934.png)
 
 Let's check the website:
 
-![[Pasted image 20250206145944.png]]
+![](../images/Pasted%20image%2020250206145944.png)
 
 We can upload only images, or that's what's intended to happen, let's send an image, capture the request and modify it:
 
-![[Pasted image 20250206150251.png]]
+![](../images/Pasted%20image%2020250206150251.png)
 
 The server does a POST request to the `/upload.php` endpoint, the validation is not strong enough for us not to be able to modify it, we can change it in the following way:
 
-![[Pasted image 20250206150411.png]]
+![](../images/Pasted%20image%2020250206150411.png)
 
 If we send the request, we can see it worked:
 
-![[Pasted image 20250206150428.png]]
+![](../images/Pasted%20image%2020250206150428.png)
 
 We need to visit the following URL:
 
@@ -156,7 +156,7 @@ http://94.237.54.116:57532/profile_images/webshell.php?cmd=id
 
 We can see this:
 
-![[Pasted image 20250206151736.png]]
+![](../images/Pasted%20image%2020250206151736.png)
 
 Nice, let's read the flag:
 

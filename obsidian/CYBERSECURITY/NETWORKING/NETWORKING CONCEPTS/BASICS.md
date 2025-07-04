@@ -120,7 +120,7 @@ Reading about the ISO OSI model for the first time can be intimidating; however,
 | Layer 1      | Physical layer     | Physical data transmission media                      | Electrical, optical, and wireless signals |
 ## QUESTIONS SECTION
 
-![[Pasted image 20241028151907.png]]
+![](../images/Pasted%20image%2020241028151907.png)
 
 # TCP/IP MODEL
 
@@ -276,7 +276,7 @@ Similar to UDP, TCP identifies the process of initiating or waiting (listenin
 
 ### QUESTIONS
 
-![[Pasted image 20241028164012.png]]
+![](../images/Pasted%20image%2020241028164012.png)
 
 # ENCAPSULATION
 
@@ -309,7 +309,7 @@ Based on what we have studied so far, we can explain a _simplified version_ of
 The steps will then be reversed as the packet reaches the router of the destination network. As we cover additional protocols, we will revisit this exercise and create a more in-depth version.
 ### QUESTIONS
 
-![[Pasted image 20241028164606.png]]
+![](../images/Pasted%20image%2020241028164606.png)
 
 # TELNET
 

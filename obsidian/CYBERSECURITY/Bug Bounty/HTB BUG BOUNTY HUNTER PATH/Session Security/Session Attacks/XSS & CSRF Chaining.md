@@ -211,5 +211,5 @@ The following section will focus on identifying and bypassing weak CSRF tokens t
 # Question
 ---
 
-![[Pasted image 20250219130520.png]]
+![](../images/Pasted%20image%2020250219130520.png)
 

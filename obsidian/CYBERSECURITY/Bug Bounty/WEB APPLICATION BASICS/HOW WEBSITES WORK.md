@@ -4,7 +4,7 @@ By the end of this room, you'll know how websites are created and will be introd
 
 When you visit a website, your browser (_like Safari or Google Chrome_) makes a request to a web server asking for information about the page you're visiting. It will respond with data that your browser uses to show you the page; a web server is just a dedicated computer somewhere else in the world that handles your requests.
 
-![[Pasted image 20241120181357.png]]
+![](../images/Pasted%20image%2020241120181357.png)
 
 
 There are two major components that make up a website:
@@ -48,9 +48,9 @@ You can view the HTML of any website by right-clicking and selecting "View Page 
 
 ## RENDERED CODE (Practical)
 ---
-![[Pasted image 20241120181558.png]]
+![](../images/Pasted%20image%2020241120181558.png)
 
-![[Pasted image 20241120181551.png]]
+![](../images/Pasted%20image%2020241120181551.png)
 
 
 # JavaScript
@@ -69,12 +69,12 @@ HTML elements can also have events, such as `"onclick"` or `"onhover"` that exec
 
 ----
 
-![[Pasted image 20241120182014.png]]
+![](../images/Pasted%20image%2020241120182014.png)
 
 
-![[Pasted image 20241120182032.png]]
+![](../images/Pasted%20image%2020241120182032.png)
 
-![[Pasted image 20241120182040.png]]
+![](../images/Pasted%20image%2020241120182040.png)
 
 # Sensitive Data Exposure
 ---
@@ -106,8 +106,8 @@ The general rule is never to trust user input. To prevent malicious input, the w
 
 ---
 
-![[Pasted image 20241120182433.png]]
+![](../images/Pasted%20image%2020241120182433.png)
 
-![[Pasted image 20241120182439.png]]
+![](../images/Pasted%20image%2020241120182439.png)
 
 

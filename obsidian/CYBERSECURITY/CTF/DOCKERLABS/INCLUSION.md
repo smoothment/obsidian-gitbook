@@ -18,16 +18,16 @@ Seems like a simple machine in terms of open ports, let's fuzz
 ## FUZZING
 ---
 
-![[Pasted image 20241226164136.png]]
+![](../images/Pasted%20image%2020241226164136.png)
 
 We found a `/shop` directory, let's visit the standard page and this one:
 
 
-![[Pasted image 20241226164213.png]]
+![](../images/Pasted%20image%2020241226164213.png)
 
 Standard apache2 installation, source code is normal too, let's visit the found directory:
 
-![[Pasted image 20241226164307.png]]
+![](../images/Pasted%20image%2020241226164307.png)
 
 
 
@@ -36,12 +36,12 @@ Standard apache2 installation, source code is normal too, let's visit the found 
 
 We found something interesting in the page, this appears right when we enter the site:
 
-![[Pasted image 20241226164337.png]]
+![](../images/Pasted%20image%2020241226164337.png)
 
 This seems like the server is vulnerable to [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/FILE INCLUSION VULNERABILITIES/LOCAL FILE INCLUSION (LFI).md|LFI]], let's test some payloads to check if its true:
 
 
-![[Pasted image 20241226170019.png]]
+![](../images/Pasted%20image%2020241226170019.png)
 
 After testing for a while, I couldn't get anything useful, so, I thought that we already have the name of the file, it is called `archivo`, so let's fuzz for this in order to find anything useful:
 
@@ -54,15 +54,15 @@ After testing for a while, I couldn't get anything useful, so, I thought that we
 
 I'm using a different wordlist this time, once used, this is what I found:
 
-![[Pasted image 20241226170452.png]]
+![](../images/Pasted%20image%2020241226170452.png)
 
 It was too big to fit, so, let's try to `grep` for something like the `/etc/passwd` file:
 
-![[Pasted image 20241226170549.png]]
+![](../images/Pasted%20image%2020241226170549.png)
 
 Indeed, it works, I'm able to see some techniques such as a null byte injection and many more, let's read our file, which is located at: `../../../../etc/passwd`
 
-![[Pasted image 20241226170718.png]]
+![](../images/Pasted%20image%2020241226170718.png)
 
 
 ```
@@ -82,11 +82,11 @@ We found some interesting usernames such as `manchi` and `seller`, let's try to 
 
 `hydra -l manchi -P /usr/share/wordlists/rockyou.txt 172.17.0.2 ssh -t 10`
 
-![[Pasted image 20241226171505.png]]
+![](../images/Pasted%20image%2020241226171505.png)
 
 We found some credentials, let's log in:
 
-![[Pasted image 20241226171627.png]]
+![](../images/Pasted%20image%2020241226171627.png)
 
 
 ```
@@ -113,13 +113,13 @@ And now the script:
 
 `scp Linux-Su-Force.sh manchi@172.17.0.2:/home/manchi/Linux-Su-Force.sh`
 
-![[Pasted image 20241226172916.png]]
+![](../images/Pasted%20image%2020241226172916.png)
 
 Once we've download it, let's run the script inside the ssh machine:
 
 `./Linux-Su-Force.sh seller rockyou.txt`
 
-![[Pasted image 20241226173125.png]]
+![](../images/Pasted%20image%2020241226173125.png)
 
 Nice, password was found!
 
@@ -128,17 +128,17 @@ Nice, password was found!
 
 Let's switch into `seller`:
 
-![[Pasted image 20241226173234.png]]
+![](../images/Pasted%20image%2020241226173234.png)
 
 Now, let's try to escalate into root user:
 
 ### sudo -l
 
-![[Pasted image 20241226173256.png]]
+![](../images/Pasted%20image%2020241226173256.png)
 
 We can run sudo on `/usr/bin/php`, let's search gtfobins:
 
-![[Pasted image 20241226173351.png]]
+![](../images/Pasted%20image%2020241226173351.png)
 
 So, let's escalate into root:
 
@@ -150,7 +150,7 @@ So, let's escalate into root:
 `sudo php -r "system('$CMD');"`
 
 
-![[Pasted image 20241226173506.png]]
+![](../images/Pasted%20image%2020241226173506.png)
 
 ```
 

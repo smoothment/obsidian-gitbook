@@ -1,7 +1,7 @@
 ---
 sticker: emoji//1f384
 ---
-![[Pasted image 20241215125710.png]]
+![](../images/Pasted%20image%2020241215125710.png)
 
 
 Ahead of SOC-mas, the team decided to do a routine security check of one of their Active Directory domain controllers. Upon some quick auditing, the team noticed something was off. Could it be? The domain controller has been breached? With sweat on their brows, the SOC team smashed the glass and hit the panic alarm. There's only one person who can save us...
@@ -82,7 +82,7 @@ Let us say that McSkidy wants to ensure that all users within Wareville's SOC 
 5. Click **OK**, then link this GPO to the domain or specific OUs you want to target.
 ```
 
-![[Pasted image 20241215132345.png]]
+![](../images/Pasted%20image%2020241215132345.png)
 
 
 This policy will now be applied across the domain, ensuring all users meet these password requirements.
@@ -199,7 +199,7 @@ WmiFilter        :
 
 We can also found the following:
 
-![[Pasted image 20241215134202.png]]
+![](../images/Pasted%20image%2020241215134202.png)
 
 Glitch has installed a backdoor using a malicious GPO
 
@@ -224,7 +224,7 @@ Then, when opening the HTML file in the browser, we are presented with an overvi
 - The user or computer configurations that it enforces.
 ```
 
-![[Pasted image 20241215134327.png]]
+![](../images/Pasted%20image%2020241215134327.png)
 
 From the screenshot above, we can see that the policy sets the Desktop Wallpaper of devices using the image located in `C:\THM.jpg` on the domain controller.
 
@@ -244,7 +244,7 @@ SetWallpaper                               10/31/2024 1:01:04 PM
 
 
 
-![[Pasted image 20241215134421.png]]
+![](../images/Pasted%20image%2020241215134421.png)
 
 ## Event Viewer
 ---
@@ -298,7 +298,7 @@ cmnatic        cmnatic        {CN=Domain Admins,CN=Users,DC=wareville,DC=thm, CN
 
 
 
-![[Pasted image 20241215134759.png]]
+![](../images/Pasted%20image%2020241215134759.png)
 
 ## Reviewing PowerShell History and Logs
 ----
@@ -310,7 +310,7 @@ On a Windows Server, this history file  is located at `%APPDATA%\Microsoft\Win
 
 You can use the in-built Notepad on Windows or your favorite text editor to review the PowerShell command history.
 
-![[Pasted image 20241215134854.png]]
+![](../images/Pasted%20image%2020241215134854.png)
 
 Additionally, logs are recorded for every PowerShell process executed on a system. These logs are located within the Event Viewer under `Application and Services Logs -> Microsoft -> Windows -> PowerShell -> Operational` or also under `Application and Service Logs -> Windows PowerShell`. The logs have a wealth of information useful for incident response.
 
@@ -322,7 +322,7 @@ Your task for today is to investigate WareVille's SOC-mas Active Directory cont
 
 ## Questions
 ---
-![[Pasted image 20241215134941.png]]
+![](../images/Pasted%20image%2020241215134941.png)
 
 Let's begin
 
@@ -331,11 +331,11 @@ Let's begin
 
 Let's go to the event viewer and search for `Glitch_Malware` last log in:
 
-![[Pasted image 20241215140345.png]]
+![](../images/Pasted%20image%2020241215140345.png)
 
 For this, we can filter for `Glitch_Malware` using the find tool in the event viewer, when we filter, we can see that the date is `07/11/2024`
 
-![[Pasted image 20241215140527.png]]
+![](../images/Pasted%20image%2020241215140527.png)
 
 
 ### 2
@@ -349,7 +349,7 @@ As specified in the room, when a logon event is happening, it states ID `4624`
 
 After reviewing the console history, we find this:
 
-![[Pasted image 20241215135135.png]]
+![](../images/Pasted%20image%2020241215135135.png)
 
 So, the command would be: `Get-ADUser -Filter * -Properties MemberOf | Select-Object Name`
 
@@ -359,17 +359,17 @@ So, the command would be: `Get-ADUser -Filter * -Properties MemberOf | Select-Ob
 
 Let's visit the specified route and check the logs:
 
-![[Pasted image 20241215140606.png]]
-![[Pasted image 20241215140611.png]]
+![](../images/Pasted%20image%2020241215140606.png)
+![](../images/Pasted%20image%2020241215140611.png)
 
 They are asking for `Glitch_Malware` again, we can use find too in the following way:
 
 
-![[Pasted image 20241215141020.png]]
+![](../images/Pasted%20image%2020241215141020.png)
 
 After scrolling for a while, we find this:
 
-![[Pasted image 20241215141159.png]]
+![](../images/Pasted%20image%2020241215141159.png)
 
 So, our answer would be: `SuperSecretP@ssw0rd!`
 
@@ -379,7 +379,7 @@ So, our answer would be: `SuperSecretP@ssw0rd!`
 As I showed before, the installed GPO is: `Malicious GPO - Glitch_Malware Persistence`
 
 
-![[Pasted image 20241215140152.png]]
+![](../images/Pasted%20image%2020241215140152.png)
 
 
 

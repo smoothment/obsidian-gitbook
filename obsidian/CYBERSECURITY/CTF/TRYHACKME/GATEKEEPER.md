@@ -89,7 +89,7 @@ python -c "print('A'*1000)"
 ```
 
 
-![[Pasted image 20250530170602.png]]
+![](../images/Pasted%20image%2020250530170602.png)
 
 As seen, the program crashes automatically, with all these, we can use `immunity debugger` to construct our exploit.
 
@@ -255,7 +255,7 @@ print("[+] Done. Check your listener for a shell!")
 
 We need to start a listener and launch the exploit:
 
-![[Pasted image 20250530172927.png]]
+![](../images/Pasted%20image%2020250530172927.png)
 
 We got access as user `natbat`, let's get our user flag and begin privilege escalation:
 
@@ -277,7 +277,7 @@ Let's begin privilege escalation.
 
 First thing we can notice on this machine is that we have direct access on our desktop for `firefox`, this is not usual and could lead us to check if there's any password or something like that on there:
 
-![[Pasted image 20250530173250.png]]
+![](../images/Pasted%20image%2020250530173250.png)
 
 We can go to:
 
@@ -285,7 +285,7 @@ We can go to:
 C:\Users\natbat\AppData\Roaming\Mozilla\Firefox\Profiles\
 ```
 
-![[Pasted image 20250530173333.png]]
+![](../images/Pasted%20image%2020250530173333.png)
 
 We got a `ljfn812a.default-release` directory, this directory contains login information for the browser, if we check the contents of this directory, we can find this:
 
@@ -357,7 +357,7 @@ copy logins.json C:\Users\Share\logins.json
 
 Now, we can get them in `smbclient`:
 
-![[Pasted image 20250530174002.png]]
+![](../images/Pasted%20image%2020250530174002.png)
 
 ```
 get key4.db
@@ -429,7 +429,7 @@ decrypting login/password pairs
    https://creds.com:b'mayor',b'8CL7O1N78MdrCIsV'
 ```
 
-![[Pasted image 20250530174226.png]]
+![](../images/Pasted%20image%2020250530174226.png)
 
 
 As seen, we got our credentials:
@@ -445,11 +445,11 @@ python3 psexec.py WORKGROUP/mayor:8CL7O1N78MdrCIsV@IP cmd.exe
 ```
 
 
-![[Pasted image 20250530174926.png]]
+![](../images/Pasted%20image%2020250530174926.png)
 
 There we go, let's read `root` flag:
 
-![[Pasted image 20250530175035.png]]
+![](../images/Pasted%20image%2020250530175035.png)
 
 ```
 C:\Users\mayor\Desktop> type root.txt.txt
@@ -458,5 +458,5 @@ C:\Users\mayor\Desktop> type root.txt.txt
 
 
 
-![[Pasted image 20250530175102.png]]
+![](../images/Pasted%20image%2020250530175102.png)
 

@@ -5,7 +5,7 @@ sticker: emoji//1f384
 
 The much-awaited SOC-mas of Wareville town is just days away! Glitch, the unsung hero, is closing all the doors to Mayor Malware's malicious intentions one by one. However, there is still much more to do. 
 
-![[Pasted image 20241211121206.png]]
+![](../images/Pasted%20image%2020241211121206.png)
 McSkidy took a thoughtful breath. _"Mayor can still find his way in!"_
 
 Glitch smiles confidently. _"I think I know the last technique he relies on to get into the networks."_
@@ -178,7 +178,7 @@ Interface wlan2
 
 Now, let us create one more SSH session. We want to have **2 separate terminals** in order to see clearly how the attack works. You can align the SSH terminals however you like, but here is an example of how it should look like.
 
-![[Pasted image 20241211123038.png]]
+![](../images/Pasted%20image%2020241211123038.png)
 
 On the first terminal, we start by capturing Wi-Fi traffic in the area, specifically targeting the WPA handshake packets. We can do this with the command `sudo airodump-ng wlan2`. This command provides a list of nearby Wi-Fi networks (SSIDs) and shows important details like signal strength, channel, and encryption type. This information is already known to us from our previous commands.
 
@@ -192,7 +192,7 @@ BSSID              PWR  Beacons    #Data, #/s  CH   MB   ENC CIPHER  AUTH ESSID
  02:00:00:00:00:00  -28        2        0    0   6   54   WPA2 CCMP   PSK  MalwareM_AP                     
 ```
 
-![[Pasted image 20241211123156.png]]
+![](../images/Pasted%20image%2020241211123156.png)
 
 
 
@@ -236,9 +236,9 @@ On the second terminal, we will launch the deauthentication attack. Because the 
 We can do this with `sudo aireplay-ng -0 1 -a 02:00:00:00:00:00 -c 02:00:00:00:01:00 wlan2`. The `-0` flag indicates that we are using the deauthentication attack, and the `1` value is the number of deauths to send. The `-a` indicates the BSSID of the access point and `-c` indicates the BSSID of the client to deauthenticate.
 
 Now, if we look back on our first terminal, we will see the WPA handshake shown on the top-right of our output as `WPA handshake: 02:00:00:00:00:00`. All of this information is being saved into our output files.
-![[Pasted image 20241211123541.png]]
+![](../images/Pasted%20image%2020241211123541.png)
 
-![[Pasted image 20241211123546.png]]
+![](../images/Pasted%20image%2020241211123546.png)
 
 ```shell-session
  CH  6 ][ Elapsed: 1 min ][ 2024-11-02 19:30 ][ WPA handshake: 02:00:00:00:00:00 
@@ -254,7 +254,7 @@ Now, if we look back on our first terminal, we will see the WPA handshake show
 
 In the second terminal, we can use the captured WPA handshake to attempt to crack the WPA/WP2 passphrase. We will be performing a dictionary attack in order to match the passphrase against each entry in a specified wordlist file. A shortened version of the infamous `rockyou.txt` wordlist has already been provided for us to use. This is located in the `/home/glitch/` directory. If the passphrase is weak and appears in the wordlist, it will eventually be cracked. The command `sudo aircrack-ng -a 2 -b 02:00:00:00:00:00 -w /home/glitch/rockyou.txt output*cap` will do this for us where the `-a 2` flag indicates the WPA/WPA2 attack mode. The `-b` indicates the BSSID of the access point, and the `-w` flag indicates the dictionary list to use for the attack. Finally, we select the output files that we will be using, which contain the 4-way handshake that we will be cracking.
 
-![[Pasted image 20241211123623.png]]
+![](../images/Pasted%20image%2020241211123623.png)
 
 Terminal
 
@@ -300,12 +300,12 @@ glitch@wifi:~$ sudo wpa_supplicant -B -c config -i wlan2
 **Note:** If you get a `rfkill: Cannot get wiphy information` error, you can ignore it. You will also notice that `wpa_supplicant` has automatically switched our **wlan2** interface to **managed mode**.
 
 
-![[Pasted image 20241211123800.png]]
+![](../images/Pasted%20image%2020241211123800.png)
 
 # Questions
 ---
 
-![[Pasted image 20241211124016.png]]
+![](../images/Pasted%20image%2020241211124016.png)
 
 Just like that, day 11 is done, all questions can be found within this note.
 

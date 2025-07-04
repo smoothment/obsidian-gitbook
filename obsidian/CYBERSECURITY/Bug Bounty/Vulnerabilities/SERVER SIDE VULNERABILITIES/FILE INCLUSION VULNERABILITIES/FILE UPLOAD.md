@@ -74,24 +74,24 @@ This script enables you to pass an arbitrary system command via a query paramete
 
 ### Lab
 ---
-![[Pasted image 20240919170230.png]]
+![](../images/Pasted%20image%2020240919170230.png)
 We'll upload a simple Web shell to read contents from secret directory:
-![[Pasted image 20240919171649.png]]
+![](../images/Pasted%20image%2020240919171649.png)
 
-![[Pasted image 20240919171719.png]]
+![](../images/Pasted%20image%2020240919171719.png)
 
-![[Pasted image 20240919171734.png]]
+![](../images/Pasted%20image%2020240919171734.png)
 
 
 Lets use burp to test if it worked:
 
-![[Pasted image 20240919171851.png]]
+![](../images/Pasted%20image%2020240919171851.png)
 And it worked, now we can read the contents of the directory:
 
-![[Pasted image 20240919172108.png]]
+![](../images/Pasted%20image%2020240919172108.png)
 We need to use URL encode for space: `%20` for it to work correctly, and like that, we finished the lab.
 
-![[Pasted image 20240919172507.png]]
+![](../images/Pasted%20image%2020240919172507.png)
 
 
 ## Exploiting flawed validation of file uploads
@@ -143,21 +143,21 @@ One way that websites may attempt to validate file uploads is to check that this
 
 ##### LAB
 
-![[Pasted image 20240919173553.png]]
+![](../images/Pasted%20image%2020240919173553.png)
 We will upload a webshell in php changing the content-type to a image/jpeg or image/png: 
-![[Pasted image 20240919174011.png]]
+![](../images/Pasted%20image%2020240919174011.png)
 Once we do it, we see that we were able to upload it:
-![[Pasted image 20240919174029.png]]
+![](../images/Pasted%20image%2020240919174029.png)
 Lets visit the website and try to perform RCE:
 
 
-![[Pasted image 20240919174130.png]]
+![](../images/Pasted%20image%2020240919174130.png)
 And it worked, now lets read the content of `/home/carlos/secret`:
 
-![[Pasted image 20240919174207.png]]
+![](../images/Pasted%20image%2020240919174207.png)
 Just like that, we completed the lab:
 
-![[Pasted image 20240919174240.png]]
+![](../images/Pasted%20image%2020240919174240.png)
 
 ## How do web servers handle requests for static files?
 
@@ -214,9 +214,9 @@ Web servers often use the filename field in multipart/form-data requests to dete
 You should also note that even though you may send all of your requests to the same domain name, this often points to a reverse proxy server of some kind, such as a load balancer. Your requests will often be handled by additional servers behind the scenes, which may also be configured differently.
 
 ### LAB
-![[Pasted image 20240923144452.png]]
+![](../images/Pasted%20image%2020240923144452.png)
 First, the request is the following:
-![[Pasted image 20240923145605.png]]
+![](../images/Pasted%20image%2020240923145605.png)
 
 It is a post request, i already changed the content-disposition for it to perform the path traversal, i used URL encoding, and the upload was successful, so if i travel to:
 
@@ -224,12 +224,12 @@ It is a post request, i already changed the content-disposition for it to perfor
 
 I get the following output:
 
-![[Pasted image 20240923145814.png]]
+![](../images/Pasted%20image%2020240923145814.png)
 Meaning, i successfully uploaded the webshell, and can now retrieve carlos secret:
 
-![[Pasted image 20240923145918.png]]
+![](../images/Pasted%20image%2020240923145918.png)
 And like that, the lab is done:
-![[Pasted image 20240923150011.png]]
+![](../images/Pasted%20image%2020240923150011.png)
 
 
 ## Insufficient blacklisting of dangerous file types
@@ -262,23 +262,23 @@ Web servers use these kinds of configuration files when present, but you're not 
 
 ### LAB
 
-![[Pasted image 20240923150707.png]]
-![[Pasted image 20240923151141.png]]
+![](../images/Pasted%20image%2020240923150707.png)
+![](../images/Pasted%20image%2020240923151141.png)
 I was able to upload the `.php5` file, now, i got to change the `.htaccess` file for it to be able to execute my `php` file:
 
-![[Pasted image 20240923152137.png]]
+![](../images/Pasted%20image%2020240923152137.png)
 For it, i added a functionality which executes `.php5 ` files, and i changed the `content-type` to `text/plain`:
 
 `AddType application/x-httpd-php .php5`
 
 `Content-Type: text/plain`
 
-![[Pasted image 20240923152416.png]]
+![](../images/Pasted%20image%2020240923152416.png)
 And just like that, we uploaded the webshell, if we read carlos secret we get this:
 
-![[Pasted image 20240923152453.png]]
+![](../images/Pasted%20image%2020240923152453.png)
 
-![[Pasted image 20240923152548.png]]
+![](../images/Pasted%20image%2020240923152548.png)
 
 ### Obfuscating file extensions
 
@@ -301,24 +301,24 @@ This is just a small selection of the many ways it's possible to obfuscate file 
 
 #### LAB
 
-![[Pasted image 20240923153104.png]]
+![](../images/Pasted%20image%2020240923153104.png)
 I used the following payloads:
-![[Pasted image 20240923153433.png]]
+![](../images/Pasted%20image%2020240923153433.png)
 Only two gave me `200` STATUS CODE, lets check the response:
 
-![[Pasted image 20240923153507.png]]
+![](../images/Pasted%20image%2020240923153507.png)
 Lets see if this webshell worked:
-![[Pasted image 20240923153708.png]]
+![](../images/Pasted%20image%2020240923153708.png)
 And it failed, but, what if we try to null byte that to see if it works:
 
-![[Pasted image 20240923153748.png]]
+![](../images/Pasted%20image%2020240923153748.png)
 And it worked!
 
 Lets see our webshell:
 
-![[Pasted image 20240923153905.png]]
+![](../images/Pasted%20image%2020240923153905.png)
 
-![[Pasted image 20240923153953.png]]
+![](../images/Pasted%20image%2020240923153953.png)
 
 
 ## Flawed validation of the file's contents
@@ -333,7 +333,7 @@ This is a much more robust way of validating the file type, but even this isn't 
 
 ### LAB
 
-![[Pasted image 20240923154250.png]]
+![](../images/Pasted%20image%2020240923154250.png)
 
 When i tried to upload a simple modified `.php` file into an `.jpg` file, it did not work, so, if i try to embed a comment into a `.jpg` file and then upload that file, i get this:
 
@@ -344,13 +344,13 @@ I will use `exiftool` for it, the following command is what i used:
 I used a cat image i downloaded, embedded the `php` malicious code and now, i uploaded it into the web server:
 
 
-![[Pasted image 20240923161046.png]]
+![](../images/Pasted%20image%2020240923161046.png)
 
 If i go to the path, i get this:
-![[Pasted image 20240923161122.png]]
+![](../images/Pasted%20image%2020240923161122.png)
 
 And, as we can see, we can read the content, it is highlighted between START and END:
-![[Pasted image 20240923161213.png]]
+![](../images/Pasted%20image%2020240923161213.png)
 
 
 ## Exploiting file upload race conditions

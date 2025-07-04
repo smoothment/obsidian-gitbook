@@ -49,7 +49,7 @@ CSS is often used alongside JavaScript to make quick calculations, dynamically a
 The following example beautifully illustrates such capabilities of CSS when used with HTML and JavaScript "Parallax Depth Cards - by Andy Merskin on [CodePen](https://codepen.io/)":
 
 
-![[Pasted image 20250122175422.png]]
+![](../images/Pasted%20image%2020250122175422.png)
 
 
 This shows that even though HTML and CSS are among the most basic cornerstones of web development when used properly, they can be used to build visually stunning web pages, which can make interacting with web applications a much easier and more user-friendly experience.

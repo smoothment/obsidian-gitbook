@@ -175,7 +175,7 @@ mysql> SELECT * FROM logins WHERE username like '___';
 # Question
 ---
 
-![[Pasted image 20250131140321.png]]
+![](../images/Pasted%20image%2020250131140321.png)
 
 Nice, once we logged into the database and using the employees table, if we use `show tables;` we can see the following:
 

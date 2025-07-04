@@ -188,7 +188,7 @@ When you tell John to use formats, if you’re dealing with a standard hash type
 
 ## QUESTIONS
 
-![[Pasted image 20241101155712.png]]
+![](../images/Pasted%20image%2020241101155712.png)
 
 # Cracking Windows Authentication Hashes
 
@@ -203,7 +203,7 @@ A bit of history: the NT designation for Windows products originally meant New T
 In Windows, SAM (Security Account Manager) is used to store user account information, including usernames and hashed passwords. You can acquire NTHash/NTLM hashes by dumping the SAM database on a Windows machine, using a tool like Mimikatz, or using the Active Directory database: `NTDS.dit`. You may not have to crack the hash to continue privilege escalation, as you can often conduct a “pass the hash” attack instead, but sometimes, hash cracking is a viable option if there is a weak password policy.
 ## QUESTIONS
 
-![[Pasted image 20241101155801.png]]
+![](../images/Pasted%20image%2020241101155801.png)
 
 
 # Cracking /etc/shadow Hashes
@@ -375,7 +375,7 @@ Now, it’s time for you to have a go!
 
 ## QUESTIONS
 
-![[Pasted image 20241101155941.png]]
+![](../images/Pasted%20image%2020241101155941.png)
 
 # Cracking Password Protected Zip Files
 
@@ -405,7 +405,7 @@ We’re then able to take the file we output from `zip2john` in our example us
 
 ## QUESTIONS
 
-![[Pasted image 20241101160009.png]]
+![](../images/Pasted%20image%2020241101160009.png)
 
 
 # Cracking Password-Protected RAR Archives
@@ -436,7 +436,7 @@ Once again, we can take the file we output from `rar2john` in our example use 
 
 ## QUESTIONS
 
-![[Pasted image 20241101160039.png]]
+![](../images/Pasted%20image%2020241101160039.png)
 
 
 # Cracking SSH Keys with John

@@ -48,27 +48,27 @@ This shows that we successfully bypassed the filter through an HTTP Verb Tamperi
 # Question
 ---
 
-![[Pasted image 20250217143523.png]]
+![](../images/Pasted%20image%2020250217143523.png)
 
 Same situation as the previous module, let's check the request behavior by adding a `test;` file:
 
-![[Pasted image 20250217143548.png]]
+![](../images/Pasted%20image%2020250217143548.png)
 
 We get malicious request denied error, this means the web application's got some sort of command injection security, but, it can be easily bypassed:
 
-![[Pasted image 20250217144923.png]]
+![](../images/Pasted%20image%2020250217144923.png)
 
 First, let's send the payload and change the request method, once we've sent it, change it again and send it:
 
-![[Pasted image 20250217145008.png]]
+![](../images/Pasted%20image%2020250217145008.png)
 
 Now we can see our `flag.txt` has been correctly added, let's take a look:
 
-![[Pasted image 20250217145033.png]]
+![](../images/Pasted%20image%2020250217145033.png)
 
 There it is, let's read it:
 
-![[Pasted image 20250217145048.png]]
+![](../images/Pasted%20image%2020250217145048.png)
 
 Flag is:
 
