@@ -19,7 +19,7 @@ sticker: emoji//1f6e5-fe0f
 # RECONNAISSANCE
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250225131132.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225131132.png)
 
 We need to add `titanic.htb` to `/etc/hosts`:
 
@@ -27,21 +27,21 @@ We need to add `titanic.htb` to `/etc/hosts`:
 echo '10.10.11.55 titanic.htb' | sudo tee -a /etc/hosts
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250225131217.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225131217.png)
 
 We can see a `Book Now` functionality, let's check it out:
 
-![](cybersecurity/images/Pasted%2520image%252020250225132420.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225132420.png)
 
 
 We can try submitting some simple form and checking the behavior of the app using burp:
 
-![](cybersecurity/images/Pasted%2520image%252020250225132757.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225132757.png)
 
 After we make the request, we get another `GET` request to `/download` which tries to download a `.json` ticket regarding our booked trip, if we check the request, it goes like this:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250225132907.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225132907.png)
 
 Seems suspicious, it seems like the server is reading files using the `/download` endpoint, if it somehow reads the internal server files, we could exploit a LFI, let's begin by testing the most basic LFI payload, if we suppose we are at `/var/www/html/download.php`, we need to submit the following payload:
 
@@ -51,7 +51,7 @@ Seems suspicious, it seems like the server is reading files using the `/download
 
 Let's test:
 
-![](cybersecurity/images/Pasted%2520image%252020250225133202.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225133202.png)
 
 And I was right, LFI is indeed possible in this endpoint, we can see the following in `/etc/passwd`:
 
@@ -141,19 +141,19 @@ dev.titanic.htb
 ---
 
 
-![](cybersecurity/images/Pasted%2520image%252020250225135044.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225135044.png)
 
 Now, we find ourselves in something called `Gitea`, we can explore and find the following repositories:
 
-![](cybersecurity/images/Pasted%2520image%252020250225135114.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225135114.png)
 
 Also, these users:
 
-![](cybersecurity/images/Pasted%2520image%252020250225135122.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225135122.png)
 
 Let's read the repos:
 
-![](cybersecurity/images/Pasted%2520image%252020250225135206.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225135206.png)
 
 We find this:
 
@@ -176,7 +176,7 @@ services:
 
 And also this:
 
-![](cybersecurity/images/Pasted%2520image%252020250225135256.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225135256.png)
 
 
 ```yaml
@@ -199,7 +199,7 @@ services:
 
 Now, knowing we are dealing with `gitea`, once we do the research, we find the configuration file is located at `/data/gitea/conf/app.ini`, we can make use of the `LFI` to read the file:
 
-![](cybersecurity/images/Pasted%2520image%252020250225135453.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225135453.png)
 
 There we are, this is the configuration file:
 
@@ -435,11 +435,11 @@ find / -writable -type d 2>/dev/null
 
 We get this:
 
-![](cybersecurity/images/Pasted%2520image%252020250225143731.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225143731.png)
 
 Now, if we check `/opt`, we can find a `/scripts` directory, it contains the following script:
 
-![](cybersecurity/images/Pasted%2520image%252020250225143837.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225143837.png)
 
 ```
 developer@titanic:/opt/scripts$ cat identify_images.sh
@@ -487,11 +487,11 @@ Compiler: gcc (9.4)
 
 Let's search for an exploit regarding that version:
 
-![](cybersecurity/images/Pasted%2520image%252020250225144440.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225144440.png)
 
 We got it, an Arbitrary Code Execution in the `7.1.1-35` version of ImageMagick, let's read the PoC
 
-![](cybersecurity/images/Pasted%2520image%252020250225145206.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225145206.png)
 
 So, we need to go to `/opt/app/static/assets/images` and upload the following, for example, I changed it a bit to get a root as shell but we can simply change the command to give us `root.txt`:
 
@@ -512,7 +512,7 @@ EOF
 
 Now, set up the listener and wait a bit:
 
-![](cybersecurity/images/Pasted%2520image%252020250225145319.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225145319.png)
 
 We got the root as shell, let's read the `/root/root.txt` file:
 
@@ -527,4 +527,4 @@ Got our final flag:
 af8e4f2c02faa0c837bebe5047abf4cf
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250225145420.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250225145420.png)

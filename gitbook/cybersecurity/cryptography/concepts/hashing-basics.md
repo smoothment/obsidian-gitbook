@@ -95,7 +95,7 @@ MD5 and SHA1 have been attacked and are now considered insecure due to the abili
 ## QUESTIONS
 
 
-![](cybersecurity/images/Pasted%2520image%252020241101154808.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101154808.png)
 
 # INSECURE PASSWORD STORAGE FOR AUTHENTICATION
 
@@ -194,7 +194,7 @@ Considering the problem of saving passwords for authentication, why don’t we e
 ## QUESTIONS
 
 
-![](cybersecurity/images/Pasted%2520image%252020241101154951.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101154951.png)
 
 # RECOGNISING PASSWORD HASHES
 
@@ -251,7 +251,7 @@ A great place to find more hash formats and password prefixes is the [Hashcat E
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101155038.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101155038.png)
 
 # PASSWORD CRACKING
 
@@ -288,7 +288,7 @@ For example, `hashcat -m 3200 -a 0 hash.txt /usr/share/wordlists/rockyou.txt` 
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101155119.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101155119.png)
 
 
 # HASHING FOR INTEGRITY CHECKING
@@ -341,4 +341,4 @@ Note that M and K represent the message and the key, respectively.
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101155230.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101155230.png)

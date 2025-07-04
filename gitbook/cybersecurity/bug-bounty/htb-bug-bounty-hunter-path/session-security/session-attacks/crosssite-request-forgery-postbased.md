@@ -20,7 +20,7 @@ Click on the "Delete" button. You will get redirected to `/app/delete/<your-ema
 
 Notice that the email is reflected on the page. Let us try inputting some HTML into the _email_ value, such as:
 
-![](cybersecurity/images/Pasted%2520image%252020250219130350.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219130350.png)
 
 ![image](https://academy.hackthebox.com/storage/modules/153/37.png)
 
@@ -54,5 +54,5 @@ Next, we will cover how you can chain XSS and CSRF to attack a user's session.
 
 # Question
 ---
-![](cybersecurity/images/Pasted%2520image%252020250219130418.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219130418.png)
 

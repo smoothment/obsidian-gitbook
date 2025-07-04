@@ -165,7 +165,7 @@ This payload defines the `a0` entity as `DOS`, references it in `a1` multip
 
 # Question
 ---
-![](cybersecurity/images/Pasted%2520image%252020250217175259.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217175259.png)
 
 We can do the following payload:
 

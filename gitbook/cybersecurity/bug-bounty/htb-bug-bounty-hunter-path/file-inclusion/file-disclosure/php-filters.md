@@ -90,7 +90,7 @@ We can now investigate this file for sensitive information like credentials or d
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250218143411.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250218143411.png)
 
 Let's begin by fuzzing:
 
@@ -117,7 +117,7 @@ configure.php
 Let's read it:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250218144257.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250218144257.png)
 
 We got this:
 

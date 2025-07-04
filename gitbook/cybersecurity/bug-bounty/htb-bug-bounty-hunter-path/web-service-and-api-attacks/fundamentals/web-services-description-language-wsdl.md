@@ -351,5 +351,5 @@ In the `SOAP Action Spoofing` section, later on, we will see how we can levera
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250219153252.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219153252.png)
 

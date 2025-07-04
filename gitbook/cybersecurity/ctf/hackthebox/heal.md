@@ -45,7 +45,7 @@ Let's start reconnaissance.
 
 First thing we can see the moment we go into the website is the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250311135818.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311135818.png)
 
 
 First thing I'd like doing, is fuzzing for subdomains and hidden directories, let's start with the subdomain fuzzing:
@@ -81,7 +81,7 @@ api                     [Status: 200, Size: 12515, Words: 469, Lines: 91, Durati
 Found a subdomain, let's add it to `/etc/hosts` too and check it out:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250311140959.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311140959.png)
 
 Let's fuzz for API endpoints:
 
@@ -182,11 +182,11 @@ ________________________________________________
 
 There we go, another thing I found while creating an account is there's a survey section in our profile:
 
-![](cybersecurity/images/Pasted%2520image%252020250311164853.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311164853.png)
 
 If we click it, we are redirected to another subdomain:
 
-![](cybersecurity/images/Pasted%2520image%252020250311164915.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311164915.png)
 
 Let's add it and try to fuzz:
 
@@ -220,7 +220,7 @@ responses               [Status: 302, Size: 0, Words: 1, Lines: 1, Duration: 214
 
 We get two, `optin` and `responses`, if we try going into `responses`, we are redirected into another site:
 
-![](cybersecurity/images/Pasted%2520image%252020250311165040.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311165040.png)
 
 So, now we know that we can make use of our LFI to get some credentials for this, let's start exploitation.
 
@@ -230,11 +230,11 @@ So, now we know that we can make use of our LFI to get some credentials for this
 
 Now, once we know we got LFI, we can try reading some configuration files, we already know that we are dealing with ruby on rails so if we research the files structure, we get this:
 
-![](cybersecurity/images/Pasted%2520image%252020250311165157.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311165157.png)
 
 So, let's try to read the `/config/database.yml` file:
 
-![](cybersecurity/images/Pasted%2520image%252020250311165242.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311165242.png)
 
 
 We found the database file, it is `/storage/development.sqlite3`, let's download it into our machine to analyze it:
@@ -244,7 +244,7 @@ We found the database file, it is `/storage/development.sqlite3`, let's download
 curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozfQ.CZbGMyPLgTWm9p2lPa9pGZ0vGQ0qKgr7RG4kj1tUSGc" "http://api.heal.htb/download?filename=../../storage/development.sqlite3" --output development.sqlite3
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250311165424.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311165424.png)
 
 We got an users table, we can see our administrator on top, `ralph`, it also got a Bcrypt hash so, let's try to decrypt it:
 
@@ -268,7 +268,7 @@ We got it, these are the credentials:
 ralph:147258369
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250311165940.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311165940.png)
 
 We are dealing with LimeSurvey 6.6.4, lets' try to search for an exploit:
 
@@ -278,12 +278,12 @@ Got an RCE exploit, we can follow the PoC in that article, the article also uses
 
 Script: https://github.com/Y1LD1R1M-1337/Limesurvey-RCE
 
-![](cybersecurity/images/Pasted%2520image%252020250311172029.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311172029.png)
 
 
 In the script there's a `config.xml` file, since this RCE works for older versions, we need to change the file in this way:
 
-![](cybersecurity/images/Pasted%2520image%252020250311171603.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311171603.png)
 
 
 We also need to change our `php-rev.php` file to match our IP and listening port, after everything is set, let's zip both files and follow this:
@@ -293,15 +293,15 @@ zip exploit.zip config.xml php-rev.php
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020250311172151.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311172151.png)
 
 Let's upload our zip file:
 
-![](cybersecurity/images/Pasted%2520image%252020250311172223.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311172223.png)
 
 Now, we need to activate:
 
-![](cybersecurity/images/Pasted%2520image%252020250311172253.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311172253.png)
 
 And visit this:
 
@@ -311,7 +311,7 @@ http://take-survey.heal.htb/upload/plugins/Y1LD1R1M/php-rev.php
 
 And we'll see this:
 
-![](cybersecurity/images/Pasted%2520image%252020250311172439.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311172439.png)
 
 We got ourselves a shell, let's begin privilege escalation.
 
@@ -473,33 +473,33 @@ We can try those credentials with user `ron`:
 ron:AdmiDi0_pA$$w0rd
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250311173009.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311173009.png)
 
 And there we are, we now got access to ssh using `ron`, let's use linpeas to look up a way to get into root:
 
-![](cybersecurity/images/Pasted%2520image%252020250311174522.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311174522.png)
 
 After analyzing the ports, at port `8500` we got a consul web page running:
 
-![](cybersecurity/images/Pasted%2520image%252020250311175002.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311175002.png)
 
 We can search for an exploit regarding that:
 
-![](cybersecurity/images/Pasted%2520image%252020250311175610.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311175610.png)
 
 
 
 Let's download it and use it:
 
-![](cybersecurity/images/Pasted%2520image%252020250311175740.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311175740.png)
 
 Our `acl_token` in this case is `1`:
 
-![](cybersecurity/images/Pasted%2520image%252020250311175801.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311175801.png)
 
 If we check our listener:
 
-![](cybersecurity/images/Pasted%2520image%252020250311175815.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311175815.png)
 
 We got root, let's read both flags finally:
 
@@ -515,7 +515,7 @@ root@heal:/# cat /root/root.txt
 
 Just like that, machine is done!
 
-![](cybersecurity/images/Pasted%2520image%252020250311175926.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250311175926.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/640
 

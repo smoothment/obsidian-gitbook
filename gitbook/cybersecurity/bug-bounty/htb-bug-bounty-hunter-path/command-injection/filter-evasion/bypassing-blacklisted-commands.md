@@ -88,7 +88,7 @@ C:\htb> who^ami
 # Question
 ----
 
-![](cybersecurity/images/Pasted%2520image%252020250205143422.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205143422.png)
 
 We can do the following command:
 

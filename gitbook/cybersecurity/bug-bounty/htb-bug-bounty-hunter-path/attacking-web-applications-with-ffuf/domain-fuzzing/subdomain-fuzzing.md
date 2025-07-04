@@ -97,7 +97,7 @@ This means that there are no `public` sub-domains under `academy.htb`, as it 
 
 # Question
 ---
-![](cybersecurity/images/Pasted%2520image%252020250129150058.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129150058.png)
 
 Let's run the following command:
 
@@ -105,6 +105,6 @@ Let's run the following command:
 
 We'll get the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250129151218.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129151218.png)
 
 Answer is `customer.inlanefreight.com`

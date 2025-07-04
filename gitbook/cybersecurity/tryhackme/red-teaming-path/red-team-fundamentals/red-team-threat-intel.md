@@ -10,12 +10,12 @@ Learning Objectives
 - Use frameworks to understand concepts and leverage threat intelligence.
 
 
-![](cybersecurity/images/Pasted%2520image%252020250511135209.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250511135209.png)
 
 # What is Threat Intelligence
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250511135218.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250511135218.png)
 
 
 Expanding upon task 1, CTI can be consumed (to taken action upon data) by collecting IOCs (**I**ndicators **o**f **C**ompromise) and TTPs commonly distributed and maintained by ISACs (**I**nformation and **S**haring **A**nalysis **C**enters). Intelligence platforms and frameworks also aid in the consumption of CTI, primarily focusing on an overarching timeline of all activities.
@@ -137,7 +137,7 @@ Other open-source and enterprise threat intelligence platforms can aid red teame
 - **CrowdStrike Falcon**
 
 
-![](cybersecurity/images/Pasted%2520image%252020250511135646.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250511135646.png)
 
 
 # Other Red Team Applications of CTI
@@ -218,9 +218,9 @@ To begin working through this task, download the required resources and launch t
 Your team has already decided to use the Lockheed Martin cyber kill chain to emulate [APT 41](https://attack.mitre.org/groups/G0096/) as the adversary that best fits the client's objectives and scope.
 
 
-![](cybersecurity/images/Pasted%2520image%252020250511140137.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250511140137.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250511140145.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250511140145.png)
 
 # Conclusion
 ---

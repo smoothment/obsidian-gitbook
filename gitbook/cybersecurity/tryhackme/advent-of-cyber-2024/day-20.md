@@ -36,7 +36,7 @@ Hoping to shed some much-needed light._
 
 Before we dig deeper into Mayor Malware's intentions, we must learn a few essential things about C2 communication. Whenever a machine is compromised, the command and control server (C2) drops its secret agent (payload) into the target machine. This secret agent is meant to obey the instructions of the C2 server. These instructions include executing malicious commands inside the target, exfiltrating essential files from the system, and much more. Interestingly, after getting into the system, the secret agent, in addition to obeying the instructions sent by the C2, has a way to keep the C2 updated on its current status. It sends a packet to the C2 every few seconds or even minutes to let it know it is active and ready to blast anything inside the target machine that the C2 aims to. These packets are known as beacons.
 
-![](cybersecurity/images/Pasted%2520image%252020241220114947.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241220114947.png)
 
 For this room, we will be using Wireshark, an open-source tool that captures and inspects network traffic saved as a PCAP file. It's a powerful tool, and you'll encounter it frequently in your journey in cyber security. It is beneficial for understanding the communications between a compromised machine and a C2 server.
 
@@ -87,7 +87,7 @@ If you click on the POST /initial packet (Frame 440), more details will be shown
 You can expand each detail if you want, but the critical area to focus on is the lower-right view, the “Packet Bytes” pane.
 
 Packet Bytes pane
-![](cybersecurity/images/Pasted%2520image%252020241220115757.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241220115757.png)
 
 This pane shows the bytes used in the communication in hexadecimal and ASCII character formats. The latter format shows readable text, which can be helpful in investigations.
 
@@ -95,7 +95,7 @@ The screenshot above shows something interesting: “I am in Mayor!”. This pie
 
 If we right-click on the POST /initial packet (Frame 440) and select Follow > HTTP Stream, a new pop-up window will appear containing the back-and-forth HTTP communication relevant to the specific session.
 
-![](cybersecurity/images/Pasted%2520image%252020241220115826.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241220115826.png)
 
 
 This feature is useful when you need to view all requests and responses between the client and the server, as it helps you understand the complete context of the communication.
@@ -126,7 +126,7 @@ If we follow the HTTP Stream for the POST /exfiltrate packet (Frame 476) sent to
 
 If you check the rest of the PCAP, you’ll find that more interesting packets were captured. Let’s break these down and dive deeper into what we’ve uncovered.
 
-![](cybersecurity/images/Pasted%2520image%252020241220120145.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241220120145.png)
 
 
 ## What’s in the Beacon
@@ -176,7 +176,7 @@ Mayor Malware’s agent is far from done!
 ## Questions
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020241220120354.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241220120354.png)
 
 
 Let's go step by step:
@@ -185,21 +185,21 @@ Let's go step by step:
 As we've checked, we are already following the stream of this http packet sent by mayor malware, let's keep on following the stream and check what it has for us:
 
 
-![](cybersecurity/images/Pasted%2520image%252020241220120624.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241220120624.png)
 
 Second stream shows that the command `whoami` was executed in the machine, that answers our third question, let's keep following the stream:
 
-![](cybersecurity/images/Pasted%2520image%252020241220120743.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241220120743.png)
 
 We got `AES ECB` data, let's use CyberChef and decrypt it, for this, we need the encrypted data, let's follow the next stream and check if its in there:
 
-![](cybersecurity/images/Pasted%2520image%252020241220121133.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241220121133.png)
 
 Indeed it was, now, let's decrypt:
 
 
 
-![](cybersecurity/images/Pasted%2520image%252020241220121158.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241220121158.png)
 
 We got the output: `THM_Secret_101`
 
@@ -207,7 +207,7 @@ We got the output: `THM_Secret_101`
 Nice, now we've got all of our answers, they would be the following:
 
 
-![](cybersecurity/images/Pasted%2520image%252020241220121351.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241220121351.png)
 
 Just like that, day 20 is done!
 

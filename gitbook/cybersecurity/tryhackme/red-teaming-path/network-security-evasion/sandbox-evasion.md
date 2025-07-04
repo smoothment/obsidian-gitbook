@@ -74,7 +74,7 @@ We have provided a Windows development VM where you can develop your own Sandb
 **Username:** Administrator  
 **Password:** TryHackMe123!
 
-![](cybersecurity/images/Pasted%2520image%252020250523145559.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250523145559.png)
 
 
 
@@ -180,7 +180,7 @@ The shellcode should then be hosted on the AttackBox via any HTTP Server. Pyth
 
 The code attached to this task has been tested and compiled using Visual Studio 2019 (or above). Download the dropper.cpp, and open it. It's important to note that there are several placeholder values on lines 16, 22, 24, 27, and 33 that you must update to make the code function properly. Once you have altered the values, compile the code for a 64-bit release.
 
-![](cybersecurity/images/Pasted%2520image%252020250523150129.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250523150129.png)
 
 # Implementing Various Evasion Techniques
 
@@ -698,7 +698,7 @@ C:\Users\Administrator\Desktop\Materials>.\SandboxChecker.exe SandboxEvasion.exe
 
 We can see this after a while:
 
-![](cybersecurity/images/Pasted%2520image%252020250523162517.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250523162517.png)
 
 We got our flag:
 

@@ -1,7 +1,7 @@
 ---
 sticker: emoji//1f384
 ---
-![](cybersecurity/images/Pasted%2520image%252020241216212137.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241216212137.png)
 
 Another day, another challenge and, unfortunately for McSkidy, another intrusion in their Azure tenant. Before joining McSkidy in her investigation, there's some catching up to do, and this is a story best told in rhyme:  
 
@@ -416,7 +416,7 @@ With that, the Glitch had helped McSkidy to find the attack path that had been t
 
 <iframe width="900" height="690" src="https://www.youtube.com/embed/t1_FG5IUBcs" title="TryHackMe | Advent of Cyber 2024: Day 16 (Azure)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-![](cybersecurity/images/Pasted%2520image%252020241216213542.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241216213542.png)
 
 To view the explanation for each question, check the video, didn't have much time today, just like that, day 16 is done.
 

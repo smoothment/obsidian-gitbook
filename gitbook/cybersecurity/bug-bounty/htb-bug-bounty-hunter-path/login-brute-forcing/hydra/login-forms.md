@@ -176,7 +176,7 @@ Remember that crafting the correct `params` string is crucial for a successful
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250213151909.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250213151909.png)
 
 We can use the following hydra command:
 
@@ -203,7 +203,7 @@ Got credentials:
 `admin`:`zxcvbnm`
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250213152115.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250213152115.png)
 
 Flag is:
 

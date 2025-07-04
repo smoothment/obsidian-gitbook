@@ -32,7 +32,7 @@ Although it is not strictly necessary, we advise completing [The Lay of the Lan
 # Purpose
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250514143101.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250514143101.png)
 
 When you gain a “shell” on the target system, you usually have very basic knowledge of the system. If it is a server, you already know which service you have exploited; however, you don’t necessarily know other details, such as usernames or network shares. Consequently, the shell will look like a “dark room” where you have an incomplete and vague knowledge of what’s around you. In this sense, enumeration helps you build a more complete and accurate picture.
 
@@ -382,7 +382,7 @@ Start the attached Linux machine if you have not done so already, as you need 
 ## Questions
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250514143547.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250514143547.png)
 
 We can automate all the process using this script:
 
@@ -449,7 +449,7 @@ Those are our correct answers.
 # Windows Enumeration
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250514144926.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250514144926.png)
 
 In this task, we assume you have access to `cmd` on a Microsoft Windows host. You might have gained this access by exploiting a vulnerability and getting a shell or a reverse shell. You may also have installed a backdoor or set up an SSH server on a system you exploited. In all cases, the commands below require `cmd` to run.
 
@@ -689,7 +689,7 @@ Start the attached MS Windows Server if you have not done so already, as you nee
 ### Questions
 -----
 
-![](cybersecurity/images/Pasted%2520image%252020250514145241.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250514145241.png)
 
 Let's automate it again using `Powershell`:
 

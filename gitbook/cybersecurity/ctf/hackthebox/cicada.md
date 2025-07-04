@@ -29,26 +29,26 @@ Let's start reconnaissance.
 We are facing a AD machine, let's start with some basic SMB enumeration:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250116135424.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116135424.png)
 
 We can use netexec to perform a simple check on SMB and WINRM:
 
-![](cybersecurity/images/Pasted%2520image%252020250116135538.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116135538.png)
 
 
 We can attempt to log into SMB without the authentication process using `smbclient -NL IP`:
 
-![](cybersecurity/images/Pasted%2520image%252020250116135823.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116135823.png)
 
 
 We found interesting shares, let's check out `HR`:
 
-![](cybersecurity/images/Pasted%2520image%252020250116135909.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116135909.png)
 
 
 We find a `Notice from HR.txt` file, let's download it and check it:
 
-![](cybersecurity/images/Pasted%2520image%252020250116140031.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116140031.png)
 
 We got a default password, my guess would be we need to perform a basic brute force to enumerate users, this would be in the following way:
 
@@ -106,7 +106,7 @@ Let's store all the usernames in a file and perform password spraying:
 `nxc smb 10.10.11.35 -u users.txt -p 'Cicada$M6Corpb*@Lp#nZp!8'`
 
 
-![](cybersecurity/images/Pasted%2520image%252020250116140940.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116140940.png)
 
 
 
@@ -121,7 +121,7 @@ We found the user, these are the credentials:
 
 We can search for more privileged users:
 
-![](cybersecurity/images/Pasted%2520image%252020250116141256.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116141256.png)
 
 We found an account with the following credentials:
 
@@ -133,18 +133,18 @@ We found an account with the following credentials:
 Let's check the shares this account has access to:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250116141414.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116141414.png)
 
 We can now read the `DEV` share, let's take a look at it:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250116141607.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116141607.png)
 
 Found a `Backup_script.ps1` file, let's view the contents:
 
 
 
-![](cybersecurity/images/Pasted%2520image%252020250116141718.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116141718.png)
 
 Found more credentials: 
 
@@ -160,7 +160,7 @@ Let's check if we are able to get a shell with those credentials using `evil-win
 `evil-winrm -i 10.10.11.35 -u 'emily.oscars' -p 'Q!3@Lp#M6b*7t*Vt'`
 
 
-![](cybersecurity/images/Pasted%2520image%252020250116142124.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116142124.png)
 
 ```
 
@@ -168,7 +168,7 @@ Let's check if we are able to get a shell with those credentials using `evil-win
 We can read `user.txt` and begin with privilege escalation:
 
 ```ad-note
-![](cybersecurity/images/Pasted%2520image%252020250116142223.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116142223.png)
 
 User: `74b2598907182ac31cca52c79b20eb0a`
 ```
@@ -182,13 +182,13 @@ In order to begin with privilege escalation, we can start enumerating our privil
 `whoami /priv`
 
 
-![](cybersecurity/images/Pasted%2520image%252020250116142402.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116142402.png)
 
 We can make use of `SeBackupPrivilege` in order to escalate our privileges, let's use the following PoC:
 
-![](cybersecurity/images/Pasted%2520image%252020250116142600.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116142600.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250116142623.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116142623.png)
 
 
 But, we can simplify the PoC in the following way:
@@ -204,7 +204,7 @@ But, we can simplify the PoC in the following way:
 #### Output
 ----
 
-![](cybersecurity/images/Pasted%2520image%252020250116144219.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116144219.png)
 
 And like that, we can get our admin hash.
 ```
@@ -225,7 +225,7 @@ DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c0
 
 Let's log in using Pass the hash:
 
-![](cybersecurity/images/Pasted%2520image%252020250116144347.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116144347.png)
 
 And our root flag is the following: 
 

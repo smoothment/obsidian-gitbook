@@ -75,7 +75,7 @@ One of the best online resources to identify bug bounty programs of your liking 
 
 # Question
 ---
-![](cybersecurity/images/Pasted%2520image%252020250218225914.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250218225914.png)
 
 Answer is:
 
