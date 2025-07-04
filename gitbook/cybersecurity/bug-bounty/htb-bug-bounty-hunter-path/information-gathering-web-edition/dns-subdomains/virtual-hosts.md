@@ -144,7 +144,7 @@ Finished
 # Questions
 ----
 
-![](Pasted image 20250128123138.png)
+![](Pasted%20image%2020250128123138.png)
 
 
 ```ad-hint
@@ -185,10 +185,10 @@ Found: browse.inlanefreight.htb:45825 Status: 200 [Size: 102]
 Found: web17611.inlanefreight.htb:45825 Status: 200 [Size: 106]
 ```
 
-![](Pasted image 20250128123828.png)
+![](Pasted%20image%2020250128123828.png)
 
 
 We got all of the answers, they would be the following:
 
-![](Pasted image 20250128123910.png)
+![](Pasted%20image%2020250128123910.png)
 

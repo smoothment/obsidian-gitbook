@@ -216,7 +216,7 @@ We will see a few other scenarios of operator precedence in the upcoming section
 ---
 
 
-![](Pasted image 20250131142339.png)
+![](Pasted%20image%2020250131142339.png)
 
 We can use limit first to check the structure of the table:
 

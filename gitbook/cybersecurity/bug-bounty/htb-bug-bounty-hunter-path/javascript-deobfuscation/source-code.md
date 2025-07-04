@@ -84,8 +84,8 @@ The reason behind this is `code obfuscation`. What is it? How is it done? Where
 
 # Question
 ---
-![](Pasted image 20250130132433.png)
-![](Pasted image 20250130132455.png)
+![](Pasted%20image%2020250130132433.png)
+![](Pasted%20image%2020250130132455.png)
 
 
 Flag is: `HTB{4lw4y5_r34d_7h3_50urc3}`

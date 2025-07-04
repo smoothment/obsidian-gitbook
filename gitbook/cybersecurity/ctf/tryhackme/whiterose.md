@@ -1,31 +1,31 @@
 ---
 sticker: emoji//1f4ae
 ---
-![](Pasted image 20241030205205.png)
+![](Pasted%20image%2020241030205205.png)
 # ENUMERATION
 
 
 ## OPEN PORTS
 
-![](Pasted image 20241031130806.png)
+![](Pasted%20image%2020241031130806.png)
 
 Let's explore the website:
 
-![](Pasted image 20241031130903.png)
+![](Pasted%20image%2020241031130903.png)
 
 So, we need to add `cyprusbank.thm` to `/etc/hosts`:
 
-![](Pasted image 20241031131009.png)
+![](Pasted%20image%2020241031131009.png)
 
 Once we've done that, let's try to look at the source code and fuzz the website:
 
-![](Pasted image 20241031131106.png)
+![](Pasted%20image%2020241031131106.png)
 Nothing useful, let's proceed with fuzzing
 
 ## FUZZING
 
 
-![](Pasted image 20241031131414.png)
+![](Pasted%20image%2020241031131414.png)
 Let's fuzz for DNS, we are able to do this in the following way:
 
 ```ad-hint
@@ -36,44 +36,44 @@ Let's fuzz for DNS, we are able to do this in the following way:
 
 #### OUTPUT
 
-![](Pasted image 20241106150057.png)
+![](Pasted%20image%2020241106150057.png)
 
 
 ```
 
 We got an `admin` section, let's visit it:
 
-![](Pasted image 20241106150211.png)
+![](Pasted%20image%2020241106150211.png)
 
 
-![](Pasted image 20241106150225.png)
+![](Pasted%20image%2020241106150225.png)
 
 We got credentials from earlier, let's authenticate using: 
 
 `Olivia Cortez:olivi8`
 
 
-![](Pasted image 20241106150415.png)
+![](Pasted%20image%2020241106150415.png)
 
 We got some recent payments, let's investigate the page in order to get something useful:
 
-![](Pasted image 20241106151026.png)
+![](Pasted%20image%2020241106151026.png)
 
 Found a messages section, interesting part is the `?c=` parameter, this seems injectable for some sort of [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/IDOR/IDOR BASICS.md|IDOR]], let's change that `?c=` parameter into something else, for example `10`:
 
 
-![](Pasted image 20241106151311.png)
+![](Pasted%20image%2020241106151311.png)
 
 Wow, seems like we got `Gayle Bev` password, and he is actually an admin user, let's log in:
 
 `Gayle Bev: p~]P@5!6;rs558:q`
 
 
-![](Pasted image 20241106151509.png)
+![](Pasted%20image%2020241106151509.png)
 
 Nice, we've logged in, let's go into settings:
 
-![](Pasted image 20241106151640.png)
+![](Pasted%20image%2020241106151640.png)
 
 Seems like we can change users passwords , let's begin with exploitation 
 
@@ -90,7 +90,7 @@ Using **ffuf** for this, we discover a couple of interesting parameters:
 
 #### OUTPUT
 
-![](Pasted image 20241106151910.png)
+![](Pasted%20image%2020241106151910.png)
 ```
 While the `error` and `message` parameters simply cause the server to include their values in the response, the `include`, `client`, and `async` parameters are more interesting.
 
@@ -138,12 +138,12 @@ Now, we can use it to obtain a shell, first by using our web server to serve a r
 
 Create a `index.html` file with this inside:
 
-![](Pasted image 20241106160836.png)
+![](Pasted%20image%2020241106160836.png)
 
-![](Pasted image 20241106160911.png)
+![](Pasted%20image%2020241106160911.png)
 
 
-![](Pasted image 20241106160440.png)
+![](Pasted%20image%2020241106160440.png)
 
 Once, I sent the request, it seemed like the web server was unable to read my index.html file, so, I changed the request to this, and got a shell:
 
@@ -155,7 +155,7 @@ Once, I sent the request, it seemed like the web server was unable to read my in
 
 #### OUTPUT
 
-![](Pasted image 20241106161910.png)
+![](Pasted%20image%2020241106161910.png)
 
 
 ```
@@ -165,14 +165,14 @@ Once, I sent the request, it seemed like the web server was unable to read my in
 First, let's [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stabilize]] our shell:
 
 
-![](Pasted image 20241106162117.png)
+![](Pasted%20image%2020241106162117.png)
 
 Nice, with our new stabilized shell, we can look forward to escalate our privileges into root, let's enumerate the machine:
 
 
 ## SUDO -L
 
-![](Pasted image 20241106162209.png)
+![](Pasted%20image%2020241106162209.png)
 
 We can run sudo in 
 
@@ -180,7 +180,7 @@ We can run sudo in
 
 ### SUDOEDIT VERSION
 
-![](Pasted image 20241106162300.png)
+![](Pasted%20image%2020241106162300.png)
 
 For this version, we found [CVE-2023-22809](https://access.redhat.com/security/cve/cve-2023-22809), let's exploit it and escalate our privileges:
 
@@ -196,13 +196,13 @@ For this, we need to do the following:
 1. export EDITOR="nano -- /etc/sudoers"
 2. sudo sudoedit /etc/nginx/sites-available/admin.cyprusbank.thm
 3. web ALL=(ALL) NOPASSWD: ALL
-![](Pasted image 20241106162520.png)
+![](Pasted%20image%2020241106162520.png)
 
 If we did everything correctly, we are now able to run sudo as web in everything:
 
-![](Pasted image 20241106162632.png)
+![](Pasted%20image%2020241106162632.png)
 
-![](Pasted image 20241106162646.png)
+![](Pasted%20image%2020241106162646.png)
 
 
 ```
@@ -212,6 +212,6 @@ And just like that CTF is done
 #### FLAGS
 
 
-![](Pasted image 20241106164116.png)
+![](Pasted%20image%2020241106164116.png)
 
 Gg!

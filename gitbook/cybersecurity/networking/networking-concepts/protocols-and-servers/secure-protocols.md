@@ -63,7 +63,7 @@ Finally, we should mention that some users opt to create a self-signed certifica
 
 ## QUESTIONS
 
-![](Pasted image 20241101151405.png)
+![](Pasted%20image%2020241101151405.png)
 
 
 
@@ -114,7 +114,7 @@ The key takeaway is that TLS offered security for HTTP without requiring any cha
 
 ## QUESTIONS
 
-![](Pasted image 20241101151509.png)
+![](Pasted%20image%2020241101151509.png)
 
 # SMTPS, POP3S, AND IMAPS
 
@@ -142,7 +142,7 @@ TLS can be added to many other protocols; the reasoning and advantages would be 
 
 ## QUESTION
 
-![](Pasted image 20241101151544.png)
+![](Pasted%20image%2020241101151544.png)
 
 # SSH
 
@@ -168,7 +168,7 @@ While the TELNET server listens on port 23, the SSH server listens on port 22.
 
 # QUESTION
 
-![](Pasted image 20241101151635.png)
+![](Pasted%20image%2020241101151635.png)
 
 # SFTP AND FTPS
 

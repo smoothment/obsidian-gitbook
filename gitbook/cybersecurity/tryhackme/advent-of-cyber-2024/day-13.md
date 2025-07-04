@@ -1,7 +1,7 @@
 ---
 sticker: emoji//1f384
 ---
-![](Pasted image 20241213123610.png)
+![](Pasted%20image%2020241213123610.png)
 
 _This SOC-mas was packed with exploits and hacking,_
 
@@ -49,7 +49,7 @@ While WebSockets can boost performance, they also come with security risks that 
 - **Denial of Service (DoS):** Because WebSocket connections stay open, they can be targeted by DoS attacks. An attacker could flood the server with a ton of messages, potentially slowing it down or crashing it altogether.
 ```
 
-![](Pasted image 20241213124219.png)
+![](Pasted%20image%2020241213124219.png)
 
 ## What Is WebSocket Message Manipulation?
 ----
@@ -80,11 +80,11 @@ Without good security checks, this kind of message tampering can lead to anythin
 
 Navigate to [http://10.10.159.118](http://10.10.159.118/).
 
-![](Pasted image 20241213125042.png)
+![](Pasted%20image%2020241213125042.png)
 
 Intercept the request with burp and go back to the browser to click the track button:
 
-![](Pasted image 20241213125123.png)
+![](Pasted%20image%2020241213125123.png)
 
 Burp Proxy will intercept the WebSocket traffic, as shown below.
 
@@ -97,7 +97,7 @@ Change the value of the userId parameter from 5 to 8 and click the Forward butto
 Go back to your browser and check the community reports.
 
 
-![](Pasted image 20241213125603.png)
+![](Pasted%20image%2020241213125603.png)
 
 **Note**: If you don't see the traffic. Try to click the untrack button, refresh the page, and hit the track button again.
 
@@ -111,18 +111,18 @@ Following the successful identification of the WebSocket Message Manipulation vu
 ## Questions
 ---
 
-![](Pasted image 20241213130205.png)
+![](Pasted%20image%2020241213130205.png)
 
 ### FLAG 1
 ---
 
 To get the value of flag1, we must change the `userid` to `8`:
 
-![](Pasted image 20241213130236.png)
+![](Pasted%20image%2020241213130236.png)
 
 Once we've changed that, click forward and turn the intercept off, once done, we get this output:
 
-![](Pasted image 20241213130457.png)
+![](Pasted%20image%2020241213130457.png)
 
 So, flag1 is: `THM{dude_where_is_my_car}`
 
@@ -134,15 +134,15 @@ To get flag2, we need to manipulate a message as mayor malware, since we know hi
 
 First, let's send a message by ourselves, and change the ID to any other ID to check if it works:
 
-![](Pasted image 20241213131110.png)
+![](Pasted%20image%2020241213131110.png)
 
-![](Pasted image 20241213131117.png)
+![](Pasted%20image%2020241213131117.png)
 
 So, let's send it to repeater, turning off the interception and modify the `sender` parameter to `8` to check if it works:
 
 
 
-![](Pasted image 20241213131325.png)
+![](Pasted%20image%2020241213131325.png)
 
 It worked! Flag 2 is: `THM{my_name_is_malware._mayor_malware}`
 

@@ -116,11 +116,11 @@ To exploit this vulnerability, we can end our payload with a null byte (e.g. `/
 
 # Question
 ---
-![](Pasted image 20250218142549.png)
+![](Pasted%20image%2020250218142549.png)
 
 Let's check the request:
 
-![](Pasted image 20250218142647.png)
+![](Pasted%20image%2020250218142647.png)
 
 We can see the format's changed, let's try some payloads:
 
@@ -128,11 +128,11 @@ We can see the format's changed, let's try some payloads:
 c
 ```
 
-![](Pasted image 20250218143026.png)
+![](Pasted%20image%2020250218143026.png)
 
 Path is right in this case, if we try moving to another path, we get the following:
 
-![](Pasted image 20250218143054.png)
+![](Pasted%20image%2020250218143054.png)
 
 So, we must construct another payload based on the previous one, let's go with the following one:
 
@@ -140,7 +140,7 @@ So, we must construct another payload based on the previous one, let's go with t
 languages//....//....///....//....//etc/passwd 
 ```
 
-![](Pasted image 20250218143205.png)
+![](Pasted%20image%2020250218143205.png)
 
 And it worked!, we were able to read `/etc/passwd`, knowing this, we're able to read our flag:
 
@@ -148,7 +148,7 @@ And it worked!, we were able to read `/etc/passwd`, knowing this, we're able to 
 languages//....//....///....//....//flag.txt
 ```
 
-![](Pasted image 20250218143249.png)
+![](Pasted%20image%2020250218143249.png)
 
 Flag is:
 

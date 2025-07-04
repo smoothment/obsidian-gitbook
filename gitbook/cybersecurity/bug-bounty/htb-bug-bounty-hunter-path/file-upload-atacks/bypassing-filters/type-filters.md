@@ -126,16 +126,16 @@ We can use a combination of the two methods discussed in this section, which may
 # Question
 ---
 
-![](Pasted image 20250206160927.png)
+![](Pasted%20image%2020250206160927.png)
 
 Well, let's begin, since the exercise already tells us about all of that, there's no need to check the website, let's send a request and analyze it:
 
 
-![](Pasted image 20250206161128.png)
+![](Pasted%20image%2020250206161128.png)
 
 We can do the same as the previous section:
 
-![](Pasted image 20250206161204.png)
+![](Pasted%20image%2020250206161204.png)
 
 Now, let's fuzz again following the same rules, but adding another condition:
 
@@ -148,25 +148,25 @@ Now, let's fuzz again following the same rules, but adding another condition:
 
 This would go in the following way:
 
-![](Pasted image 20250206161652.png)
+![](Pasted%20image%2020250206161652.png)
 
 We can see this:
 
-![](Pasted image 20250206161856.png)
+![](Pasted%20image%2020250206161856.png)
 
 A lot of extensions work, let's simply go with `.phtml`, we need to upload our file like this:
 
-![](Pasted image 20250206162328.png)
+![](Pasted%20image%2020250206162328.png)
 
-![](Pasted image 20250206161953.png)
+![](Pasted%20image%2020250206161953.png)
 
 Let's check our webshell:
 
-![](Pasted image 20250206162337.png)
+![](Pasted%20image%2020250206162337.png)
 
 Now we can read `flag.txt`:
 
-![](Pasted image 20250206162403.png)
+![](Pasted%20image%2020250206162403.png)
 
 ```
 HTB{m461c4l_c0n73n7_3xpl0174710n}

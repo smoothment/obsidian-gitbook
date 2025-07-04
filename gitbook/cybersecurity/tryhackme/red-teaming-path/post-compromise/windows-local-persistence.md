@@ -194,7 +194,7 @@ net localgroup "Remote Management Users" thmuser1 /add
 reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /t REG_DWORD /v LocalAccountTokenFilterPolicy /d 1 
 ```
 
-![](Pasted image 20250515151535.png)
+![](Pasted%20image%2020250515151535.png)
 
 We are now able to get access as `thmuser1`:
 
@@ -448,7 +448,7 @@ Execute `C:\flags\flag5.exe` from your reverse shell to get your flag!
 
 Once we do all that, we will get a shell as administrator:
 
-![](Pasted image 20250515163008.png)
+![](Pasted%20image%2020250515163008.png)
 
 Let's get our flag:
 
@@ -492,7 +492,7 @@ Once you have backdoored the .txt file handler and spawned a reverse shell, run�
 
 Once we follow all steps and open a `.txt` file, we will receive a shell:
 
-![](Pasted image 20250515163552.png)
+![](Pasted%20image%2020250515163552.png)
 
 ```
 C:\flags>.\flag6.exe
@@ -551,7 +551,7 @@ Use the reverse shell you just gained to execute `C:\flags\flag7.exe`
 
 Once we did all steps, we get a shell:
 
-![](Pasted image 20250515164255.png)
+![](Pasted%20image%2020250515164255.png)
 
 Let's get our flag:
 
@@ -641,7 +641,7 @@ Start a Metasploit listener on your attacker's machine and manually start the 
 
 Once we did all that, we will receive a shell:
 
-![](Pasted image 20250515164758.png)
+![](Pasted%20image%2020250515164758.png)
 
 ```
 C:\flags>.\flag8.exe
@@ -718,7 +718,7 @@ Use the reverse shell obtained through the task scheduler and execute `C:\flags
 
 Once we did all steps, we get a shell:
 
-![](Pasted image 20250515165131.png)
+![](Pasted%20image%2020250515165131.png)
 
 ```
 C:\flags>.\flag9.exe
@@ -769,7 +769,7 @@ Use your newly obtained shell to execute `C:\flags\flag10.exe` and get your fl
 
 Once we follow all steps, we get a shell:
 
-![](Pasted image 20250515172104.png)
+![](Pasted%20image%2020250515172104.png)
 
 ```
 C:\flags>.\flag10.exe
@@ -814,7 +814,7 @@ Using your newly obtained shell, execute `C:\flags\flag11.exe` to get a flag!
 
 Once we follow all steps, we will receive our shell, we need to strictly name the registry `MyBackdoor` for us to be able to read the flag:
 
-![](Pasted image 20250516113038.png)
+![](Pasted%20image%2020250516113038.png)
 
 ```
 C:\flags>.\flag11.exe
@@ -869,7 +869,7 @@ c:\tools\pstools\PsExec64.exe -s -i regedit
 
 Once we follow all steps, we get our shell:
 
-![](Pasted image 20250516113622.png)
+![](Pasted%20image%2020250516113622.png)
 
 ```
 C:\flags>.\flag12.exe
@@ -909,7 +909,7 @@ Using your newly obtained shell, execute `C:\flags\flag13.exe` to get a flag
 
 Once we did all steps, we get a shell:
 
-![](Pasted image 20250516114216.png)
+![](Pasted%20image%2020250516114216.png)
 
 ```
 C:\flags> .\flag13.exe
@@ -968,11 +968,11 @@ From your newly obtained terminal, execute `C:\flags\flag14.exe` to get your f
 
 Once we do all steps, we get our cmd:
 
-![](Pasted image 20250516114751.png)
+![](Pasted%20image%2020250516114751.png)
 
 Let's read our flag:
 
-![](Pasted image 20250516114855.png)
+![](Pasted%20image%2020250516114855.png)
 
 ```
 THM{BREAKING_THROUGH_LOGIN}
@@ -1017,11 +1017,11 @@ From your newly obtained terminal, execute `C:\flags\flag15.exe` to get your f
 
 Once we do all steps, when we click on the utilman, we will get our shell:
 
-![](Pasted image 20250516115028.png)
+![](Pasted%20image%2020250516115028.png)
 
 Let's get our flag:
 
-![](Pasted image 20250516115121.png)
+![](Pasted%20image%2020250516115121.png)
 
 ```
 THM{THE_LOGIN_SCREEN_IS_MERELY_A_SUGGESTION}
@@ -1060,11 +1060,11 @@ While web shells provide a simple way to leave a backdoor on a system, it is usu
 
 Once we follow all steps, we receive our webshell:
 
-![](Pasted image 20250516120044.png)
+![](Pasted%20image%2020250516120044.png)
 
 Let's read our flag:
 
-![](Pasted image 20250516120111.png)
+![](Pasted%20image%2020250516120111.png)
 
 ```
 THM{EZ_WEB_PERSISTENCE}
@@ -1155,13 +1155,13 @@ Use your web shell to execute `C:\flags\flag17.exe` to get your flag!
 
 Once we did all steps, we need to add an employee to get our shell:
 
-![](Pasted image 20250516120626.png)
+![](Pasted%20image%2020250516120626.png)
 
 Let's add one and check our listener:
 
-![](Pasted image 20250516120648.png)
+![](Pasted%20image%2020250516120648.png)
 
-![](Pasted image 20250516120855.png)
+![](Pasted%20image%2020250516120855.png)
 
 There we go, let's read our flag:
 

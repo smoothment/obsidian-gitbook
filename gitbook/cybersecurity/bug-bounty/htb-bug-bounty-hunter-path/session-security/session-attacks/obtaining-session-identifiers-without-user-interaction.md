@@ -211,4 +211,4 @@ It is about time we cover Session ID-obtaining attacks requiring user interactio
 
 # Question
 ---
-![](Pasted image 20250219123544.png)
+![](Pasted%20image%2020250219123544.png)
