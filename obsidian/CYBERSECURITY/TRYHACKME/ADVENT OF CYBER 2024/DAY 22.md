@@ -1,7 +1,7 @@
 ---
 sticker: emoji//1f384
 ---
-![](../images/Pasted%20image%2020241222180525.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241222180525.png)
 
 _Mayor Malware laughed hard at what he had done,_
 
@@ -36,7 +36,7 @@ _Mayor Malware then smiled, as he'd find no blame._
 
 _With this he would find, a new home for his name!_
 
-![](../images/Pasted%20image%2020241222180552.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241222180552.png)
 
 This is the continuation of [[CYBERSECURITY/TRYHACKME/ADVENT OF CYBER 2024/DAY 21.md|day 21]]
 
@@ -461,7 +461,7 @@ Shaking her head, McSkidy then confirms that the docker registry pull password i
 ## Questions
 ---
 
-![](../images/Pasted%20image%2020241222181730.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241222181730.png)
 
 To get the review of each answer, watch this video, didn't have much time since I was sick.
 

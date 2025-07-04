@@ -44,17 +44,17 @@ We can view the first archived version of HackTheBox by entering the page we are
 # Questions
 ---
 
-![](../images/Pasted%20image%2020250128141003.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128141003.png)
 ## 1
 ---
 
 Let's search up hackthebox, in this case, the provided URL for this task is: `hackthebox.eu`:
 
-![](../images/Pasted%20image%2020250128141347.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128141347.png)
 
 Let's look up `August 8th 2018`:
 
-![](../images/Pasted%20image%2020250128141523.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128141523.png)
 
 Answer is `74`
 ## 2
@@ -63,7 +63,7 @@ Answer is `74`
 
 Now let's check `10th june 2017`:
 
-![](../images/Pasted%20image%2020250128141621.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128141621.png)
 
 Answer is `3054`
 
@@ -74,12 +74,12 @@ For third question, once we visit the page, we get redirected to:
 
 `http://site.aboutface.com/`
 
-![](../images/Pasted%20image%2020250128144016.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128144016.png)
 
 ## 4
 ---
 
-![](../images/Pasted%20image%2020250128144625.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128144625.png)
 
 Answer is: `Palm 0rganizer`
 
@@ -89,10 +89,10 @@ Answer is: `Palm 0rganizer`
 
 If we search up, we find the following website:
 
-![](../images/Pasted%20image%2020250128144441.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128144441.png)
 
 
-![](../images/Pasted%20image%2020250128144434.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128144434.png)
 
 
 Answer is: `http://google.stanford.edu/`
@@ -100,14 +100,14 @@ Answer is: `http://google.stanford.edu/`
 ## 6
 ---
 
-![](../images/Pasted%20image%2020250128144721.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128144721.png)
 
 Answer is: `17-December-99`
 
 ## 7
 ---
 
-![](../images/Pasted%20image%2020250128144802.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128144802.png)
 
 Answer is `3000`
 

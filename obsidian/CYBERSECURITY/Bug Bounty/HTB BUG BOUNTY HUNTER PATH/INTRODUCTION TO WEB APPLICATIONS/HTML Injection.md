@@ -60,12 +60,12 @@ In this example, as everything is being carried out on the front end, refreshing
 
 # Question
 
-![](../images/Pasted%20image%2020250122182012.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122182012.png)
 
-![](../images/Pasted%20image%2020250122182036.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122182036.png)
 
 The text that appears is the following:
 
-![](../images/Pasted%20image%2020250122182120.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122182120.png)
 
 Then, answer is: `Your name is Click Me`

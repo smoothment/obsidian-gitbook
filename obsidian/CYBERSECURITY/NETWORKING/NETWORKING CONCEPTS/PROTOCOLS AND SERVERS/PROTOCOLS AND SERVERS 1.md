@@ -150,7 +150,7 @@ Web browsers are generally free to install and use; furthermore, tech giants bat
 
 ## POC USING TELNET TO GET A FLAG
 
-![](../images/Pasted%20image%2020241112131916.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241112131916.png)
 
 # File Transfer Protocol (FTP)
 ---
@@ -258,9 +258,9 @@ Because FTP sends the login credentials along with the commands and files in c
 ---
 
 
-![](../images/Pasted%20image%2020241112132321.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241112132321.png)
 
-![](../images/Pasted%20image%2020241112132327.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241112132327.png)
 
 # Simple Mail Transfer Protocol (SMTP)
 ---

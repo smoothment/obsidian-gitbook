@@ -76,7 +76,7 @@ The API is indeed vulnerable to Local File Inclusion!
 # Question
 ---
 
-![](../images/Pasted%20image%2020250219171803.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250219171803.png)
 
 We can do:
 

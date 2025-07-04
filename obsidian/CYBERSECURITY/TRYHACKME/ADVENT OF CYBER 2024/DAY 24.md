@@ -163,13 +163,13 @@ To determine the correct topic and message to turn on the lights, you must study
 ## Question
 ---
 
-![](../images/Pasted%20image%2020241224125832.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241224125832.png)
 
 
 So, after checking the `challenge.pcapng` file, we see this is the topic:
 
 
-![](../images/Pasted%20image%2020241224132226.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241224132226.png)
 
 
 So, we must send the following message:
@@ -179,7 +179,7 @@ So, we must send the following message:
 
 This will lead to our flag:
 
-![](../images/Pasted%20image%2020241224132249.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241224132249.png)
 
 So, flag is: `THM{Ligh75on-day54ved}`
 
@@ -190,9 +190,9 @@ Just like that, day 24 and the event is done!
 I truly enjoyed the event, sad that it is over, GG!
 
 
-![](../images/Pasted%20image%2020241224132417.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241224132417.png)
 
 
-![](../images/Pasted%20image%2020241224143559.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241224143559.png)
 
 

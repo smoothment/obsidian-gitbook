@@ -45,16 +45,16 @@ As we can see, we get many hits. That is because our session successfully passed
 # Question
 ---
 
-![](../images/Pasted%20image%2020250214162315.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214162315.png)
 
 Ok, let's authenticate:
 
-![](../images/Pasted%20image%2020250214162403.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214162403.png)
 
 Once we try to authenticate, we go to `/2fa.php` and subsequently, we are able to see this:
 
 
-![](../images/Pasted%20image%2020250214162451.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214162451.png)
 
 We need a 2FA code, but we do not have one, what can we do now?
 
@@ -68,7 +68,7 @@ seq -w 0 9999 > tokens.txt
 
 Next, let's check the response of what an invalid code looks like, for example, if we enter 1111:
 
-![](../images/Pasted%20image%2020250214162733.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214162733.png)
 
 We get `Invalid 2FA Code`, knowing all this, we can build our ffuf command:
 
@@ -121,7 +121,7 @@ The first code is our 2fa code:
 
 We can now authenticate:
 
-![](../images/Pasted%20image%2020250214163819.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214163819.png)
 
 Flag is:
 

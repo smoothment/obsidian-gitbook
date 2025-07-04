@@ -130,19 +130,19 @@ We should first attempt reading these logs through LFI, and if we do have access
 # Questions
 ---
 
-![](../images/Pasted%20image%2020250218153924.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218153924.png)
 
 Let's begin by viewing the website:
 
-![](../images/Pasted%20image%2020250218165111.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218165111.png)
 
 Same as the previous one, let's send the request and perform the php session poisoning to check if it works:
 
-![](../images/Pasted%20image%2020250218165138.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218165138.png)
 
 We are able to read the session, now, let's change the value and check again:
 
-![](../images/Pasted%20image%2020250218165218.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218165218.png)
 
 If we check again:
 
@@ -150,7 +150,7 @@ If we check again:
 /var/lib/php/sessions/sess_5lpvtk301qthsd578ihq05f63r
 ```
 
-![](../images/Pasted%20image%2020250218165244.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218165244.png)
 
 We can see it changed, which means we are able to perform this action, let's change it to a webshell:
 
@@ -164,7 +164,7 @@ And check again using the `cmd` parameter:
 /var/lib/php/sessions/sess_5lpvtk301qthsd578ihq05f63r&cmd=id
 ```
 
-![](../images/Pasted%20image%2020250218165503.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218165503.png)
 
 We got `RCE`, let's answer the questions:
 
@@ -211,7 +211,7 @@ var
 
 Got it, let's read it:
 
-![](../images/Pasted%20image%2020250218170217.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218170217.png)
 
 Got our flag:
 

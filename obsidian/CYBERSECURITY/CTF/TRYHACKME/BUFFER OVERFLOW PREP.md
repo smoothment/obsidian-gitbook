@@ -217,21 +217,21 @@ Restart oscp.exe in Immunity and run the modified exploit.py script again. Your 
 
 First, we need to run `Immunity Debugger` as admin:
 
-![](../images/Pasted%20image%2020250529120641.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529120641.png)
 
 Once we run it as admin we need to open `oscp.exe` file located at the desktop of the administrator user:
 
-![](../images/Pasted%20image%2020250529120730.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529120730.png)
 
-![](../images/Pasted%20image%2020250529120742.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529120742.png)
 
 As seen, the binary is in a paused state, we need to click the `red play button` to start it:
 
-![](../images/Pasted%20image%2020250529120831.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529120831.png)
 
 The state has now changed to running, we can use netcat to verify it is listening:
 
-![](../images/Pasted%20image%2020250529120948.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529120948.png)
 
 Everything's right for now, let's proceed, what we need to do now is configure mona, in Immunity’s command bar (bottom), run:
 
@@ -239,9 +239,9 @@ Everything's right for now, let's proceed, what we need to do now is configure m
 !mona config -set workingfolder c:\mona\%p
 ```
 
-![](../images/Pasted%20image%2020250529121058.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529121058.png)
 
-![](../images/Pasted%20image%2020250529121115.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529121115.png)
 
 Now, on our linux machine we need to create a file named `fuzzer.py` with this contents:
 
@@ -338,7 +338,7 @@ s.close()
 
 Before we use the script, we need to restart `oscp.exe` on immunity debugger, simply open it again as before and press the red play button:
 
-![](../images/Pasted%20image%2020250529122103.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529122103.png)
 
 Now, use the script:
 
@@ -356,7 +356,7 @@ If we did everything correctly, the oscp.exe file crashes, we now need to use mo
 
 Now if we take a closer look to the log panel we get in mona, we can see this:
 
-![](../images/Pasted%20image%2020250529122501.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529122501.png)
 
 As seen, I got my offset:
 
@@ -396,7 +396,7 @@ s.close()
 
 We need to restart `oscp.exe` again and run it:
 
-![](../images/Pasted%20image%2020250529123058.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529123058.png)
 
 As seen, we got `Access Violation when executing [42424242]`, this means everything's going right by now, now, we need to use mona again to generate the base bytearray:
 
@@ -404,7 +404,7 @@ As seen, we got `Access Violation when executing [42424242]`, this means everyth
 !mona bytearray -b "\x00"
 ```
 
-![](../images/Pasted%20image%2020250529123802.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529123802.png)
 
 
 As seen, it got saved as `bytearray.bin`, we now need to create a bad char string on another python script:
@@ -449,7 +449,7 @@ s.close()
 
 Now, restart the file again and use the script, the server will crash again and we need to look in the right side of immunity for the `ESP address`:
 
-![](../images/Pasted%20image%2020250529124609.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529124609.png)
 
 There we go, our address is:
 
@@ -463,7 +463,7 @@ Now, we can use mona;
 !mona compare -f C:\mona\oscp\bytearray.bin -a 0x0018F430
 ```
 
-![](../images/Pasted%20image%2020250529124830.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529124830.png)
 
 Mona is telling us `\x01` is mangled in memory, we need to regenerate the bytearray excluding `\x00` and `\x01`:
 
@@ -502,7 +502,7 @@ Restart and compare again, we will get a new `esp` address, we need to check it 
 !mona compare -f C:\mona\oscp\bytearray.bin -a 0x01A4FA30
 ```
 
-![](../images/Pasted%20image%2020250529125231.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529125231.png)
 
 Got this, need to do the process all over again:
 
@@ -538,7 +538,7 @@ s.close()
 !mona compare -f C:\mona\oscp\bytearray.bin -a 0x01CBFA30
 ```
 
-![](../images/Pasted%20image%2020250529125741.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529125741.png)
 
 Finally, we got:
 
@@ -552,7 +552,7 @@ Means that the bad char hunting is over, we now need to proceed with finding the
 !mona jmp -r esp -cpb "\x00\x01\x02\x07\x08\x20\x2e\x2f\xa0\xa1"
 ```
 
-![](../images/Pasted%20image%2020250529125932.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529125932.png)
 
 As seen, we get some jmp esp gadgets, let's choose the first one:
 
@@ -637,15 +637,15 @@ print("[+] Done. Check your listener for a shell!")
 
 We need to restart it and send the exploit:
 
-![](../images/Pasted%20image%2020250529131124.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529131124.png)
 
 If we got our listener ready, we will receive the connection:
 
-![](../images/Pasted%20image%2020250529131143.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529131143.png)
 
 We can now answer the questions:
 
-![](../images/Pasted%20image%2020250529131224.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529131224.png)
 
 
 From now on, since the process is pretty much the same, you guys can practice by trying to get a reverse shell in every single `OVERFLOW`. If you got any problem, check the answers below.
@@ -655,60 +655,60 @@ From now on, since the process is pretty much the same, you guys can practice by
 ---
 
 
-![](../images/Pasted%20image%2020250529132544.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529132544.png)
 
 
 # oscp.exe - OVERFLOW3
 
 ---
 
-![](../images/Pasted%20image%2020250529132558.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529132558.png)
 
 # oscp.exe - OVERFLOW4
 
 ---
 
-![](../images/Pasted%20image%2020250529132609.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529132609.png)
 
 # oscp.exe - OVERFLOW5
 
 ---
 
-![](../images/Pasted%20image%2020250529132623.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529132623.png)
 
 # oscp.exe - OVERFLOW6
 
 ---
 
-![](../images/Pasted%20image%2020250529132634.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529132634.png)
 
 # oscp.exe - OVERFLOW7
 
 ---
 
-![](../images/Pasted%20image%2020250529132645.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529132645.png)
 
 # oscp.exe - OVERFLOW8
 
 ---
 
-![](../images/Pasted%20image%2020250529132704.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529132704.png)
 
 
 # oscp.exe - OVERFLOW9
 
 ---
 
-![](../images/Pasted%20image%2020250529132725.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529132725.png)
 
 # oscp.exe - OVERFLOW10
 
 ---
 
-![](../images/Pasted%20image%2020250529132736.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529132736.png)
 
 
 
 
-![](../images/Pasted%20image%2020250529132524.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250529132524.png)
 

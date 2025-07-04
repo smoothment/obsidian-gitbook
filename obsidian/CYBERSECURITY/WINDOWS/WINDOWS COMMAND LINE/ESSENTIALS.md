@@ -255,7 +255,7 @@ Active Connections
 ## QUESTIONS
 
 
-![](../images/Pasted%20image%2020241028150207.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241028150207.png)
 
 # FILE AND DISK MANAGEMENT
 
@@ -501,7 +501,7 @@ With the process ID (PID) known, we can terminate any task using `taskkill /PID
 
 ## QUESTIONS
 
-![](../images/Pasted%20image%2020241028150327.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241028150327.png)
 
 # OTHER COMMANDS
 

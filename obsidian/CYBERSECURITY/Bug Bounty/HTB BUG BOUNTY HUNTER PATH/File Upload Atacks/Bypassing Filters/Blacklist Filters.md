@@ -86,25 +86,25 @@ As we can see, our file seems to have indeed been uploaded. The final step is to
 # Question
 ---
 
-![](../images/Pasted%20image%2020250206152513.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206152513.png)
 
 Let's check the website:
 
-![](../images/Pasted%20image%2020250206152555.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206152555.png)
 
 If we try to upload a simple `.php` file, we can see the following:
 
-![](../images/Pasted%20image%2020250206152627.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206152627.png)
 
 So, let's upload an image and modify its contents using burp:
 
-![](../images/Pasted%20image%2020250206152734.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206152734.png)
 
 If we try uploading with the `.php` extension, we get an error telling us the extension is not allowed, let's send the request to `intruder` and modify it in the following way:
 
-![](../images/Pasted%20image%2020250206152915.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206152915.png)
 
-![](../images/Pasted%20image%2020250206152920.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206152920.png)
 
 We can use the following list of extensions:
 
@@ -150,15 +150,15 @@ We can use the following list of extensions:
 
 Let's start the attack and check the responses:
 
-![](../images/Pasted%20image%2020250206153151.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206153151.png)
 
 A lot of them work, let's go with `.phar`:
 
-![](../images/Pasted%20image%2020250206153555.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206153555.png)
 
 We are able to execute commands, let's read our flag:
 
-![](../images/Pasted%20image%2020250206153619.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206153619.png)
 
 ```
 HTB{1_c4n_n3v3r_b3_bl4ckl1573d} 

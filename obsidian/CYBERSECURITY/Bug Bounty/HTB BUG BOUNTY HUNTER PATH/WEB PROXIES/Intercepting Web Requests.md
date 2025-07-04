@@ -105,14 +105,14 @@ This demonstrates a basic example of how request interception and manipulation c
 
 # Question
 ---
-![](../images/Pasted%20image%2020250123162152.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250123162152.png)
 
 Let's intercept the request and send it to burp:
 
-![](../images/Pasted%20image%2020250123162223.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250123162223.png)
 
 We need to change it like this in order to read `flag.txt`:
 
-![](../images/Pasted%20image%2020250123162339.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250123162339.png)
 
 Flag is: `HTB{1n73rc3p73d_1n_7h3_m1ddl3}`

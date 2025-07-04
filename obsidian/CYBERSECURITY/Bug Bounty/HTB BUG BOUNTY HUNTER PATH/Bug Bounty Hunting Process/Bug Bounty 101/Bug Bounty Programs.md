@@ -75,7 +75,7 @@ One of the best online resources to identify bug bounty programs of your liking 
 
 # Question
 ---
-![](../images/Pasted%20image%2020250218225914.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218225914.png)
 
 Answer is:
 

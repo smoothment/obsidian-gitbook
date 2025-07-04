@@ -30,7 +30,7 @@ Some notable headers include:
 | Source Address      | The IP address of the device that the packet is being sent **from** so that data knows where to **return to**.                                                          |
 | Destination Address | The device's IP address the packet is being sent to so that data knows where to travel next.                                                                            |
 |                     |                                                                                                                                                                         |
-![](../images/Pasted%20image%2020241120175538.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120175538.png)
 
 # TCP/IP (The Three-Way Handshake)
 ---
@@ -134,7 +134,7 @@ Let's show this process using Alice and Bob as we have previously.
 In the illustration, we can see that Alice has sent Bob a "**FIN**" packet. Because Bob received this, he will let Alice know that he received it and that he also wants to close the connection (using FIN). Alice has heard Bob loud and clear and will let Bob know that she acknowledges this.
 
 
-![](../images/Pasted%20image%2020241120175712.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120175712.png)
 
 # UDP/IP
 ----
@@ -184,7 +184,7 @@ The diagram below shows a normal UDP connection between Alice and Bob. In real
 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/53d459ccda57e5fdea0dafe7e64ffe7c.svg)
 
-![](../images/Pasted%20image%2020241120175844.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120175844.png)
 
 # Ports 101 (Practical)
 ---

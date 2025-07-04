@@ -96,7 +96,7 @@ With our new `role`, we may also perform mass assignments to change specific fi
 
 # Question
 ---
-![](../images/Pasted%20image%2020250217165333.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250217165333.png)
 
 We can use this script to enumerate users:
 
@@ -255,11 +255,11 @@ Priority: u=0
 If we check the response, we get this:
 
 
-![](../images/Pasted%20image%2020250217165646.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250217165646.png)
 
 Now, if we check our edit profile:
 
-![](../images/Pasted%20image%2020250217165720.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250217165720.png)
 
 We got our flag:
 

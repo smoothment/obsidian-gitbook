@@ -78,7 +78,7 @@ done.
 # Question
 ---
 
-![](../images/Pasted%20image%2020250127142537.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250127142537.png)
 
 We can use `dnsenum`, let's perform the following command: 
 
@@ -86,7 +86,7 @@ We can use `dnsenum`, let's perform the following command:
 
 We'll get the following:
 
-![](../images/Pasted%20image%2020250127143435.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250127143435.png)
 
 Answer is: `my.inlanefreight.com`
 

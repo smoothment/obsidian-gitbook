@@ -136,19 +136,19 @@ With this custom wordlist, we can run a fuzzing scan with `Burp Intruder`, simi
 # Question
 ---
 
-![](../images/Pasted%20image%2020250206154129.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206154129.png)
 
 We can begin by checking the website:
 
-![](../images/Pasted%20image%2020250206154226.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206154226.png)
 
 If we try uploading a `.php` file, we see the following:
 
-![](../images/Pasted%20image%2020250206154300.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206154300.png)
 
 We can only upload images, let's upload an image and modify the request:
 
-![](../images/Pasted%20image%2020250206154432.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206154432.png)
 
 Extension is not allowed, we can try fuzzing again, we can generate our wordlist with the following bash script:
 
@@ -163,25 +163,25 @@ for char in '%20' '%0a' '%00' '%0d0a' '/' '.\\' '.' '…' ':'; do
 done
 ```
 
-![](../images/Pasted%20image%2020250206154754.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206154754.png)
 
 Let's send the attack:
 
-![](../images/Pasted%20image%2020250206155322.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206155322.png)
 
 None of them worked, we missed something, let's go back to the normal request, and check it out:
 
-![](../images/Pasted%20image%2020250206155436.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206155436.png)
 
 We can erase the `CheckFile`, and change the `accept` to whitelist our `.php` extension:
 
-![](../images/Pasted%20image%2020250206155557.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206155557.png)
 
 Now we can upload a `.php` file:
 
-![](../images/Pasted%20image%2020250206155649.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206155649.png)
 
-![](../images/Pasted%20image%2020250206155837.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206155837.png)
 
 Or that's what we thought, remember this does not only have whitelist but blacklist, we need to fuzz to check which extension is allowed, let's follow these two things:
 
@@ -191,25 +191,25 @@ Or that's what we thought, remember this does not only have whitelist but blackl
 3. Let's change the content-type to `image/jpeg`
 ```
 
-![](../images/Pasted%20image%2020250206160325.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206160325.png)
 
 Once we've sent the attack, we can see the following:
 
-![](../images/Pasted%20image%2020250206160404.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206160404.png)
 
 Let's go with `.phar`, we can upload the file in the following way:
 
-![](../images/Pasted%20image%2020250206160445.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206160445.png)
 
-![](../images/Pasted%20image%2020250206160510.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206160510.png)
 
 Nice, let's check our webshell:
 
-![](../images/Pasted%20image%2020250206160533.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206160533.png)
 
 It worked, let's read `flag.txt`:
 
-![](../images/Pasted%20image%2020250206160551.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206160551.png)
 
 ```
 HTB{1_wh173l157_my53lf} 

@@ -55,11 +55,11 @@ If you're using Linux, the command will look like this:
 ## Questions
 ---
 
-![](../images/Pasted%20image%2020250106150752.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250106150752.png)
 
 Let's use sudo -l to check what command we are allowed to run:
 
-![](../images/Pasted%20image%2020250106150821.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250106150821.png)
 
 We are allowed to run `/bin/bash`
 
@@ -71,11 +71,11 @@ Now, in order to read the flag, we must perform the vulnerability in the followi
 
 #### Output
 
-![](../images/Pasted%20image%2020250106152010.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250106152010.png)
 
 So, root flag would be: 
 
-![](../images/Pasted%20image%2020250106152029.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250106152029.png)
 
 `THM{l33t_s3cur1ty_bypass}`
 ```

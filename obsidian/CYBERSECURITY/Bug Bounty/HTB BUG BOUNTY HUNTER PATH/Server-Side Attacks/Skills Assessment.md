@@ -5,15 +5,15 @@ sticker: lucide//server
 
 You are tasked to perform a security assessment of a client's web application. Apply what you have learned in this module to obtain the flag.
 
-![](../images/Pasted%20image%2020250212154851.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212154851.png)
 
 Let's begin by checking the page:
 
-![](../images/Pasted%20image%2020250212154913.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212154913.png)
 
 We got a simple page, nothing is off at the beginning, we have three sections: `menu`, `reviews` and `contact`, let's read the main's page source code:
 
-![](../images/Pasted%20image%2020250212155010.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212155010.png)
 
 We can see this js code at the end of the file, let's break it down:
 
@@ -94,7 +94,7 @@ For each Truck ID:
 
 Understanding the functionality of the page, we can start burp and check the request:
 
-![](../images/Pasted%20image%2020250212160205.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212160205.png)
 
 We can begin the testing for SSRF.
 
@@ -103,11 +103,11 @@ We can begin the testing for SSRF.
 
 We can begin the test by pointing `http://127.0.0.1:80` to view the response:
 
-![](../images/Pasted%20image%2020250212160429.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212160429.png)
 
 It went through, what if we point to a closed port:
 
-![](../images/Pasted%20image%2020250212160546.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212160546.png)
 
 An error message is shown, knowing this, we can use ffuf and fuzz for open ports:
 
@@ -150,7 +150,7 @@ ________________________________________________
 
 So, port 3306 is open, let's check the response:
 
-![](../images/Pasted%20image%2020250212161958.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212161958.png)
 
 We got another error message, `Received HTTP/0.9 when not allowed`, but it doesn't matter, since we know we have SSRF, we can attempt to read local files:
 
@@ -161,7 +161,7 @@ file:///etc/passwd
 
 We get the following:
 
-![](../images/Pasted%20image%2020250212165927.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212165927.png)
 
 `file` has been disabled, let's test other way.
 
@@ -178,7 +178,7 @@ http://truckapi.htb/?id={{7*7}}
 We see the following:
 
 
-![](../images/Pasted%20image%2020250212170132.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212170132.png)
 
 It works, this means we are facing `twig`, let's try to use this:
 
@@ -194,7 +194,7 @@ http://truckapi.htb/?id={{['id']|filter('system')}}
 
 We see the following:
 
-![](../images/Pasted%20image%2020250212170307.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212170307.png)
 
 We got RCE, let's proceed to read our flag, since we need to do a space in order to do `cat /flag.txt`, we can use `${IFS}` which is the `Internal Field Separator` to bypass the space restrictions in shell commands, payload would be the following:
 
@@ -204,7 +204,7 @@ http://truckapi.htb/?id={{['cat${IFS}/flag.txt']|filter('system')}}
 
 We can see the following:
 
-![](../images/Pasted%20image%2020250212170624.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212170624.png)
 
 We got our flag:
 
@@ -212,5 +212,5 @@ We got our flag:
 HTB{3b8e2b940775e0267ce39d7c80488fc8}
 ```
 
-![](../images/Pasted%20image%2020250212170814.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250212170814.png)
 

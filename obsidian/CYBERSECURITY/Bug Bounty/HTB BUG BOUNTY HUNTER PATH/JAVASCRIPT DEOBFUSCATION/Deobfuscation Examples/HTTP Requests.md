@@ -60,7 +60,7 @@ Now that we know how to use `cURL` to send basic `POST` requests, in the nex
 
 # Question
 ---
-![](../images/Pasted%20image%2020250130134544.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130134544.png)
 
 Let's perform the next curl request:
 
@@ -68,6 +68,6 @@ Let's perform the next curl request:
 
 Since we don't need to send any data, let's just use a simple POST request:
 
-![](../images/Pasted%20image%2020250130134738.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130134738.png)
 
 Answer is `N2gxNV8xNV9hX3MzY3IzN19tMzU1NGcz`

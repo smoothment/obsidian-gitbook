@@ -111,38 +111,38 @@ As a developer, it's important to be aware of web application vulnerabilities, h
 
 ## FIRST
 
-![](../images/Pasted%20image%2020241105181015.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105181015.png)
 
 We need to go into inspector and change the method from `GET` to `POST`
 
-![](../images/Pasted%20image%2020241105181107.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105181107.png)
 
 Once we've changed that, send the request to burp and modify the value to POST:
 
-![](../images/Pasted%20image%2020241105181139.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105181139.png)
 
 Once that is done, we will be able to retrieve the flag:
 
-![](../images/Pasted%20image%2020241105181202.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105181202.png)
 
 ## SECOND
 
 
-![](../images/Pasted%20image%2020241105181228.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105181228.png)
 
 Seems like something related to the cookies, let's look at them:
 
 
-![](../images/Pasted%20image%2020241105181327.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105181327.png)
 
 Let's try changing the cookies to `admin`:
 
-![](../images/Pasted%20image%2020241105181413.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105181413.png)
 
 Nice, we were able to bypass that, let's get our flag:
 
 
-![](../images/Pasted%20image%2020241105181626.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105181626.png)
 
 If we change our value to an invalid input, we are able to see the directory include is working, so, the correct input would be:
 
@@ -150,14 +150,14 @@ If we change our value to an invalid input, we are able to see the directory inc
 
 We use that `%00` to reference a null byte, in order to bypass that `.php` read the function performs:
 
-![](../images/Pasted%20image%2020241105181803.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105181803.png)
 
 And just like that, challenge 2 is done!
 
 ## THIRD
 
 
-![](../images/Pasted%20image%2020241105181938.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105181938.png)
 
 We can read from the file name, let's input something like:
 
@@ -165,46 +165,46 @@ We can read from the file name, let's input something like:
 
 To check if we are able to get the flag:
 
-![](../images/Pasted%20image%2020241105182048.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105182048.png)
 
 Hmm, something weird happened let's check at inspector tab to view if the request is actually a post request:
 
 
-![](../images/Pasted%20image%2020241105182134.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105182134.png)
 
 And this is where the issue relies, let's change it to post:
 
-![](../images/Pasted%20image%2020241105182747.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105182747.png)
 
 
 
 
-![](../images/Pasted%20image%2020241105182754.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105182754.png)
 
 Now, let's give the previous payload to the file section:
 
-![](../images/Pasted%20image%2020241105182811.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105182811.png)
 
 Let's send the request:
 
 
-![](../images/Pasted%20image%2020241105182825.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105182825.png)
 
 Nice, we got the flag!
 
 ## FOURTH 
 
-![](../images/Pasted%20image%2020241105182924.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105182924.png)
 
 We need to gain RCE in that section, let's check:
 
-![](../images/Pasted%20image%2020241105182954.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105182954.png)
 
 First, let's create a file with the following php code saved as a txt file:
 
 `<?php echo exec("hostname");?>`
 
-![](../images/Pasted%20image%2020241105183103.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105183103.png)
 
 Now, we need to pass the following to the lab:
 
@@ -216,7 +216,7 @@ Now, we need to pass the following to the lab:
 
 # POC
 
-![](../images/Pasted%20image%2020241105183251.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241105183251.png)
 
 
 

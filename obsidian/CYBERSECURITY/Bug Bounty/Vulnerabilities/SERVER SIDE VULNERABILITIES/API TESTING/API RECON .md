@@ -50,4 +50,4 @@ You can also use a list of common paths to find documentation using Intruder.
 
 ## LAB
 
-![](../images/Pasted%20image%2020241004123805.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241004123805.png)

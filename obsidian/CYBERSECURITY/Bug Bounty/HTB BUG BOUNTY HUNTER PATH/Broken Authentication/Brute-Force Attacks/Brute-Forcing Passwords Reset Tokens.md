@@ -79,7 +79,7 @@ By specifying the reset token in the GET-parameter `token` in the `/reset_pas
 # Questions
 ---
 
-![](../images/Pasted%20image%2020250214152014.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214152014.png)
 
 The answers for the first three questions are:
 
@@ -91,19 +91,19 @@ The answers for the first three questions are:
 
 Now, let's go to the web application:
 
-![](../images/Pasted%20image%2020250214160759.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214160759.png)
 
 We got a login functionality, we can reset out password, let's check it out:
 
-![](../images/Pasted%20image%2020250214160832.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214160832.png)
 
 As seen, we are redirected to `/reset.php`, the input is not properly sanitized, which means, we could send a password reset for other users, for example, let's send a password reset for `admin`:
 
-![](../images/Pasted%20image%2020250214161036.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214161036.png)
 
 If we try going to `/reset_password.php`, we get the following:
 
-![](../images/Pasted%20image%2020250214161111.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214161111.png)
 
 So, we need a token, we can try brute-forcing the token using the following, first, let's generate a sequence of tokens from `0000` to `9999`, which is the maximum length of 4 digits tokens:
 
@@ -161,7 +161,7 @@ http://IP:PORT/reset_password.php?token=6583
 
 We'd see this:
 
-![](../images/Pasted%20image%2020250214161805.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214161805.png)
 
 We are able to reset the password, let's simply do the following credentials:
 
@@ -171,9 +171,9 @@ We are able to reset the password, let's simply do the following credentials:
 
 Now we can log in:
 
-![](../images/Pasted%20image%2020250214162106.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214162106.png)
 
-![](../images/Pasted%20image%2020250214162128.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214162128.png)
 
 Flag is:
 

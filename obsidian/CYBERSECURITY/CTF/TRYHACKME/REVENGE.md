@@ -18,13 +18,13 @@ sticker: emoji//1f986
 
 First of all, we can download a task file containing a message from Billy Joel:
 
-![](../images/Pasted%20image%2020250609131337.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609131337.png)
 
 
 Now, let's proceed to check the website:
 
 
-![](../images/Pasted%20image%2020250609131510.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609131510.png)
 
 Let's fuzz:
 
@@ -62,11 +62,11 @@ requirements.txt        [Status: 200, Size: 258, Words: 1, Lines: 16, Duration: 
 
 The products section seems odd, if we check it out with a non existant product, this happens:
 
-![](../images/Pasted%20image%2020250609132109.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609132109.png)
 
 I was thinking of IDOR but couldn't get anything out of it, back at the fuzzing scan, we got `requirements.txt`, let's check it out:
 
-![](../images/Pasted%20image%2020250609132816.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609132816.png)
 
 We are dealing with flask, we can try fuzzing again but with a python extension to check if we can get `app.py`:
 
@@ -102,7 +102,7 @@ app.py                  [Status: 200, Size: 2371, Words: 267, Lines: 82, Duratio
 
 There it is, let's download it and perform analysis on it:
 
-![](../images/Pasted%20image%2020250609133120.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609133120.png)
 
 In this exact part of the code, we can find this:
 
@@ -158,7 +158,7 @@ Let's read the duckyinc one:
 sqlmap -u "http://10.10.38.213/products/1" -D duckyinc --dump --batch
 ```
 
-![](../images/Pasted%20image%2020250609134256.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609134256.png)
 
 We got our first flag: 
 
@@ -167,7 +167,7 @@ thm{br3ak1ng_4nd_3nt3r1ng}
 ```
 
 
-![](../images/Pasted%20image%2020250609134438.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609134438.png)
 
 We got some hashes, we can try getting them and cracking them with hashcat:
 
@@ -183,7 +183,7 @@ Now:
 hashcat -m 3200 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt
 ```
 
-![](../images/Pasted%20image%2020250609134802.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609134802.png)
 
 This is the password for the `server-admin` user:
 
@@ -199,7 +199,7 @@ ssh server-admin@10.10.38.213
 ```
 
 
-![](../images/Pasted%20image%2020250609134933.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609134933.png)
 Now, we can begin privilege escalation.
 
 
@@ -291,10 +291,10 @@ sudo /bin/systemctl restart duckyinc.service
 
 If we check `/tmp` directory:
 
-![](../images/Pasted%20image%2020250609142735.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609142735.png)
 As seen, we got the `sh` binary, let's run it to get a root shell:
 
-![](../images/Pasted%20image%2020250609142853.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609142853.png)
 
 Now, let's get second flag and root flag:
 
@@ -327,7 +327,7 @@ As seen, inside of the root directory, we can't find the flag, this is because w
 nano /var/www/duckyinc/templates/index.html
 ```
 
-![](../images/Pasted%20image%2020250609143131.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609143131.png)
 
 Once we modify the file, our root directory changes:
 
@@ -357,5 +357,5 @@ sh-4.4# cat /root/flag3.txt
 thm{m1ss10n_acc0mpl1sh3d}
 ```
 
-![](../images/Pasted%20image%2020250609143240.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250609143240.png)
 

@@ -51,7 +51,7 @@ As we can see, the first row shows that our request was a `GET` request. `GET
 
 # Question
 ---
-![](../images/Pasted%20image%2020250130163930.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130163930.png)
 
 We simply need to use:
 
@@ -59,7 +59,7 @@ We simply need to use:
 <script>alert(document.cookie)</script>
 ```
 
-![](../images/Pasted%20image%2020250130163936.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130163936.png)
 
 Flag is `HTB{r3fl3c73d_b4ck_2_m3}`
 

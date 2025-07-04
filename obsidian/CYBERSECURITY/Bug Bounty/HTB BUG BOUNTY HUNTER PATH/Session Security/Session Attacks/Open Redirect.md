@@ -93,5 +93,5 @@ The following section will provide some prevention advice related to the covered
 ---
 
 
-![](../images/Pasted%20image%2020250219131152.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250219131152.png)
 

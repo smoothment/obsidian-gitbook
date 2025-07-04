@@ -81,7 +81,7 @@ Example 1 - Global Enterprises:
     1. Any interaction with "*.bethechange.xyz" is prohibited.
     2. All interaction with "*.globalenterprises.thm" is permitted.
 
-![](../images/Pasted%20image%2020250511134136.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250511134136.png)
 
 # Rules of Engagement
 ---
@@ -114,7 +114,7 @@ When analyzing the document, it is important to remember that it is only a summa
 For this task we will use a shortened document adapted from [redteam.guide](https://redteam.guide/docs/templates/roe_template/)
 
 
-![](../images/Pasted%20image%2020250511134413.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250511134413.png)
 
 # Campaign Planning
 ---
@@ -239,10 +239,10 @@ Unlike the CONOPS, the resource plan should not be written as a summary; instead
 The key to writing and understanding a resource plan is to provide enough information to gather what is required but not become overbearing. The document should be straight to the point and define what is needed.
 
 
-![](../images/Pasted%20image%2020250511134810.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250511134810.png)
 
 
-![](../images/Pasted%20image%2020250511134816.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250511134816.png)
 
 # Operations Plan
 ------
@@ -268,9 +268,9 @@ The most notable addition to this document is the communications plan. The commu
 - Slack
 
 
-![](../images/Pasted%20image%2020250511135005.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250511135005.png)
 
-![](../images/Pasted%20image%2020250511135010.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250511135010.png)
 
 # Mission Plan
 ---
@@ -287,9 +287,9 @@ How the document is written and detailed will depend on the team; as this is an 
 
 The two plans can be thought of similarly; the operations plan should be considered from a business and client perspective, and the mission plan should be thought of from an operator and red cell perspective.
 
-![](../images/Pasted%20image%2020250511135101.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250511135101.png)
 
-![](../images/Pasted%20image%2020250511135106.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250511135106.png)
 
 
 # Conclusion

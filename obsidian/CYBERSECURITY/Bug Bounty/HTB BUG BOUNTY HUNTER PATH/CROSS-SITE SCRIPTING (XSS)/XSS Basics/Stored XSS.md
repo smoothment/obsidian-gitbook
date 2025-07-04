@@ -47,7 +47,7 @@ To see whether the payload is persistent and stored on the back-end, we can refr
 
 # Question
 ---
-![](../images/Pasted%20image%2020250130163211.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130163211.png)
 
 We can use:
 
@@ -57,6 +57,6 @@ We can use:
 
 And we'll se the following pop up:
 
-![](../images/Pasted%20image%2020250130163536.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130163536.png)
 
 Answer is `HTB{570r3d_f0r_3v3ry0n3_70_533}`

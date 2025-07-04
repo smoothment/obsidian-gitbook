@@ -38,21 +38,21 @@ Let's begin reconnaissance.
 Since we got some credentials, let's use `evil-winrm` to log:
 
 
-![](../images/Pasted%20image%2020250116163132.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116163132.png)
 
 We can use `net users` to list all the users in this machine:
 
-![](../images/Pasted%20image%2020250116163210.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116163210.png)
 
 We can attempt to change password for these users, with `net user {user} {password_to_set}`, after trying I found I could change the password for user Michael:
 
 
-![](../images/Pasted%20image%2020250116163543.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116163543.png)
 
 So, we can log using `evil-winrm` with the set credentials:
 
 
-![](../images/Pasted%20image%2020250116163724.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116163724.png)
 
 Nice, we could log as `michael`, an useful step would be dumping the AD json using `bloodhound-python` to perform analysis:
 
@@ -70,7 +70,7 @@ In order to perform this command we need to add `administrator.htb` to `/etc/hos
 #### Output
 ----
 
-![](../images/Pasted%20image%2020250116164218.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116164218.png)
 
 Now we can analyze the data, let's take a look and highlight the most important stuff.
 ```
@@ -89,23 +89,23 @@ After analyzing the data, we check we can use `michael` account to change the pa
 
 We can check it worked using `smbclient`:
 
-![](../images/Pasted%20image%2020250116165415.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116165415.png)
 
 Nice, let's list all available shares using `smbmap`:
 
 `smbmap -H 10.10.11.42 -u 'benjamin' -p 'benjaminPasword`
 
-![](../images/Pasted%20image%2020250116165547.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116165547.png)
 
 
 We have FTP enabled, let's use it to read files:
 
-![](../images/Pasted%20image%2020250116165908.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116165908.png)
 
 We got a `Backup.psafe3` file, let's download it on our local machine:
 
 
-![](../images/Pasted%20image%2020250116170832.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116170832.png)
 
 We need to do the following in order to be able to read the file:
 
@@ -116,7 +116,7 @@ We need to do the following in order to be able to read the file:
 #### Output
 ----
 
-![](../images/Pasted%20image%2020250116171307.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116171307.png)
 
 We got it: `tekieromucho`
 ```
@@ -124,7 +124,7 @@ We got it: `tekieromucho`
 
 Let's view that data, we can use `pwsafe`:
 
-![](../images/Pasted%20image%2020250116171455.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116171455.png)
 
 We got some data about three people: `alexander`, `emily`, `emma`, let's log using the password found for `emily`:
 
@@ -134,11 +134,11 @@ We got some data about three people: `alexander`, `emily`, `emma`, let's log usi
 ```
 
 
-![](../images/Pasted%20image%2020250116172606.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116172606.png)
 
 Let's get our user flag and begin privilege escalation:
 
-![](../images/Pasted%20image%2020250116173148.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116173148.png)
 
 ```ad-important
 User: `8870f70828e61d9ab29b0db1e5c1be2f`
@@ -167,7 +167,7 @@ In that way, we can obtain the TGT, we can crack it using john:
 `john --wordlist=/usr/share/wordlists/rockyou.txt ethan.hash`
 ```
 
-![](../images/Pasted%20image%2020250116181304.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116181304.png)
 
 We got Ethan password: `limpbizkit`, we can do the following in order to get the admin hash:
 
@@ -178,7 +178,7 @@ We got Ethan password: `limpbizkit`, we can do the following in order to get the
 ##### Output
 ---
 
-![](../images/Pasted%20image%2020250116181538.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116181538.png)
 ```
 
 So, our admin hash would be: 
@@ -189,7 +189,7 @@ Hash: `3dc553ce4b9fd20bd016e098d2d2fd2e`
 
 Let's log in:
 
-![](../images/Pasted%20image%2020250116181640.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250116181640.png)
 
 ```ad-important
 Root: `28aaa826bd73c76cf8c151cca7108e23`

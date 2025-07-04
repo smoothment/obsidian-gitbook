@@ -150,7 +150,7 @@ HTB{...}
 # Questions
 ---
 
-![](../images/Pasted%20image%2020250213152556.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250213152556.png)
 
 Let's begin by launching the default medusa scan:
 

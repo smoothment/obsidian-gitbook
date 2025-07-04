@@ -122,7 +122,7 @@ You are probably wondering why we have both groups and OUs. While both are used 
 - **OUs** are handy for **applying policies** to users and computers, which include specific configurations that pertain to sets of users depending on their particular role in the enterprise. Remember, a user can only be a member of a single OU at a time, as it wouldn't make sense to try to apply two different sets of policies to a single user.
 - **Security Groups**, on the other hand, are used to **grant permissions over resources**. For example, you will use groups if you want to allow some users to access a shared folder or network printer. A user can be a part of many groups, which is needed to grant access to multiple resources.
 
-![](../images/Pasted%20image%2020250526121454.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526121454.png)
 
 # Managing Users in AD
 
@@ -209,7 +209,7 @@ VERBOSE: Performing the operation "Set" on target "CN=Sophie,OU=Sales,OU=THM,DC=
 
 **Note:** When connecting via RDP, use `THM\sophie` as the username to specify you want to log in using the user `sophie` on the `THM` domain.
 
-![](../images/Pasted%20image%2020250526121532.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526121532.png)
 
 # Managing Computers in AD
 
@@ -241,7 +241,7 @@ Since we are tidying up our AD, let's create two separate OUs for `Workstation
 
 Now, move the personal computers and laptops to the Workstations OU and the servers to the Servers OU from the Computers container. Doing so will allow us to configure policies for each OU later.
 
-![](../images/Pasted%20image%2020250526121639.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526121639.png)
 
 
 # Group Policies
@@ -357,7 +357,7 @@ Since we didn't apply the control panel GPO on IT, you should still be able to l
 **Note:** If you created and linked the GPOs, but for some reason, they still don't work, remember you can run `gpupdate /force` to force GPOs to be updated.
 
 
-![](../images/Pasted%20image%2020250526121709.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526121709.png)
 
   
 # Authentication Methods
@@ -414,7 +414,7 @@ Note that the user's password (or hash) is never transmitted through the network
 
 **Note:** The described process applies when using a domain account. If a local account is used, the server can verify the response to the challenge itself without requiring interaction with the domain controller since it has the password hash stored locally on its SAM.
 
-![](../images/Pasted%20image%2020250526121749.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526121749.png)
 
 
 # Trees, Forests and Trusts
@@ -464,7 +464,7 @@ The direction of the one-way trust relationship is contrary to that of the acces
 
 It is important to note that having a trust relationship between domains doesn't automatically grant access to all resources on other domains. Once a trust relationship is established, you have the chance to authorise users across different domains, but it's up to you what is actually authorised or not.
 
-![](../images/Pasted%20image%2020250526121815.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526121815.png)
 
 # Conclusion
 

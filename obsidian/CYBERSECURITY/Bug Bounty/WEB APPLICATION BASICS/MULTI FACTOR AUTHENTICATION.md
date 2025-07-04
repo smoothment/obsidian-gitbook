@@ -520,6 +520,6 @@ Replace the PHPSESSID value with the PHPSESSID from your terminal.
 Once done, go to http://mfa.thm/labs/third/dashboard.
 
 
-![](../images/Pasted%20image%2020241118145910.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118145910.png)
 
 

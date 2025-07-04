@@ -11,18 +11,18 @@ Find the vulnerabilities and submit a final flag using the skills we covered in 
 
 Don't forget to think outside the box!
 
-![](../images/Pasted%20image%2020250218222640.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218222640.png)
 
 # Initial Reconnaissance
 ----
 
 When we go into the web application, this is the first thing we can see:
 
-![](../images/Pasted%20image%2020250218222741.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218222741.png)
 
 We got `Home`, `About Us`, `Industries` and `Contact`, if we click any of them, we can see the following URL:
 
-![](../images/Pasted%20image%2020250218222837.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218222837.png)
 
 It goes formatted like this:
 
@@ -32,11 +32,11 @@ http://IP:PORT/index.php?page=page_we_selected
 
 So, let's try sending the request to burp to analyze it better:
 
-![](../images/Pasted%20image%2020250218223106.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218223106.png)
 
 Let's go with a basic attempt to read `/etc/passwd`, it's very unlikely that this goes through but can help us identify the behavior of the application:
 
-![](../images/Pasted%20image%2020250218223214.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218223214.png)
 
 We get `Invalid Input dteected!` error, so, it seems like they've filtered stuff like `....//` to avoid basic LFI, let's test another stuff, for example, php filters, let's try to read `/index.php`:
 
@@ -44,7 +44,7 @@ We get `Invalid Input dteected!` error, so, it seems like they've filtered stuff
 php://filter/read=convert.base64-encode/resource=index
 ```
 
-![](../images/Pasted%20image%2020250218223355.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218223355.png)
 
 And surprisingly, this goes through, let's decode the contents to search for any useful stuff in here:
 
@@ -199,7 +199,7 @@ We can analyze the behavior, here are some key features:
     The commented-out line `ilf_admin/index.php` suggests an admin section. Attackers can target this path to read admin scripts for credentials or vulnerabilities.
 ```
 
-![](../images/Pasted%20image%2020250218224538.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218224538.png)
 
 So, we found the admin panel, we can try automating the scan to check for LFI vulnerabilities, let's do it:
 
@@ -238,7 +238,7 @@ We get the following output:
 
 We can test any of this payloads, let's try:
 
-![](../images/Pasted%20image%2020250218224640.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218224640.png)
 
 And it indeed works, now, next step we need to do is log poisoning, we need to change the `User-Agent` to this:
 
@@ -248,15 +248,15 @@ And it indeed works, now, next step we need to do is log poisoning, we need to c
 
 Now, let's send the request like this:
 
-![](../images/Pasted%20image%2020250218225147.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218225147.png)
 
 As seen, it gets logged, in this case, we can see the current directory, let's list the root folder:
 
-![](../images/Pasted%20image%2020250218225233.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218225233.png)
 
 Found our flag, let's read it now:
 
-![](../images/Pasted%20image%2020250218225409.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218225409.png)
 
 Our flag is:
 
@@ -265,5 +265,5 @@ a9a892dbc9faf9a014f58e007721835e
 ```
 
 
-![](../images/Pasted%20image%2020250218225450.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218225450.png)
 

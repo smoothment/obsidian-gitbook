@@ -25,7 +25,7 @@ However, with this said, bus topologies are one of the easier and more cost-effi
 
 Lastly, another disadvantage of the bus topology is that there is little redundancy in place in case of failures. This disadvantage is because there is a single point of failure along the backbone cable. If this cable were to break, devices can no longer receive or transmit data along the bus.
 
-![](../images/Pasted%20image%2020241120164131.png) 
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120164131.png) 
 
 ### Ring Topology
 ---
@@ -37,7 +37,7 @@ Because there is only one direction for data to travel across this topology, it 
 
 Lastly, ring topologies are less prone to bottlenecks, such as within a bus topology, as large amounts of traffic are not travelling across the network at any one time. The design of this topology does, however, mean that a fault such as cut cable, or broken device will result in the entire networking breaking.
 
-![](../images/Pasted%20image%2020241120164154.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120164154.png)
 
 ## What is a Switch?
 ----
@@ -45,7 +45,7 @@ Switches are dedicated devices within a network that are designed to aggregate m
 
 Switches are much more efficient than their lesser counterpart (hubs/repeaters). Switches keep track of what device is connected to which port. This way, when they receive a packet, instead of repeating that packet to every port like a hub would do, it just sends it to the intended target, thus reducing network traffic.
 
-![](../images/Pasted%20image%2020241120164202.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120164202.png)
 
 Both Switches and Routers can be connected to one another. The ability to do this increases the redundancy (the reliability) of a network by adding multiple paths for data to take. If one path goes down, another can be used. Whilst this may reduce the overall performance of a network because packets have to take longer to travel, there is no downtime -- a small price to pay considering the alternative.
 
@@ -57,8 +57,8 @@ Routing is the label given to the process of data travelling across networks. Ro
 
 Routing is useful when devices are connected by many paths, such as in the example diagram below.
 
-![](../images/Pasted%20image%2020241120164225.png)
-![](../images/Pasted%20image%2020241120165200.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120164225.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120165200.png)
 
 # A Primer on Subnetting
 ---
@@ -118,7 +118,7 @@ We'll come on to explore exactly how subnetting provides these benefits at a lat
 
 Subnetting allows you to separate these two use cases from each other whilst having the benefits of a connection to larger networks such as the Internet.
 
-![](../images/Pasted%20image%2020241120174235.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120174235.png)
 
 # ARP
 ---
@@ -143,7 +143,7 @@ When an **ARP request** is sent, a message is broadcasted on the network to o
 This process is illustrated in the diagram below:
 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/2107060a6e1df30659654335b878e91a.png)
-![](../images/Pasted%20image%2020241120174350.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120174350.png)
 
 # DHCP
 ----
@@ -151,4 +151,4 @@ This process is illustrated in the diagram below:
 IP addresses can be assigned either manually, by entering them physically into a device, or automatically and most commonly by using a **DHCP** (**D**ynamic **H**ost **C**onfiguration **P**rotocol) server. When a device connects to a network, if it has not already been manually assigned an IP address, it sends out a request (DHCP Discover) to see if any DHCP servers are on the network. The DHCP server then replies back with an IP address the device could use (DHCP Offer). The device then sends a reply confirming it wants the offered IP Address (DHCP Request), and then lastly, the DHCP server sends a reply acknowledging this has been completed, and the device can start using the IP Address (DHCP ACK).
 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/0514189b8424bb6493f7b427b40425e2.png)
-![](../images/Pasted%20image%2020241120174504.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241120174504.png)

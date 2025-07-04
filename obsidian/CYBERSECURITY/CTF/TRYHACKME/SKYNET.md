@@ -25,10 +25,10 @@ We have a lot of open ports in this machine, if we try to enumerate them all:
 
 We realized we have SMB on this machine, let's use [smbmap](https://github.com/ShawnDEvans/smbmap) or [enum4linux](https://www.kali.org/tools/enum4linux/) to enumerate what's inside this service:
 
-![](../images/Pasted%20image%2020241121130533.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121130533.png)
 We found interesting things in this, got a `milesdyson` username, and two shares: `milesdyson`, `anonymous`, let's see what the scan says about these two:
 
-![](../images/Pasted%20image%2020241121130647.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121130647.png)
 
 We cannot read `milesdyson` but reading `anonymous` is allowed, let's connect to smb and read this:
 
@@ -42,7 +42,7 @@ We cannot read `milesdyson` but reading `anonymous` is allowed, let's connect to
 #### Investigating the SMB
 ---
 
-![](../images/Pasted%20image%2020241121131319.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121131319.png)
 
 Got `logs` and `attention.txt`
 
@@ -50,25 +50,25 @@ Got `logs` and `attention.txt`
 
 If we `cd` to logs and `ls`, we found three files:
 
-![](../images/Pasted%20image%2020241121131700.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121131700.png)
 
 Let's get them all using `mget *`
 
 We'll analyze those files later, let's get our `attention.txt` file:
 
-![](../images/Pasted%20image%2020241121131803.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121131803.png)
 
 Nice, let's analyze those files:
 
 #### `attention.txt`
 ----
-![](../images/Pasted%20image%2020241121131952.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121131952.png)
 
 Seems like a note, saying a malfunction has caused them passwords to be change, and that all employees need to change their passwords.
 
 If we look at the logs, only log1 has something, it appears to be a wordlist of some sort of kind:
 
-![](../images/Pasted%20image%2020241121132133.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121132133.png)
 
 Nice, let's proceed with fuzzing.
 
@@ -84,24 +84,24 @@ Let's begin with the fuzzing part, we can fuzz using `ffuf` `gobuster` `dirb` an
 ### ffuf
 ---
 
-![](../images/Pasted%20image%2020241121134127.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121134127.png)
 
 Found a few directories, let's scan with `gobuster`
 
 ### gobuster
 ----
 
-![](../images/Pasted%20image%2020241121134245.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121134245.png)
 Same interesting directory again, let's scan with `dirb`
 
 ### dirb
 ---
-![](../images/Pasted%20image%2020241121134211.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121134211.png)
 
 Found the `squirrelmail` directory again, seems like this is our way to go, let's visit it.
 ```
 
-![](../images/Pasted%20image%2020241121134448.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121134448.png)
 
 This directory contains a login, we can try brute forcing the login page assuming the username would be `milesdyson` and the password to be inside of `log1.txt`.
 
@@ -112,9 +112,9 @@ This directory contains a login, we can try brute forcing the login page assumin
 
 For the brute force processs, i'll be using hydra, this is the following command:
 
-![](../images/Pasted%20image%2020241121134929.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121134929.png)
 
-![](../images/Pasted%20image%2020241121134940.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121134940.png)
 
 This is a `POST` request, with the parameters: `login_username`, `secretkey`, so, the hydra command would be the following:
 
@@ -127,7 +127,7 @@ For this machine I used:
 #### Output
 ---
 
-![](../images/Pasted%20image%2020241121135155.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121135155.png)
 
 We found our `milesdyson` username password, credentials would be the following:
 
@@ -141,11 +141,11 @@ We found our `milesdyson` username password, credentials would be the following:
 
 Once we got our credentials, let's log in and perform the reconnaissance of the machine:
 
-![](../images/Pasted%20image%2020241121135455.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121135455.png)
 
 Once we are inside the page, we found that this is hosted on a `webmail.php` section, we got three emails, most jazzy one would be the Samba Password reset, let's look at it:
 
-![](../images/Pasted%20image%2020241121135646.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121135646.png)
 
 So we got a password, `)s{A&2Z=F^n_E.B` this is `milesdyson` samba password, let's log into SMB using those credentials
 
@@ -155,21 +155,21 @@ So we got a password, `)s{A&2Z=F^n_E.B` this is `milesdyson` samba password, let
 
 `milesdyson` : )s{A&2Z=F^n_E.B`
 
-![](../images/Pasted%20image%2020241121135937.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121135937.png)
 
 A bunch of files are inside of it, let's look for anything useful:
 
-![](../images/Pasted%20image%2020241121140027.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121140027.png)
 
 Bunch of stuff too, but we found something interesting a `important.txt` file, let's get it and analyze it in our machine:
 
-![](../images/Pasted%20image%2020241121140112.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121140112.png)
 
 We found a hidden directory: `/45kra24zxs28v3yd`, let's fuzz this directory to check if anything useful is hidding within it:
 
 `dirb http://10.10.183.201/45kra24zxs28v3yd`
 
-![](../images/Pasted%20image%2020241121140644.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121140644.png)
 
 ```
 
@@ -179,15 +179,15 @@ We found a hidden directory: `/45kra24zxs28v3yd`, let's fuzz this directory to c
 
 We found a `/administrator` directory inside, let's take a look:
 
-![](../images/Pasted%20image%2020241121140728.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121140728.png)
 
 This is running `Cuppa` if we use searchsploit we get this:
 
-![](../images/Pasted%20image%2020241121140810.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121140810.png)
 
 A [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/FILE INCLUSION VULNERABILITIES/LOCAL FILE INCLUSION (LFI).md|LFI]] vulnerability is shown, let's read and exploit:
 
-![](../images/Pasted%20image%2020241121142014.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121142014.png)
 So, in order to exploit this and get a reverse shell, we need to follow these steps:
 
 ```ad-summary
@@ -199,8 +199,8 @@ So, in order to exploit this and get a reverse shell, we need to follow these st
 ### Output 
 ----
 
-![](../images/Pasted%20image%2020241121142636.png)
-![](../images/Pasted%20image%2020241121142641.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121142636.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121142641.png)
 We got our shell.
 
 ```
@@ -210,7 +210,7 @@ We got our shell.
 
 Once the shell connection is established, we need to stabilize our shell in order to have a better experience, let's use our [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|note]]:
 
-![](../images/Pasted%20image%2020241121143025.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121143025.png)
 
 Nice, now we have a stable shell, let's begin with our privilege escalation
 
@@ -223,13 +223,13 @@ Nice, now we have a stable shell, let's begin with our privilege escalation
 
 If we use `cat /etc/crontab` we find this:
 
-![](../images/Pasted%20image%2020241121143321.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121143321.png)
 
 User `root` is running a script inside of `milesdyson` home called `backup.sh` let's check if we are able to write in it:
 
-![](../images/Pasted%20image%2020241121143414.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121143414.png)
 
-![](../images/Pasted%20image%2020241121143635.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121143635.png)
 
 We are able to write in it, so, we need to put the following in order to get a higher privileged shell:
 
@@ -249,8 +249,8 @@ After a minute, we will be able to execute `/bin/bash -p` and get a root shell:
 #### Output
 ---
 
-![](../images/Pasted%20image%2020241121144618.png)
-![](../images/Pasted%20image%2020241121144743.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121144618.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020241121144743.png)
 
 
 

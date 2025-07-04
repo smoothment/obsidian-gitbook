@@ -121,7 +121,7 @@ In the coming tasks, we will discuss the following techniques and use cases:
 - DNS
 
 
-![](../images/Pasted%20image%2020250516174541.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516174541.png)
 
 # Exfiltration using TCP socket
 ----
@@ -259,7 +259,7 @@ root:toor
 Success! We exfiltrated data from a victim machine to an attacker machine using the TCP socket in this task.
 
 
-![](../images/Pasted%20image%2020250516175048.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516175048.png)
 
 
 # Exfiltration using SSH
@@ -564,7 +564,7 @@ http://IP/uploader
 
 On here, we need to upload our `tunnel.php` file the tool generated:
 
-![](../images/Pasted%20image%2020250516180630.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516180630.png)
 
 Once we upload it, we will get that message, now, we can use the tool again:
 
@@ -1271,5 +1271,5 @@ dns0
 THM{DN5-Tunn311n9-1s-c00l}
 ```
 
-![](../images/Pasted%20image%2020250516183307.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250516183307.png)
 

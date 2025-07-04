@@ -60,10 +60,10 @@ We will see these vulnerabilities again and again in our learning journey and re
 
 # Question
 ---
-![](../images/Pasted%20image%2020250122185633.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122185633.png)
 
 If we search `CVE-2014-6271`, we can see the following vulnerability:
 
-![](../images/Pasted%20image%2020250122185732.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122185732.png)
 
 So, we are facing `Command Injection`.

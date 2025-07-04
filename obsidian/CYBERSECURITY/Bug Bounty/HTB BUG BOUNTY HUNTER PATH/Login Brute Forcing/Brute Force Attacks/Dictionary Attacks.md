@@ -107,7 +107,7 @@ Flag: HTB{...}
 # Question
 ---
 
-![](../images/Pasted%20image%2020250213135222.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250213135222.png)
 
 Let's modify the script to make it faster:
 

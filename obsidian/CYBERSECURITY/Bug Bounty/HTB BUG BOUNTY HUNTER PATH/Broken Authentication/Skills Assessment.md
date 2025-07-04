@@ -5,15 +5,15 @@ sticker: emoji//1faaa
 
 You are tasked to perform a security assessment of a client's web application. For the assessment, the client has not provided you with credentials. Apply what you have learned in this module to obtain the flag.
 
-![](../images/Pasted%20image%2020250215140214.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215140214.png)
 
 Let's begin by checking the website:
 
-![](../images/Pasted%20image%2020250215140227.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215140227.png)
 
 We have a login functionality, let's check it out:
 
-![](../images/Pasted%20image%2020250215140248.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215140248.png)
 
 We can begin by registering a new account and checking the behavior in burp:
 
@@ -24,7 +24,7 @@ We can begin by registering a new account and checking the behavior in burp:
 If we do those credentials, we get the following:
 
 
-![](../images/Pasted%20image%2020250215140815.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215140815.png)
 
 
 Now we know the password policy, it goes like this:
@@ -46,11 +46,11 @@ Nice, let's register an account that goes like that:
 
 We can now test how it looks like when a valid username goes through the application:
 
-![](../images/Pasted%20image%2020250215155348.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215155348.png)
 
 We get `Invalid credentials`, what if we use an invalid user:
 
-![](../images/Pasted%20image%2020250215155424.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215155424.png)
 
 Now we get another error `Unknown username or password.`, once we know this, we can use ffuf in order to fuzz for valid usernames:
 
@@ -148,13 +148,13 @@ We got credentials:
 
 If we try to log in, we can see the following:
 
-![](../images/Pasted%20image%2020250215160432.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215160432.png)
 
 We are redirected to `/2fa.php`, we need to bypass it, let's do the following:
 
 Let's start by sending a request and checking the behavior:
 
-![](../images/Pasted%20image%2020250215160533.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215160533.png)
 
 If we send an invalid OTP, we get `Invalid OTP` error, knowing this, let's create a list of OTPs and fuzz:
 
@@ -168,31 +168,31 @@ ffuf -w tokens.txt -u http://94.237.55.157:40800/2fa.php -X POST -H "Content-Typ
 
 After a while, we are unable to get any OTP by fuzzing, which means, this is not the intended path to take, that's when logging into our `test` account is truly helpful, if we log in, we can see the following:
 
-![](../images/Pasted%20image%2020250215164723.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215164723.png)
 
 We are redirected to `/profile.php` instead of `/2fa.php`, that means that if we're able to change the `Location` to `/profile.php` on glady's account, we'd be able to bypass the 2fa code requirement, let's do it:
 
-![](../images/Pasted%20image%2020250215164842.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215164842.png)
 
 `Do intercept -> Response to this request`:
 
-![](../images/Pasted%20image%2020250215164923.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215164923.png)
 
 Now, change `Location` to `/profile.php`:
 
-![](../images/Pasted%20image%2020250215165100.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215165100.png)
 
 Forward and `Do intercept -> Response to this request` again:
 
-![](../images/Pasted%20image%2020250215165141.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215165141.png)
 
 We get a GET request, we need to intercept this one too and change status code to `200` and `location` to `/profile.php` again:
 
-![](../images/Pasted%20image%2020250215165225.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215165225.png)
 
 After forwarding the request, this happens:
 
-![](../images/Pasted%20image%2020250215165242.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215165242.png)
 
 We get access to glady's account and got the flag:
 
@@ -201,6 +201,6 @@ HTB{d86115e037388d0fa29280b737fd9171}
 ```
 
 
-![](../images/Pasted%20image%2020250215165319.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250215165319.png)
 
 

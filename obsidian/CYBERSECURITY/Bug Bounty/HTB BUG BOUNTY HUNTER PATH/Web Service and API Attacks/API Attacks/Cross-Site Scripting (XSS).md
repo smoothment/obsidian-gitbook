@@ -37,4 +37,4 @@ Now our submitted JavaScript payload is evaluated successfully. The API endpoint
 
 # Question
 ---
-![](../images/Pasted%20image%2020250219172004.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250219172004.png)

@@ -198,7 +198,7 @@ WHOIS databases and DNS servers hold publicly available information, and query
 
 Moreover, we can rely on Traceroute (`traceroute` on Linux and macOS systems and `tracert` on MS Windows systems) to discover the hops between our system and the target host.
 
-![](../images/Pasted%20image%2020250512135422.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250512135422.png)
 
 # Advanced Searching
 ---
@@ -533,7 +533,7 @@ To wrap up, use the following demonstration provided below containing all the st
 
 Use `recon-ng` to repeat the steps we carried out against `thmredteam.com`, then answer the following questions.
 
-![](../images/Pasted%20image%2020250512142125.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250512142125.png)
 
 # Maltego
 ---
@@ -583,7 +583,7 @@ Now that we have learned how Maltego’s power stems from its transforms, the on
 
 Using Maltego requires activation, even if you opt for Maltego CE (Community Edition). Therefore, the following questions can be answered by visiting [Maltego Transform Hub](https://www.maltego.com/transform-hub/) or by installing and activating Maltego CE on your own system (not on the AttackBox).
 
-![](../images/Pasted%20image%2020250512142318.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250512142318.png)
 
 # Summary
 ---

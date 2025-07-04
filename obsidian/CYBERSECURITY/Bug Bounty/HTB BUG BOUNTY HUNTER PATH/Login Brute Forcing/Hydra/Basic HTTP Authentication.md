@@ -53,7 +53,7 @@ Upon execution, Hydra will systematically attempt each password from the `2023-
 # Question
 ---
 
-![](../images/Pasted%20image%2020250213141136.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250213141136.png)
 
 We can use the following command:
 
@@ -82,7 +82,7 @@ Got credentials:
 
 If we log in, we can see the flag:
 
-![](../images/Pasted%20image%2020250213151644.png)
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250213151644.png)
 
 Flag is:
 
