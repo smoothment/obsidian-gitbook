@@ -177,7 +177,7 @@ Please refer to the [Submitting Reports](https://docs.hackerone.com/hackers/sub
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218230445.png)
+![](cybersecurity/images/Pasted%2520image%252020250218230445.png)
 
 Answer is:
 

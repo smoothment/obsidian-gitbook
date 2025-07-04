@@ -41,12 +41,12 @@ AnyDesk Client
 Let's search for an exploit regarding this:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610124643.png)
+![](cybersecurity/images/Pasted%2520image%252020250610124643.png)
 
 The first ones talked about `CVE-2024-12754` but, the one we are interested in is the `AnyDesk 5.5.2` RCE, let's check it out:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610124748.png)
+![](cybersecurity/images/Pasted%2520image%252020250610124748.png)
 
 Ok, we got a python exploit on here, let's proceed to exploitation:
 
@@ -177,7 +177,7 @@ print('reverse shell should connect within 5 seconds')
 
 Now, set up a listener and execute the exploit with `python2`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610125955.png)
+![](cybersecurity/images/Pasted%2520image%252020250610125955.png)
 
 We got our shell, let's proceed with privilege escalation.
 
@@ -199,11 +199,11 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610130506.png)
+![](cybersecurity/images/Pasted%2520image%252020250610130506.png)
 
 Time to use `linpeas`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610130840.png)
+![](cybersecurity/images/Pasted%2520image%252020250610130840.png)
 
 As seen, we got an unknown SUID binary, this is the `setcap` binary, The `setcap` binary allows setting file capabilities with root privileges. By granting `cap_setuid` capability to a malicious binary we control, we can escalate to root when executing it.
 
@@ -243,7 +243,7 @@ chmod +x /tmp/rootme.py
 /tmp/mypython /tmp/rootme.py
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610131649.png)
+![](cybersecurity/images/Pasted%2520image%252020250610131649.png)
 
 As seen, we get a root shell exploiting the root capabilities we assigned, let's get both flags:
 
@@ -260,8 +260,8 @@ THM{0nly_th3m_5.5.2_D3sk}
 
 As a fun fact, this box included a 1 month voucher for the blood taker:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610131926.png)
+![](cybersecurity/images/Pasted%2520image%252020250610131926.png)
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610131827.png)
+![](cybersecurity/images/Pasted%2520image%252020250610131827.png)
 

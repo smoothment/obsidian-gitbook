@@ -101,7 +101,7 @@ This method may also be used to read the source code of files. All we have to do
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250217180146.png)
+![](cybersecurity/images/Pasted%2520image%252020250217180146.png)
 
 We can use the following payloads in order to get the flag:
 

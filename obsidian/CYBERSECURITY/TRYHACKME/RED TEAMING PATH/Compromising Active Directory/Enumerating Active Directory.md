@@ -122,7 +122,7 @@ Now, check if everything works:
 nslookup thmdc.za.tryhackme.com
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526163954.png)
+![](cybersecurity/images/Pasted%2520image%252020250526163954.png)
 
 We can now fetch our credentials, we need to visit:
 
@@ -130,7 +130,7 @@ We can now fetch our credentials, we need to visit:
 http://distributor.za.tryhackme.com/creds
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526164029.png)
+![](cybersecurity/images/Pasted%2520image%252020250526164029.png)
 
 In this case I got:
 
@@ -236,7 +236,7 @@ This is where it becomes potent. Have you ever had a case where an MS SQL databa
 We will be using that in the next task for our first AD enumeration technique.
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526165615.png)
+![](cybersecurity/images/Pasted%2520image%252020250526165615.png)
 
 
 
@@ -347,27 +347,27 @@ With mmc open:
 10. Right-click on **Active Directory Users and Computers** in the left-hand pane  
 11. Click on **View** -> **Advanced Features** 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526172019.png)
+![](cybersecurity/images/Pasted%2520image%252020250526172019.png)
 
 Now, we can answer to the questions:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526172308.png)
+![](cybersecurity/images/Pasted%2520image%252020250526172308.png)
 
 We got `2` computer objects
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526172331.png)
+![](cybersecurity/images/Pasted%2520image%252020250526172331.png)
 
 We got `1` computer objects part of the workstations OU
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526172405.png)
+![](cybersecurity/images/Pasted%2520image%252020250526172405.png)
 
 `7` departments
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526172440.png)
+![](cybersecurity/images/Pasted%2520image%252020250526172440.png)
 
 3 admins
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526172517.png)
+![](cybersecurity/images/Pasted%2520image%252020250526172517.png)
 
 And we got our flag:
 
@@ -375,7 +375,7 @@ And we got our flag:
 THM{Enumerating.Via.MMC}
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526172648.png)
+![](cybersecurity/images/Pasted%2520image%252020250526172648.png)
 
 
 # Enumeration through Command Prompt
@@ -545,19 +545,19 @@ We need to go into ssh first:
 ssh za.tryhackme.com\\<AD Username>@thmjmp1.za.tryhackme.com
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526173325.png)
+![](cybersecurity/images/Pasted%2520image%252020250526173325.png)
 
 We can now begin to answer the questions:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526173440.png)
+![](cybersecurity/images/Pasted%2520image%252020250526173440.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526173523.png)
+![](cybersecurity/images/Pasted%2520image%252020250526173523.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526173557.png)
+![](cybersecurity/images/Pasted%2520image%252020250526173557.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526173616.png)
+![](cybersecurity/images/Pasted%2520image%252020250526173616.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526173623.png)
+![](cybersecurity/images/Pasted%2520image%252020250526173623.png)
 
 Got all our answers.
 
@@ -733,19 +733,19 @@ Remember to change the identity value and password for the account you were prov
 
 Let's answer our questions:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526174617.png)
+![](cybersecurity/images/Pasted%2520image%252020250526174617.png)
 
 ```
 Get-ADUser -Identity beth.nolan -Server za.tryhackme.com -Properties Title
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526174925.png)
+![](cybersecurity/images/Pasted%2520image%252020250526174925.png)
 
 ```
 Get-ADUser -Identity annette.manning -Server za.tryhackme.com -Properties DistinguishedName
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526174907.png)
+![](cybersecurity/images/Pasted%2520image%252020250526174907.png)
 
 ```
 CN=annette.manning,OU=Marketing,OU=People,DC=za,DC=tryhackme,DC=com
@@ -755,7 +755,7 @@ CN=annette.manning,OU=Marketing,OU=People,DC=za,DC=tryhackme,DC=com
 Get-ADGroup -Filter 'DisplayName -like "Tier 1*"' -Server za.tryhackme.com -Properties *
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526175108.png)
+![](cybersecurity/images/Pasted%2520image%252020250526175108.png)
 
 ```
 2/24/2022 10:04:41 PM
@@ -765,7 +765,7 @@ Get-ADGroup -Filter 'DisplayName -like "Tier 1*"' -Server za.tryhackme.com -Prop
 Get-ADGroup -Filter 'DisplayName -like "Tier 0*"' -Server za.tryhackme.com -Properties *
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526175240.png)
+![](cybersecurity/images/Pasted%2520image%252020250526175240.png)
 
 ```
 S-1-5-21-3330634377-1326264276-632209373-519
@@ -775,13 +775,13 @@ S-1-5-21-3330634377-1326264276-632209373-519
 Get-ADDomain -Server za.tryhackme.com
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526175352.png)
+![](cybersecurity/images/Pasted%2520image%252020250526175352.png)
 
 ```
 CN=Deleted Objects,DC=za,DC=tryhackme,DC=com
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526175405.png)
+![](cybersecurity/images/Pasted%2520image%252020250526175405.png)
 
 
 # Enumeration through Bloodhound
@@ -998,7 +998,7 @@ PS C:\> cd ~\Documents\
 PS C:\> dir
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526175858.png)
+![](cybersecurity/images/Pasted%2520image%252020250526175858.png)
 
 As we can see `Sharphound.exe` is on here, let's run it:
 
@@ -1008,7 +1008,7 @@ As we can see `Sharphound.exe` is on here, let's run it:
 
 After it finishes, we can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526180102.png)
+![](cybersecurity/images/Pasted%2520image%252020250526180102.png)
 
 We got a zip file and a bin, let's get the zip file:
 
@@ -1018,7 +1018,7 @@ scp <username>@THMJMP1.za.tryhackme.com:C:/Users/<username>/Documents/<sharphoun
 
 After getting the file, we can drag it into bloodhound, I will leave the answers only to speed up things:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526181632.png)
+![](cybersecurity/images/Pasted%2520image%252020250526181632.png)
 
 # Conclusion
 

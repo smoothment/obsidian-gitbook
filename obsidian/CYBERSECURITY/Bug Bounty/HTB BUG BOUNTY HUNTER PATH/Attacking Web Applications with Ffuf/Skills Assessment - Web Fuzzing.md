@@ -8,7 +8,7 @@ Finally, you should do some fuzzing on pages you identify to see if any of them 
 # Questions
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250129161351.png)
+![](cybersecurity/images/Pasted%2520image%252020250129161351.png)
 ## 1
 ---
 
@@ -20,7 +20,7 @@ Now, let's run an initial scan to check the size in order to filter:
 
 `ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:49384/ -H 'Host: FUZZ.academy.htb'`
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250129162015.png)
+![](cybersecurity/images/Pasted%2520image%252020250129162015.png)
 
 Size is `985`, let's filter by `-fs 985`:
 
@@ -106,7 +106,7 @@ echo "Scan complete! Results saved to ${OUTPUT_FILE}"
 
 If we run the script we can see the following output:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250129164642.png)
+![](cybersecurity/images/Pasted%2520image%252020250129164642.png)
 
 So, answer would be `.php .php7 .phps`
 
@@ -196,7 +196,7 @@ Now, let's perform parameters fuzzing in the page:
 
 `ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://faculty.academy.htb:$PORT/courses/linux-security.php7?FUZZ=key` -> To identify the filter size needed:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250129170432.png)
+![](cybersecurity/images/Pasted%2520image%252020250129170432.png)
 
 We need to filter with `-fs 774`:
 
@@ -278,7 +278,7 @@ For the final task, I'll be using the `/opt/useful/seclists/Usernames/Names/name
 
 `ffuf -w /usr/share/seclists/Usernames/Names/names.txt:FUZZ -u http://faculty.academy.htb:34474/courses/linux-security.php7 -X POST -d 'username=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded'`
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250129170957.png)
+![](cybersecurity/images/Pasted%2520image%252020250129170957.png)
 
 Got to filter for size 781: 
 
@@ -315,7 +315,7 @@ ________________________________________________
 harry                   [Status: 200, Size: 773, Words: 218, Lines: 53, Duration: 77ms]
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250129171107.png)
+![](cybersecurity/images/Pasted%2520image%252020250129171107.png)
 Got the answer: `harry`, let's use curl and get the flag:
 
 `curl http://faculty.academy.htb:34474/courses/linux-security.php7 -X POST -d 'username=harry' -H 'Content-Type: application/x-www-form-urlencoded' -s | grep HTB{`
@@ -323,7 +323,7 @@ Got the answer: `harry`, let's use curl and get the flag:
 
 We get the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250129171237.png)
+![](cybersecurity/images/Pasted%2520image%252020250129171237.png)
 
 Answer is: `HTB{w3b_fuzz1n6_m4573r}`
 
@@ -331,5 +331,5 @@ Answer is: `HTB{w3b_fuzz1n6_m4573r}`
 Just like that, module is done!
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250129171314.png)
+![](cybersecurity/images/Pasted%2520image%252020250129171314.png)
 

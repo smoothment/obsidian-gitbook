@@ -62,7 +62,7 @@ These last few sections introduced several methods for performing manual enumera
 
 # Question
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250220133306.png)
+![](cybersecurity/images/Pasted%2520image%252020250220133306.png)
 
 We can use this:
 

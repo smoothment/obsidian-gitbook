@@ -142,12 +142,12 @@ The other bypass mechanisms is the `HTTP parameter pollution` (`HPP`), where p
 
 # Questions
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204174249.png)
+![](cybersecurity/images/Pasted%2520image%252020250204174249.png)
 
 ## Case 8
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204174531.png)
+![](cybersecurity/images/Pasted%2520image%252020250204174531.png)
 
 Let's use the following:
 
@@ -172,7 +172,7 @@ Flag is `HTB{y0u_h4v3_b33n_c5rf_70k3n1z3d}`
 
 ## Case 9
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204175407.png)
+![](cybersecurity/images/Pasted%2520image%252020250204175407.png)
 
 Let's use the following sqlmap command:
 
@@ -199,7 +199,7 @@ Flag is `HTB{700_much_r4nd0mn355_f0r_my_74573}`
 
 ## Case 10
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204175417.png)
+![](cybersecurity/images/Pasted%2520image%252020250204175417.png)
 
 Let's use this:
 
@@ -224,7 +224,7 @@ Flag is `HTB{y37_4n07h3r_r4nd0m1z3}`
 
 ## Case 11
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204175426.png)
+![](cybersecurity/images/Pasted%2520image%252020250204175426.png)
 
 ```
 python3 sqlmap.py -r Case11.txt -T flag11 --dump --risk=3 --level=5 --batch --tamper=greatest,least --threads=10

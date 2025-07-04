@@ -141,7 +141,7 @@ We will now change the "**a**" next to the email to: ' or 1=1-- and forward it
   
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241124135522.png)
+![](cybersecurity/images/Pasted%2520image%252020241124135522.png)
 
 # Who broke my lock?!
 ----
@@ -171,7 +171,7 @@ A failed request will receive a 401 Unauthorized   ![](https://i.imgur.com
 
 Whereas a successful request will return a 200 OK. ![](https://i.imgur.com/q5jcfIA.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241125141419.png)
+![](cybersecurity/images/Pasted%2520image%252020241125141419.png)
 
 So, password is `admin123`
 

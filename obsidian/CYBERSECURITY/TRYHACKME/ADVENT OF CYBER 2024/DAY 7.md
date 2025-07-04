@@ -465,7 +465,7 @@ As shown above, the Care4wares Fund received all the donations until it changed 
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241207132005.png)
+![](cybersecurity/images/Pasted%2520image%252020241207132005.png)
 
 A lot of questions for these day, let's go one by one:
 
@@ -483,7 +483,7 @@ jq -r '["Event_Time", "Event_Source", "Event_Name", "User_Name", "Source_IP"],
 
 Output would be the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241207132322.png)
+![](cybersecurity/images/Pasted%2520image%252020241207132322.png)
 
 So, answer for this question is: `PutObject`
 
@@ -517,7 +517,7 @@ We can use this command to check for the type of access assigned to the user:
 jq '.Records[] | select(.eventSource=="iam.amazonaws.com" and .eventName== "AttachUserPolicy")' cloudtrail_log.json
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241207132940.png)
+![](cybersecurity/images/Pasted%2520image%252020241207132940.png)
 
 We can make the command shorter by filtering with this:
 
@@ -543,7 +543,7 @@ jq -r '["Event_Time","Event_Source","Event_Name", "User_Name","User_Agent","Sour
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241207133547.png)
+![](cybersecurity/images/Pasted%2520image%252020241207133547.png)
 
 Real McSkidy IP address is: `31.210.15.79`
 
@@ -557,7 +557,7 @@ To check for Mayor malware's bank account number we can use the following comman
 
 This will output the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241207133805.png)
+![](cybersecurity/images/Pasted%2520image%252020241207133805.png)
 
 The bank account number is: `2394 6912 7723 1294`
 

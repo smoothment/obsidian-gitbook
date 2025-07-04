@@ -133,7 +133,7 @@ Other than encoding, many obfuscation tools utilize encryption, which is encodin
 
 # Question
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130135136.png)
+![](cybersecurity/images/Pasted%2520image%252020250130135136.png)
 
 If we analyze the previous output, we find it is the following:
 
@@ -141,7 +141,7 @@ If we analyze the previous output, we find it is the following:
 
 We can use a tool to help us identify it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130135208.png)
+![](cybersecurity/images/Pasted%2520image%252020250130135208.png)
 
 It is Base64, let's use the following in order to decode it:
 

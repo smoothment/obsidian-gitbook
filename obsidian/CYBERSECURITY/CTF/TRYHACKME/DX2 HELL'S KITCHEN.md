@@ -16,36 +16,36 @@
 If we check the web application at port 80, we can find this:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702155653.png)
+![](cybersecurity/images/Pasted%2520image%252020250702155653.png)
 
 We got some utilities, if we try booking a room, this happens:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702155725.png)
+![](cybersecurity/images/Pasted%2520image%252020250702155725.png)
 
 
 
 We get an alert saying the hotel is currently fully booked, that's weird, let's check other functionalities:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702161606.png)
+![](cybersecurity/images/Pasted%2520image%252020250702161606.png)
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702161616.png)
+![](cybersecurity/images/Pasted%2520image%252020250702161616.png)
 
 Let's check the other port:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702164915.png)
+![](cybersecurity/images/Pasted%2520image%252020250702164915.png)
 
 Nothing we can do yet, no credentials. Our best chance is the other web application.
 
 Ok, we got some info, if we check source code, we can find this:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702161710.png)
+![](cybersecurity/images/Pasted%2520image%252020250702161710.png)
 
 There's a call to `check-rooms.js`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702161728.png)
+![](cybersecurity/images/Pasted%2520image%252020250702161728.png)
 
 The script pulls in the current room count from `/api/rooms-available`, turns on the “#booking” button, and then wires up its click handler: if fewer than 6 rooms are reported it sends you straight to `new-booking`, otherwise it pops up an alert saying the hotel’s fully booked.
 
@@ -58,25 +58,25 @@ curl -s -X GET http://10.10.129.203/api/rooms-available
 
 Not much we can do with it, we can check `new-booking` though:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702162514.png)
+![](cybersecurity/images/Pasted%2520image%252020250702162514.png)
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702162458.png)
+![](cybersecurity/images/Pasted%2520image%252020250702162458.png)
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702162544.png)
+![](cybersecurity/images/Pasted%2520image%252020250702162544.png)
 
 This script defines a `getCookie` helper to extract a named cookie’s value, then uses it to retrieve the `BOOKING_KEY` from `document.cookie`. It sends a GET request to `/api/booking-info?booking_key=<key>`, parses the JSON response, and auto‑fills the form fields `#rooms` with `data.room_num` and `#nights` with `data.days`, effectively pre‑populating the booking form based on the stored booking key.
 
 As seen, we can notice the `BOOKING_KEY` cookie on our browser:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702162749.png)
+![](cybersecurity/images/Pasted%2520image%252020250702162749.png)
 
 This is base58 encoding, if we use cyberchef, we can notice this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702162847.png)
+![](cybersecurity/images/Pasted%2520image%252020250702162847.png)
 
 We got:
 
@@ -93,28 +93,28 @@ Let's interact with the API, for now, we can begin exploitation phase.
 We can interact with the API using curl or a proxy, I'll use caido:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163137.png)
+![](cybersecurity/images/Pasted%2520image%252020250702163137.png)
 
 It says not found, let's try sending another stuff as the key, maybe `LFI` or `SQLI` works, even `SSRF`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163549.png)
+![](cybersecurity/images/Pasted%2520image%252020250702163549.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163351.png)
+![](cybersecurity/images/Pasted%2520image%252020250702163351.png)
 
 LFI doesn't work here, I tried some payloads but no luck, let's try `SQLI`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163611.png)
+![](cybersecurity/images/Pasted%2520image%252020250702163611.png)
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163714.png)
+![](cybersecurity/images/Pasted%2520image%252020250702163714.png)
 
 No bad request so it may work, let's try to enumerate the number of rows by using `order by`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163810.png)
+![](cybersecurity/images/Pasted%2520image%252020250702163810.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163858.png)
+![](cybersecurity/images/Pasted%2520image%252020250702163858.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702163911.png)
+![](cybersecurity/images/Pasted%2520image%252020250702163911.png)
 
 On `3` we get a bad request, which means that SQLI is possible, we can automate the process with `sqlmap` but we need a tamper, a tamper is a little Python hook that sits between the tool and the target, grabbing every injection payload sqlmap generates and transforming it before it’s sent. we need it thanks to the `base58` format, let's use this script:
 
@@ -150,7 +150,7 @@ pip install base58
 
 We can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702164805.png)
+![](cybersecurity/images/Pasted%2520image%252020250702164805.png)
 
 
 There are some credentials:
@@ -162,12 +162,12 @@ pdenton:4321chameleon
 We can use them on the 4346 port web application:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702165049.png)
+![](cybersecurity/images/Pasted%2520image%252020250702165049.png)
 
 
 There's a message from `SweetCharity` to our user, we can see this on the source code:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702165158.png)
+![](cybersecurity/images/Pasted%2520image%252020250702165158.png)
 
 There's a `js` script embedded, let's beautify it:
 
@@ -203,9 +203,9 @@ This snippet first grabs every row in the “.email_list” and wires up a click
 Due to the format of `/message?message_id=id`, we may be able to fuzz, let's automate the process on Caido:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702165550.png)
+![](cybersecurity/images/Pasted%2520image%252020250702165550.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250702165616.png)
+![](cybersecurity/images/Pasted%2520image%252020250702165616.png)
 
 5 messages got `200` status code, let's check them:
 

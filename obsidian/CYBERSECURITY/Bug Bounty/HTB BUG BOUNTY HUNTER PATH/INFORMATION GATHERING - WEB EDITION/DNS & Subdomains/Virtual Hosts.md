@@ -144,7 +144,7 @@ Finished
 # Questions
 ----
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128123138.png)
+![](cybersecurity/images/Pasted%2520image%252020250128123138.png)
 
 
 ```ad-hint
@@ -185,10 +185,10 @@ Found: browse.inlanefreight.htb:45825 Status: 200 [Size: 102]
 Found: web17611.inlanefreight.htb:45825 Status: 200 [Size: 106]
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128123828.png)
+![](cybersecurity/images/Pasted%2520image%252020250128123828.png)
 
 
 We got all of the answers, they would be the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128123910.png)
+![](cybersecurity/images/Pasted%2520image%252020250128123910.png)
 

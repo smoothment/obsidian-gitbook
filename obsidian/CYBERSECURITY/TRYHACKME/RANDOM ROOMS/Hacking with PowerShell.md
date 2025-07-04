@@ -41,7 +41,7 @@ Common verbs to use include:
 
 To get the complete list of approved verbs, visit [this](https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/approved-verbs-for-windows-powershell-commands?view=powershell-7) link.
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530131518.png)
+![](cybersecurity/images/Pasted%2520image%252020250530131518.png)
 
 
 # Basic Powershell Commands
@@ -270,7 +270,7 @@ Now that you've understood how Powershell works let's try some commands to apply
 We need to answer these questions:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530132001.png)
+![](cybersecurity/images/Pasted%2520image%252020250530132001.png)
 
 Let's begin by opening up `powershell`, once it opens, we can do:
 
@@ -278,7 +278,7 @@ Let's begin by opening up `powershell`, once it opens, we can do:
 Get-ChildItem -Path C:\ -Include *interesting-file.txt* -File -Recurse -ErrorAction SilentlyContinue
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530133023.png)
+![](cybersecurity/images/Pasted%2520image%252020250530133023.png)
 
 ```
 C:\Program Files
@@ -290,7 +290,7 @@ Once we find the path, we can do:
 Get-Content -Path "C:\Program Files\interesting-file.txt.txt" 
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530133137.png)
+![](cybersecurity/images/Pasted%2520image%252020250530133137.png)
 
 ```
 notsointerestingcontent
@@ -304,7 +304,7 @@ To find how many cmdlets, we can do:
 
 We get:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530132725.png)
+![](cybersecurity/images/Pasted%2520image%252020250530132725.png)
 
 ```
 6638
@@ -317,7 +317,7 @@ To get the `MD5` hash of the file:
 Get-FileHash -Path "C:\Program Files\interesting-file.txt.txt" -Algorithm MD5 | Select-Object -ExpandProperty Hash
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530133226.png)
+![](cybersecurity/images/Pasted%2520image%252020250530133226.png)
 
 ```
 49A586A2A9456226F8A1B4CEC6FAB329 
@@ -335,7 +335,7 @@ We can test the path with:
 Test-Path "C:\Users\Administrator\Documents\Passwords"
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530132854.png)
+![](cybersecurity/images/Pasted%2520image%252020250530132854.png)
 
 ```
 N
@@ -353,7 +353,7 @@ And finally, inside of the Administrator Desktop, we can do;
 [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String((Get-Content "b64.txt" -Raw)))
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530133430.png)
+![](cybersecurity/images/Pasted%2520image%252020250530133430.png)
 
 ```
 ihopeyoudidthisonwindows
@@ -685,7 +685,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 
 Sometimes the API key command search times out, but you still got the answer on top, we can see the following output on the script:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530141500.png)
+![](cybersecurity/images/Pasted%2520image%252020250530141500.png)
 
 
 
@@ -762,11 +762,11 @@ if ($httpsMatches) {
 
 We get:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530143750.png)
+![](cybersecurity/images/Pasted%2520image%252020250530143750.png)
 
 Got our answers:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530143815.png)
+![](cybersecurity/images/Pasted%2520image%252020250530143815.png)
 
 # Intermediate Scripting
 ---
@@ -880,5 +880,5 @@ This will show us the open ports, the answer for the question is:
 11
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250530144932.png)
+![](cybersecurity/images/Pasted%2520image%252020250530144932.png)
 

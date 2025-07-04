@@ -108,5 +108,5 @@ The API is vulnerable to XXE Injection.
 
 # Question
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250219172306.png)
+![](cybersecurity/images/Pasted%2520image%252020250219172306.png)
 

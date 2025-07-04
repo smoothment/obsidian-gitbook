@@ -193,7 +193,7 @@ Unfortunately, most of these tools are not maintained and rely on the outdated 
 # Question
 ----
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218171815.png)
+![](cybersecurity/images/Pasted%2520image%252020250218171815.png)
 
 Let's start by fuzzing parameters:
 

@@ -34,9 +34,9 @@ CVSS scores are based on a formula that uses several metrics: `Base`, `Tempora
 
 CVSS scoring ratings differ slightly between V2 and V3 as can be seen in the following tables:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122185946.png)
+![](cybersecurity/images/Pasted%2520image%252020250122185946.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122185954.png)
+![](cybersecurity/images/Pasted%2520image%252020250122185954.png)
 
 
 
@@ -64,11 +64,11 @@ Although not directly exploitable externally, these vulnerabilities are still cr
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122190010.png)
+![](cybersecurity/images/Pasted%2520image%252020250122190010.png)
 
 Let's search `CVE-2017-0144`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122190156.png)
+![](cybersecurity/images/Pasted%2520image%252020250122190156.png)
 
 Answer would be `9.3`
 
