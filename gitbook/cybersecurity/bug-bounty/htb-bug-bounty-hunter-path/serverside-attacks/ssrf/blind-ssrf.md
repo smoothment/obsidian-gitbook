@@ -1,13 +1,16 @@
 ---
 sticker: lucide//server
 ---
-In many real-world SSRF vulnerabilities, the response is not directly displayed to us. These instances are called `blind` SSRF vulnerabilities because we cannot see the response. As such, all of the exploitation vectors discussed in the previous sections are unavailable to us because they all rely on us being able to inspect the response. Therefore, the impact of blind SSRF vulnerabilities is generally significantly lower due to the severely restricted exploitation vectors.
 
----
+# Blind SSRF
 
-## Identifying Blind SSRF
+In many real-world SSRF vulnerabilities, the response is not directly displayed to us. These instances are called `blind` SSRF vulnerabilities because we cannot see the response. As such, all of the exploitation vectors discussed in the previous sections are unavailable to us because they all rely on us being able to inspect the response. Therefore, the impact of blind SSRF vulnerabilities is generally significantly lower due to the severely restricted exploitation vectors.
 
-The sample web application behaves just like in the previous section. We can confirm the SSRF vulnerability just like we did before by supplying a URL to a system under our control and setting up a `netcat` listener:
+***
+
+### Identifying Blind SSRF
+
+The sample web application behaves just like in the previous section. We can confirm the SSRF vulnerability just like we did before by supplying a URL to a system under our control and setting up a `netcat` listener:
 
 ```shell-session
 smoothment@htb[/htb]$ nc -lnvp 8000
@@ -23,11 +26,11 @@ However, if we attempt to point the web application to itself, we can observe th
 
 ![image](https://academy.hackthebox.com/storage/modules/145/ssrf/ssrf_blind_1.png)
 
----
+***
 
-## Exploiting Blind SSRF
+### Exploiting Blind SSRF
 
-Exploiting blind SSRF vulnerabilities is generally severely limited compared to non-blind SSRF vulnerabilities. However, depending on the web application's behavior, we might still be able to conduct a (restricted) local port scan of the system, provided the response differs for open and closed ports. In this case, the web application responds with `Something went wrong!` for closed ports:
+Exploiting blind SSRF vulnerabilities is generally severely limited compared to non-blind SSRF vulnerabilities. However, depending on the web application's behavior, we might still be able to conduct a (restricted) local port scan of the system, provided the response differs for open and closed ports. In this case, the web application responds with `Something went wrong!` for closed ports:
 
 ![image](https://academy.hackthebox.com/storage/modules/145/ssrf/ssrf_blind_2.png)
 
@@ -47,20 +50,19 @@ For invalid files, the error message is different:
 
 ![image](https://academy.hackthebox.com/storage/modules/145/ssrf/ssrf_blind_6.png)
 
+## Question
 
-# Question
----
+***
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212123042.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250212123042.png)
 
 We know we are dealing with blind SSRF, when we try to point at an invalid resource of the server, we can see this:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212123247.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250212123247.png)
 
 We get an error message saying `Something went wrong!`, what about if we point at a valid resource:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212123337.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250212123337.png)
 
 We get a different error message, since we need to enumerate ports, we can use ffuf in the following way:
 
@@ -105,6 +107,5 @@ ________________________________________________
 5000                    [Status: 200, Size: 52, Words: 8, Lines: 1, Duration: 111ms]
 80                      [Status: 200, Size: 52, Words: 8, Lines: 1, Duration: 3977ms]
 ```
-
 
 Answer is `5000`

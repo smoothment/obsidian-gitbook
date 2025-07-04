@@ -1,17 +1,19 @@
 ---
 sticker: lucide//code-2
 ---
-# ENUMERATION
----
 
+# CODE
 
+## ENUMERATION
 
-## OPEN PORTS
----
+***
 
+### OPEN PORTS
+
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 22   | ssh     |
 | 5000 | http    |
 
@@ -33,22 +35,23 @@ PORT     STATE SERVICE REASON  VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
+## RECONNAISSANCE
 
-# RECONNAISSANCE
----
+***
 
 We can begin by going into the web application:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324224713.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324224713.png)
 
 We got a python code execution, let's check the behavior:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324225113.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324225113.png)
 
 For example, if we try sending ourselves a reverse shell, we are unable to do it, so, let's search around, for another way to get a shell.
 
-# EXPLOITATION
----
+## EXPLOITATION
+
+***
 
 Knowing that there's some filter regarding keywords, we can use other payloads, for example, let's try sending the shell in another format:
 
@@ -59,25 +62,19 @@ Knowing that there's some filter regarding keywords, we can use other payloads, 
 Explanation of this code would be the following:
 
 1. **`().__class__.__base__.__subclasses__()`**
-    
-    - Accesses all loaded Python classes via the tuple instance's inheritance chain
-        
+   * Accesses all loaded Python classes via the tuple instance's inheritance chain
 2. **`[317]`**
-    
-    - Indexes to `subprocess.Popen` class (common but environment-dependent)
-        
+   * Indexes to `subprocess.Popen` class (common but environment-dependent)
 3. **`(["...bash..."])`**
-    
-    - Executes the bash reverse shell command via Popen
-
+   * Executes the bash reverse shell command via Popen
 
 If we run the code, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324225905.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324225905.png)
 
 We got the reverse shell, issue is that after some time, it gets closed automatically:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324230045.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324230045.png)
 
 To solve this issue, let's stabilize our shell:
 
@@ -98,27 +95,25 @@ app-production@code:~$ cat /home/app-production/user.txt
 
 Let's begin privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-
-# PRIVILEGE ESCALATION
----
+***
 
 Looking around we can find a `database.db` file:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324230546.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324230546.png)
 
 Let's download it in our machine and look at the contents with `sqlitebrowser`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324230620.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324230620.png)
 
 We got two users, but, looking at `/etc/passwd` we can see that `martin` is the user with a shell:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324230723.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324230723.png)
 
 Let's crack the md5 hash:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324230746.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324230746.png)
 
 We got martin's credentials:
 
@@ -128,11 +123,11 @@ martin:nafeelswordsmaster
 
 Let's go into ssh:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324230841.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324230841.png)
 
 Let's check our sudo privileges:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324230915.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324230915.png)
 
 We can run something called `backy.sh`, let's check this file:
 
@@ -180,15 +175,12 @@ done
 /usr/bin/backy "$json_file"
 ```
 
-
 1. **Script Logic**:
-    - Sanitizes `directories_to_archive` by removing `../`
-    - Restricts paths to `/var/` or `/home/`
-    - Passes the sanitized JSON to `/usr/bin/backy`
-
-2. **Critical Flaw**:  
-    The script doesn't resolve symlinks when checking allowed paths. We can abuse this to archive sensitive directories like `/root`.
-
+   * Sanitizes `directories_to_archive` by removing `../`
+   * Restricts paths to `/var/` or `/home/`
+   * Passes the sanitized JSON to `/usr/bin/backy`
+2. **Critical Flaw**:\
+   The script doesn't resolve symlinks when checking allowed paths. We can abuse this to archive sensitive directories like `/root`.
 
 We can try creating a symlink for root folder:
 
@@ -216,7 +208,7 @@ sudo /usr/bin/backy.sh task.json
 
 If we check the folder this happens:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324233308.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324233308.png)
 
 We get a permission denied, seems like we cannot backup the whole root folder using this method, let's try doing something else, for example, we now that the script restricts the path to `/var` or `/home`, so, what if we use this and try to use `path traversal` to get the contents of the `root` folder:
 
@@ -235,18 +227,17 @@ With this, we are using path traversal to backup the root folder:
 sudo /usr/bin/backy.sh task.json
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324234117.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324234117.png)
 
 Nice, it worked, let's check if we're able to access the contents of it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324234139.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324234139.png)
 
 ```
 cat root.txt
 3ad1ddf89c85abaae7bf403ea906156a
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324234355.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250324234355.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/653
-

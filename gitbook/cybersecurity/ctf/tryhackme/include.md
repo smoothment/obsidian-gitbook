@@ -1,13 +1,16 @@
 ---
 sticker: emoji//1f4c2
 ---
-# ENUMERATION
----
 
+# INCLUDE
 
+## ENUMERATION
 
-## OPEN PORTS
----
+***
+
+### OPEN PORTS
+
+***
 
 | PORT      | SERVICE |
 | --------- | ------- |
@@ -20,16 +23,15 @@ sticker: emoji//1f4c2
 | 4000/tcp  | http    |
 | 50000/tcp | http    |
 
+## RECONNAISSANCE
 
-# RECONNAISSANCE
----
+***
 
 Let's go into both websites:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502222332.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502222332.png)
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502222339.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502222339.png)
 
 Let's go with the one located at port `4000` first, we can login using:
 
@@ -37,61 +39,53 @@ Let's go with the one located at port `4000` first, we can login using:
 guest:guest
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502222618.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502222618.png)
 
 If we go to any profile, we can see this:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502222747.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502222747.png)
 
 We can `Recommend Activities`, let's send a test request and check how it behaves:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502222938.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502222938.png)
 
 We get a redirection, `XSS` and `SQLI` does not work on here, it only reflects in this way:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502223244.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502223244.png)
 
 But, there's no execution or anything like that, the interesting stuff in here is the `isAdmin` section, if we can modify that to true, we may be able to become admin user on here, we need to send a request with the following stuff:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502223530.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502223530.png)
 
 We can now see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502223604.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502223604.png)
 
 Let's go with the exploitation phase.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
 We became admin and two functionalities were added to the panel:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502223632.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502223632.png)
 
 We got `API` and `Settings`, let's check them both:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502223732.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502223732.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502223740.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502223740.png)
 
 Both are useful, we got some info from the API and an update banner image url functionality, I tried uploading a shell from a python server to get RCE but it didn't worked, that's when i realized i can maybe get the hidden contents from the `http://127.0.0.1:5000/getAllAdmins101099991` API service:
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502224237.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502224237.png)
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502224245.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502224245.png)
 
 We get an encoded base64 response, let's decode it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502224337.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502224337.png)
 
 As seen, we get this:
 
@@ -105,9 +99,7 @@ These seem to be the credentials for the web application located at port `50000`
 administrator:S$9$qk6d#**LQU
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502224615.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502224615.png)
 
 We got first flag:
 
@@ -155,19 +147,17 @@ dashboard.php           [Status: 302, Size: 1225, Words: 201, Lines: 28, Duratio
 phpmyadmin              [Status: 403, Size: 279, Words: 20, Lines: 10, Duration: 179ms]
 ```
 
-
 We got `profile.php`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502225430.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502225430.png)
 
 Seems like we need a parameter, if we check source code of the dashboard, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502225353.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502225353.png)
 
 We can now see the way it must be formatted, let's submit the request to our proxy to check it better:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502225636.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502225636.png)
 
 The structure of the URL may be vulnerable to LFI, let's send this to `Automate` and send some `LFI payloads`, I used the following wordlist:
 
@@ -243,14 +233,11 @@ The structure of the URL may be vulnerable to LFI, let's send this to `Automate`
 
 ```
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502231125.png)
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502231125.png)
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502232057.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502232057.png)
 
 We got an user named `joshua`, let's bruteforce our way in:
-
 
 ```
 hydra -l joshua -P /usr/share/wordlists/rockyou.txt include.thm ssh
@@ -259,8 +246,7 @@ hydra -l joshua -P /usr/share/wordlists/rockyou.txt include.thm ssh
 
 We can now go in ssh:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502232411.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502232411.png)
 
 We can now go into `/var/www/html` and get the flag:
 
@@ -287,13 +273,4 @@ joshua@filepath:/var/www/html$ cat 505eb0fb8a9f32853b4d955e1f9123ea.txt
 THM{505eb0fb8a9f32853b4d955e1f9123ea}
 ```
 
-
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502232613.png)
-
-
-
-
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250502232613.png)

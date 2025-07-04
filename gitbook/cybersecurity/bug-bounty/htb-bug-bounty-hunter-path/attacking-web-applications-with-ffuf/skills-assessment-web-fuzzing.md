@@ -1,16 +1,22 @@
 ---
 sticker: lucide//code
 ---
+
+# Skills Assessment - Web Fuzzing
+
 You are given an online academy's IP address but have no further information about their website. As the first step of conducting a Penetration Test, you are expected to locate all pages and domains linked to their IP to enumerate the IP and domains properly.
 
 Finally, you should do some fuzzing on pages you identify to see if any of them has any parameters that can be interacted with. If you do find active parameters, see if you can retrieve any data from them.
 
-# Questions
----
+## Questions
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129161351.png)
-## 1
----
+***
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020250129161351.png)
+
+### 1
+
+***
 
 Let's begin by adding the domain to `/etc/hosts`:
 
@@ -20,11 +26,11 @@ Now, let's run an initial scan to check the size in order to filter:
 
 `ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:49384/ -H 'Host: FUZZ.academy.htb'`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129162015.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250129162015.png)
 
 Size is `985`, let's filter by `-fs 985`:
 
-`ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:34474/ -H 'Host: FUZZ.academy.htb' -fs 985 -ic -c `
+`ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:34474/ -H 'Host: FUZZ.academy.htb' -fs 985 -ic -c`
 
 ```
 ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:34474/ -H 'Host: FUZZ.academy.htb' -fs 985 -ic -c 
@@ -58,7 +64,6 @@ faculty                 [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 78m
 
 We got it, answer is: `archive test faculty`
 
-
 Now, let's add the found vhosts to `/etc/hosts` too:
 
 ```ad-hint
@@ -69,12 +74,11 @@ Now, let's add the found vhosts to `/etc/hosts` too:
 
 Nice, let's proceed with the next question.
 
-## 2
----
+### 2
 
+***
 
-We need to run an extensions fuzzing before the page fuzzing, since we have to iterate through each subdomain, I created a bash script with the help of AI: 
-
+We need to run an extensions fuzzing before the page fuzzing, since we have to iterate through each subdomain, I created a bash script with the help of AI:
 
 ```bash
 #!/bin/bash
@@ -106,18 +110,19 @@ echo "Scan complete! Results saved to ${OUTPUT_FILE}"
 
 If we run the script we can see the following output:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129164642.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250129164642.png)
 
 So, answer would be `.php .php7 .phps`
 
-## 3
----
+### 3
+
+***
 
 Now, let's run the page fuzzing, we need to identify the page we don't have access to, we can use the following command:
 
 `ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://faculty.academy.htb:34474/FUZZ -recursion -recursion-depth 1 -e ".php,.phps,.php7" -v -fc 403 -ic -c -t 200`
 
-We'll be using `faculty.academy.htb` since is the only one with all the extensions, this can be a good approach at the beginning, after a while we get the following: 
+We'll be using `faculty.academy.htb` since is the only one with all the extensions, this can be a good approach at the beginning, after a while we get the following:
 
 ```
 ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://faculty.academy.htb:34474/FUZZ -recursion -recursion-depth 1 -e ".php,.phps,.php7" -v -fc 403 -ic -c -t 200
@@ -188,15 +193,15 @@ ________________________________________________
 
 We found the URL, answer must be in this format: `http://faculty.academy.htb:PORT/courses/linux-security.php7`
 
+### 4
 
-## 4
----
+***
 
 Now, let's perform parameters fuzzing in the page:
 
 `ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://faculty.academy.htb:$PORT/courses/linux-security.php7?FUZZ=key` -> To identify the filter size needed:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129170432.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250129170432.png)
 
 We need to filter with `-fs 774`:
 
@@ -271,16 +276,17 @@ username                [Status: 200, Size: 781, Words: 223, Lines: 53, Duration
 
 So, we got both parameters: `user` `username`
 
-## 5
----
+### 5
+
+***
 
 For the final task, I'll be using the `/opt/useful/seclists/Usernames/Names/names.txt` files, since we are fuzzing for usernames, let's use the following command:
 
 `ffuf -w /usr/share/seclists/Usernames/Names/names.txt:FUZZ -u http://faculty.academy.htb:34474/courses/linux-security.php7 -X POST -d 'username=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded'`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129170957.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250129170957.png)
 
-Got to filter for size 781: 
+Got to filter for size 781:
 
 `ffuf -w /usr/share/seclists/Usernames/Names/names.txt:FUZZ -u http://faculty.academy.htb:34474/courses/linux-security.php7 -X POST -d 'username=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs 781 -ic -c -t 200`
 
@@ -315,21 +321,16 @@ ________________________________________________
 harry                   [Status: 200, Size: 773, Words: 218, Lines: 53, Duration: 77ms]
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129171107.png)
-Got the answer: `harry`, let's use curl and get the flag:
+![](gitbook/cybersecurity/images/Pasted%20image%2020250129171107.png) Got the answer: `harry`, let's use curl and get the flag:
 
 `curl http://faculty.academy.htb:34474/courses/linux-security.php7 -X POST -d 'username=harry' -H 'Content-Type: application/x-www-form-urlencoded' -s | grep HTB{`
 
-
 We get the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129171237.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250129171237.png)
 
 Answer is: `HTB{w3b_fuzz1n6_m4573r}`
 
-
 Just like that, module is done!
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129171314.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250129171314.png)

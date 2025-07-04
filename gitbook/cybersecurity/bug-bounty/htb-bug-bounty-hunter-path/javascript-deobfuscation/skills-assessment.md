@@ -1,24 +1,30 @@
 ---
 sticker: lucide//code-2
 ---
+
+# Skills Assessment
+
 During our Penetration Test, we came across a web server that contains JavaScript and APIs. We need to determine their functionality to understand how it can negatively affect our customer.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130135545.png)
-## 1
----
+![](gitbook/cybersecurity/images/Pasted%20image%2020250130135545.png)
+
+### 1
+
+***
 
 Let's start by visiting the website:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130135630.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250130135630.png)
 
 If we check source code we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130135707.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250130135707.png)
 
 So, first answer is: `api.min.js`
 
-## 2
----
+### 2
+
+***
 
 If we go to `api.min.js` file, we can see the following code:
 
@@ -28,16 +34,17 @@ eval(function (p, a, c, k, e, d) { e = function (c) { return c.toString(36) }; i
 
 Let's use [JsConsole](https://jsconsole.com/):
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130135846.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250130135846.png)
 
 Got the flag: `HTB{j4v45cr1p7_3num3r4710n_15_k3y}`
 
-## 3
----
+### 3
+
+***
 
 Let's deobfuscate the code:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130140233.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250130140233.png)
 
 We get the following JS code:
 
@@ -80,8 +87,9 @@ Nice, now code is actually way readable, we can get this valuable information:
 2. We got our flag: `HTB{n3v3r_run_0bfu5c473d_c0d3!}`
 ```
 
-## 4
----
+### 4
+
+***
 
 Since we already know how to proceed, let's make a curl POST request to `94.237.62.181:53070/keys.php`
 
@@ -107,12 +115,13 @@ curl -s http://94.237.62.181:53070/keys.php -X POST | xxd -p -r
 API_p3n_73571n6_15_fun
 ```
 
-Answer for this question is the encoded key, so, answer is 
+Answer for this question is the encoded key, so, answer is
 
 `4150495f70336e5f37333537316e365f31355f66756e`
 
-## 5
----
+### 5
+
+***
 
 Now, let's simply send another post request with the data in this way:
 
@@ -128,6 +137,4 @@ HTB{r34dy_70_h4ck_my_w4y_1n_2_HTB}
 
 Got the final flag: `HTB{r34dy_70_h4ck_my_w4y_1n_2_HTB}`
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130142032.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250130142032.png)

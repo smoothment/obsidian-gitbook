@@ -1,19 +1,21 @@
 ---
 sticker: emoji//1f528
 ---
-# ENUMERATION
----
 
-## OPEN PORTS
----
+# HAMMER
 
+## ENUMERATION
 
+***
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118152629.png)
+### OPEN PORTS
 
+***
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118152629.png)
 
 | PORT | STATE | SERVICE |
-| :--- | :---- | :------ |
+| ---- | ----- | ------- |
 | 22   | open  | ssh     |
 | 1337 | open  | http    |
 |      |       |         |
@@ -21,42 +23,43 @@ sticker: emoji//1f528
 
 We got two open ports, a ssh service and a http service is running in this machine, let's enumerate the website in order to gain access.
 
-## FUZZING
----
+### FUZZING
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118155536.png)
+***
 
-Two interesting directories, `/vendor` and `/phpmyadmin`, let's take a look at `/vendor` directory`
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118155536.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118160002.png)
+Two interesting directories, `/vendor` and `/phpmyadmin`, let's take a look at `/vendor` directory\`
 
-Found three things, a `autoload.php` file, a `composer/` directory and a `firebase/` directory, but to be honest, nothing useful seems to come out of it, let's proceed with the reconnaissance 
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118160002.png)
 
-# RECONNAISSANCE
----
+Found three things, a `autoload.php` file, a `composer/` directory and a `firebase/` directory, but to be honest, nothing useful seems to come out of it, let's proceed with the reconnaissance
+
+## RECONNAISSANCE
+
+***
 
 Let's try the default credentials for this page and take a look at its behavior:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118160317.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118160317.png)
 
 Weren't lucky enough, let's inspect `storage` section and look for anything useful:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118160351.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118160351.png)
 
 Found a cookie value, it seems to be the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118160408.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118160408.png)
 
 `PHPSESSID: un57ni4plm0evo3h1augo6i799`
 
-
 Now we know where to check for the cookie, let's take a look at the `Forgot your password?` section:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118160522.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118160522.png)
 
 Got redirected into a new section, `/reset_password.php` seems to be the one in charge of this part of the application, let's look at the main page source code in order to look up for the framework's name:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118160656.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118160656.png)
 
 Nice, now we know we need to bruteforce the directory in the following way, for this, I'll be using `ffuf`:
 
@@ -76,11 +79,9 @@ We found 4 interesting directories, the one I like the most would be `logs` dire
 
 `http://hammer.thm:1337/hmr_logs`
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118170617.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118170617.png)
 
 Seems like we have a `error.logs` file, let's look inside:
-
 
 ```ad-note
 
@@ -107,18 +108,17 @@ Important part about the log would be the following email:
 
 ```
 
-# EXPLOITATION
----
+## EXPLOITATION
+
+***
 
 Now, here the exploitation part begins, let's try to reset the password for the email we found in the log:
 
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118171025.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118171025.png)
 
 Once we send the request, this appears:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118171056.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118171056.png)
 
 We have a time of `180` seconds to enter the code, we can try to brute force it in the following way:
 
@@ -152,7 +152,6 @@ I resetted the pasword to 1234:
 
 ```
 
-
 ```ad-note
 # Additional section
 ---
@@ -172,13 +171,13 @@ I resetted the pasword to 1234:
 
 Once we got in, we can proceed with privilege escalation.
 
-# PRIVILEGE ESCALATION
----
+## PRIVILEGE ESCALATION
 
+***
 
 Nice, we got access to the dashboard and we see something interesting, we can use commands, let's send a simple command like ls:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118173721.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241118173721.png)
 
 We are able to perform the ls, and some interesting files were found, such as the `188ade1.key`, after some research in the page, I found this in the source code:
 
@@ -269,5 +268,3 @@ We got our flag and finished the CTF.
 
 `flag`: `THM{RUNANYCOMMAND1337}`
 ```
-
-

@@ -1,50 +1,51 @@
 ---
 sticker: emoji//1f469-200d-1f9b3
 ---
-# ENUMERATION
----
 
-## OPEN PORTS
----
+# INCLUSION
 
+## ENUMERATION
+
+***
+
+### OPEN PORTS
+
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 22   | ssh     |
 | 80   | http    |
 
 Seems like a simple machine in terms of open ports, let's fuzz
 
-## FUZZING
----
+### FUZZING
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226164136.png)
+***
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020241226164136.png)
 
 We found a `/shop` directory, let's visit the standard page and this one:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226164213.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241226164213.png)
 
 Standard apache2 installation, source code is normal too, let's visit the found directory:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226164307.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241226164307.png)
 
+## RECONNAISSANCE
 
-
-# RECONNAISSANCE
----
+***
 
 We found something interesting in the page, this appears right when we enter the site:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226164337.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241226164337.png)
 
-This seems like the server is vulnerable to [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/FILE INCLUSION VULNERABILITIES/LOCAL FILE INCLUSION (LFI).md|LFI]], let's test some payloads to check if its true:
+This seems like the server is vulnerable to \[\[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/FILE INCLUSION VULNERABILITIES/LOCAL FILE INCLUSION (LFI).md|LFI]], let's test some payloads to check if its true:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226170019.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241226170019.png)
 
 After testing for a while, I couldn't get anything useful, so, I thought that we already have the name of the file, it is called `archivo`, so let's fuzz for this in order to find anything useful:
-
 
 ```ad-hint
 #### Used
@@ -67,11 +68,9 @@ Indeed, it works, I'm able to see some techniques such as a null byte injection 
 
 ```
 
+## EXPLOITATION
 
-
-# EXPLOITATION
----
-
+***
 
 We found some interesting usernames such as `manchi` and `seller`, let's try to brute force these usernames in order to get access to ssh:
 
@@ -91,11 +90,11 @@ We found some credentials, let's log in:
 
 ```
 
-
 Nice, let's proceed with privilege escalation
 
-# PRIVILEGE ESCALATION
----
+## PRIVILEGE ESCALATION
+
+***
 
 This is a difficult privilege escalation, after reading another writeup for some sort of hint, I found that the way to escalate privileges is to perform brute force on the other user while being inside of the ssh machine, for this, this script is really helpful:
 
@@ -125,20 +124,19 @@ Nice, password was found!
 
 ```
 
-
 Let's switch into `seller`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226173234.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241226173234.png)
 
 Now, let's try to escalate into root user:
 
-### sudo -l
+#### sudo -l
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226173256.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241226173256.png)
 
 We can run sudo on `/usr/bin/php`, let's search gtfobins:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226173351.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241226173351.png)
 
 So, let's escalate into root:
 
@@ -155,6 +153,3 @@ So, let's escalate into root:
 ```
 
 Just like that, the CTF is done!
-
-
-

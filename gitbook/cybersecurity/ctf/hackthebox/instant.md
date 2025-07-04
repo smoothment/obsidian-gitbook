@@ -1,30 +1,32 @@
 ---
 sticker: lucide//wallet
 ---
-# ENUMERATION
----
 
+# INSTANT
 
+## ENUMERATION
 
-## OPEN PORTS
----
+***
 
+### OPEN PORTS
 
-| PORT | SERVICE |
-| :--- | :------ |
-| 22   | ssh     |
-| 80   | http    |
-We need to add `instant.htb` to `/etc/hosts`:
+***
+
+| PORT                                          | SERVICE |
+| --------------------------------------------- | ------- |
+| 22                                            | ssh     |
+| 80                                            | http    |
+| We need to add `instant.htb` to `/etc/hosts`: |         |
 
 ```bash
 echo '10.10.11.37 instant.htb' | sudo tee -a /etc/hosts
 ```
 
+## RECONNAISSANCE
 
-# RECONNAISSANCE
----
+***
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228153935.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228153935.png)
 
 Let's try to fuzz for subdomains:
 
@@ -33,8 +35,6 @@ ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u h
 
 :: Progress: [114437/114437] :: Job [1/1] :: 260 req/sec :: Duration: [0:01:09] :: Errors: 0 ::
 ```
-
-
 
 Nothing, let's try to fuzz for hidden directories:
 
@@ -50,11 +50,9 @@ javascript              [Status: 301, Size: 315, Words: 20, Lines: 10, Duration:
 
 Nothing useful too, let's proceed by analyzing the source code and the functionalities of the web application:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228155330.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228155330.png)
 
 A good approach would analyzing the apk we installed, for this, let's use the apktool installed in kali:
-
 
 ```
 apktool d instant.apk
@@ -82,27 +80,23 @@ We can check the network security configuration at `/instant/res/xml`:
 
 We can see two subdomains, let's add them and proceed to analyze them:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228172047.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228172047.png)
 
 Let's start exploitation.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
 At first site, the second subdomain has got this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228172118.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228172118.png)
 
 Let's check how to register an user:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228172149.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228172149.png)
 
 Let's try registering an user:
-
-
 
 ```
 curl -X POST "http://swagger-ui.instant.htb/api/v1/register" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{  \"email\": \"string\",  \"password\": \"test\",  \"pin\": \"10001\",  \"username\": \"test\"}"
@@ -110,14 +104,13 @@ curl -X POST "http://swagger-ui.instant.htb/api/v1/register" -H  "accept: applic
 {"Description":"User Registered! Login Now!","Status":201}
 ```
 
-
 We can now login and check our details:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228172525.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228172525.png)
 
 We got an access token, let's decode it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228172641.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228172641.png)
 
 We can see our role, we are not admin user obviously but this helps us understand that if we get the token of an admin user, we can interact with the application more, let's go back to our `/instant` directory
 
@@ -137,7 +130,6 @@ smali/com/instantlabs/instant/AdminActivities.smali:    new-instance v1, Lcom/in
 smali/com/instantlabs/instant/AdminActivities.smali:    invoke-direct {v1, p0}, Lcom/instantlabs/instant/AdminActivities$1;-><init>(Lcom/instantlabs/instant/AdminActivities;)V
 smali/androidx/core/content/ContextCompat$LegacyServiceMapHolder.smali:    const-class v1, Landroid/app/admin/DevicePolicyManager;
 ```
-
 
 The most interesting one would be the:
 
@@ -161,22 +153,19 @@ Let's read it:
 
 If we decode the jwt:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228173322.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228173322.png)
 
 Nice, this is the admin token, let's authorize with the token and use this:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228173451.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228173451.png)
 
 Now, if I'm right, we can read files from the server, let's read `/etc/passwd`, we need to apply some path traversal:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228173614.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228173614.png)
 
 There we are, we find the user `shirohige`, let's try reading this user `id_rsa`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228173728.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228173728.png)
 
 Nice, this is the `id_rsa`:
 
@@ -292,20 +281,17 @@ shirohige@instant:~$ cat user.txt
 
 Time to begin PRIVESC.
 
+## PRIVILEGE ESCALATION
 
-
-# PRIVILEGE ESCALATION
----
+***
 
 Let's use linpeas and check the output:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228174817.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228174817.png)
 
 Linpeas finds the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228175049.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228175049.png)
 
 We got an admin hash for a db:
 
@@ -323,11 +309,11 @@ instant.db                                                    100%   36KB 113.0K
 
 Now, let's open it then, for this, let's use `sqlitebrowser` to have a GUI:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228175541.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228175541.png)
 
 This algorithm would take a ridiculous amount of time to crack, let's search for something more, looking back at the linpeas scan, we find another thing:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228175731.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228175731.png)
 
 We got a backups folder, let's take a look:
 
@@ -383,7 +369,4 @@ root@instant:/opt/backups/Solar-PuTTY# cat /root/root.txt
 605c2864e2457606e34dbd95472c04e3
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250228180726.png)
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250228180726.png)

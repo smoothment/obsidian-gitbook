@@ -1,34 +1,39 @@
 ---
 sticker: emoji//1f916
 ---
-# ENUMERATION
----
 
-## OPEN PORTS
----
+# LOOKUP
 
+## ENUMERATION
+
+***
+
+### OPEN PORTS
+
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 22   | ssh     |
 | 80   | http    |
 
 Let's visit the website:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202135422.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202135422.png)
 
 We need to add `lookup.thm` to `/etc/hosts`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202135528.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202135528.png)
 
 We got a login page, let's check the source code:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202135550.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202135550.png)
 
 This page refers to a `login.php` section on the server, it uses a POST method, let's try to bruteforce it
 
-# RECONNAISSANCE
----
+## RECONNAISSANCE
+
+***
 
 As known, we need to bruteforce this login page, let's send the request to burp to check the way it performs in order to create a Python script or use hydra, I will send a request with the following credentials to test:
 
@@ -48,14 +53,13 @@ If we send the request, we get the following:
 If we follow the redirection, it just reloads the page, so, now that we know the way the request behave, let's create a python script to bruteforce our way in.
 ```
 
+## EXPLOITATION
 
+***
 
-# EXPLOITATION
----
+#### Python
 
-### Python
----
-
+***
 
 ```python
 import requests
@@ -159,17 +163,17 @@ if __name__ == '__main__':
 
 With the following python code, we can brute force the usernames, this may take some time, so, we can also use the hydra way
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202142821.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202142821.png)
 
 We got two usernames: `admin` and `jose`
 
-#### Output
----
+**Output**
 
+***
 
-### Hydra
----
+#### Hydra
 
+***
 
 ```ad-note
 
@@ -184,7 +188,6 @@ We got two usernames: `admin` and `jose`
 
 Got the same usernames as before, let's bruteforce the password
 ```
-
 
 For brute forcing the password, we can use the following Python code:
 
@@ -281,28 +284,27 @@ if __name__ == "__main__":
 
 When we run the script, we get the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202144135.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202144135.png)
 
 So, the credentials are: `jose`: `password123`
 
 Let's login and take a look at it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202144230.png)
-Once we login, we find a `files.lookup.thm` domain we need to add to `/etc/hosts`, once we've added the domain, this appears:
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202144230.png) Once we login, we find a `files.lookup.thm` domain we need to add to `/etc/hosts`, once we've added the domain, this appears:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202144345.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202144345.png)
 
-We got access to a file managing system, let's take a further look: 
+We got access to a file managing system, let's take a further look:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202144428.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202144428.png)
 
 After checking the passwords that are in those files, all are useless, so, I decided to check at the info about the webapp, that's were I found that this is running something called `elFinder`, let's search that on searchsploit:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202144558.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202144558.png)
 
 This is running `elfinder 2.1.47` so, we got a command injection vulnerability for this specific version, it is a script written in python, let's look at the script:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202144738.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202144738.png)
 
 This is a script written in python, let's change it to python3 since it's a bit outdated, the script would be the following:
 
@@ -365,15 +367,17 @@ if __name__ == "__main__":
 
 We can either run this code or use the Metasploit exploit located at: `exploit/unix/webapp/elfinder_php_connector_exiftran_cmd_injection`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202145921.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202145921.png)
 
 Once we've set everything, we got a shell, let's perform privilege escalation
-# PRIVILEGE ESCALATION
----
+
+## PRIVILEGE ESCALATION
+
+***
 
 To begin with, I used `find / -perm -u=s -type f 2>/dev/null` and got this output:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202150045.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202150045.png)
 
 We found something interesting a `/usr/sbin/pwm` file, asking Chatgpt for help related to that, it gave this path to perform the privilege escalation:
 
@@ -440,26 +444,23 @@ We got the password!
 
 Now, let's log in to ssh as think:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202151159.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202151159.png)
 
 Nice, now we need a way to get into root, let's use `sudo -l` to check our permissions:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202151236.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202151236.png)
 
 We can use sudo in `/usr/bin/look`, let's check at what gtfobins have for us:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202151340.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202151340.png)
 
 We can actually read any file, for example, let's read `/etc/shadow`;
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202151437.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202151437.png)
 
 From this point, we could either read both flags or getting into ssh as root by reading the `/root/.ssh/id_rsa` and setting read permissions on it, but for the sake of the CTF, let's just read both flags
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202151552.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202151634.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020241202151552.png) ![](gitbook/cybersecurity/images/Pasted%20image%2020241202151634.png)
 
 ```ad-note
 
@@ -470,4 +471,3 @@ From this point, we could either read both flags or getting into ssh as root by 
 ```
 
 Just like that CTF is done!
-

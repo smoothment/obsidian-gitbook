@@ -1,6 +1,9 @@
 ---
 sticker: emoji//1f440
 ---
+
+# API RECON
+
 To start API testing, you first need to find out as much information about the API as possible, to discover its attack surface.
 
 To begin, you should identify API endpoints. These are locations where an API receives requests about a specific resource on its server. For example, consider the following GET request:
@@ -20,14 +23,15 @@ Once you have identified the endpoints, you need to determine how to interact wi
 - Rate limits and authentication mechanisms.
 ```
 
-# API documentation
+## API documentation
 
 APIs are usually documented so that developers know how to use and integrate with them.
 
 Documentation can be in both human-readable and machine-readable forms. Human-readable documentation is designed for developers to understand how to use the API. It may include detailed explanations, examples, and usage scenarios. Machine-readable documentation is designed to be processed by software for automating tasks like API integration and validation. It's written in structured formats like JSON or XML.
 
 API documentation is often publicly available, particularly if the API is intended for use by external developers. If this is the case, always start your recon by reviewing the documentation.
-## Discovering API documentation
+
+### Discovering API documentation
 
 Even if API documentation isn't openly available, you may still be able to access it by browsing applications that use the API.
 
@@ -46,8 +50,9 @@ If you identify an endpoint for a resource, make sure to investigate the base pa
     /api/swagger
     /api
 ```
+
 You can also use a list of common paths to find documentation using Intruder.
 
-## LAB
+### LAB
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241004123805.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241004123805.png)

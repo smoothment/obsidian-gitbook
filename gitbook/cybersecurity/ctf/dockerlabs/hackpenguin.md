@@ -1,12 +1,14 @@
 ---
 sticker: emoji//1f427
 ---
-# ENUMERATION
 
+# HACKPENGUIN
 
-## OPEN PORTS
+## ENUMERATION
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025170752.png)
+### OPEN PORTS
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025170752.png)
 
 ```ad-hint
 OPEN PORTS
@@ -17,27 +19,27 @@ OPEN PORTS
 
 So, seems like a simple machine with only 2 open ports, let's enumerate our website
 
-## FUZZING
-### GOBUSTER FUZZING:
+### FUZZING
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025170908.png)
+#### GOBUSTER FUZZING:
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025170908.png)
 
 Let's look at the page and its source code:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025171151.png)
-Simple Apache page, source code ain't got something useful too, let's search within the directories found by gobuster:
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025171151.png) Simple Apache page, source code ain't got something useful too, let's search within the directories found by gobuster:
 
-### PENGUIN.HTML
+#### PENGUIN.HTML
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025171257.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025171257.png)
 
-#### SOURCE CODE:
+**SOURCE CODE:**
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025171316.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025171316.png)
 
 Nothing interesting too, except from the `penguin.jpg` file, let's download it and try to use [steghide](https://steghide.sourceforge.net/) to get any important info out of it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025171924.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025171924.png)
 
 We lack the passphrase, let's crack it using [stegseek](https://github.com/RickdeJager/stegseek):
 
@@ -45,16 +47,13 @@ We lack the passphrase, let's crack it using [stegseek](https://github.com/Rickd
 stegseek command: `stegseek penguin.jpg /usr/share/wordlists/rockyou.txt`
 ```
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025172143.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025172143.png)
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025172227.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025172227.png)
 
 Seems like we got a `keepass password database 2.x` inside of the image, let's keep with the exploitation
 
-
-# EXPLOITATION
+## EXPLOITATION
 
 To start with the exploitation, we must need to crack that file we got, for this, we will use a specific module of john the ripper called: `keepass2john`, let's look at the usage:
 
@@ -94,8 +93,7 @@ So, we found user `pinguino` and its password, being the following:
 
 Let's go inside of ssh and begin our privilege escalation:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025173238.png)
-Oops, we cannot log in, this is because, the password is not for user `pinguino` but user `penguin`, so, correct credentials would be the following:
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025173238.png) Oops, we cannot log in, this is because, the password is not for user `pinguino` but user `penguin`, so, correct credentials would be the following:
 
 ```ad-note
 CORRECT CREDENTIALS:
@@ -103,16 +101,15 @@ CORRECT CREDENTIALS:
 `penguin`:`pinguinomaravilloso123`
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025173357.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025173357.png)
 
 And now we're in, let's proceed with PRIVESC
 
-# PRIVILEGE ESCALATION
-
+## PRIVILEGE ESCALATION
 
 When we first log in, we find two files:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025173540.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025173540.png)
 
 `archivo.txt` and `script.sh`, first files says:
 
@@ -122,14 +119,14 @@ archivo.txt: `pinguino no hackeable`
 
 So, nothing useful in it, what we are interested in, is second file, which is a bash file and we can write in it:
 
-```ad-note 
+```ad-note
 script.sh: 
 
 #!/bin/bash
 echo 'pinguino no hackeable' > archivo.txt`
 ```
 
-## GETTING OUR ROOT SHELL
+### GETTING OUR ROOT SHELL
 
 If we use `ps -aux | grep root` to list for processes used for user root, we find the following:
 
@@ -167,7 +164,7 @@ This command is useful for checking which `root` processes are active, especiall
 
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025174633.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025174633.png)
 
 User root, actually runs the script seen previously, so, in order to get our privileged shell, we would need to edit the `script.sh` file in the following way:
 
@@ -194,9 +191,6 @@ The command `chmod u+s /bin/bash` sets the **SUID** (Set User ID) bit on the `/b
 
 Once we've added this into the file, we would only need to do `bash -p` to get our shell:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025174906.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241025174906.png)
 
 Nice, now the CTF is done!
-
-
-

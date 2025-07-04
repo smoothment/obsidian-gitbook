@@ -1,50 +1,51 @@
 ---
 sticker: lucide//fingerprint
 ---
+
+# Fingerprinting
+
 Fingerprinting focuses on extracting technical details about the technologies powering a website or web application. Similar to how a fingerprint uniquely identifies a person, the digital signatures of web servers, operating systems, and software components can reveal critical information about a target's infrastructure and potential security weaknesses. This knowledge empowers attackers to tailor attacks and exploit vulnerabilities specific to the identified technologies.
 
 Fingerprinting serves as a cornerstone of web reconnaissance for several reasons:
 
-- `Targeted Attacks`: By knowing the specific technologies in use, attackers can focus their efforts on exploits and vulnerabilities that are known to affect those systems. This significantly increases the chances of a successful compromise.
-- `Identifying Misconfigurations`: Fingerprinting can expose misconfigured or outdated software, default settings, or other weaknesses that might not be apparent through other reconnaissance methods.
-- `Prioritising Targets`: When faced with multiple potential targets, fingerprinting helps prioritise efforts by identifying systems more likely to be vulnerable or hold valuable information.
-- `Building a Comprehensive Profile`: Combining fingerprint data with other reconnaissance findings creates a holistic view of the target's infrastructure, aiding in understanding its overall security posture and potential attack vectors.
+* `Targeted Attacks`: By knowing the specific technologies in use, attackers can focus their efforts on exploits and vulnerabilities that are known to affect those systems. This significantly increases the chances of a successful compromise.
+* `Identifying Misconfigurations`: Fingerprinting can expose misconfigured or outdated software, default settings, or other weaknesses that might not be apparent through other reconnaissance methods.
+* `Prioritising Targets`: When faced with multiple potential targets, fingerprinting helps prioritise efforts by identifying systems more likely to be vulnerable or hold valuable information.
+* `Building a Comprehensive Profile`: Combining fingerprint data with other reconnaissance findings creates a holistic view of the target's infrastructure, aiding in understanding its overall security posture and potential attack vectors.
 
-## Fingerprinting Techniques
+### Fingerprinting Techniques
 
 There are several techniques used for web server and technology fingerprinting:
 
-- `Banner Grabbing`: Banner grabbing involves analysing the banners presented by web servers and other services. These banners often reveal the server software, version numbers, and other details.
-- `Analysing HTTP Headers`: HTTP headers transmitted with every web page request and response contain a wealth of information. The `Server` header typically discloses the web server software, while the `X-Powered-By` header might reveal additional technologies like scripting languages or frameworks.
-- `Probing for Specific Responses`: Sending specially crafted requests to the target can elicit unique responses that reveal specific technologies or versions. For example, certain error messages or behaviours are characteristic of particular web servers or software components.
-- `Analysing Page Content`: A web page's content, including its structure, scripts, and other elements, can often provide clues about the underlying technologies. There may be a copyright header that indicates specific software being used, for example.
+* `Banner Grabbing`: Banner grabbing involves analysing the banners presented by web servers and other services. These banners often reveal the server software, version numbers, and other details.
+* `Analysing HTTP Headers`: HTTP headers transmitted with every web page request and response contain a wealth of information. The `Server` header typically discloses the web server software, while the `X-Powered-By` header might reveal additional technologies like scripting languages or frameworks.
+* `Probing for Specific Responses`: Sending specially crafted requests to the target can elicit unique responses that reveal specific technologies or versions. For example, certain error messages or behaviours are characteristic of particular web servers or software components.
+* `Analysing Page Content`: A web page's content, including its structure, scripts, and other elements, can often provide clues about the underlying technologies. There may be a copyright header that indicates specific software being used, for example.
 
 A variety of tools exist that automate the fingerprinting process, combining various techniques to identify web servers, operating systems, content management systems, and other technologies:
 
-|Tool|Description|Features|
-|---|---|---|
-|`Wappalyzer`|Browser extension and online service for website technology profiling.|Identifies a wide range of web technologies, including CMSs, frameworks, analytics tools, and more.|
-|`BuiltWith`|Web technology profiler that provides detailed reports on a website's technology stack.|Offers both free and paid plans with varying levels of detail.|
-|`WhatWeb`|Command-line tool for website fingerprinting.|Uses a vast database of signatures to identify various web technologies.|
-|`Nmap`|Versatile network scanner that can be used for various reconnaissance tasks, including service and OS fingerprinting.|Can be used with scripts (NSE) to perform more specialised fingerprinting.|
-|`Netcraft`|Offers a range of web security services, including website fingerprinting and security reporting.|Provides detailed reports on a website's technology, hosting provider, and security posture.|
-|`wafw00f`|Command-line tool specifically designed for identifying Web Application Firewalls (WAFs).|Helps determine if a WAF is present and, if so, its type and configuration.|
+| Tool         | Description                                                                                                           | Features                                                                                            |
+| ------------ | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `Wappalyzer` | Browser extension and online service for website technology profiling.                                                | Identifies a wide range of web technologies, including CMSs, frameworks, analytics tools, and more. |
+| `BuiltWith`  | Web technology profiler that provides detailed reports on a website's technology stack.                               | Offers both free and paid plans with varying levels of detail.                                      |
+| `WhatWeb`    | Command-line tool for website fingerprinting.                                                                         | Uses a vast database of signatures to identify various web technologies.                            |
+| `Nmap`       | Versatile network scanner that can be used for various reconnaissance tasks, including service and OS fingerprinting. | Can be used with scripts (NSE) to perform more specialised fingerprinting.                          |
+| `Netcraft`   | Offers a range of web security services, including website fingerprinting and security reporting.                     | Provides detailed reports on a website's technology, hosting provider, and security posture.        |
+| `wafw00f`    | Command-line tool specifically designed for identifying Web Application Firewalls (WAFs).                             | Helps determine if a WAF is present and, if so, its type and configuration.                         |
 
-## Fingerprinting inlanefreight.com
+### Fingerprinting inlanefreight.com
 
-Let's apply our fingerprinting knowledge to uncover the digital DNA of our purpose-built host, `inlanefreight.com`. We'll leverage both manual and automated techniques to gather information about its web server, technologies, and potential vulnerabilities.
+Let's apply our fingerprinting knowledge to uncover the digital DNA of our purpose-built host, `inlanefreight.com`. We'll leverage both manual and automated techniques to gather information about its web server, technologies, and potential vulnerabilities.
 
-### Banner Grabbing
+#### Banner Grabbing
 
-Our first step is to gather information directly from the web server itself. We can do this using the `curl` command with the `-I` flag (or `--head`) to fetch only the HTTP headers, not the entire page content.
-
+Our first step is to gather information directly from the web server itself. We can do this using the `curl` command with the `-I` flag (or `--head`) to fetch only the HTTP headers, not the entire page content.
 
 ```shell-session
 smoothment@htb[/htb]$ curl -I inlanefreight.com
 ```
 
 The output will include the server banner, revealing the web server software and version number:
-
 
 ```shell-session
 smoothment@htb[/htb]$ curl -I inlanefreight.com
@@ -56,8 +57,7 @@ Location: https://inlanefreight.com/
 Content-Type: text/html; charset=iso-8859-1
 ```
 
-In this case, we see that `inlanefreight.com` is running on `Apache/2.4.41`, specifically the `Ubuntu` version. This information is our first clue, hinting at the underlying technology stack. It's also trying to redirect to `https://inlanefreight.com/` so grab those banners too
-
+In this case, we see that `inlanefreight.com` is running on `Apache/2.4.41`, specifically the `Ubuntu` version. This information is our first clue, hinting at the underlying technology stack. It's also trying to redirect to `https://inlanefreight.com/` so grab those banners too
 
 ```shell-session
 smoothment@htb[/htb]$ curl -I https://inlanefreight.com
@@ -70,8 +70,7 @@ Location: https://www.inlanefreight.com/
 Content-Type: text/html; charset=UTF-8
 ```
 
-We now get a really interesting header, the server is trying to redirect us again, but this time we see that it's `WordPress` that is doing the redirection to `https://www.inlanefreight.com/`
-
+We now get a really interesting header, the server is trying to redirect us again, but this time we see that it's `WordPress` that is doing the redirection to `https://www.inlanefreight.com/`
 
 ```shell-session
 smoothment@htb[/htb]$ curl -I https://www.inlanefreight.com
@@ -85,21 +84,19 @@ Link: <https://www.inlanefreight.com/>; rel=shortlink
 Content-Type: text/html; charset=UTF-8
 ```
 
-A few more interesting headers, including an interesting path that contains `wp-json`. The `wp-` prefix is common to WordPress.
+A few more interesting headers, including an interesting path that contains `wp-json`. The `wp-` prefix is common to WordPress.
 
-### Wafw00f
+#### Wafw00f
 
-`Web Application Firewalls` (`WAFs`) are security solutions designed to protect web applications from various attacks. Before proceeding with further fingerprinting, it's crucial to determine if `inlanefreight.com` employs a WAF, as it could interfere with our probes or potentially block our requests.
+`Web Application Firewalls` (`WAFs`) are security solutions designed to protect web applications from various attacks. Before proceeding with further fingerprinting, it's crucial to determine if `inlanefreight.com` employs a WAF, as it could interfere with our probes or potentially block our requests.
 
-To detect the presence of a WAF, we'll use the `wafw00f` tool. To install `wafw00f`, you can use pip3:
-
+To detect the presence of a WAF, we'll use the `wafw00f` tool. To install `wafw00f`, you can use pip3:
 
 ```shell-session
 smoothment@htb[/htb]$ pip3 install git+https://github.com/EnableSecurity/wafw00f
 ```
 
 Once it's installed, pass the domain you want to check as an argument to the tool:
-
 
 ```shell-session
 smoothment@htb[/htb]$ wafw00f inlanefreight.com
@@ -126,16 +123,15 @@ smoothment@htb[/htb]$ wafw00f inlanefreight.com
 [~] Number of requests: 2
 ```
 
-The `wafw00f` scan on `inlanefreight.com` reveals that the website is protected by the `Wordfence Web Application Firewall` (`WAF`), developed by Defiant.
+The `wafw00f` scan on `inlanefreight.com` reveals that the website is protected by the `Wordfence Web Application Firewall` (`WAF`), developed by Defiant.
 
 This means the site has an additional security layer that could block or filter our reconnaissance attempts. In a real-world scenario, it would be crucial to keep this in mind as you proceed with further investigation, as you might need to adapt techniques to bypass or evade the WAF's detection mechanisms.
 
-### Nikto
+#### Nikto
 
-`Nikto` is a powerful open-source web server scanner. In addition to its primary function as a vulnerability assessment tool, `Nikto's` fingerprinting capabilities provide insights into a website's technology stack.
+`Nikto` is a powerful open-source web server scanner. In addition to its primary function as a vulnerability assessment tool, `Nikto's` fingerprinting capabilities provide insights into a website's technology stack.
 
-`Nikto` is pre-installed on pwnbox, but if you need to install it, you can run the following commands:
-
+`Nikto` is pre-installed on pwnbox, but if you need to install it, you can run the following commands:
 
 ```shell-session
 smoothment@htb[/htb]$ sudo apt update && sudo apt install -y perl
@@ -144,18 +140,15 @@ smoothment@htb[/htb]$ cd nikto/program
 smoothment@htb[/htb]$ chmod +x ./nikto.pl
 ```
 
-To scan `inlanefreight.com` using `Nikto`, only running the fingerprinting modules, execute the following command:
-
+To scan `inlanefreight.com` using `Nikto`, only running the fingerprinting modules, execute the following command:
 
 ```shell-session
 smoothment@htb[/htb]$ nikto -h inlanefreight.com -Tuning b
 ```
 
-The `-h` flag specifies the target host. The `-Tuning b` flag tells `Nikto` to only run the Software Identification modules.
+The `-h` flag specifies the target host. The `-Tuning b` flag tells `Nikto` to only run the Software Identification modules.
 
-`Nikto` will then initiate a series of tests, attempting to identify outdated software, insecure files or configurations, and other potential security risks.
-
-
+`Nikto` will then initiate a series of tests, attempting to identify outdated software, insecure files or configurations, and other potential security risks.
 
 ```shell-session
 smoothment@htb[/htb]$ nikto -h inlanefreight.com -Tuning b
@@ -193,19 +186,19 @@ smoothment@htb[/htb]$ nikto -h inlanefreight.com -Tuning b
 + 1 host(s) tested
 ```
 
-The reconnaissance scan on `inlanefreight.com` reveals several key findings:
+The reconnaissance scan on `inlanefreight.com` reveals several key findings:
 
-- `IPs`: The website resolves to both IPv4 (`134.209.24.248`) and IPv6 (`2a03:b0c0:1:e0::32c:b001`) addresses.
-- `Server Technology`: The website runs on `Apache/2.4.41 (Ubuntu)`
-- `WordPress Presence`: The scan identified a WordPress installation, including the login page (`/wp-login.php`). This suggests the site might be a potential target for common WordPress-related exploits.
-- `Information Disclosure`: The presence of a `license.txt` file could reveal additional details about the website's software components.
-- `Headers`: Several non-standard or insecure headers were found, including a missing `Strict-Transport-Security` header and a potentially insecure `x-redirect-by` header.
+* `IPs`: The website resolves to both IPv4 (`134.209.24.248`) and IPv6 (`2a03:b0c0:1:e0::32c:b001`) addresses.
+* `Server Technology`: The website runs on `Apache/2.4.41 (Ubuntu)`
+* `WordPress Presence`: The scan identified a WordPress installation, including the login page (`/wp-login.php`). This suggests the site might be a potential target for common WordPress-related exploits.
+* `Information Disclosure`: The presence of a `license.txt` file could reveal additional details about the website's software components.
+* `Headers`: Several non-standard or insecure headers were found, including a missing `Strict-Transport-Security` header and a potentially insecure `x-redirect-by` header.
 
+## Questions
 
-# Questions
----
+***
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128125023.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250128125023.png)
 
 ```ad-hint
 First, let's add both to`/etc/hosts`:
@@ -213,19 +206,17 @@ First, let's add both to`/etc/hosts`:
 `echo '10.129.108.232 app.inlanefreight.local dev.inlanefreight.local' | sudo tee -a /etc/hosts`
 ```
 
-
 Now, let's use curl to perform banner grabbing on `app.inlanefreight.local`:
 
 `curl -I app.inlanefreight.local`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128125342.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250128125342.png)
 
 We found the version is `2.4.41`.
 
-
 To check for the CMS, we can use `whatweb`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128130042.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250128130042.png)
 
 So, the CMS is `Joomla`
 

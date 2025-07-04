@@ -1,23 +1,25 @@
 ---
 sticker: lucide//code
 ---
-In this section, we will learn how to use `ffuf` to identify sub-domains (i.e., `*.website.com`) for any website.
 
----
+# Sub-Domain Fuzzing
 
-## Sub-domains
+In this section, we will learn how to use `ffuf` to identify sub-domains (i.e., `*.website.com`) for any website.
 
-A sub-domain is any website underlying another domain. For example, `https://photos.google.com` is the `photos` sub-domain of `google.com`.
+***
+
+### Sub-domains
+
+A sub-domain is any website underlying another domain. For example, `https://photos.google.com` is the `photos` sub-domain of `google.com`.
 
 In this case, we are simply checking different websites to see if they exist by checking if they have a public DNS record that would redirect us to a working server IP. So, let's run a scan and see if we get any hits. Before we can start our scan, we need two things:
 
-- A `wordlist`
-- A `target`
+* A `wordlist`
+* A `target`
 
-Luckily for us, in the `SecLists` repo, there is a specific section for sub-domain wordlists, consisting of common words usually used for sub-domains. We can find it in `/opt/useful/seclists/Discovery/DNS/`. In our case, we would be using a shorter wordlist, which is `subdomains-top1million-5000.txt`. If we want to extend our scan, we can pick a larger list.
+Luckily for us, in the `SecLists` repo, there is a specific section for sub-domain wordlists, consisting of common words usually used for sub-domains. We can find it in `/opt/useful/seclists/Discovery/DNS/`. In our case, we would be using a shorter wordlist, which is `subdomains-top1million-5000.txt`. If we want to extend our scan, we can pick a larger list.
 
-As for our target, we will use `inlanefreight.com` as our target and run our scan on it. Let us use `ffuf` and place the `FUZZ` keyword in the place of sub-domains, and see if we get any hits:
-
+As for our target, we will use `inlanefreight.com` as our target and run our scan on it. Let us use `ffuf` and place the `FUZZ` keyword in the place of sub-domains, and see if we get any hits:
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u https://FUZZ.inlanefreight.com/
@@ -61,8 +63,7 @@ ________________________________________________
 <...SNIP...>
 ```
 
-We see that we do get a few hits back. Now, we can try running the same thing on `academy.htb` and see if we get any hits back:
-
+We see that we do get a few hits back. Now, we can try running the same thing on `academy.htb` and see if we get any hits back:
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://FUZZ.academy.htb/
@@ -91,13 +92,15 @@ ________________________________________________
 :: Progress: [4997/4997] :: Job [1/1] :: 131 req/sec :: Duration: [0:00:38] :: Errors: 4997 ::
 ```
 
-We see that we do not get any hits back. Does this mean that there are no sub-domain under `academy.htb`? - No.
+We see that we do not get any hits back. Does this mean that there are no sub-domain under `academy.htb`? - No.
 
-This means that there are no `public` sub-domains under `academy.htb`, as it does not have a public DNS record, as previously mentioned. Even though we did add `academy.htb` to our `/etc/hosts` file, we only added the main domain, so when `ffuf` is looking for other sub-domains, it will not find them in `/etc/hosts`, and will ask the public DNS, which obviously will not have them.
+This means that there are no `public` sub-domains under `academy.htb`, as it does not have a public DNS record, as previously mentioned. Even though we did add `academy.htb` to our `/etc/hosts` file, we only added the main domain, so when `ffuf` is looking for other sub-domains, it will not find them in `/etc/hosts`, and will ask the public DNS, which obviously will not have them.
 
-# Question
----
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129150058.png)
+## Question
+
+***
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020250129150058.png)
 
 Let's run the following command:
 
@@ -105,6 +108,6 @@ Let's run the following command:
 
 We'll get the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250129151218.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250129151218.png)
 
 Answer is `customer.inlanefreight.com`

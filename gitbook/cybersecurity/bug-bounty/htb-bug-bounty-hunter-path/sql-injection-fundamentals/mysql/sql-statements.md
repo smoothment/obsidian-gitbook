@@ -1,15 +1,16 @@
 ---
 sticker: lucide//database
 ---
-Now that we understand how to use the `mysql` utility and create databases and tables, let us look at some of the essential SQL statements and their uses.
 
----
+# SQL Statements
 
-## INSERT Statement
+Now that we understand how to use the `mysql` utility and create databases and tables, let us look at some of the essential SQL statements and their uses.
 
-The [INSERT](https://dev.mysql.com/doc/refman/8.0/en/insert.html) statement is used to add new records to a given table. The statement following the below syntax:
+***
 
+### INSERT Statement
 
+The [INSERT](https://dev.mysql.com/doc/refman/8.0/en/insert.html) statement is used to add new records to a given table. The statement following the below syntax:
 
 ```sql
 INSERT INTO table_name VALUES (column1_value, column2_value, column3_value, ...);
@@ -17,7 +18,7 @@ INSERT INTO table_name VALUES (column1_value, column2_value, column3_value, ...)
 
 The syntax above requires the user to fill in values for all the columns present in the table.
 
- 
+&#x20;
 
 ```shell-session
 mysql> INSERT INTO logins VALUES(1, 'admin', 'p@ssw0rd', '2020-07-02');
@@ -25,9 +26,7 @@ mysql> INSERT INTO logins VALUES(1, 'admin', 'p@ssw0rd', '2020-07-02');
 Query OK, 1 row affected (0.00 sec)
 ```
 
-The example above shows how to add a new login to the logins table, with appropriate values for each column. However, we can skip filling columns with default values, such as `id` and `date_of_joining`. This can be done by specifying the column names to insert values into a table selectively:
-
-
+The example above shows how to add a new login to the logins table, with appropriate values for each column. However, we can skip filling columns with default values, such as `id` and `date_of_joining`. This can be done by specifying the column names to insert values into a table selectively:
 
 ```sql
 INSERT INTO table_name(column2, column3, ...) VALUES (column2_value, column3_value, ...);
@@ -35,9 +34,7 @@ INSERT INTO table_name(column2, column3, ...) VALUES (column2_value, column3_val
 
 Note: skipping columns with the 'NOT NULL' constraint will result in an error, as it is a required value.
 
-We can do the same to insert values into the `logins` table:
-
-
+We can do the same to insert values into the `logins` table:
 
 ```shell-session
 mysql> INSERT INTO logins(username, password) VALUES('administrator', 'adm1n_p@ss');
@@ -45,13 +42,14 @@ mysql> INSERT INTO logins(username, password) VALUES('administrator', 'adm1n_p@s
 Query OK, 1 row affected (0.00 sec)
 ```
 
-We inserted a username-password pair in the example above while skipping the `id` and `date_of_joining` columns.
+We inserted a username-password pair in the example above while skipping the `id` and `date_of_joining` columns.
 
 Note: The examples insert cleartext passwords into the table, for demonstration only. This is a bad practice, as passwords should always be hashed/encrypted before storage.
 
 We can also insert multiple records at once by separating them with a comma:
 
- 
+&#x20;
+
 ```shell-session
 mysql> INSERT INTO logins(username, password) VALUES ('john', 'john123!'), ('tom', 'tom123!');
 
@@ -61,26 +59,23 @@ Records: 2  Duplicates: 0  Warnings: 0
 
 The query above inserted two new records at once.
 
----
+***
 
-## SELECT Statement
+### SELECT Statement
 
-Now that we have inserted data into tables let us see how to retrieve data with the [SELECT](https://dev.mysql.com/doc/refman/8.0/en/select.html) statement. This statement can also be used for many other purposes, which we will come across later. The general syntax to view the entire table is as follows:
-
+Now that we have inserted data into tables let us see how to retrieve data with the [SELECT](https://dev.mysql.com/doc/refman/8.0/en/select.html) statement. This statement can also be used for many other purposes, which we will come across later. The general syntax to view the entire table is as follows:
 
 ```sql
 SELECT * FROM table_name;
 ```
 
-The asterisk symbol (*) acts as a wildcard and selects all the columns. The `FROM` keyword is used to denote the table to select from. It is possible to view data present in specific columns as well:
-
+The asterisk symbol (\*) acts as a wildcard and selects all the columns. The `FROM` keyword is used to denote the table to select from. It is possible to view data present in specific columns as well:
 
 ```sql
 SELECT column1, column2 FROM table_name;
 ```
 
 The query above will select data present in column1 and column2 only.
-
 
 ```shell-session
 mysql> SELECT * FROM logins;
@@ -111,12 +106,11 @@ mysql> SELECT username,password FROM logins;
 
 The first query in the example above looks at all records present in the logins table. We can see the four records which were entered before. The second query selects just the username and password columns while skipping the other two.
 
----
+***
 
-## DROP Statement
+### DROP Statement
 
-We can use [DROP](https://dev.mysql.com/doc/refman/8.0/en/drop-table.html) to remove tables and databases from the server.
-
+We can use [DROP](https://dev.mysql.com/doc/refman/8.0/en/drop-table.html) to remove tables and databases from the server.
 
 ```shell-session
 mysql> DROP TABLE logins;
@@ -133,12 +127,11 @@ As we can see, the table was removed entirely.
 
 The 'DROP' statement will permanently and completely delete the table with no confirmation, so it should be used with caution.
 
----
+***
 
-## ALTER Statement
+### ALTER Statement
 
-Finally, We can use [ALTER](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html) to change the name of any table and any of its fields or to delete or add a new column to an existing table. The below example adds a new column `newColumn` to the `logins` table using `ADD`:
-
+Finally, We can use [ALTER](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html) to change the name of any table and any of its fields or to delete or add a new column to an existing table. The below example adds a new column `newColumn` to the `logins` table using `ADD`:
 
 ```shell-session
 mysql> ALTER TABLE logins ADD newColumn INT;
@@ -146,8 +139,7 @@ mysql> ALTER TABLE logins ADD newColumn INT;
 Query OK, 0 rows affected (0.01 sec)
 ```
 
-To rename a column, we can use `RENAME COLUMN`:
-
+To rename a column, we can use `RENAME COLUMN`:
 
 ```shell-session
 mysql> ALTER TABLE logins RENAME COLUMN newColumn TO newerColumn;
@@ -155,8 +147,7 @@ mysql> ALTER TABLE logins RENAME COLUMN newColumn TO newerColumn;
 Query OK, 0 rows affected (0.01 sec)
 ```
 
-We can also change a column's datatype with `MODIFY`:
-
+We can also change a column's datatype with `MODIFY`:
 
 ```shell-session
 mysql> ALTER TABLE logins MODIFY newerColumn DATE;
@@ -164,9 +155,7 @@ mysql> ALTER TABLE logins MODIFY newerColumn DATE;
 Query OK, 0 rows affected (0.01 sec)
 ```
 
-Finally, we can drop a column using `DROP`:
-
-
+Finally, we can drop a column using `DROP`:
 
 ```shell-session
 mysql> ALTER TABLE logins DROP newerColumn;
@@ -176,19 +165,17 @@ Query OK, 0 rows affected (0.01 sec)
 
 We can use any of the above statements with any existing table, as long as we have enough privileges to do so.
 
----
+***
 
-## UPDATE Statement
+### UPDATE Statement
 
-While `ALTER` is used to change a table's properties, the [UPDATE](https://dev.mysql.com/doc/refman/8.0/en/update.html) statement can be used to update specific records within a table, based on certain conditions. Its general syntax is:
-
+While `ALTER` is used to change a table's properties, the [UPDATE](https://dev.mysql.com/doc/refman/8.0/en/update.html) statement can be used to update specific records within a table, based on certain conditions. Its general syntax is:
 
 ```sql
 UPDATE table_name SET column1=newvalue1, column2=newvalue2, ... WHERE <condition>;
 ```
 
 We specify the table name, each column and its new value, and the condition for updating records. Let us look at an example:
-
 
 ```shell-session
 mysql> UPDATE logins SET password = 'change_password' WHERE id > 1;
@@ -214,11 +201,11 @@ The query above updated all passwords in all records where the id was more signi
 
 Note: we have to specify the 'WHERE' clause with UPDATE, in order to specify which records get updated. The 'WHERE' clause will be discussed next.
 
+## Question
 
-# Question
-----
+***
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250131135106.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250131135106.png)
 
 We can do the following steps:
 
@@ -230,10 +217,8 @@ We can do the following steps:
 5. Get the department number
 ```
 
-
 If we follow the steps we see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250131135655.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020250131135655.png)
 
 So, answer is `d005`.
-

@@ -2,25 +2,28 @@
 sticker: lucide//wifi
 ---
 
+# NET SEC CHALLENGE
 
-### What is the highest port number being open less than 10,000?
+#### What is the highest port number being open less than 10,000?
 
----
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112135121.png)
+***
+
+![](gitbook/cybersecurity/images/Pasted%20image%2020241112135121.png)
 
 Highest open port is `8080`
 
-### There is an open port outside the common 1000 ports; it is above 10,000. What is it?
----
+#### There is an open port outside the common 1000 ports; it is above 10,000. What is it?
 
+***
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112135224.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241112135224.png)
 
 It is port `10021`
 
+#### What is the flag hidden in the HTTP server header?
 
-### What is the flag hidden in the HTTP server header?
----
+***
+
 ```ad-hint
 ### Used
 
@@ -33,12 +36,11 @@ It is port `10021`
 
 ```
 
-
 Flag is `THM{web_server_25352}`
 
-### What is the flag hidden in the SSH server header?
+#### What is the flag hidden in the SSH server header?
 
----
+***
 
 ```ad-hint
 
@@ -54,10 +56,11 @@ Flag is `THM{web_server_25352}`
 
 ```
 
-Flag is `THM{946219583339}
+Flag is \`THM{946219583339}
 
-### We have an FTP server listening on a nonstandard port. What is the version of the FTP server?
----
+#### We have an FTP server listening on a nonstandard port. What is the version of the FTP server?
+
+***
 
 ```ad-hint
 
@@ -72,16 +75,15 @@ Flag is `THM{946219583339}
 
 ```
 
- Version is `(vsFTPd 3.0.5)`
+Version is `(vsFTPd 3.0.5)`
 
-### We learned two usernames using social engineering: `eddie` and `quinn`. What is the flag hidden in one of these two account files and accessible via FTP?
----
+#### We learned two usernames using social engineering: `eddie` and `quinn`. What is the flag hidden in one of these two account files and accessible via FTP?
 
+***
 
 First, we need to perform a Hydra attack to get the password of both usernames, let's start with `eddie`
 
-#### Eddie
-
+**Eddie**
 
 ```ad-hint
 
@@ -98,15 +100,13 @@ We need to use -s flag to specify the non-standard port
 
 ```
 
-
-
 Let's log into ftp with our credentials to check if we are able to retrieve the flag:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112140445.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241112140445.png)
 
 Nothing useful, let's proceed with the other username
 
-#### Quinn
+**Quinn**
 
 ```ad-hint
 
@@ -123,23 +123,21 @@ Nothing useful, let's proceed with the other username
 
 Let's log into ftp and get our flag:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112140700.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241112140700.png)
 
 Reading the flag, we get this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112140744.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241112140744.png)
 
 So, flag is `THM{321452667098}`
 
+#### Browsing to `http://10.10.4.229:8080` displays a small challenge that will give you a flag once you solve it. What is the flag?
 
-### Browsing to `http://10.10.4.229:8080` displays a small challenge that will give you a flag once you solve it. What is the flag?
----
+***
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241112140846.png)
+![](gitbook/cybersecurity/images/Pasted%20image%2020241112140846.png)
 
-So, using our notes from [[CYBERSECURITY/RECONNAISSANCE/NMAP/ADVANCED PORT SCANS.md|nmap advanced port scans]], we can perform a IDS evasion scan in the following way:
-
-
+So, using our notes from \[\[CYBERSECURITY/RECONNAISSANCE/NMAP/ADVANCED PORT SCANS.md|nmap advanced port scans]], we can perform a IDS evasion scan in the following way:
 
 ```ad-hint
 
@@ -178,12 +176,6 @@ A **TCP Null scan** is a type of scan where Nmap sends a **TCP packet** with **n
 
 ```
 
-
-
-
 Once we send the scan and reset the packet count, which is shown in the page, we get flag `THM{f7443f99}`
 
-
-
-# END!
-
+## END!
