@@ -66,5 +66,5 @@ secure.dev.facebook.com
 
 We can see the following if we use the command to test:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250128124336.png)
+![](cybersecurity/images/Pasted%2520image%252020250128124336.png)
 

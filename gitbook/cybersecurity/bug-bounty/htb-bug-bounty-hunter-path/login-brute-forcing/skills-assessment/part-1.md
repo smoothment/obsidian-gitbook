@@ -5,7 +5,7 @@ The first part of the skills assessment will require you to brute-force the the 
 
 You might find the following wordlists helpful in this engagement: [usernames.txt](https://github.com/danielmiessler/SecLists/blob/master/Usernames/top-usernames-shortlist.txt) and [passwords.txt](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/2023-200_most_used_passwords.txt)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250213155858.png)
+![](cybersecurity/images/Pasted%2520image%252020250213155858.png)
 
 Let's begin by downloading both wordlists to our machine:
 
@@ -44,7 +44,7 @@ Found credentials:
 
 Let's log in now:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250213160445.png)
+![](cybersecurity/images/Pasted%2520image%252020250213160445.png)
 
 We got the username:
 

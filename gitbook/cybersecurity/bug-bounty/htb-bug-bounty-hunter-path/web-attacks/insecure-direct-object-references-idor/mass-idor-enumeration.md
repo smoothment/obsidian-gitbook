@@ -103,15 +103,15 @@ When we run the script, it will download all documents from all employees with 
 
 # Question
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250217150006.png)
+![](cybersecurity/images/Pasted%2520image%252020250217150006.png)
 
 Let's begin by visiting the website:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250217150148.png)
+![](cybersecurity/images/Pasted%2520image%252020250217150148.png)
 
 We can view invoices, if we check the request we can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250217150307.png)
+![](cybersecurity/images/Pasted%2520image%252020250217150307.png)
 
 We are set with an `uid` of `1`, so, if an IDOR vulnerability is present in the web application, we can enumerate the invoice files from other users, let's use, also, the `uid` parameter is not injected directly in the URL but inside the request as data, we need to change the script we've been given a little bit, I did this script:
 

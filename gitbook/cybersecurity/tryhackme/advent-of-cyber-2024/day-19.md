@@ -22,7 +22,7 @@ This is the continuation of [[CYBERSECURITY/TRYHACKME/ADVENT OF CYBER 2024/DAY 1
 - Hack a game with the help of Frida.
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241219114542.png)
+![](cybersecurity/images/Pasted%2520image%252020241219114542.png)
 
 ## Game Hacking
 ---
@@ -38,7 +38,7 @@ Library files are collections of functions that many applications can reuse. Unl
 
 For example, imagine you are developing a game that requires adding two numbers together. Since mathematical functions are so commonly used, you could implement a library called `libmaths` to handle all your math functions, one of which could be called `add()`. The function would take two arguments (`x` and `y`) and return the `sum` of both numbers.
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241219120527.png)
+![](cybersecurity/images/Pasted%2520image%252020241219120527.png)
 
 Note that the application trusts the library to perform the requested operation correctly. From an attacker's standpoint, if we could somehow intercept the function calls from the executable to the library, we could alter the arguments sent or the return value. This would allow us to force the application to behave in strange ways. 
 
@@ -168,7 +168,7 @@ ubuntu@tryhackme:~/Desktop/TryUnlockMe/__handlers__/libaocgame.so/$ code .
 ubuntu@tryhackme:~/Desktop/TryUnlockMe/__handlers__/libaocgame.so/$
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241219121250.png)
+![](cybersecurity/images/Pasted%2520image%252020241219121250.png)
 
 
 At this point, you should be able to select the `_Z7set_otpi` JavaScript file with the hook defined. The i at the end of the `set_otp` function indicates that an integer will be passed as a parameter. It will likely set the OTP by passing it as the first argument. To get the parameter value, you can use the `log` function, specifying the first elements of the array `args` on the `onEnter` function:
@@ -202,10 +202,10 @@ Started tracing 3 functions. Web UI available at http://localhost:1337/
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241219122516.png)
+![](cybersecurity/images/Pasted%2520image%252020241219122516.png)
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241219122540.png)
+![](cybersecurity/images/Pasted%2520image%252020241219122540.png)
 
 Flag 1 is: `THM{one_tough_password}`
 
@@ -274,7 +274,7 @@ defineHandler({
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241219123032.png)
+![](cybersecurity/images/Pasted%2520image%252020241219123032.png)
 
 Flag 2 is: `THM{credit_card_undeclined}`
 
@@ -347,7 +347,7 @@ defineHandler({
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241219123643.png)
+![](cybersecurity/images/Pasted%2520image%252020241219123643.png)
 
 So, final flag would be: `THM{dont_smash_your_keyboard}`
 
@@ -355,7 +355,7 @@ So, final flag would be: `THM{dont_smash_your_keyboard}`
 ## Questions
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241219123757.png)
+![](cybersecurity/images/Pasted%2520image%252020241219123757.png)
 
 
 Just like that, day 19 is done!

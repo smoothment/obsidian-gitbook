@@ -199,5 +199,5 @@ Got our flag:
 THM{password_0v3rfl0w}
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250605184529.png)
+![](cybersecurity/images/Pasted%2520image%252020250605184529.png)
 

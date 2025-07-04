@@ -90,7 +90,7 @@ If the upload function is vulnerable to directory traversal, we may also attempt
 
 # Questions
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206165124.png)
+![](cybersecurity/images/Pasted%2520image%252020250206165124.png)
 
 ## First
 ---
@@ -105,7 +105,7 @@ We can try uploading a file with the following contents:
 
 If we check source code, we'll see the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206171135.png)
+![](cybersecurity/images/Pasted%2520image%252020250206171135.png)
 
 Flag is: 
 

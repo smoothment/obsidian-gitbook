@@ -63,7 +63,7 @@ It is important to understand the goal of hardening is not to make your system u
 
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218175957.png)
+![](cybersecurity/images/Pasted%2520image%252020250218175957.png)
 
 Credentials are:
 

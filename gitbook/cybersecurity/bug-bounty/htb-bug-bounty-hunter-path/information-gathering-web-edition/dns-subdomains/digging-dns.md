@@ -117,14 +117,14 @@ smoothment@htb[/htb]$ dig +short hackthebox.com
 # Questions
 ----
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250127135909.png)
+![](cybersecurity/images/Pasted%2520image%252020250127135909.png)
 
 ## 1
 ---
 
 We can use dig or ping `inlanefreight.com` to check IP:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250127140144.png)
+![](cybersecurity/images/Pasted%2520image%252020250127140144.png)
 
 IP is: `134.209.24.248`
 
@@ -139,7 +139,7 @@ Answer for question number 2 is: `inlanefreight.com
 
 For question 3, we can use `dnsenum` or `dig facebook.com MX`, we'll get the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250127140801.png)
+![](cybersecurity/images/Pasted%2520image%252020250127140801.png)
 
 Answer is: `smtpin.vvv.facebook.com`
 

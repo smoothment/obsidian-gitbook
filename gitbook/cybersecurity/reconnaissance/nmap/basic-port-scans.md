@@ -55,7 +55,7 @@ However, in practical situations, we need to consider the impact of firewalls. F
 6. **Closed|Filtered**: This means that Nmap cannot decide whether a port is closed or filtered.
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241108165106.png)
+![](cybersecurity/images/Pasted%2520image%252020241108165106.png)
 
 # TCP FLAGS
 
@@ -76,7 +76,7 @@ In particular, we need to focus on the flags that Nmap can set or unset. We have
 6. **FIN**: The sender has no more data to send.
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241108165331.png)
+![](cybersecurity/images/Pasted%2520image%252020241108165331.png)
 
 # TCP Connect Scan
 ---
@@ -228,7 +228,7 @@ Alternatively, you can choose to control the packet rate using `--min-rate <num
 
 Moreover, you can control probing parallelization using `--min-parallelism <numprobes>` and `--max-parallelism <numprobes>`. Nmap probes the targets to discover which hosts are live and which ports are open; probing parallelization specifies the number of such probes that can be run in parallel. For instance, `--min-parallelism=512` pushes Nmap to maintain at least 512 probes in parallel; these 512 probes are related to host discovery and open ports.
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241108172150.png)
+![](cybersecurity/images/Pasted%2520image%252020241108172150.png)
 
 
 # SUMMARY

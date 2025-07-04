@@ -164,12 +164,12 @@ Failing to use the proper `FROM` appendix automatically could be due to the in
 # Questions
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204155850.png)
+![](cybersecurity/images/Pasted%2520image%252020250204155850.png)
 
 ## Case 5
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204160030.png)
+![](cybersecurity/images/Pasted%2520image%252020250204160030.png)
 
 Let's send the request and save it:
 
@@ -276,7 +276,7 @@ Table: flag5
 
 ## Case 6
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204162741.png)
+![](cybersecurity/images/Pasted%2520image%252020250204162741.png)
 
 Do the same as before, we can do the following command:
 
@@ -304,7 +304,7 @@ Flag is `HTB{v1nc3_mcm4h0n_15_4570n15h3d}`
 ## Case 7
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204162749.png)
+![](cybersecurity/images/Pasted%2520image%252020250204162749.png)
 
 For case 7, we do the following:
 
