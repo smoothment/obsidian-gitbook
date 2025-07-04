@@ -1,12 +1,16 @@
 ---
 sticker: emoji//1f47d
 ---
-# INTRODUCTION
----
+
+# THREAT HUNTING WITH YARA
+
+## INTRODUCTION
+
+***
 
 This room aims to demonstrate an active application of threat hunting with a specific focus on using YARA rules to hunt for Indicators of Compromise (IOC) related to malware. We will use a realistic scenario as the red wire throughout this room.
 
-## Learning Objectives
+### Learning Objectives
 
 ```ad-summary
 - Looking for actionable information that can be used to search for threats
@@ -15,7 +19,7 @@ This room aims to demonstrate an active application of threat hunting with a spe
 - Deploying a YARA rule
 ```
 
-## Prerequisites
+### Prerequisites
 
 ```ad-summary
 - It is recommended to have completed the [Threat Hunting: Introduction](https://tryhackme.com/r/room/introductiontothreathunting) room. That room includes multiple concepts and terminologies used throughout our current room.
@@ -24,42 +28,44 @@ This room aims to demonstrate an active application of threat hunting with a spe
 - Basic understanding of data types and encoding.
 ```
 
-**Disclaimer:** We will use a real scenario as the red wire throughout this room. All the URLs and referenced files are malicious, and should not be opened outside an isolated environment.
+**Disclaimer:** We will use a real scenario as the red wire throughout this room. All the URLs and referenced files are malicious, and should not be opened outside an isolated environment.
 
+## Scenario Description
 
-# Scenario Description
----
+***
 
-Our threat hunting team is part of Belgium’s national CSIRT. We work closely with the cyber threat intelligence and incident response teams to get ahead of the numerous threats targeting our constituents. One main category of our constituents is political parties. 
+Our threat hunting team is part of Belgium’s national CSIRT. We work closely with the cyber threat intelligence and incident response teams to get ahead of the numerous threats targeting our constituents. One main category of our constituents is political parties.&#x20;
 
-Our cyber threat intelligence team has picked up an interesting [article](https://www.mandiant.com/resources/blog/apt29-wineloader-german-political-parties) from the Mandiant threat intelligence blog about a targeted cyber attack on a German political party. They have extracted all the relevant information and passed it to our team. We will analyze this information and look for opportunities to hunt the threat described in the article. Below is the information extracted by the  cyber threat intelligence team. They have structured the information using the diamond model.
+Our cyber threat intelligence team has picked up an interesting [article](https://www.mandiant.com/resources/blog/apt29-wineloader-german-political-parties) from the Mandiant threat intelligence blog about a targeted cyber attack on a German political party. They have extracted all the relevant information and passed it to our team. We will analyze this information and look for opportunities to hunt the threat described in the article. Below is the information extracted by the  cyber threat intelligence team. They have structured the information using the diamond model.
 
-## Threat Intelligence Provided
+### Threat Intelligence Provided
 
 ```ad-note
 **Note:** All the URLs and referenced files provided below are real and malicious. Do not open them outside of an isolated environment. 
-``` 
+```
 
-#### **Adversary**  
+**Adversary**
+
 APT29
 
-#### **Victim**  
+**Victim**
+
 German political party
 
-#### **Used Capabilities (TTPs)**
+**Used Capabilities (TTPs)**
 
-|**ID**|**Technique**|
-|---|---|
-|[**T1543.003**](https://attack.mitre.org/techniques/T1543/003)|Create or Modify System Process: Windows Service|
-|[**T1012**](https://attack.mitre.org/techniques/T1012)|Query Registry|
-|[**T1082**](https://attack.mitre.org/techniques/T1082)|System Information Discovery|
-|[**T1134**](https://attack.mitre.org/techniques/T1134)|Access Token Manipulation|
-|[**T1057**](https://attack.mitre.org/techniques/T1057)|Process Discovery|
-|[**T1007**](https://attack.mitre.org/techniques/T1007)|System Service Discovery|
-|[**T1027**](https://attack.mitre.org/techniques/T1027)|Obfuscated Files or Information|
-|[**T1070.004**](https://attack.mitre.org/techniques/T1070/004)|Indicator Removal: File Deletion|
-|[**T1055.003**](https://attack.mitre.org/techniques/T1055/003)|Process Injection: Thread Execution Hijacking|
-|[**T1083**](https://attack.mitre.org/techniques/T1083)|File and Directory Discovery|
+| **ID**                                                         | **Technique**                                    |
+| -------------------------------------------------------------- | ------------------------------------------------ |
+| [**T1543.003**](https://attack.mitre.org/techniques/T1543/003) | Create or Modify System Process: Windows Service |
+| [**T1012**](https://attack.mitre.org/techniques/T1012)         | Query Registry                                   |
+| [**T1082**](https://attack.mitre.org/techniques/T1082)         | System Information Discovery                     |
+| [**T1134**](https://attack.mitre.org/techniques/T1134)         | Access Token Manipulation                        |
+| [**T1057**](https://attack.mitre.org/techniques/T1057)         | Process Discovery                                |
+| [**T1007**](https://attack.mitre.org/techniques/T1007)         | System Service Discovery                         |
+| [**T1027**](https://attack.mitre.org/techniques/T1027)         | Obfuscated Files or Information                  |
+| [**T1070.004**](https://attack.mitre.org/techniques/T1070/004) | Indicator Removal: File Deletion                 |
+| [**T1055.003**](https://attack.mitre.org/techniques/T1055/003) | Process Injection: Thread Execution Hijacking    |
+| [**T1083**](https://attack.mitre.org/techniques/T1083)         | File and Directory Discovery                     |
 
 ```ad-important
 #**Infrastructure/IOCs** 
@@ -97,7 +103,7 @@ German political party
     - Communicates to https://siestakeying[.]com/auth.php  ``
 ```
 
-#### **Detections**
+**Detections**
 
 ```javascript
 rule M_APT_Dropper_Rootsaw_Obfuscated
@@ -119,8 +125,6 @@ rule M_APT_Dropper_Rootsaw_Obfuscated
 } 
 ```
 
-  
-
 ```javascript
 
 rule M_APT_Downloader_WINELOADER_1 
@@ -139,8 +143,6 @@ rule M_APT_Downloader_WINELOADER_1
 } 
  
 ```
-
-  
 
 ```javascript
 
@@ -166,45 +168,57 @@ rule M_APT_Downloader_WINELOADER_2
 }
 ```
 
-### Question Section
----
+#### Question Section
+
+***
+
 ![](Pasted%20image%2020241115125856.png)
 
+## Opportunities for Threat Hunting
 
-# Opportunities for Threat Hunting
----
+***
 
-Based on the threat intelligence provided in Task 2, we will look for opportunities to mount a threat hunt. At first, the amount of intelligence supplied may seem daunting to process. “Where do we start?”, “How do we start?”, “What information do we need?”, are some questions that need answering first. Before these questions can be answered for this scenario, a small overview of threat hunting styles and processes is required. 
+Based on the threat intelligence provided in Task 2, we will look for opportunities to mount a threat hunt. At first, the amount of intelligence supplied may seem daunting to process. “Where do we start?”, “How do we start?”, “What information do we need?”, are some questions that need answering first. Before these questions can be answered for this scenario, a small overview of threat hunting styles and processes is required.&#x20;
 
-## Threat Hunting Styles
----
+### Threat Hunting Styles
+
+***
+
 ![Threat hunting styles](https://tryhackme-images.s3.amazonaws.com/user-uploads/66c44fd9733427ea1181ad58/room-content/66c44fd9733427ea1181ad58-1731429616800.png)
 
 There are three styles of threat hunting: Structured hunting, unstructured hunting, and situational/entity-driven hunting.
 
-### **Structured Hunting**
----
-This hunting style uses Indicators of Attack and TTPs (Tactics, Techniques, and Procedures) to look for possible attacks from threat actors. This is also called _Hypothesis-based hunting_. The advantage of this hunting style is that an attack can be detected early on in the Kill Chain, preventing damage. One of the primary threat intelligence sources used for this style is the [MITRE ATT&CK](https://attack.mitre.org/) framework. 
+#### **Structured Hunting**
 
-### **Unstructured Hunting** 
----
-This hunting style uses Indicators of Compromise to fuel a search in the environment. This translates into several hunting activities throughout the infrastructure: Using YARA rules for pattern matching, writing specific queries to apply to the aggregated data in the SIEM, and more. Another name for this style of hunting is _intel-based threat hunting_.
+***
 
-The threat intelligence sources used for this style are security blogs, the Malware Intelligence Sharing Platform ( MISP ), and threat intelligence feeds like [abuse.ch](https://abuse.ch/) or [Alienvault](https://otx.alienvault.com/). 
+This hunting style uses Indicators of Attack and TTPs (Tactics, Techniques, and Procedures) to look for possible attacks from threat actors. This is also called _Hypothesis-based hunting_. The advantage of this hunting style is that an attack can be detected early on in the Kill Chain, preventing damage. One of the primary threat intelligence sources used for this style is the [MITRE ATT\&CK](https://attack.mitre.org/) framework.&#x20;
 
-### **Situational or Entity-Driven Hunting** 
-----
+#### **Unstructured Hunting**&#x20;
+
+***
+
+This hunting style uses Indicators of Compromise to fuel a search in the environment. This translates into several hunting activities throughout the infrastructure: Using YARA rules for pattern matching, writing specific queries to apply to the aggregated data in the SIEM, and more. Another name for this style of hunting is _intel-based threat hunting_.
+
+The threat intelligence sources used for this style are security blogs, the Malware Intelligence Sharing Platform ( MISP ), and threat intelligence feeds like [abuse.ch](https://abuse.ch/) or [Alienvault](https://otx.alienvault.com/).&#x20;
+
+#### **Situational or Entity-Driven Hunting**&#x20;
+
+***
+
 This style of hunting combines several elements from structured and unstructured hunting and is driven by changes in the threat landscape. For example, a new threat actor, a new report on a threat targeting your business vertical, information from the national CSIRT, a customer request, and more.
 
-Activities include formulating a hypothesis detailing which threat actors could target your infrastructure and what high-value assets they target, hunting for IOCs, and creating or using a threat profile with the help of the [MITRE ATT&CK](https://attack.mitre.org/) framework. Hunting activities often focus on the Crown Jewels (the most critical assets). 
+Activities include formulating a hypothesis detailing which threat actors could target your infrastructure and what high-value assets they target, hunting for IOCs, and creating or using a threat profile with the help of the [MITRE ATT\&CK](https://attack.mitre.org/) framework. Hunting activities often focus on the Crown Jewels (the most critical assets).&#x20;
 
-The primary sources of threat intelligence are threat reports from within the same business vertical and historical attacks. 
+The primary sources of threat intelligence are threat reports from within the same business vertical and historical attacks.&#x20;
 
-## Threat Hunting Process
----
+### Threat Hunting Process
+
+***
+
 ![Threat hunting phases](https://tryhackme-images.s3.amazonaws.com/user-uploads/66c44fd9733427ea1181ad58/room-content/66c44fd9733427ea1181ad58-1731429698717.png)
 
-Threat hunting consists of 3 phases: 
+Threat hunting consists of 3 phases:&#x20;
 
 ```ad-summary
 1. **Trigger**: This is what initiates the threat hunt. This can be an IOC, a set of TTPs, a hypothesis, a system that behaves abnormally, articles on external blogs, reports by third parties, etc.
@@ -212,9 +226,11 @@ Threat hunting consists of 3 phases: 
 3. **Resolution**: If the threat hunter finds evidence of a breach, the incident response team is notified, and the incident response procedure is started. Depending on the procedure, the threat hunter can support the IR team by scoping and digging deeper into the evidence found. 
 ```
 
-## Opportunities
----
-Let us now apply the above concepts to our scenario. There are multiple opportunities provided within the received threat intelligence: 
+### Opportunities
+
+***
+
+Let us now apply the above concepts to our scenario. There are multiple opportunities provided within the received threat intelligence:&#x20;
 
 ```ad-important
 1. The received threat intelligence details specific TTPs attributed to APT29, which is known to target political entities. 
@@ -224,53 +240,65 @@ Let us now apply the above concepts to our scenario. There are multiple opportun
 3. The two opportunities above can be combined to enable a _situational or entity-driven hunting style_.
 ```
 
-Throughout the rest of this room, we will focus on opportunity number 2. The provided Indicators of Compromise enable multiple threat hunting activities, e.g., ingesting them in the IDS, manually scanning with YARA or SIGMA, creating SNORT rules, and more.
+Throughout the rest of this room, we will focus on opportunity number 2. The provided Indicators of Compromise enable multiple threat hunting activities, e.g., ingesting them in the IDS, manually scanning with YARA or SIGMA, creating SNORT rules, and more.
 
 We will use the provided YARA rules for this room to hunt for the WINELOADER malware.
 
-## Question section
----
+### Question section
+
+***
 
 ![](Pasted%20image%2020241115130918.png)
 
+## YARA: Introduction
 
-# YARA: Introduction
----
+***
 
 The threat intelligence received in Task 2 contained three YARA rules. These YARA rules can be used to hunt for specific malware (in this scenario, the malware is WINELOADER). Before we get hands-on with these YARA rules, it is important to understand what YARA is.
 
-`YARA stands for Yet Another Ridiculous Acronym`. It is a tool Victor Alvarez of VirusTotal developed to assist malware researchers in detecting and describing malware families.
+`YARA stands for Yet Another Ridiculous Acronym`. It is a tool Victor Alvarez of VirusTotal developed to assist malware researchers in detecting and describing malware families.
 
-The main functionality of YARA is based on advanced pattern matching, explicitly tailored to malware. It can be best compared to using a supercharged grep with complex regular expressions in Linux. Just like the grep command, the YARA binary will iterate over all files in a designated path, trying to find a match with the information provided in the YARA rule.
+The main functionality of YARA is based on advanced pattern matching, explicitly tailored to malware. It can be best compared to using a supercharged grep with complex regular expressions in Linux. Just like the grep command, the YARA binary will iterate over all files in a designated path, trying to find a match with the information provided in the YARA rule.
 
-A YARA rule describes a malware family based on a pattern using a set of strings and Boolean logic. 
+A YARA rule describes a malware family based on a pattern using a set of strings and Boolean logic.&#x20;
 
-## Structure of a YARA Rule
----
+### Structure of a YARA Rule
+
+***
+
 A YARA rule uses descriptive language to define a pattern consisting of strings to match a Boolean condition specified at the end of the rule.
 
-The main parts of a YARA rule are the rule **name**_,_ **meta**_,_ **strings**_,_ and **condition**. Below, we will discuss each part.
+The main parts of a YARA rule are the rule **name**_,_ **meta**_,_ **strings**_,_ and **condition**. Below, we will discuss each part.
 
-#### **Rule Name**
----
-The **Rule name** is a descriptive name for the rule and starts with the keyword **rule**. Best practices include setting a name that clarifies what the rule is used for.
+**Rule Name**
 
-#### **Meta**
----
+***
 
-This part defines extra information like description, author, and more. Custom identifiers and value pairs can be freely created. The information defined in **meta** cannot be used in the **condition** part. Whether to include this part or not is entirely up to you. The rule will work completely fine without it. It is, however, recommended to include the _meta_ part with some basic information, including the author and the description of what to use the rule for.
+The **Rule name** is a descriptive name for the rule and starts with the keyword **rule**. Best practices include setting a name that clarifies what the rule is used for.
 
-#### **Strings**
----
-In this part of the rule, matching strings are defined. Multiple types of strings can be defined, which is essential for creating functional rules.  
+**Meta**
 
-#### **Condition**
----
-In this part of the rule, a matching condition is defined using the identifiers defined in the **strings** part.
+***
 
-## Example of a YARA Rule
----
-Below is an example of a YARA rule we received from the CTI team. In this example, all four parts discussed in the previous paragraph are present:
+This part defines extra information like description, author, and more. Custom identifiers and value pairs can be freely created. The information defined in **meta** cannot be used in the **condition** part. Whether to include this part or not is entirely up to you. The rule will work completely fine without it. It is, however, recommended to include the _meta_ part with some basic information, including the author and the description of what to use the rule for.
+
+**Strings**
+
+***
+
+In this part of the rule, matching strings are defined. Multiple types of strings can be defined, which is essential for creating functional rules.
+
+**Condition**
+
+***
+
+In this part of the rule, a matching condition is defined using the identifiers defined in the **strings** part.
+
+### Example of a YARA Rule
+
+***
+
+Below is an example of a YARA rule we received from the CTI team. In this example, all four parts discussed in the previous paragraph are present:
 
 ```ad-summary
 1. **Rule** **name**: M_APT_Dropper_Rootsaw_Obfuscated. The rule’s title is well-chosen and gives the user a good idea of what to use it for. In this case, it is to detect a dropper called Rootsaw that is obfuscated.
@@ -284,22 +312,25 @@ Below is an example of a YARA rule we received from the CTI team. In this exam
 
 Only two parts are required for a rule to function: the rule name and the condition. All the other parts are optional. However, adding strings to a rule is recommended if you want to create complex, functional YARA rules.
 
-More detailed information on writing YARA rules can be found in the official [YARA documentation](https://yara.readthedocs.io/en/stable/writingrules.html), or if you prefer not to write them yourself, many repositories are available with well-written YARA rules. Florian Roth is a good authority on writing quality YARA rules. Florian also created a tool called YARA FORGE that streamlines public YARA rule collection. This tool gathers, tests, organizes, and redistributes these rules more efficiently, making them more accessible and valuable for the cyber security community. You can find documentation related to this tool within the official [YARAHQ GitHub profile](https://github.com/YARAHQ/yara-forge).
+More detailed information on writing YARA rules can be found in the official [YARA documentation](https://yara.readthedocs.io/en/stable/writingrules.html), or if you prefer not to write them yourself, many repositories are available with well-written YARA rules. Florian Roth is a good authority on writing quality YARA rules. Florian also created a tool called YARA FORGE that streamlines public YARA rule collection. This tool gathers, tests, organizes, and redistributes these rules more efficiently, making them more accessible and valuable for the cyber security community. You can find documentation related to this tool within the official [YARAHQ GitHub profile](https://github.com/YARAHQ/yara-forge).
 
-# YARA: Strings and Conditions
----
+## YARA: Strings and Conditions
 
-In the previous task, we briefly discussed the different parts of a YARA rule and mentioned that a YARA rule requires at least the **strings** and **condition** part to function as intended. These two parts make or break a YARA rule, so it is important to go a bit deeper into them. But before that, we will talk briefly about false positives.
+***
 
-## False Positives
----
+In the previous task, we briefly discussed the different parts of a YARA rule and mentioned that a YARA rule requires at least the **strings** and **condition** part to function as intended. These two parts make or break a YARA rule, so it is important to go a bit deeper into them. But before that, we will talk briefly about false positives.
+
+### False Positives
+
+***
+
 An essential part of threat hunting is excluding false positives. When we look at YARA, this means creating rules that uniquely identify the threat you are looking for. This is easier said than done. YARA rules can get complex very fast when tailored toward specific malware. Using well-written and tested YARA rules is a must. This leaves us with two choices: You either dive deep into the specifics of writing YARA rules or use YARA rules created by experts (like those included in the threat intelligence we received in Task 3). Of course, the combination of these two options is also viable. Even when just using pre-created YARA rules, it is crucial that you understand them.
 
-## Strings
+### Strings
 
-In this paragraph, we will investigate what strings we can use within a YARA rule. We will discuss the general types of available strings without going too deep in each category. Most modifier keywords we will encounter throughout this paragraph can be combined. It is out of scope to discuss all the possible combinations. If you want to dig deeper, you can have a look at the official [YARA documentation](https://yara.readthedocs.io/en/latest/writingrules.html#strings).
+In this paragraph, we will investigate what strings we can use within a YARA rule. We will discuss the general types of available strings without going too deep in each category. Most modifier keywords we will encounter throughout this paragraph can be combined. It is out of scope to discuss all the possible combinations. If you want to dig deeper, you can have a look at the official [YARA documentation](https://yara.readthedocs.io/en/latest/writingrules.html#strings).
 
-### **Text Strings**
+#### **Text Strings**
 
 In its simplest form, we can define an ASCII-encoded string that matches some text we seek. It is essential to mention that the specified string is case-sensitive. Let us look at an example:
 
@@ -315,9 +346,7 @@ rule textString
     } 
 ```
 
-  
-
-It is possible to define the string as case-insensitive by adding the modifier **nocase** next to it. This way, it will search for all permutations of the specified string. The example below shows the use of the **nocase** modifier:
+It is possible to define the string as case-insensitive by adding the modifier **nocase** next to it. This way, it will search for all permutations of the specified string. The example below shows the use of the **nocase** modifier:
 
 ```javascript
 rule noCaseTextString
@@ -330,11 +359,11 @@ rule noCaseTextString
     } 
 ```
 
-  
+#### **Wide-Character Strings**
 
-### **Wide-Character Strings**
----
-Strings can be encoded in different ways. One way often found in binaries is encoding the string as two bytes per character instead of the traditional one-byte ASCII encoding. For example, the string `tryhackme` would be encoded as `t00r00y00h00a00c00k00m00e00`. It is possible to use a modifier next to the defined string so the rule matches for this wide-character string. The modifier used for this is **wide**_._ The example below shows the use of the **wide** modifier:
+***
+
+Strings can be encoded in different ways. One way often found in binaries is encoding the string as two bytes per character instead of the traditional one-byte ASCII encoding. For example, the string `tryhackme` would be encoded as `t00r00y00h00a00c00k00m00e00`. It is possible to use a modifier next to the defined string so the rule matches for this wide-character string. The modifier used for this is **wide**_._ The example below shows the use of the **wide** modifier:
 
 ```javascript
 rule wideTextString
@@ -347,10 +376,10 @@ rule wideTextString
     } 
 ```
 
-  
+#### **Hexadecimal Strings**
 
-### **Hexadecimal Strings**
----
+***
+
 When malware analysts start analyzing malware, they often use a disassembler and debugger like IDA Pro to dismantle binaries. Often, the pieces of code they uncover are displayed in hexadecimal. We can then use the hexadecimal strings uncovered during analysis to create our own YARA rules. Sequences of hexadecimal characters are often more challenging for attackers to obfuscate and hide. So, these hexadecimal strings provide an excellent opportunity to uniquely identify a certain malicious binary. Let us look at an example of hexadecimal strings in a YARA rule.
 
 ```javascript
@@ -363,8 +392,6 @@ rule hexString
             $1
     } 
 ```
-
-  
 
 Defining hexadecimal strings can be very flexible. YARA supports four ways to realize this: Use of wild cards, not operators, jumps, and alternatives. All of the constructions can be combined as well. Let us look at an example of its primary usage:
 
@@ -381,11 +408,11 @@ rule hexStringExpanded
     } 
 ```
 
-  
+#### **XOR Strings**
 
-### **XOR Strings**
----
-Malware creators often use XOR to encrypt their code, making it harder for malware analysts to analyze. It also helps evade anti-virus signatures. The XOR string support in YARA helps us to hunt for XOR encrypted string variations with 1-byte keys. Let us look at an example:
+***
+
+Malware creators often use XOR to encrypt their code, making it harder for malware analysts to analyze. It also helps evade anti-virus signatures. The XOR string support in YARA helps us to hunt for XOR encrypted string variations with 1-byte keys. Let us look at an example:
 
 ```javascript
 rule xorString
@@ -398,9 +425,7 @@ rule xorString
     } 
 ```
 
-  
-
-Malware authors will often use encoding to evade detection. One encoding technique that is often used is base64. YARA supports looking for base64 encoded strings. To do this, you can use the modifier _base64_ after defining the string. YARA will search for the base64 encoded string when running the YARA rule. Let us have a look at an example:
+Malware authors will often use encoding to evade detection. One encoding technique that is often used is base64. YARA supports looking for base64 encoded strings. To do this, you can use the modifier _base64_ after defining the string. YARA will search for the base64 encoded string when running the YARA rule. Let us have a look at an example:
 
 ```javascript
 rule base64String
@@ -413,11 +438,11 @@ rule base64String
         } 
 ```
 
-  
+#### **Regular Expressions**
 
-### **Regular Expressions**
----
-Just like with the grep command in Linux, using regular expressions makes YARA powerful. You can define regular expressions the same way as strings, with the only difference being forward slashes instead of double quotes. A bonus is that the above modifiers can also be applied to these regular expressions. Check out our [Regular expressions](https://tryhackme.com/r/room/catregex) room for more info on creating regular expressions. It is, however, important to note that since version 2.0, YARA has used its regular expression engine, which implements most features found in PCRE. For now, let us look at an example of a YARA rule that includes a regular expression:
+***
+
+Just like with the grep command in Linux, using regular expressions makes YARA powerful. You can define regular expressions the same way as strings, with the only difference being forward slashes instead of double quotes. A bonus is that the above modifiers can also be applied to these regular expressions. Check out our [Regular expressions](https://tryhackme.com/r/room/catregex) room for more info on creating regular expressions. It is, however, important to note that since version 2.0, YARA has used its regular expression engine, which implements most features found in PCRE. For now, let us look at an example of a YARA rule that includes a regular expression:
 
 ```javascript
 rule regularExpression
@@ -426,27 +451,27 @@ rule regularExpression
                 $1 = /THM\{[a-zA-Z]
 ```
 
-  
+### Conditions
 
-## Conditions
----
+***
+
 Once you have defined your strings, it is crucial to define how to combine them and match the files you are searching for. YARA offers great flexibility when making different combinations. YARA includes Boolean, relational, arithmetic, and bitwise operators. Additionally, some keywords can be used. The table below shows an overview of the operators and keywords:
 
-|Boolean operators|Relational operators|Arithmetic operators|Bitwise operators|Keywords|
-|---|---|---|---|---|
-|and|>=|+|&|1 of them|
-|or|<=|-|\||any of them|
-|not|<|*|<<|none of them|
-||>|\|>>|contains|
-||==|%|~|icontains|
-||!=||^|startswith|
-|||||istartswith|
-|||||endswith|
-|||||iendswith|
-|||||iequals|
-|||||matches|
-|||||not defined|
-|||||filesize|
+| Boolean operators | Relational operators | Arithmetic operators | Bitwise operators | Keywords     |
+| ----------------- | -------------------- | -------------------- | ----------------- | ------------ |
+| and               | >=                   | +                    | &                 | 1 of them    |
+| or                | <=                   | -                    | \|                | any of them  |
+| not               | <                    | \*                   | <<                | none of them |
+|                   | >                    | \|>>                 | contains          |              |
+|                   | ==                   | %                    | \~                | icontains    |
+|                   | !=                   |                      | ^                 | startswith   |
+|                   |                      |                      |                   | istartswith  |
+|                   |                      |                      |                   | endswith     |
+|                   |                      |                      |                   | iendswith    |
+|                   |                      |                      |                   | iequals      |
+|                   |                      |                      |                   | matches      |
+|                   |                      |                      |                   | not defined  |
+|                   |                      |                      |                   | filesize     |
 
 We could dedicate a complete room to all the operators, but for this room, we will focus only on some of the Boolean operators and keywords. Let’s look at some examples:
 
@@ -463,8 +488,6 @@ rule differentConditions
     } 
 ```
 
-  
-
 ```javascript
 rule differentConditions
     {
@@ -477,8 +500,6 @@ rule differentConditions
             any of them  // Matches when at least one of the defined strings is present.
     } 
 ```
-
-  
 
 ```javascript
 rule differentConditions
@@ -493,8 +514,6 @@ rule differentConditions
     } 
 ```
 
-  
-
 ```javascript
 rule differentConditions
     {
@@ -507,8 +526,6 @@ rule differentConditions
             "$1 or $2" // Matches when 'Try' or 'Hack' is present.
     } 
 ```
-
-  
 
 ```javascript
 rule differentConditions
@@ -523,8 +540,6 @@ rule differentConditions
     } 
 ```
 
-  
-
 ```javascript
 rule differentConditions
     {
@@ -537,8 +552,6 @@ rule differentConditions
             $1 and ($2 or $3) // Matches when 'Try' and 'Hack' or 'Try' and 'Me' combinations are present.
     } 
 ```
-
-  
 
 ```javascript
 rule differentConditions
@@ -553,8 +566,6 @@ rule differentConditions
     } 
 ```
 
-  
-
 ```javascript
 rule differentConditions
     {
@@ -567,8 +578,6 @@ rule differentConditions
             filesize < 500KB // Matches all files smaller than 500 KiloByte. This can only be used when matching for files.
     } 
 ```
-
-  
 
 ```javascript
 rule differentConditions
@@ -583,25 +592,27 @@ rule differentConditions
     } 
 ```
 
-  
-
 Now that we have covered the two most important parts of a YARA rule, let’s move on to the next task and examine how we can use YARA rules to hunt for Indicators of Compromise.
 
-## Question Section
----
+### Question Section
+
+***
 
 ![](Pasted%20image%2020241115132332.png)
 
-# YARA: How To Use YARA Rules To Hunt for Indicators of Compromise
----
+## YARA: How To Use YARA Rules To Hunt for Indicators of Compromise
+
+***
 
 During this task, we will learn how to use a YARA rule to hunt for Indicators of Compromise for the WINELOADER malware. It is important to note that YARA rules can be run standalone or as part of a security product like Kaspersky, VirusTotal, Trend Micro, and more.
 
-## Basic Syntax for YARA
----
-Open up a PowerShell window as administrator and enter the command yara64, where you should get the following output: 
+### Basic Syntax for YARA
 
-```PS
+***
+
+Open up a PowerShell window as administrator and enter the command yara64, where you should get the following output:
+
+```ps
 PS C:\TMP> yara64
 yara: wrong number of arguments
 Usage: yara [OPTION]... [NAMESPACE:]RULES_FILE... FILE | DIR | PID
@@ -622,8 +633,7 @@ Short Flag	Long Flag	Description
 -p	--threads=N	Use N threads to scan a directory
 ```
 
-
-### Run a YARA Rule for the First Time
+#### Run a YARA Rule for the First Time
 
 We will use a basic YARA rule we wrote for this hands-on. Let’s examine the rule.
 
@@ -648,15 +658,16 @@ The result of running this rule should be as follows:
 
 ![](Pasted%20image%2020241115132957.png)
 
-
 ```ad-summary
 - The used command is shown on the first line.
 - The second line shows a match for a file named test.txt. Open this file and verify the result.
 - You can use the myfirstrule.yar as a starting point for writing your own YARA rules.
 ```
 
-## Hunt for WINELOADER Malware Indicators of Compromise
----
+### Hunt for WINELOADER Malware Indicators of Compromise
+
+***
+
 For this walkthrough, we will use the YARA rules that the CTI team provided. A malware sample of WINELOADER is included in the `C:\TMP\` folder.
 
 Open a PowerShell administrator window and enter the following command to hunt for WINELOADER malware:
@@ -677,13 +688,13 @@ The following result should be displayed:
 
 ```
 
+### Combine Multiple Rules in One File
 
-## Combine Multiple Rules in One File
----
+***
+
 Rules can also be combined in one file. Combining the three rules in one file could be interesting in our scenario. There are no specific guidelines on when to combine rules in one file. One way could be to group rules that hunt for the same malware family:
 
-Create a new file in `C:\TMP\YARARULES\` and name it `WINELOADERCOMBO.yar`.
-Copy the content of `WINELOADER1.yar`, `WINELOADER2.yar`, and `ROOTSAW.yar` in the newly created file. Leave a space between each rule for readability. The result should look something like this:
+Create a new file in `C:\TMP\YARARULES\` and name it `WINELOADERCOMBO.yar`. Copy the content of `WINELOADER1.yar`, `WINELOADER2.yar`, and `ROOTSAW.yar` in the newly created file. Leave a space between each rule for readability. The result should look something like this:
 
 ```
 PS C:\TMP> get-content C:\TMP\YARARULES\WINELOADERCOMBO.yar
@@ -744,9 +755,9 @@ rule M_APT_Dropper_Rootsaw_Obfuscated
 }
 ```
 
-# Indicators of Compromise Detected - Now What
----
+## Indicators of Compromise Detected - Now What
 
+***
 
 In the previous task, we used YARA rules to hunt for the WINELOADER malware. During this hunt, we found a malicious binary. This task will focus on what happens after discovering a confirmed Indicator of Compromise.
 
