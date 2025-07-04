@@ -1,24 +1,22 @@
 ---
 sticker: emoji//1f578-fe0f
 ---
+Usually, a `GET` request to the API endpoint should return the details of the requested user, so we may try calling it to see if we can retrieve our user's details. We also notice that after the page loads, it fetches the user details with a `GET` request to the same API endpoint: 
 
-# Chaining IDOR Vulnerabilities
+![get_api](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_get_api.jpg)
 
-Usually, a `GET` request to the API endpoint should return the details of the requested user, so we may try calling it to see if we can retrieve our user's details. We also notice that after the page loads, it fetches the user details with a `GET` request to the same API endpoint:&#x20;
+As mentioned in the previous section, the only form of authorization in our HTTP requests is the `role=employee` cookie, as the HTTP request does not contain any other form of user-specific authorization, like a JWT token, for example. Even if a token did exist, unless it was being actively compared to the requested object details by a back-end access control system, we may still be able to retrieve other users' details.
 
-![get\_api](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_get_api.jpg)
+---
 
-As mentioned in the previous section, the only form of authorization in our HTTP requests is the `role=employee` cookie, as the HTTP request does not contain any other form of user-specific authorization, like a JWT token, for example. Even if a token did exist, unless it was being actively compared to the requested object details by a back-end access control system, we may still be able to retrieve other users' details.
+## Information Disclosure
 
-***
+Let's send a `GET` request with another `uid`:
 
-### Information Disclosure
+![get_another_user](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_get_another_user.jpg)
 
-Let's send a `GET` request with another `uid`:
+As we can see, this returned the details of another user, with their own `uuid` and `role`, confirming an `IDOR Information Disclosure vulnerability`:
 
-![get\_another\_user](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_get_another_user.jpg)
-
-As we can see, this returned the details of another user, with their own `uuid` and `role`, confirming an `IDOR Information Disclosure vulnerability`:
 
 ```json
 {
@@ -31,29 +29,30 @@ As we can see, this returned the details of another user, with their own `uuid` 
 }
 ```
 
-This provides us with new details, most notably the `uuid`, which we could not calculate before, and thus could not change other users' details.
+This provides us with new details, most notably the `uuid`, which we could not calculate before, and thus could not change other users' details.
 
-***
+---
 
-### Modifying Other Users' Details
+## Modifying Other Users' Details
 
-Now, with the user's `uuid` at hand, we can change this user's details by sending a `PUT` request to `/profile/api.php/profile/2` with the above details along with any modifications we made, as follows:
+Now, with the user's `uuid` at hand, we can change this user's details by sending a `PUT` request to `/profile/api.php/profile/2` with the above details along with any modifications we made, as follows:
 
-![modify\_another\_user](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_modify_another_user.jpg)
+![modify_another_user](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_modify_another_user.jpg)
 
-We don't get any access control error messages this time, and when we try to `GET` the user details again, we see that we did indeed update their details:
+We don't get any access control error messages this time, and when we try to `GET` the user details again, we see that we did indeed update their details:
 
-![new\_another\_user\_details](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_new_another_user_details.jpg)
+![new_another_user_details](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_new_another_user_details.jpg)
 
-In addition to allowing us to view potentially sensitive details, the ability to modify another user's details also enables us to perform several other attacks. One type of attack is `modifying a user's email address` and then requesting a password reset link, which will be sent to the email address we specified, thus allowing us to take control over their account. Another potential attack is `placing an XSS payload in the 'about' field`, which would get executed once the user visits their `Edit profile` page, enabling us to attack the user in different ways.
+In addition to allowing us to view potentially sensitive details, the ability to modify another user's details also enables us to perform several other attacks. One type of attack is `modifying a user's email address` and then requesting a password reset link, which will be sent to the email address we specified, thus allowing us to take control over their account. Another potential attack is `placing an XSS payload in the 'about' field`, which would get executed once the user visits their `Edit profile` page, enabling us to attack the user in different ways.
 
-***
+---
 
-### Chaining Two IDOR Vulnerabilities
+## Chaining Two IDOR Vulnerabilities
 
-Since we have identified an IDOR Information Disclosure vulnerability, we may also enumerate all users and look for other `roles`, ideally an admin role. `Try to write a script to enumerate all users, similarly to what we did previously`.
+Since we have identified an IDOR Information Disclosure vulnerability, we may also enumerate all users and look for other `roles`, ideally an admin role. `Try to write a script to enumerate all users, similarly to what we did previously`.
 
 Once we enumerate all users, we will find an admin user with the following details:
+
 
 ```json
 {
@@ -66,11 +65,11 @@ Once we enumerate all users, we will find an admin user with the following detai
 }
 ```
 
-We may modify the admin's details and then perform one of the above attacks to take over their account. However, as we now know the admin role name (`web_admin`), we can set it to our user so we can create new users or delete current users. To do so, we will intercept the request when we click on the `Update profile` button and change our role to `web_admin`:
+We may modify the admin's details and then perform one of the above attacks to take over their account. However, as we now know the admin role name (`web_admin`), we can set it to our user so we can create new users or delete current users. To do so, we will intercept the request when we click on the `Update profile` button and change our role to `web_admin`:
 
-![modify\_our\_role](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_modify_our_role.jpg)
+![modify_our_role](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_modify_our_role.jpg)
 
-This time, we do not get the `Invalid role` error message, nor do we get any access control error messages, meaning that there are no back-end access control measures to what roles we can set for our user. If we `GET` our user details, we see that our `role` has indeed been set to `web_admin`:
+This time, we do not get the `Invalid role` error message, nor do we get any access control error messages, meaning that there are no back-end access control measures to what roles we can set for our user. If we `GET` our user details, we see that our `role` has indeed been set to `web_admin`:
 
 ```json
 {
@@ -83,22 +82,20 @@ This time, we do not get the `Invalid role` error message, nor do we get any acc
 }
 ```
 
-Now, we can refresh the page to update our cookie, or manually set it as `Cookie: role=web_admin`, and then intercept the `Update` request to create a new user and see if we'd be allowed to do so:
+Now, we can refresh the page to update our cookie, or manually set it as `Cookie: role=web_admin`, and then intercept the `Update` request to create a new user and see if we'd be allowed to do so:
 
-![create\_new\_user\_2](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_create_new_user_2.jpg)
+![create_new_user_2](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_create_new_user_2.jpg)
 
-We did not get an error message this time. If we send a `GET` request for the new user, we see that it has been successfully created:
+We did not get an error message this time. If we send a `GET` request for the new user, we see that it has been successfully created:
 
-![create\_new\_user\_2](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_get_new_user.jpg)
+![create_new_user_2](https://academy.hackthebox.com/storage/modules/134/web_attacks_idor_get_new_user.jpg)
 
-By combining the information we gained from the `IDOR Information Disclosure vulnerability` with an `IDOR Insecure Function Calls` attack on an API endpoint, we could modify other users' details and create/delete users while bypassing various access control checks in place. On many occasions, the information we leak through IDOR vulnerabilities can be utilized in other attacks, like IDOR or XSS, leading to more sophisticated attacks or bypassing existing security mechanisms.
+By combining the information we gained from the `IDOR Information Disclosure vulnerability` with an `IDOR Insecure Function Calls` attack on an API endpoint, we could modify other users' details and create/delete users while bypassing various access control checks in place. On many occasions, the information we leak through IDOR vulnerabilities can be utilized in other attacks, like IDOR or XSS, leading to more sophisticated attacks or bypassing existing security mechanisms.
 
-With our new `role`, we may also perform mass assignments to change specific fields for all users, like placing XSS payloads in their profiles or changing their email to an email we specify. `Try to write a script that changes all users' email to an email you choose.`. You may do so by retrieving their `uuids` and then sending a `PUT` request for each with the new email.
+With our new `role`, we may also perform mass assignments to change specific fields for all users, like placing XSS payloads in their profiles or changing their email to an email we specify. `Try to write a script that changes all users' email to an email you choose.`. You may do so by retrieving their `uuids` and then sending a `PUT` request for each with the new email.
 
-## Question
-
-***
-
+# Question
+---
 ![](Pasted%20image%2020250217165333.png)
 
 We can use this script to enumerate users:
@@ -256,6 +253,7 @@ Priority: u=0
 ```
 
 If we check the response, we get this:
+
 
 ![](Pasted%20image%2020250217165646.png)
 
