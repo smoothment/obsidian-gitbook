@@ -62,7 +62,7 @@ These last few sections introduced several methods for performing manual enumera
 
 # Question
 ---
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220133306.png)
+![](Pasted image 20250220133306.png)
 
 We can use this:
 

@@ -48,27 +48,27 @@ This shows that we successfully bypassed the filter through an HTTP Verb Tamperi
 # Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217143523.png)
+![](Pasted image 20250217143523.png)
 
 Same situation as the previous module, let's check the request behavior by adding a `test;` file:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217143548.png)
+![](Pasted image 20250217143548.png)
 
 We get malicious request denied error, this means the web application's got some sort of command injection security, but, it can be easily bypassed:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217144923.png)
+![](Pasted image 20250217144923.png)
 
 First, let's send the payload and change the request method, once we've sent it, change it again and send it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217145008.png)
+![](Pasted image 20250217145008.png)
 
 Now we can see our `flag.txt` has been correctly added, let's take a look:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217145033.png)
+![](Pasted image 20250217145033.png)
 
 There it is, let's read it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217145048.png)
+![](Pasted image 20250217145048.png)
 
 Flag is:
 

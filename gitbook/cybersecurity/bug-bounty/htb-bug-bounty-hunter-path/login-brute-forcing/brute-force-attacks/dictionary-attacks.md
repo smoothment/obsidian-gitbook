@@ -107,7 +107,7 @@ Flag: HTB{...}
 # Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250213135222.png)
+![](Pasted image 20250213135222.png)
 
 Let's modify the script to make it faster:
 

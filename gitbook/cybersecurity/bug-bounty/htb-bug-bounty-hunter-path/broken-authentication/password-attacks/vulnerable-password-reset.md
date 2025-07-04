@@ -153,19 +153,19 @@ To prevent this vulnerability, keeping a consistent state during the entire pass
 # Questions
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214164409.png)
+![](Pasted image 20250214164409.png)
 
 Let's begin by visiting the website:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214174940.png)
+![](Pasted image 20250214174940.png)
 
 We can reset the password, let's see it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214175101.png)
+![](Pasted image 20250214175101.png)
 
 We can enter the `admin` username for example:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214175120.png)
+![](Pasted image 20250214175120.png)
 
 We got a password reset question, this can be guessed through OSINT or even brute-force, for this exercise, let's bruteforce in the following way:
 
@@ -183,7 +183,7 @@ awk -F'"?,"?' '{print $1}' world-cities.csv > city_wordlist.txt
 
 Let's check the error response:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214180001.png)
+![](Pasted image 20250214180001.png)
 
 Now, we can use ffuf:
 
@@ -225,7 +225,7 @@ Manchester              [Status: 302, Size: 0, Words: 1, Lines: 1, Duration: 149
 
 Answer for first question is `Manchester`, we got `302` status code, which means we are now able to reset the password:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214180234.png)
+![](Pasted image 20250214180234.png)
 
 Let's go with the following credentials:
 
@@ -233,11 +233,11 @@ Let's go with the following credentials:
 `admin`:`password`
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214180310.png)
+![](Pasted image 20250214180310.png)
 
 And we can now log into the admin panel:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214180332.png)
+![](Pasted image 20250214180332.png)
 
 Flag is:
 

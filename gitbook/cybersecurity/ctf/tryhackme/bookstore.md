@@ -51,16 +51,16 @@ As we can see, we got `robots.txt` and `api` on port `5000`, let's check both we
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509112440.png)
+![](Pasted image 20250509112440.png)
 
 On the `login.html` source code, we can see this:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509114339.png)
+![](Pasted image 20250509114339.png)
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509113014.png)
+![](Pasted image 20250509113014.png)
 
 Let's fuzz:
 
@@ -94,7 +94,7 @@ console                 [Status: 200, Size: 1985, Words: 411, Lines: 53, Duratio
 
 We got console:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509114528.png)
+![](Pasted image 20250509114528.png)
 
 
 
@@ -102,7 +102,7 @@ We got console:
 
 We already know we are dealing with `REST API`, if we go to `/api`, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509113535.png)
+![](Pasted image 20250509113535.png)
 
 
 We got the documentation of the api, we got some routes we can analyze, if we go with:
@@ -204,7 +204,7 @@ exit
 
 It works and we got the pin, let's go into `/console` then:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509115547.png)
+![](Pasted image 20250509115547.png)
 
 We got an interactive python console, let's send ourselves a reverse shell and check if it works:
 
@@ -216,12 +216,12 @@ import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509115732.png)
+![](Pasted image 20250509115732.png)
 
 
 If we check our listener:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509115746.png)
+![](Pasted image 20250509115746.png)
 
 There we go, let's proceed to privilege escalation.
 
@@ -243,16 +243,16 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509115852.png)
+![](Pasted image 20250509115852.png)
 
 With our stable shell, we can now look around the machine, let's use linpeas:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509121448.png)
+![](Pasted image 20250509121448.png)
 
 We got a `try-harder` binary owned by root on our home directory, let's check it out using `ghidra`:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509121742.png)
+![](Pasted image 20250509121742.png)
 
 As seen, in the main function, we got an interesting finding, The binary checks if our input satisfies the equation:  
 
@@ -284,7 +284,7 @@ python3 magic_number.py
 
 We got our magic number, let's get our root shell:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509122835.png)
+![](Pasted image 20250509122835.png)
 
 Nice, we can finally read the root flag:
 
@@ -293,6 +293,6 @@ root@bookstore:~# cat /root/root.txt
 e29b05fba5b2a7e69c24a450893158e3
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509122935.png)
+![](Pasted image 20250509122935.png)
 
 

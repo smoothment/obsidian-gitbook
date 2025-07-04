@@ -11,7 +11,7 @@ Before exploiting an SSTI vulnerability, it is essential to successfully confirm
 
 The process of identifying an SSTI vulnerability is similar to the process of identifying any other injection vulnerability, such as SQL injection. The most effective way is to inject special characters with semantic meaning in template engines and observe the web application's behavior. As such, the following test string is commonly used to provoke an error message in a web application vulnerable to SSTI, as it consists of all special characters that have a particular semantic purpose in popular template engines:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212130159.png)
+![](Pasted image 20250212130159.png)
 
 
 Since the above test string should almost certainly violate the template syntax, it should result in an error if the web application is vulnerable to SSTI. This behavior is similar to how injecting a single quote (`'`) into a web application vulnerable to SQL injection can break an SQL query's syntax and thus result in an SQL error.
@@ -61,26 +61,26 @@ This time, the payload was executed by the template engine. Therefore, we follow
 # Question
 ----
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212130935.png)
+![](Pasted image 20250212130935.png)
 
 We got this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212130951.png)
+![](Pasted image 20250212130951.png)
 
 We can try injecting this payload:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212131049.png)
+![](Pasted image 20250212131049.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212131107.png)
+![](Pasted image 20250212131107.png)
 
 This means it worked, this site is indeed vulnerable to SSTI, let's use the following chart to test payloads:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212131145.png)
+![](Pasted image 20250212131145.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212131203.png)
+![](Pasted image 20250212131203.png)
 
 Let's proceed with: `{{7*7}}`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250212131228.png)
+![](Pasted image 20250212131228.png)
 
 Got it, if we read the chart, we can notice the template engine being used is `twig`

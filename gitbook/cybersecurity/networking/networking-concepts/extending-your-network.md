@@ -27,7 +27,7 @@ It is easy to confuse port forwarding with the behaviors of a firewall (a techno
 
 Port forwarding is configured at the router of a network.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120180153.png)
+![](Pasted image 20241120180153.png)
 
 # Firewalls 101
 ---
@@ -61,16 +61,16 @@ We'll cover the two primary categories of firewalls in the table below:
 | Stateless             | This firewall type uses a static set of rules to determine whether or not **individual packets** are acceptable or not. For example, a device sending a bad packet will not necessarily mean that the entire device is then blocked.<br><br>Whilst these firewalls use much fewer resources than alternatives, they are much dumber. For example, these firewalls are only effective as the rules that are defined within them. If a rule is not exactly matched, it is effectively useless.<br><br>However, these firewalls are great when receiving large amounts of traffic from a set of hosts (such as a Distributed Denial-of-Service attack) |
 |                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 |                       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120180452.png)
+![](Pasted image 20241120180452.png)
 
 ## PRACTICAL
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120180618.png)
+![](Pasted image 20241120180618.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120180641.png)
+![](Pasted image 20241120180641.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120180648.png)
+![](Pasted image 20241120180648.png)
 
 # VPN Basics
 ---
@@ -121,7 +121,7 @@ VPN technology has improved over the years. Let's explore some existing VPN te
 | PPTP               | The **P**oint-to-**P**oint **T**unneling **P**rotocol (**PPTP**) is the technology that allows the data from PPP to travel and leave a network. <br><br>PPTP is very easy to set up and is supported by most devices. It is, however, weakly encrypted in comparison to alternatives.                                                       |
 | IPSec              | Internet Protocol Security (IPsec) encrypts data using the existing **I**nternet **P**rotocol (**IP**) framework.<br><br>IPSec is difficult to set up in comparison to alternatives; however, if successful, it boasts strong encryption and is also supported on many devices.                                                             |
 |                    |                                                                                                                                                                                                                                                                                                                                             |
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120180715.png)
+![](Pasted image 20241120180715.png)
 
 
 # LAN Networking Devices
@@ -178,26 +178,26 @@ A technology called **VLAN** (**V**irtual **L**ocal **A**rea **N**etwork) a
 
 In the context of the diagram above, the "Sales Department" and "Accounting Department" will be able to access the Internet, but not able to communicate with each other (although they are connected to the same switch).
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120180817.png)
+![](Pasted image 20241120180817.png)
 
 # Practical - Network Simulator
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120181009.png)
+![](Pasted image 20241120181009.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120181026.png)
+![](Pasted image 20241120181026.png)
 
 Let's send the tcp packet and view at the network log:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120181058.png)
+![](Pasted image 20241120181058.png)
 
 ## Network log 
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120181209.png)
+![](Pasted image 20241120181209.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120181230.png)
+![](Pasted image 20241120181230.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120181239.png)
+![](Pasted image 20241120181239.png)
 
 

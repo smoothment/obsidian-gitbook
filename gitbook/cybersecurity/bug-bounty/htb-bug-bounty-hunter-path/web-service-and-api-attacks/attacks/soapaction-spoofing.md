@@ -298,5 +298,5 @@ $
 
 Answer is: 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219153436.png)
+![](Pasted image 20250219153436.png)
 

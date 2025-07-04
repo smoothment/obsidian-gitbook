@@ -211,4 +211,4 @@ It is about time we cover Session ID-obtaining attacks requiring user interactio
 
 # Question
 ---
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219123544.png)
+![](Pasted image 20250219123544.png)

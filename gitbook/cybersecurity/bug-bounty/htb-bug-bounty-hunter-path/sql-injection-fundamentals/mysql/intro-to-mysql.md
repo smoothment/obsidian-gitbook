@@ -217,7 +217,7 @@ Note: Allow 10-15 seconds for the servers in the questions to start, to allow en
 # Question
 ----
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250131134349.png)
+![](Pasted image 20250131134349.png)
 
 Let's authenticate using the following command:
 

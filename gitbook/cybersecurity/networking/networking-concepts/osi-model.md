@@ -14,7 +14,7 @@ The OSI model consists of seven layers which are illustrated in the diagram belo
 At every individual layer that data travels through, specific processes take place, and pieces of information are added to this data, which is what we'll come to discuss in the upcoming tasks within this room. However, for now, we only need to understand that this process is called encapsulation and what the OSI model looks like in the diagram below:
 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/6d17472b87f8792dadde3bb06aa1fdaa.svg)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120174700.png)
+![](Pasted image 20241120174700.png)
 
 # Layer 1 - Physical
 
@@ -39,7 +39,7 @@ MAC addresses are set by the manufacturer and literally burnt into the card; the
 
 Additionally, it’s also the job of the data link layer to present the data in a format suitable for transmission.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120174828.png)
+![](Pasted image 20241120174828.png)
 
 # Layer 3 - Network
 ---
@@ -62,7 +62,7 @@ At this layer, everything is dealt with via IP addresses such as 192.168.1.100. 
 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5de96d9ca744773ea7ef8c00/room-content/893620a3545775f0fbbd75ea4bc4a946.svg)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120174921.png)
+![](Pasted image 20241120174921.png)
 
 # Layer 4 - Transport
 ----
@@ -118,7 +118,7 @@ Using the same example as before, we can now see that only Packets #1 and #3 hav
 UDP is useful in situations where there are small pieces of data being sent. For example, protocols used for discovering devices (_ARP_ and _DHCP_ that we discussed in [Room 2 - Intro to LAN)](https://tryhackme.com/room/introtolan) or larger files such as video streaming (where it is okay if some part of the video is pixelated. Pixels are just lost pieces of data!)
 
   
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120175100.png)
+![](Pasted image 20241120175100.png)
 
 # Layer 5 - Session
 ---
@@ -131,7 +131,7 @@ The session layer is also responsible for closing the connection if it hasn't b
 
 What is worthy of noting is that sessions are unique — meaning that data cannot travel over different sessions, but in fact, only across each session instead.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120175130.png)
+![](Pasted image 20241120175130.png)
 
 # Layer 6 - Presentation
 ---
@@ -145,7 +145,7 @@ This layer acts as a translator for data to and from the application layer (laye
 
 Security features such as data encryption (like HTTPS when visiting a secure site) occur at this layer.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120175154.png)
+![](Pasted image 20241120175154.png)
 
 
 # Layer 7 - Application
@@ -162,4 +162,4 @@ Everyday applications such as email clients, browsers, or file server browsing s
 
 ![](https://assets.tryhackme.com/additional/cmn-aoc2020/day-10/replace/browser.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241120175232.png)
+![](Pasted image 20241120175232.png)

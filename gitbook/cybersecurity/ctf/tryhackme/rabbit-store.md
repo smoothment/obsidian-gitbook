@@ -19,7 +19,7 @@ sticker: emoji//1f430
 
 We got 4 open ports, here's the Nmap scan:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226145915.png)
+![](Pasted image 20250226145915.png)
 
 So, before we start, let's add `cloudsite.thm` to `/etc/hosts`:
 
@@ -33,12 +33,12 @@ Now, let's begin.
 # RECONNAISSANCE
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226150256.png)
+![](Pasted image 20250226150256.png)
 
 
 We got a login section, let's take a look:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226150811.png)
+![](Pasted image 20250226150811.png)
 
 Now, we need to add `storage.cloudsite.thm` to `/etc/hosts`, in this part, it would be useful to fuzz for any other subdomains to check if we missed some:
 
@@ -50,7 +50,7 @@ storage                 [Status: 200, Size: 9039, Words: 3183, Lines: 263, Durat
 
 We didn't miss anything, let's add it and continue:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226151210.png)
+![](Pasted image 20250226151210.png)
 
 
 Let's create a test account first:
@@ -60,14 +60,14 @@ test@test.com:test
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226151727.png)
+![](Pasted image 20250226151727.png)
 
 Let's check the request in burp:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226152008.png)
+![](Pasted image 20250226152008.png)
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226152021.png)
+![](Pasted image 20250226152021.png)
 
 
 Basically, the sequence goes like this:
@@ -123,7 +123,7 @@ curl -s -H 'Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R
 
 In this one we get access denied, seems like either way we are unable to read the endpoints without an active subscription, this means, we need to find a way to get it, let's check the login request once again:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226152958.png)
+![](Pasted image 20250226152958.png)
 
 If we check the way the cookie is being generated, we check that we got another data in the json, it goes:
 
@@ -133,7 +133,7 @@ If we check the way the cookie is being generated, we check that we got another 
 
 I think that if we're able to change that in the register endpoint, we can active our subscription, let's create another account:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226153148.png)
+![](Pasted image 20250226153148.png)
 
 Now, let's add this in the data:
 
@@ -142,11 +142,11 @@ Now, let's add this in the data:
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226153239.png)
+![](Pasted image 20250226153239.png)
 
 And it worked:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226153250.png)
+![](Pasted image 20250226153250.png)
 
 Now, let's try to log in:
 
@@ -154,14 +154,14 @@ Now, let's try to log in:
 test2@test.com:test2
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226153346.png)
+![](Pasted image 20250226153346.png)
 
 And now, it's changed to active, let's check the panel now:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226153426.png)
+![](Pasted image 20250226153426.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226153434.png)
+![](Pasted image 20250226153434.png)
 
 
 Let's try sending a simple file using the `Upload From Url` functionality, for this, we need to start a python server and create a test file:
@@ -176,25 +176,25 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 Now, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226154538.png)
+![](Pasted image 20250226154538.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226154547.png)
+![](Pasted image 20250226154547.png)
 
 And we got a link to our file, let's open burp and analyze the request:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226154631.png)
+![](Pasted image 20250226154631.png)
 
 We are making use of the `uploads` endpoint found previously on the API, it makes a GET request and retrieves the content of the file, but what about the request when downloading a file from an URL:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226154759.png)
+![](Pasted image 20250226154759.png)
 
 Now, another call to another endpoint happens, we are now calling the `store_url` endpoint, if we make a successful call and are able to download a file, this is the output:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226154901.png)
+![](Pasted image 20250226154901.png)
 
 So, what if we try pointing some internal resource, like trying to read `/docs` endpoint of the API, if we use Wappalyzer we can check this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226155051.png)
+![](Pasted image 20250226155051.png)
 
 The API seems to be using `Express`, the default port for this is `3000`, so, in order to read `/docs` this would be the data we need to submit:
 
@@ -204,11 +204,11 @@ The API seems to be using `Express`, the default port for this is `3000`, so, in
 
 This happens:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226155815.png)
+![](Pasted image 20250226155815.png)
 
 We were able to do it, let's read the file:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226155859.png)
+![](Pasted image 20250226155859.png)
 
 Found another endpoint, this one seems weird:
 
@@ -218,25 +218,25 @@ Found another endpoint, this one seems weird:
 
 Let's try to check the behavior of the endpoint:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226160121.png)
+![](Pasted image 20250226160121.png)
 
 As known, it requires a POST request, let's send one with empty data:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226160238.png)
+![](Pasted image 20250226160238.png)
 
 If we change our username to `admin` this happens:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226160324.png)
+![](Pasted image 20250226160324.png)
 
 We get an error message saying: `Sorry, admin, our chatbot server is currently under development.`
 
 But, if we analyze the error message, we see that our input gets reflected in the response the endpoint is giving us, let's change the username to test and check if its true:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226160441.png)
+![](Pasted image 20250226160441.png)
 
 And that's correct, let's test for `SSTI`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226160538.png)
+![](Pasted image 20250226160538.png)
 
 We got it, this is vulnerable to SSTI, in this case, we are facing Jinja2, let's take a look at my old notes from HTB BBHP which talks about this: 
 
@@ -244,7 +244,7 @@ We got it, this is vulnerable to SSTI, in this case, we are facing Jinja2, let's
 
 For example, let's try to read the web application configuration:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226161449.png)
+![](Pasted image 20250226161449.png)
 
 Nice, now, our next step is getting a shell:
 
@@ -254,7 +254,7 @@ Nice, now, our next step is getting a shell:
 
 After we send this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226161615.png)
+![](Pasted image 20250226161615.png)
 
 We got a shell as `azrael`, let's begin privilege escalation.
 
@@ -263,7 +263,7 @@ We got a shell as `azrael`, let's begin privilege escalation.
 
 First step would be getting an [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stable shell]]:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226161731.png)
+![](Pasted image 20250226161731.png)
 
 There is our first flag:
 
@@ -398,7 +398,7 @@ Now, based on the way the hash is structured, we need to remove the 4 byte salt:
 
 We can now switch users:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250226171829.png)
+![](Pasted image 20250226171829.png)
 
 And there we are, we are now root, let's read our `root.txt` file:
 

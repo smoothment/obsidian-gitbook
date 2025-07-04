@@ -135,22 +135,22 @@ Similarly, we can use `Burp Intruder` to do any type of web fuzzing and brute-
 
 # Question
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124104945.png)
+![](Pasted image 20250124104945.png)
 
 Nice, let's follow these steps:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124115144.png)
+![](Pasted image 20250124115144.png)
 
 Set the target, let's add the dictionary, for this, I filtered a premade dictionary using this: `cat /usr/share/seclists/Discovery/Web-Content/raft-small-files.txt | grep '\.html$' > filtered-html-files.txt`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124115253.png)
+![](Pasted image 20250124115253.png)
 
 Let's send the payload:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124115555.png)
+![](Pasted image 20250124115555.png)
 
 After a while, we can see that `2010.html` matches `200` status code:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124115630.png)
+![](Pasted image 20250124115630.png)
 
 We got the flag: `HTB{burp_1n7rud3r_fuzz3r!}`

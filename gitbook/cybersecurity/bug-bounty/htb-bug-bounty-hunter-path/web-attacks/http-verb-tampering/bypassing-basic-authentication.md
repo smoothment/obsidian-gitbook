@@ -77,36 +77,36 @@ Try testing other HTTP methods, and see which ones can successfully bypass the a
 # Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217141132.png)
+![](Pasted image 20250217141132.png)
 
 Let's check out the website:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217141147.png)
+![](Pasted image 20250217141147.png)
 
 We can see it's a file manager application, we can add files and delete them, let's try adding a file:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217141216.png)
+![](Pasted image 20250217141216.png)
 
 Now, if we try deleting a file, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217141234.png)
+![](Pasted image 20250217141234.png)
 
 We need credentials in order to do so, this seems like a privileged action only, so, in order to bypass this, let's send the request and analyze it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217141331.png)
+![](Pasted image 20250217141331.png)
 
 First, it sends a `GET` request to `/admin/reset.php` endpoint, if we forward the request, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217141414.png)
+![](Pasted image 20250217141414.png)
 
 If we change the request method to `PUT`, this happens:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217141751.png)
+![](Pasted image 20250217141751.png)
 
 We no longer get `401` status code, let's send the request and check the behavior:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217142846.png)
+![](Pasted image 20250217142846.png)
 
 Page goes blank, we are unable to retrieve any data, this means, it's not the intended way to go, let's go back to adding files and checking the request, we can use the following test payload:
 
@@ -116,7 +116,7 @@ file; cp /flag.txt ./
 
 We'd see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217143156.png)
+![](Pasted image 20250217143156.png)
 
 It shows its a malicious request but doesn't block the access to the flag, flag is:
 

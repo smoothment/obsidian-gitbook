@@ -68,7 +68,7 @@ As we can see, the command was successfully executed without having spaces in it
 # Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205141609.png)
+![](Pasted image 20250205141609.png)
 
 We can use the following:
 

@@ -74,24 +74,24 @@ Host script results:
 We got FTP and SMB enabled on the machine, also, we got anonymous login enabled in FTP at first sight thanks to the scan, this may be enabled on smb too, let's check out FTP first:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401131807.png)
+![](Pasted image 20250401131807.png)
 
 We got a `scripts` directory, let's check it contents:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401132437.png)
+![](Pasted image 20250401132437.png)
 
 We got some scripts in it, let's look at them:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401132655.png)
+![](Pasted image 20250401132655.png)
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401132708.png)
+![](Pasted image 20250401132708.png)
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401132719.png)
+![](Pasted image 20250401132719.png)
 
 
 That `clean.sh` script seems interesting, let's keep it like that for now. We can proceed to analyze `SMB`, since the anonymous login may be enabled, we can view the contents of the shares:
@@ -110,7 +110,7 @@ SMB1 disabled -- no workgroup available
 
 Let's check that `pics` share:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401133112.png)
+![](Pasted image 20250401133112.png)
 
 Both files are not interesting, if we try extracting the contents with `steghide`, we'll need a passphrase so, they're not useful, let's proceed with exploitation then.
 
@@ -152,7 +152,7 @@ nc -lvnp PORT
 
 If we reproduce these steps, we can see the following in our listener:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401133901.png)
+![](Pasted image 20250401133901.png)
 
 We got a shell as `namelessone`, let's begin privilege escalation.
 
@@ -174,7 +174,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401134051.png)
+![](Pasted image 20250401134051.png)
 
 We can read `user.txt` now:
 
@@ -185,15 +185,15 @@ namelessone@anonymous:~$ cat user.txt
 
 Now, in order to get root, we can use linpeas to check for any privesc vector:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401134406.png)
+![](Pasted image 20250401134406.png)
 
 For example, we are inside of the `sudo` group but since we do not know the password of `namelessone`, this is pretty much useless for now, if we keep looking at `linpeas` output, we can check this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401134512.png)
+![](Pasted image 20250401134512.png)
 
 We got `SUID` for `/usr/bin/env`, let's check `gtfobins`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401134540.png)
+![](Pasted image 20250401134540.png)
 
 So, we can do the following in order to get a root shell:
 
@@ -201,7 +201,7 @@ So, we can do the following in order to get a root shell:
 /usr/bin/env /bin/bash -p
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401134615.png)
+![](Pasted image 20250401134615.png)
 
 There we go, we can finally read `root.txt` and end the challenge:
 
@@ -210,7 +210,7 @@ bash-4.4# cat /root/root.txt
 4d930091c31a622a7ed10f27999af363
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401134709.png)
+![](Pasted image 20250401134709.png)
 
 
 

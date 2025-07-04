@@ -216,7 +216,7 @@ We will see a few other scenarios of operator precedence in the upcoming section
 ---
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250131142339.png)
+![](Pasted image 20250131142339.png)
 
 We can use limit first to check the structure of the table:
 
