@@ -88,7 +88,7 @@ C:\htb> who^ami
 # Question
 ----
 
-![](Pasted%20image%2020250205143422.png)
+![](images/Pasted%20image%2020250205143422.png)
 
 We can do the following command:
 

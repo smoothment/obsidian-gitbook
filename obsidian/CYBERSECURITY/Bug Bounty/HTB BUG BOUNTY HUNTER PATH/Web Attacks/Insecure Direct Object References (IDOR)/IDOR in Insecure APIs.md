@@ -86,7 +86,7 @@ So far, we have only been testing the `IDOR Insecure Function Calls`. However, 
 # Question
 ---
 
-![](Pasted%20image%2020250217161733.png)
+![](images/Pasted%20image%2020250217161733.png)
 
 We can check the following request:
 

@@ -51,18 +51,23 @@ PORT   STATE SERVICE REASON  VERSION
 Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
+```
+The application running on the web server on port 3000 is the software development platform Gitea, recognizable by the set cookie `i_like_gitea`.
+
+![](https://0xb0b.gitbook.io/writeups/~gitbook/image?url=https%3A%2F%2F2148487935-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FoqaFccsCrwKo1CHmLRKW%252Fuploads%252FefVGb1ZXLw4R9GYPR7E4%252Fimage.png%3Falt%3Dmedia%26token%3Dbf2153c1-05be-461f-9ef7-cdc31a95d044&width=768&dpr=4&quality=100&sign=6b09f8dc&sv=2)
+```
 
 # RECONNAISSANCE
 ---
 
 We can see that anonymous login is enabled based on the scan, let's check out FTP:
 
-![](Pasted%20image%2020250321140200.png)
+![](images/Pasted%20image%2020250321140200.png)
 
 
 Nothing in here, let's proceed to the website then:
 
-![](Pasted%20image%2020250321140441.png)
+![](images/Pasted%20image%2020250321140441.png)
 
 Simple apache2 page, let's fuzz:
 
@@ -96,15 +101,15 @@ hackathons              [Status: 200, Size: 197, Words: 19, Lines: 64, Duration:
 
 We found `wordpress` and `hackathons`, let's check the last one:
 
-![](Pasted%20image%2020250321141557.png)
+![](images/Pasted%20image%2020250321141557.png)
 
 We can check the source code:
 
-![](Pasted%20image%2020250321141616.png)
+![](images/Pasted%20image%2020250321141616.png)
 
 This is talking about vigenere encoding, it's providing the key and the hash so let's decode:
 
-![](Pasted%20image%2020250321155707.png)
+![](images/Pasted%20image%2020250321155707.png)
 
 Looks like a password:
 
@@ -116,7 +121,7 @@ Let's save this for now, let's check the WordPress one:
 
 
 
-![](Pasted%20image%2020250321141902.png)
+![](images/Pasted%20image%2020250321141902.png)
 
 We can enumerate some basic stuff with wpscan:
 
@@ -225,7 +230,7 @@ Interesting Finding(s):
 
 As seen, we got the `mail_masta` plugin enabled, this plugin is well known to be susceptible to LFI at version 1.0, we can try a PoC and test:
 
-![](Pasted%20image%2020250321150756.png)
+![](images/Pasted%20image%2020250321150756.png)
 
 
 # EXPLOITATION
@@ -233,7 +238,7 @@ As seen, we got the `mail_masta` plugin enabled, this plugin is well known to be
 
 Since we have LFI, and the password we found does not work for the user `elyana`, let's try to read `wp-config.php` file, if we do it normally:
 
-![](Pasted%20image%2020250321160057.png)
+![](images/Pasted%20image%2020250321160057.png)
 
 We get an internal server error, for this, let's use a `php wrapper` in the following way:
 
@@ -242,12 +247,12 @@ php://filter/convert.base64-encode/resource=../../../../../wp-config.php
 ```
 
 
-![](Pasted%20image%2020250321160230.png)
+![](images/Pasted%20image%2020250321160230.png)
 
 And now we get the contents of the file in the format of base64, let's decode it and analyze it:
 
 
-![](Pasted%20image%2020250321160332.png)
+![](images/Pasted%20image%2020250321160332.png)
 
 There we go, we got the credentials:
 
@@ -259,19 +264,19 @@ elyana:H@ckme@123
 Let's log into the panel:
 
 
-![](Pasted%20image%2020250321161038.png)
+![](images/Pasted%20image%2020250321161038.png)
 
 
 From this point, we can get a shell by exploiting the theme editor, let's do it:
 
 
-![](Pasted%20image%2020250321161252.png)
+![](images/Pasted%20image%2020250321161252.png)
 
 
 
 Let's change the contents of it to a reverse shell:
 
-![](Pasted%20image%2020250321161313.png)
+![](images/Pasted%20image%2020250321161313.png)
 
 Update, start a listener and visit this url:
 
@@ -279,7 +284,7 @@ Update, start a listener and visit this url:
 http://<target>/wordpress/wp-content/themes/twentyseventeen/404.php
 ```
 
-![](Pasted%20image%2020250321161556.png)
+![](images/Pasted%20image%2020250321161556.png)
 
 And we got a shell, let's proceed with privesc.
 
@@ -301,15 +306,15 @@ First step is stabilizing our session:
 6. export TERM=xterm
 7. export BASH=bash
 
-![](Pasted%20image%2020250321161700.png)
+![](images/Pasted%20image%2020250321161700.png)
 
 Once we've established our shell, let's look around for a way to get into root:
 
-![](Pasted%20image%2020250321161942.png)
+![](images/Pasted%20image%2020250321161942.png)
 
 As seen root is running a script.sh file in the crontab, we cannot write it with `www-data` so, we need either the credentials of `elyana` or look around for other stuff, let's use linpeas:
 
-![](Pasted%20image%2020250321162922.png)
+![](images/Pasted%20image%2020250321162922.png)
 
 We got a lot of binaries enabled, we can use this to get a root shell:
 
@@ -317,7 +322,7 @@ We got a lot of binaries enabled, we can use this to get a root shell:
 /bin/bash -p
 ```
 
-![](Pasted%20image%2020250321163046.png)
+![](images/Pasted%20image%2020250321163046.png)
 
 We got a root shell by this, let's read both flags:
 
@@ -347,7 +352,7 @@ echo 'VEhNe3VlbTJ3aWdidWVtMndpZ2I2OHNuMmoxb3NwaTg2OHNuMmoxb3NwaTh9' | base64 -d
 THM{uem2wigbuem2wigb68sn2j1ospi868sn2j1ospi8}
 ```
 
-![](Pasted%20image%2020250321163201.png)
+![](images/Pasted%20image%2020250321163201.png)
 
 
 sudo apt update && sudo apt full-upgrade -y

@@ -205,7 +205,7 @@ The reconnaissance scan on `inlanefreight.com` reveals several key findings:
 # Questions
 ---
 
-![](Pasted%20image%2020250128125023.png)
+![](images/Pasted%20image%2020250128125023.png)
 
 ```ad-hint
 First, let's add both to`/etc/hosts`:
@@ -218,14 +218,14 @@ Now, let's use curl to perform banner grabbing on `app.inlanefreight.local`:
 
 `curl -I app.inlanefreight.local`
 
-![](Pasted%20image%2020250128125342.png)
+![](images/Pasted%20image%2020250128125342.png)
 
 We found the version is `2.4.41`.
 
 
 To check for the CMS, we can use `whatweb`:
 
-![](Pasted%20image%2020250128130042.png)
+![](images/Pasted%20image%2020250128130042.png)
 
 So, the CMS is `Joomla`
 

@@ -141,20 +141,20 @@ In the first `Headers` tab, we see both the HTTP request and HTTP response hea
 # Question
 
 
-![](Pasted%20image%2020250122144803.png)
+![](images/Pasted%20image%2020250122144803.png)
 
 So, let's go into the site, and view the network tab:
 
-![](Pasted%20image%2020250122144922.png)
+![](images/Pasted%20image%2020250122144922.png)
 
 If we reload the page, we see the following request being made:
 
-![](Pasted%20image%2020250122144944.png)
+![](images/Pasted%20image%2020250122144944.png)
 
 
 If we double click on that `flag_327a6c4304ad5938eaf0efb6cc3e53dc.txt` resource, we see the following:
 
-![](Pasted%20image%2020250122145010.png)
+![](images/Pasted%20image%2020250122145010.png)
 
 So, flag would be: `HTB{p493_r3qu3$t$_m0n!t0r}`
 

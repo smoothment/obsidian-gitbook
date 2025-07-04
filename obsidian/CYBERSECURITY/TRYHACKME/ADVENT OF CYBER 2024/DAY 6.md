@@ -1,7 +1,7 @@
 ---
 sticker: emoji//1f384
 ---
-![](Pasted%20image%2020241206110950.png)
+![](images/Pasted%20image%2020241206110950.png)
 
 _Mayor Malware was scheming, quite full of delight,  
 To ruin SOC-mas and frighten SOC teams.  
@@ -46,7 +46,7 @@ Mayor Malware knows that before his malware executes, it needs to check if it is
 To do so, he has settled on one technique, which checks if the directory `C:\Program Files` is present by querying the Registry path `HKLM\\Software\\Microsoft\\Windows\\CurrentVersion`. The value can be confirmed by visiting the Registry path within the Registry Editor, as shown below:
 
 
-![](Pasted%20image%2020241206111732.png)
+![](images/Pasted%20image%2020241206111732.png)
 
 To open the `Windows Registry Editor`, navigate to the `Start Menu` on the bottom, select `Run`, enter `regedit`, and press enter.
 
@@ -143,7 +143,7 @@ If our custom script did its job, you should have witnessed a popup by our EDR�
 
 _**Note:** If the popup does not show up, hover over the PowerShell item in the taskbar. It should show the popup that was generated._
 
-![](Pasted%20image%2020241206113220.png)
+![](images/Pasted%20image%2020241206113220.png)
 
 Our first flag is: `THM{GlitchWasHere}`
 
@@ -202,7 +202,7 @@ Once the command is done, open `malstrings.txt`, press `CTRL+F`, and search fo
 
 Or, we can use powershell and type in the following command:
 
-![](Pasted%20image%2020241206113952.png)
+![](images/Pasted%20image%2020241206113952.png)
 
 ```ad-note
 ##### Command
@@ -248,7 +248,7 @@ Continue by navigating to `Filter Current Log` on the right-hand side of the s
 
 You should see a window like the one below:
 
-![](Pasted%20image%2020241206114145.png)
+![](images/Pasted%20image%2020241206114145.png)
 
 Navigate to XML and tick the checkbox `Edit query manually`. Click `Yes` to confirm. Finally, copy the following filter into the input box:
 
@@ -265,7 +265,7 @@ Navigate to XML and tick the checkbox `Edit query manually`. Click `Yes` to
 
 Replace the `EventRecordID` value with the one you recorded before. Apply the filter by clicking `OK`. Now you get the event related to the malware. Click on the event and then on the `Details` tab. You should get the following output:
 
-![](Pasted%20image%2020241206114211.png)
+![](images/Pasted%20image%2020241206114211.png)
 
 Let's take a look at the `EventData` that is valuable to us:
 
@@ -291,7 +291,7 @@ He clenched his fist, a determined glint in his eye. _"Just a little more fine-
 
 But for now, he would wait. Watching. Planning. And he was perfecting his craft in the shadows.
 
-![](Pasted%20image%2020241206114316.png)
+![](images/Pasted%20image%2020241206114316.png)
 
 Just like that day 6 is done!
 

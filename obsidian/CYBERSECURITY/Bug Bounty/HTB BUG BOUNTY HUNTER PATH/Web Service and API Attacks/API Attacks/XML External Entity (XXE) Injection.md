@@ -108,5 +108,5 @@ The API is vulnerable to XXE Injection.
 
 # Question
 ---
-![](Pasted%20image%2020250219172306.png)
+![](images/Pasted%20image%2020250219172306.png)
 

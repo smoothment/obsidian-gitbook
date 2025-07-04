@@ -150,7 +150,7 @@ HTB{...}
 # Questions
 ---
 
-![](Pasted%20image%2020250213152556.png)
+![](images/Pasted%20image%2020250213152556.png)
 
 Let's begin by launching the default medusa scan:
 

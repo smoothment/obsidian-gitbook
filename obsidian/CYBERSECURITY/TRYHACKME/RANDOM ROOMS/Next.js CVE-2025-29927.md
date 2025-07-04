@@ -35,11 +35,11 @@ The command is like a usual `curl` command with one exception: It uses the `-
 
 We can pass in the request to our proxy and add the `x-middleware-subrequest: middleware` header to it:
 
-![](Pasted%20image%2020250325153823.png)
+![](images/Pasted%20image%2020250325153823.png)
 
 Now let's add the header:
 
-![](Pasted%20image%2020250325153856.png)
+![](images/Pasted%20image%2020250325153856.png)
 
 We were able to bypass the `307` status code, flag is:
 

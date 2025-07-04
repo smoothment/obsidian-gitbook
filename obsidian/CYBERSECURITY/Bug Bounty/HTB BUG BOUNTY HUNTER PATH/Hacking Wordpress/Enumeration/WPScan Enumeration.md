@@ -82,7 +82,7 @@ WPScan uses various passive and active methods to determine versions and vulnera
 # Question
 ----
 
-![](Pasted%20image%2020250220133445.png)
+![](images/Pasted%20image%2020250220133445.png)
 
 Let's use:
 

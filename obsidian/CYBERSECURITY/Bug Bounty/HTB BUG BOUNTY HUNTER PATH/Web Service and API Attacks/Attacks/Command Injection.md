@@ -48,7 +48,7 @@ smoothment@htb[/htb]$ sudo tcpdump -i tun0 icmp
 
 - The code also checks if the _packets_'s value is more than 4, and it does that via an array. So if we issue a request such as `http://<TARGET IP>:3003/ping-server.php/ping/<VPN/TUN Adapter IP>/3333`, we're going to get an _Only 1-4 packets!_ error.
 - A variable called _cmd_ is then created, which forms the ping command to be executed. Two values are "parsed", _packets_ and _host_url_. [escapeshellarg()](https://www.php.net/manual/en/function.escapeshellarg.php) is used to escape the _host_url_'s value. According to PHP's function reference, _escapeshellarg() adds single quotes around a string and quotes/escapes any existing single quotes allowing you to pass a string directly to a shell function and having it be treated as a single safe argument. This function should be used to escape individual arguments to shell functions coming from user input. The shell functions include exec(), system() shell_exec() and the backtick operator._ If the _host_url_'s value was not escaped, the below could happen.
-![](Pasted%20image%2020250219153637.png)
+![](images/Pasted%20image%2020250219153637.png)
 - The command specified by the _cmd_ parameter is executed with the help of the _shell_exec()_ PHP function.
 - If the request method is GET, an existing function can be called with the help of [call_user_func_array()](https://www.php.net/manual/en/function.call-user-func-array.php). The _call_user_func_array()_ function is a special way to call an existing PHP function. It takes a function to call as its first parameter, then takes an array of parameters as its second parameter. This means that instead of `http://<TARGET IP>:3003/ping-server.php/ping/www.example.com/3` an attacker could issue a request as follows. `http://<TARGET IP>:3003/ping-server.php/system/ls`. This constitutes a command injection vulnerability!
 
@@ -64,7 +64,7 @@ ping-server.php
 # Question
 ---
 
-![](Pasted%20image%2020250219153716.png)
+![](images/Pasted%20image%2020250219153716.png)
 
 If we test `id`, we get the following:
 

@@ -86,7 +86,7 @@ You will use the Metasploit Framework to create the document with the maliciou
 
 
 
-![](Pasted%20image%2020241210205337.png)
+![](images/Pasted%20image%2020241210205337.png)
 
 Nice, now we have our malicious macro file. 
 
@@ -118,7 +118,7 @@ You already expect this file to connect to the specified IP address and port. If
 
 ![VirusTotal summary of the payload behaviour](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/5f04259cf9bf5b57aed2c476-1729859908974.png)
 
-![](Pasted%20image%2020241210205913.png)
+![](images/Pasted%20image%2020241210205913.png)
 
 Most of the AV already catch this file so, its pretty simple and informative only, let's check what would happen if a victim just downloaded this file:
 
@@ -193,24 +193,24 @@ Notice how Mayor Malware uses a domain name that looks similar to the target use
 
 Once logged in, compose an email to the target user, and don’t forget to attach the document you created. Changing the name to something more convincing, such as `invoice.docm` or `receipt.docm` might be a good idea. Also, write a couple of sentences explaining what you are attaching to convince Marta May Ware to open the document. **Note:** You can use CTRL+H on the file upload pop-up to be able to see the `.msf4` directory where our email attachment is located.
 
-![](Pasted%20image%2020241210210210.png)
+![](images/Pasted%20image%2020241210210210.png)
 
 ## Exploitation
 
 If everything works out, you will get a reverse shell after about 2 minutes. You can access the files and folders on the target system via the command line. You can use `cat` to display any text file.
 
 
-![](Pasted%20image%2020241210210605.png)
+![](images/Pasted%20image%2020241210210605.png)
 
 Let's apply simple social engineering and send the file, as we suppose we are in a real environment, once sent, let's wait for the connection:
 
 
-![](Pasted%20image%2020241210210730.png)
+![](images/Pasted%20image%2020241210210730.png)
 
 We got the shell as admin user!
 
 Let's read our flag and end this day.
 
-![](Pasted%20image%2020241210210840.png)
+![](images/Pasted%20image%2020241210210840.png)
 
 Our flag is: `THM{PHISHING_CHRISTMAS}`

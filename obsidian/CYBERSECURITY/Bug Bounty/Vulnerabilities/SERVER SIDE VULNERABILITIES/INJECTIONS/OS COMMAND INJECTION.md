@@ -113,15 +113,15 @@ Placing the additional command separator & after the injected command is useful 
 
 ### LAB
 
-![](Pasted%20image%2020240919175154.png)
+![](images/Pasted%20image%2020240919175154.png)
 
 Request:
 
-![](Pasted%20image%2020240919175442.png)
+![](images/Pasted%20image%2020240919175442.png)
 Lets OS inject parameter storeId using a pipeline `|` so it performs a command right after the first one:
 
-![](Pasted%20image%2020240919175714.png)
-![](Pasted%20image%2020240919175733.png)
+![](images/Pasted%20image%2020240919175714.png)
+![](images/Pasted%20image%2020240919175733.png)
 
 # TRYHACKME SECTION
 
@@ -289,7 +289,7 @@ When executed, although the data given will be in a different format than what i
 ### PRACTICAL EXAMPLE
 
 
-![](Pasted%20image%2020241106114039.png)
+![](images/Pasted%20image%2020241106114039.png)
 
-![](Pasted%20image%2020241106114104.png)
+![](images/Pasted%20image%2020241106114104.png)
 

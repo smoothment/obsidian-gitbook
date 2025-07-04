@@ -68,14 +68,14 @@ Take care when injecting the condition OR 1=1 into a SQL query. Even if it appea
 
 ### LAB
 
-![](Pasted%20image%2020240919180316.png)
+![](images/Pasted%20image%2020240919180316.png)
 Request:
-![](Pasted%20image%2020240919180614.png)
+![](images/Pasted%20image%2020240919180614.png)
 
 Using `'+OR+1=1--` to perform SQLI:
 
-![](Pasted%20image%2020240919180538.png)
-![](Pasted%20image%2020240919180654.png)
+![](images/Pasted%20image%2020240919180538.png)
+![](images/Pasted%20image%2020240919180654.png)
 
 
 ## Subverting application logic
@@ -95,17 +95,17 @@ This query returns the user whose username is administrator and successfully log
 
 ### LAB
 
-![](Pasted%20image%2020240919180913.png)
+![](images/Pasted%20image%2020240919180913.png)
 
-![](Pasted%20image%2020240919180954.png)
+![](images/Pasted%20image%2020240919180954.png)
 Request:
 
-![](Pasted%20image%2020240919181021.png)
+![](images/Pasted%20image%2020240919181021.png)
 Lets perform SQLI:
 
-![](Pasted%20image%2020240919181123.png)
+![](images/Pasted%20image%2020240919181123.png)
 Now we know this works, lets login from the panel and end the lab!:
-![](Pasted%20image%2020240919181447.png)
+![](images/Pasted%20image%2020240919181447.png)
 
 # SQL INJECTION UNION ATTACKS
 
