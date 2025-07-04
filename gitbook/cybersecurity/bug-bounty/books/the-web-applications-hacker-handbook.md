@@ -2,6 +2,7 @@
 sticker: emoji//1f4d5
 ---
 
-# THE WEB APPLICATION'S HACKER HANDBOOK
 
-{% file src="../../../.gitbook/assets/THE WEB APPLICATION'S HACKER HANDBOOK.pdf" %}
+
+
+![[Dafydd Stuttard, Marcus Pinto - The web application hacker's handbook_ finding and exploiting security flaws-Wiley (2011).pdf]]

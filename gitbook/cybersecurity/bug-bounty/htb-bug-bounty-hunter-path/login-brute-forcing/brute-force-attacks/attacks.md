@@ -1,10 +1,8 @@
 ---
 sticker: emoji//1f9d1-200d-1f4bb
 ---
-
-# Attacks
-
 To truly grasp the challenge of brute forcing, it's essential to understand the underlying mathematics. The following formula determines the total number of possible combinations for a password:
+
 
 ```mathml
 Possible Combinations = Character Set Size^Password Length
@@ -16,12 +14,13 @@ This exponential growth in the number of combinations highlights the importance 
 
 Let's consider a few scenarios to illustrate the impact of password length and character set on the search space:
 
-| Password Type           | Password Length | Character Set                                | Possible Combinations                              |
-| ----------------------- | --------------- | -------------------------------------------- | -------------------------------------------------- |
-| Short and Simple        | 6               | Lowercase letters (a-z)                      | 26^6 = 308,915,776                                 |
-| Longer but Still Simple | 8               | Lowercase letters (a-z)                      | 26^8 = 208,827,064,576                             |
-| Adding Complexity       | 8               | Lowercase and uppercase letters (a-z, A-Z)   | 52^8 = 53,459,728,531,456                          |
-| Maximum Complexity      | 12              | Lowercase, uppercase, numbers, and symbols\* | 94^12 ≈ 4.76 × 10^23 (475,920,493,781,698,549,504) |
+| Password Type           | Password Length | Character Set                               | Possible Combinations                              |
+| ----------------------- | --------------- | ------------------------------------------- | -------------------------------------------------- |
+| Short and Simple        | 6               | Lowercase letters (a-z)                     | 26^6 = 308,915,776                                 |
+| Longer but Still Simple | 8               | Lowercase letters (a-z)                     | 26^8 = 208,827,064,576                             |
+| Adding Complexity       | 8               | Lowercase and uppercase letters (a-z, A-Z)  | 52^8 = 53,459,728,531,456                          |
+| Maximum Complexity      | 12              | Lowercase, uppercase, numbers, and symbols* | 94^12 ≈ 4.76 × 10^23 (475,920,493,781,698,549,504) |
+
 
 As you can see, even a slight increase in password length or the inclusion of additional character types dramatically expands the search space. This significantly increases the number of possible combinations that an attacker must try, making brute-forcing increasingly challenging and time-consuming. However, the time it takes to crack a password isn't just dependent on the size of the search space—it also hinges on the attacker's available computational power.
 
@@ -33,16 +32,17 @@ The above chart illustrates an exponential relationship between password complex
 
 Comparing the basic computer and the supercomputer:
 
-* Basic Computer (1 million passwords/second): Adequate for cracking simple passwords quickly but becomes impractically slow for complex passwords. For instance, cracking an 8-character password using letters and digits would take approximately 6.92 years.
-* Supercomputer (1 trillion passwords/second): Drastically reduces cracking times for simpler passwords. However, even with this immense power, cracking highly complex passwords can take an impractical amount of time. For example, a 12-character password with all ASCII characters would still take about 15000 years to crack.
+- Basic Computer (1 million passwords/second): Adequate for cracking simple passwords quickly but becomes impractically slow for complex passwords. For instance, cracking an 8-character password using letters and digits would take approximately 6.92 years.
+- Supercomputer (1 trillion passwords/second): Drastically reduces cracking times for simpler passwords. However, even with this immense power, cracking highly complex passwords can take an impractical amount of time. For example, a 12-character password with all ASCII characters would still take about 15000 years to crack.
 
-### Cracking the PIN
+## Cracking the PIN
 
 **To follow along, start the target system via the question section at the bottom of the page.**
 
 The instance application generates a random 4-digit PIN and exposes an endpoint (`/pin`) that accepts a PIN as a query parameter. If the provided PIN matches the generated one, the application responds with a success message and a flag. Otherwise, it returns an error message.
 
-We will use this simple demonstration Python script to brute-force the `/pin` endpoint on the API. Copy and paste this Python script below as `pin-solver.py` onto your machine. You only need to modify the IP and port variables to match your target system information.
+We will use this simple demonstration Python script to brute-force the `/pin` endpoint on the API. Copy and paste this Python script below as `pin-solver.py` onto your machine. You only need to modify the IP and port variables to match your target system information.
+
 
 ```python
 import requests
@@ -66,6 +66,7 @@ for pin in range(10000):
 ```
 
 The Python script systematically iterates all possible 4-digit PINs (0000 to 9999) and sends GET requests to the Flask endpoint with each PIN. It checks the response status code and content to identify the correct PIN and capture the associated flag.
+
 
 ```shell-session
 smoothment@htb[/htb]$ python pin-solver.py
@@ -91,11 +92,10 @@ Flag: HTB{...}
 
 The script's output will show the progression of the brute-force attack, displaying each attempted PIN and its corresponding result. The final output will reveal the correct PIN and the captured flag, demonstrating the successful completion of the brute-force attack.
 
-## Question
+# Question
+---
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250213134207.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250213134207.png)
 
 Let's use the python script provided to us, let's modify it a bit for it to run faster:
 
@@ -204,7 +204,7 @@ Testing PIN: 3100
 [+] Flag: HTB{Brut3_F0rc3_1s_P0w3rfu1}
 ```
 
-Flag is:
+Flag is: 
 
 ```
 HTB{Brut3_F0rc3_1s_P0w3rfu1}

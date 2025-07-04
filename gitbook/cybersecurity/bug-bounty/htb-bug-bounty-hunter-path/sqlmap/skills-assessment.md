@@ -1,36 +1,32 @@
 ---
 sticker: lucide//database-backup
 ---
-
-# Skills Assessment
-
 You are given access to a web application with basic protection mechanisms. Use the skills learned in this module to find the SQLi vulnerability with SQLMap and exploit it accordingly. To complete this module, find the flag and submit it here.
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250204180837.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204180837.png)
 
 Once we go into the site, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250204180851.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204180851.png)
 
 Seems like a simple shoe shop, we have three interesting options we should take a look at: `Contact`, `Catalog`, `Blog`. We need to search around for some of them that injects code in the back-end server, let's take a look:
 
-### Contact
+## Contact
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250204181046.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204181046.png)
 
 In the contact site, we can see a form that we can fill in order to get in contact with the administrators. Nothing is off in this page, everything sets itself to `#`, so this is not what we're looking for.
 
-### Blog
+## Blog
+---
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250204181231.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204181231.png)
 
 We have a search bar, but the same stuff happens as with the contact site, it gets set to `#`.
 
-### Catalog
-
-***
+## Catalog
+---
 
 If we go to the catalog section, we can go into a `shop.html` site, if we inspect the source code for this page, we can see this interesting code:
 
@@ -110,4 +106,5 @@ Table: final_flag
 
 Flag is `HTB{n07_50_h4rd_r16h7?!}`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250204183428.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204183428.png)

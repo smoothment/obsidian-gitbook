@@ -1,56 +1,54 @@
 ---
 sticker: emoji//1fab0
 ---
+# ENUMERATION
+---
 
-# CICADA
+## OPEN PORTS
+---
 
-## ENUMERATION
+| PORT   | SERVICE       |
+| :----- | :------------ |
+| 53/tcp | domain        |
+| 88/tcp | kerberos-sec  |
+| 135/tcp| msrpc         |
+| 139/tcp| netbios-ssn   |
+| 389/tcp| ldap          |
+| 445/tcp| microsoft-ds? |
+| 464/tcp| kpasswd5?     |
+| 593/tcp| ncacn_http    |
+| 636/tcp| ssl/ldap      |
+| 3268/tcp| ldap         |
+| 3269/tcp| ssl/ldap     |
+| 5985/tcp| http         |
+Let's start reconnaissance.
 
-***
-
-### OPEN PORTS
-
-***
-
-| PORT                        | SERVICE       |
-| --------------------------- | ------------- |
-| 53/tcp                      | domain        |
-| 88/tcp                      | kerberos-sec  |
-| 135/tcp                     | msrpc         |
-| 139/tcp                     | netbios-ssn   |
-| 389/tcp                     | ldap          |
-| 445/tcp                     | microsoft-ds? |
-| 464/tcp                     | kpasswd5?     |
-| 593/tcp                     | ncacn\_http   |
-| 636/tcp                     | ssl/ldap      |
-| 3268/tcp                    | ldap          |
-| 3269/tcp                    | ssl/ldap      |
-| 5985/tcp                    | http          |
-| Let's start reconnaissance. |               |
-
-## RECONNAISSANCE
-
-***
+# RECONNAISSANCE
+---
 
 We are facing a AD machine, let's start with some basic SMB enumeration:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116135424.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116135424.png)
 
 We can use netexec to perform a simple check on SMB and WINRM:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116135538.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116135538.png)
+
 
 We can attempt to log into SMB without the authentication process using `smbclient -NL IP`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116135823.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116135823.png)
+
 
 We found interesting shares, let's check out `HR`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116135909.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116135909.png)
+
 
 We find a `Notice from HR.txt` file, let's download it and check it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116140031.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116140031.png)
 
 We got a default password, my guess would be we need to perform a basic brute force to enumerate users, this would be in the following way:
 
@@ -97,15 +95,20 @@ SMB         10.10.11.35     445    CICADA-DC        1109: CICADA\Dev Support (Si
 SMB         10.10.11.35     445    CICADA-DC        1601: CICADA\emily.oscars (SidTypeUser)
 ```
 
-## EXPLOITATION
 
-***
+
+# EXPLOITATION
+---
 
 Let's store all the usernames in a file and perform password spraying:
 
+
 `nxc smb 10.10.11.35 -u users.txt -p 'Cicada$M6Corpb*@Lp#nZp!8'`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116140940.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116140940.png)
+
+
 
 We found the user, these are the credentials:
 
@@ -115,9 +118,10 @@ We found the user, these are the credentials:
 
 ```
 
+
 We can search for more privileged users:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116141256.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116141256.png)
 
 We found an account with the following credentials:
 
@@ -125,24 +129,30 @@ We found an account with the following credentials:
 `david.orelious`:`aRt$Lp#7t*VQ!3`
 ```
 
+
 Let's check the shares this account has access to:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116141414.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116141414.png)
 
 We can now read the `DEV` share, let's take a look at it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116141607.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116141607.png)
 
 Found a `Backup_script.ps1` file, let's view the contents:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116141718.png)
 
-Found more credentials:
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116141718.png)
+
+Found more credentials: 
 
 ```ad-note
 
 `emily.oscars`:`Q!3@Lp#M6b*7t*Vt`
 ```
+
 
 Let's check if we are able to get a shell with those credentials using `evil-winrm`:
 
@@ -154,6 +164,7 @@ Let's check if we are able to get a shell with those credentials using `evil-win
 
 ```
 
+
 We can read `user.txt` and begin with privilege escalation:
 
 ```ad-note
@@ -162,21 +173,23 @@ We can read `user.txt` and begin with privilege escalation:
 User: `74b2598907182ac31cca52c79b20eb0a`
 ```
 
-## PRIVILEGE ESCALATION
-
-***
+# PRIVILEGE ESCALATION
+---
 
 In order to begin with privilege escalation, we can start enumerating our privileges:
 
+
 `whoami /priv`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116142402.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116142402.png)
 
 We can make use of `SeBackupPrivilege` in order to escalate our privileges, let's use the following PoC:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116142600.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116142600.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116142623.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116142623.png)
+
 
 But, we can simplify the PoC in the following way:
 
@@ -196,6 +209,7 @@ But, we can simplify the PoC in the following way:
 And like that, we can get our admin hash.
 ```
 
+
 ```
 impacket-secretsdump LOCAL -sam sam -system system
 Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies 
@@ -211,11 +225,12 @@ DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c0
 
 Let's log in using Pass the hash:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250116144347.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250116144347.png)
 
-And our root flag is the following:
+And our root flag is the following: 
 
 ```ad-note
 
 Root: `568e019774b66b875a024dfa590b84dc`
 ```
+

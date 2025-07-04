@@ -2,27 +2,27 @@
 sticker: lucide//code
 ---
 
-# MD2PDF
+# PORT SCAN
+---
 
-## PORT SCAN
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 | 5000 | RSTP    |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 If we check the web application, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250617123928.png)
 
-As seen, we can convert markdown to pdf, this is highly vulnerable since at its core it blindly hands our Markdown straight off to a server‑side renderer, whether that’s a headless browser or Pandoc+LaTeX with no filtering or authentication.
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617123928.png)
+
+As seen, we can convert markdown to pdf, this is highly vulnerable since at its core it blindly hands our Markdown straight off to a server‑side renderer, whether that’s a headless browser or Pandoc+LaTeX with no filtering or authentication. 
 
 That means we can sneak in `<script>` tags or raw LaTeX commands and make the server fetch internal URLs (like `localhost:5000/resource`) or even execute shell commands. In short, untrusted input becomes powerful SSRF or RCE, exposing private admin panels and letting attackers run arbitrary code.
 
@@ -57,13 +57,13 @@ admin                   [Status: 403, Size: 166, Words: 15, Lines: 5, Duration: 
 
 We can find an admin resource on here, if we try accessing it, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250617124337.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617124337.png)
 
 Based on that, we now we can exploit the md2pdf site to achieve access to the admin resource, let's do it.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 First of all, we need to exfiltrate the data, we can use the following payload:
 
@@ -73,9 +73,11 @@ First of all, we need to exfiltrate the data, we can use the following payload:
 
 We use iframe to achieve `SSRF`, basically the pdf engine will render the internal resource and give us access to it, let's test it out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250617125048.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250617125056.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125048.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125056.png)
 
 It works, let's read admin resource then:
 
@@ -86,9 +88,9 @@ It works, let's read admin resource then:
 </iframe>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250617125137.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125137.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250617125144.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125144.png)
 
 We got our flag:
 
@@ -96,4 +98,5 @@ We got our flag:
 flag{1f4a2b6ffeaf4707c43885d704eaee4b}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250617125225.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125225.png)
+

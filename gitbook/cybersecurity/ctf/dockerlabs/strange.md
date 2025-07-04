@@ -1,28 +1,25 @@
 ---
 sticker: emoji//1f6b7
 ---
+# ENUMERATION
 
-# STRANGE
-
-## ENUMERATION
-
-### OPEN PORTS
-
+## OPEN PORTS
 To begin with this CTF writeup, we must enumerate the machine, when we run Nmap on the target, we get this output:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023135604.png) So we got 3 open ports:
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023135604.png)
+So we got 3 open ports: 
 
 ```ad-note
 1. 21: FTP
 2. 22: SSH
 3. 80: HTTP
 ```
-
-### FUZZING
+## FUZZING
 
 Nice, now let's try to enumerate our web server, for this, I used ffuf:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023135712.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023135712.png)
 
 And we found `/strange` directory, let's try to enumerate that directory using gobuster to check if we can find anything:
 
@@ -36,19 +33,18 @@ With this command, we are looking forward to enumerate the directory to check fo
 
 If we launch the gobuster command we get this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023135959.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023135959.png)
 
 Seems like we have a `private.txt` file and a `secret.html` directory, let's check both, but, before that, let's try to check the page source for the website to check if we can get anything useful:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023140149.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023140149.png)
 
 `mwheeler` could be an username for either ftp or ssh, so, let's save it for later, now, let's check our files:
 
-#### SECRET.HTML
+### SECRET.HTML
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023140240.png)
-
-### BRUTE FORCE
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023140240.png)
+## BRUTE FORCE
 
 So, the FTP user is admin, if we use hydra to bruteforce our way in, we get this:
 
@@ -62,23 +58,22 @@ With this command, we are looking to bruteforce ftp knowing the username is admi
 
 With the command, we get this output:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023140748.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023140748.png)
 
 So, our FTP admin user's password is `banana`
 
-## EXPLOITATION
+# EXPLOITATION
 
 Now that we know the password, we can go into ftp and try to get any useful file:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023140837.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023140837.png)
 
 We found a `private_key.pem` file, let's download it using `get`
-
-### DECRYPTION
+## DECRYPTION
 
 Nice, but, seems like we are lacking something else, right, checking the `private.txt` file we downloaded earlier, if we try to read the file, it is encrypted:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023141020.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023141020.png)
 
 So, in order to read its contents, we would need to decrypt it, for example, let's use this command:
 
@@ -95,11 +90,12 @@ EXPLANATION
 
 If we run that command, we are now able to see the contents of our original file, if we read it, this is the output:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023141405.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023141405.png)
 
-Seems like the password for SSH, if we try user: `mwheeler` which we previously found on the source code of the page, we will log in to ssh: ![](gitbook/cybersecurity/images/Pasted%20image%2020241023141505.png)
+Seems like the password for SSH, if we try user: `mwheeler` which we previously found on the source code of the page, we will log in to ssh:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023141505.png)
 
-## PRIVILEGE ESCALATION
+# PRIVILEGE ESCALATION
 
 We got into the machine, let's escalate our privileges, for this, we can use the following commands:
 
@@ -107,18 +103,20 @@ We got into the machine, let's escalate our privileges, for this, we can use the
 BASIC PRIVESC LINUX COMMANDS:  [[CyberSecurity/LINUX/LINUX PRIVILEGE ESCALATION/BASIC PRIVESC IN LINUX.md|Commands]]
 ```
 
+
+
 After trying some commands, nothing useful came out of it, so, i checked my current directory using `pwd` and found I was in `mwheeler`home, I went back using `cd ..` and found there was 2 more homes:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023142321.png)
-
-### SWITCHING USERS
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023142321.png)
+## SWITCHING USERS
 
 Seems like we got `admin` and `ubuntu`, if server's bad configured, `admin` could be the same as FTP one, so, if we try to change user to it with the ftp password, we might get in:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023142428.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023142428.png)
+
 
 And I was right, like this, we could perform a simple PRIVESC without the need of `gtfobins` or some other website or tool, we can check we are root by checking the privileges of the user:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241023142527.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241023142527.png)
 
 Just like that, CTF is done!

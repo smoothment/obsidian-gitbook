@@ -2,11 +2,9 @@
 sticker: emoji//1f6a9
 ---
 
-# FLAG VAULT
+# CONTEXT
+---
 
-## CONTEXT
-
-***
 
 Cipher asked me to create the most secure vault for flags, so I created a vault that cannot be accessed. You don't believe me? Well, here is the code with the password hardcoded. Not that you can do much with it anymore.
 
@@ -20,11 +18,12 @@ Download the source code from [here](https://drive.google.com/file/d/1kYIR2JEfLf
 
 This challenge was originally a part of the Hackfinity Battle 2025 CTF Event.
 
+
 Let's begin.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 So, we know there's a binary running on port `1337`, let's use netcat to interact with it:
 
@@ -110,17 +109,20 @@ void main(){
 This binary is vulnerable to `Buffer Overflow`:
 
 1. **Buffer Overflow in `username`**:
-   * The `gets(username)` function reads input without bounds checking, allowing overflow into adjacent memory.
-   * The `password` buffer (initialized as empty) is adjacent to `username` on the stack. Overflowing `username` can overwrite `password`.
+    - The `gets(username)` function reads input without bounds checking, allowing overflow into adjacent memory.
+    - The `password` buffer (initialized as empty) is adjacent to `username` on the stack. Overflowing `username` can overwrite `password`.
+        
 2. **Stack Layout**:
-   * `password[100]` is allocated first (lower memory address).
-   * `username[100]` is allocated next (higher memory address).
-   * Writing beyond 100 bytes in `username` overflows into `password`.
+    - `password[100]` is allocated first (lower memory address).
+    - `username[100]` is allocated next (higher memory address).
+    - Writing beyond 100 bytes in `username` overflows into `password`.
+        
 3. **Login Bypass**:
-   * The login check requires:
-     * `username == "bytereaper"`
-     * `password == "5up3rP4zz123Byte"`.
-   * By crafting a payload that sets `username` to `"bytereaper"` (with proper null termination) and overflows into `password` with the correct value, we can satisfy both conditions.
+    - The login check requires:
+        - `username == "bytereaper"`
+        - `password == "5up3rP4zz123Byte"`.
+    - By crafting a payload that sets `username` to `"bytereaper"` (with proper null termination) and overflows into `password` with the correct value, we can satisfy both conditions.
+
 
 Knowing all that, we can use this python script:
 
@@ -197,4 +199,5 @@ Got our flag:
 THM{password_0v3rfl0w}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250605184529.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250605184529.png)
+

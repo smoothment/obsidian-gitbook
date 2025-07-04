@@ -1,22 +1,20 @@
 ---
 sticker: emoji//1f480
 ---
-
-# Information Disclosure (with a twist of SQLi)
-
 .As already discussed, security-related inefficiencies or misconfigurations in a web service or API can result in information disclosure.
 
 When assessing a web service or API for information disclosure, we should spend considerable time on fuzzing.
 
-***
+---
 
-### Information Disclosure through Fuzzing
+## Information Disclosure through Fuzzing
 
-Proceed to the end of this section and click on `Click here to spawn the target system!` or the `Reset Target` icon. Use the provided Pwnbox or a local VM with the supplied VPN key to reach the target API and follow along.
+Proceed to the end of this section and click on `Click here to spawn the target system!` or the `Reset Target` icon. Use the provided Pwnbox or a local VM with the supplied VPN key to reach the target API and follow along.
 
-Suppose we are assessing an API residing in `http://<TARGET IP>:3003`.
+Suppose we are assessing an API residing in `http://<TARGET IP>:3003`.
 
-Maybe there is a parameter that will reveal the API's functionality. Let us perform parameter fuzzing using _ffuf_ and the [burp-parameter-names.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/burp-parameter-names.txt) list, as follows.
+Maybe there is a parameter that will reveal the API's functionality. Let us perform parameter fuzzing using _ffuf_ and the [burp-parameter-names.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/burp-parameter-names.txt) list, as follows.
+
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -w "/home/htb-acxxxxx/Desktop/Useful Repos/SecLists/Discovery/Web-Content/burp-parameter-names.txt" -u 'http://<TARGET IP>:3003/?FUZZ=test_value'
@@ -64,6 +62,7 @@ We notice a similar response size in every request. This is because supplying an
 
 Let us filter out any responses having a size of 19, as follows:
 
+
 ```shell-session
 smoothment@htb[/htb]$ ffuf -w "/home/htb-acxxxxx/Desktop/Useful Repos/SecLists/Discovery/Web-Content/burp-parameter-names.txt" -u 'http://<TARGET IP>:3003/?FUZZ=test_value' -fs 19
 
@@ -108,14 +107,15 @@ ________________________________________________
 :: Progress: [2588/2588] :: Job [1/1] :: 2120 req/sec :: Duration: [0:00:02] :: Errors: 0 ::
 ```
 
-It looks like _id_ is a valid parameter. Let us check the response when specifying _id_ as a parameter and a test value.
+It looks like _id_ is a valid parameter. Let us check the response when specifying _id_ as a parameter and a test value.
 
 ```shell-session
 smoothment@htb[/htb]$ curl http://<TARGET IP>:3003/?id=1
 [{"id":"1","username":"admin","position":"1"}]
 ```
 
-Find below a Python script that could automate retrieving all information that the API returns (save it as `brute_api.py`).
+Find below a Python script that could automate retrieving all information that the API returns (save it as `brute_api.py`).
+
 
 ```python
 import requests, sys
@@ -159,6 +159,7 @@ Now you can proceed to the end of this section and answer the first question!
 
 **TIP**: If there is a rate limit in place, you can always try to bypass it through headers such as X-Forwarded-For, X-Forwarded-IP, etc., or use proxies. These headers have to be compared with an IP most of the time. See an example below.
 
+
 ```php
 <?php
 $whitelist = array("127.0.0.1", "1.3.3.7");
@@ -172,19 +173,18 @@ else
 }
 ```
 
-The issue here is that the code compares the _HTTP\_X\_FORWARDED\_FOR_ header to the possible _whitelist_ values, and if the _HTTP\_X\_FORWARDED\_FOR_ is not set or is set without one of the IPs from the array, it'll give a 401. A possible bypass could be setting the _X-Forwarded-For_ header and the value to one of the IPs from the array.
+The issue here is that the code compares the _HTTP_X_FORWARDED_FOR_ header to the possible _whitelist_ values, and if the _HTTP_X_FORWARDED_FOR_ is not set or is set without one of the IPs from the array, it'll give a 401. A possible bypass could be setting the _X-Forwarded-For_ header and the value to one of the IPs from the array.
 
-***
+---
 
-### Information Disclosure through SQL Injection
+## Information Disclosure through SQL Injection
 
-SQL injection vulnerabilities can affect APIs as well. That _id_ parameter looks interesting. Try submitting classic SQLi payloads and answer the second question.
+SQL injection vulnerabilities can affect APIs as well. That _id_ parameter looks interesting. Try submitting classic SQLi payloads and answer the second question.
 
-## Questions
+# Questions
+---
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250219154858.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219154858.png)
 
 Let's use this script to answer the first question:
 

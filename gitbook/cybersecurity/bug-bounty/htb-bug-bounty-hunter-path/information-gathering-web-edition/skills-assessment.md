@@ -2,13 +2,10 @@
 sticker: emoji//1f9be
 ---
 
-# Skills Assessment
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128151552.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128151552.png)
-
-## 1
-
-***
+# 1
+---
 
 Let's begin by adding `inlanefreight.htb` to `/etc/hosts`:
 
@@ -16,25 +13,25 @@ Let's begin by adding `inlanefreight.htb` to `/etc/hosts`:
 
 Now, in order to find the IANA ID of the registrar we can use whois and grep for IANA ID:
 
-\`\` `whois inlanefreight.com | grep 'IANA ID'`
+``
+`whois inlanefreight.com | grep 'IANA ID'`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128151814.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128151814.png)
 
 Answer is `468`
 
-## 2
 
-***
+# 2
+---
 
 We can use `curl` or `whatweb` in order to check the software name:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128152330.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128152330.png)
 
 Answer is `nginx`
 
-## 3
-
-***
+# 3
+---
 
 Now, the next step would be VHOST discovery, let's use this command:
 
@@ -42,7 +39,7 @@ Now, the next step would be VHOST discovery, let's use this command:
 
 After scan is done, we can see the following virtual host:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128152734.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128152734.png)
 
 ```
 gobuster vhost -u http://inlanefreight.htb:56641 -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt --append-domain -t 100
@@ -69,29 +66,29 @@ Finished
 
 Let's add that to `/etc/hosts` too, let's grab the banners:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128152938.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128152938.png)
 
 Seems nice, since the question talks about a hidden admin directory, we can check if the entry to `robots.txt` is allowed:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128153034.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128153034.png)
 
 We found it! `/admin_h1dd3n`, let's check it out:
 
+
 `curl -i web1337.inlanefreight.htb:56641/admin_h1dd3n/`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128153202.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128153202.png)
 
 We got the API: `e963d863ee0e82ba7080fbf558ca0d3f`
 
-## 4
-
-***
-
+# 4
+---
 Following the string from the previous question, we've already found another VHOST, let's keep on enumerating them using the following:
 
 `gobuster vhost -u http://web1337.inlanefreight.htb:56641 -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt --append-domain -t 100`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128153615.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128153615.png)
 
 We found another VHOST:
 
@@ -136,20 +133,21 @@ Let's add it to `/etc/hosts`, we can crawl using reconspider:
 
 We get the following output:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128154144.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128154144.png)
 
 Answer is: `1337testing@inlanefreight.htb`
 
-## 5
-
-***
+# 5
+---
 
 We can find the API key in the same `results.json` file given by reconspider:
 
 `cat results.json | grep API`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128154248.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128154248.png)
 
 Answer is: `ba988b835be4aa97d068941dc852ff33`
+
+
 
 Just like that, skills assessment is done.

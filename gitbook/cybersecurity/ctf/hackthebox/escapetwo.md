@@ -1,20 +1,18 @@
 ---
 sticker: emoji//0032-fe0f-20e3
 ---
+# ENUMERATION
+---
 
-# ESCAPETWO
+## OPEN PORTS
+---
 
-## ENUMERATION
 
-***
-
-### OPEN PORTS
-
-***
 
 | IP ADDRESS  |
 | ----------- |
 | 10.10.11.51 |
+
 
 | PORT     | SERVICE      |
 | -------- | ------------ |
@@ -25,7 +23,7 @@ sticker: emoji//0032-fe0f-20e3
 | 389/tcp  | ldap         |
 | 445/tcp  | microsoft-ds |
 | 464/tcp  | kpasswd5     |
-| 593/tcp  | ncacn\_http  |
+| 593/tcp  | ncacn_http   |
 | 636/tcp  | ssl/ldap     |
 | 1433/tcp | ms-sql-s     |
 | 3268/tcp | ldap         |
@@ -34,9 +32,8 @@ sticker: emoji//0032-fe0f-20e3
 
 We got a lot of open ports, this is a Windows machine, let's start reconnaissance.
 
-## RECONNAISSANCE
-
-***
+# RECONNAISSANCE
+---
 
 At first, we are already given some credentials:
 
@@ -64,9 +61,8 @@ Since they are zip files, we need to unzip them and review the contents:
 After an extensive search, we can see that `xl/sharedStrings.xml` is a file that contains credentials to `mssql`, we can connect using the `mssqlclient.py` script from [impacket](https://github.com/fortra/impacket)
 ```
 
-## EXPLOITATION
-
-***
+# EXPLOITATION
+---
 
 Let's connect:
 
@@ -105,17 +101,20 @@ That's right, let's read the configuration file:
 We got credentials for another user.
 ```
 
+
 ```ad-note
 `sql_svc`:`WqSZAF6CysDQbGb3`
 ```
 
+
 Since we also know the domain is called `SEQUEL`, we can use `evil-winrm` to log in:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250114193709.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114193709.png)
 
 We are unable to log with those credentials, but remember we have another user, `ryan`, let's try with that username:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250114193750.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250114193750.png)
 
 And we're in, let's read `user.txt`:
 
@@ -127,9 +126,9 @@ User: `1c3847c8cc30b9afd12ff6c2bc86f0db`
 
 Let's begin PRIVESC.
 
-## PRIVILEGE ESCALATION
+# PRIVILEGE ESCALATION
+---
 
-***
 
 For privilege escalation, we can use tools like `bloodyAD`, `dacledit.py` and `certipy-ad` (I used Kali Linux in this part), let's follow these steps:
 
@@ -144,6 +143,7 @@ For privilege escalation, we can use tools like `bloodyAD`, `dacledit.py` and `c
 8. `evil-winrm -i 10.10.11.51 -u 'administrator' -H '7a8d4e04986afa8ed4060f75e5a0b3ff'`
 ```
 
+
 So, explanation of this PRIVESC is that we're abusing the CA:
 
 ```ad-important
@@ -151,10 +151,12 @@ So, explanation of this PRIVESC is that we're abusing the CA:
 - The vulnerability identified was that `Cert Publishers` (a group with a dangerous permission set) have access to request certificates. **Cert Publishers** are not typically expected to have these rights, which opens the door for attackers.
 ```
 
-With this, we are able to obtain a certificate as administrator, thus, obtaining the hash for Admin user, making us able to perform [Pass the hash](https://www.beyondtrust.com/resources/glossary/pass-the-hash-pth-attack) Like that, we can read root flag:
+With this, we are able to obtain a certificate as administrator, thus, obtaining the hash for Admin user, making us able to perform [Pass the hash](https://www.beyondtrust.com/resources/glossary/pass-the-hash-pth-attack)
+Like that, we can read root flag:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250115141448.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250115141448.png)
 
 ```ad-important
 Root: `63404c844597a9eef0c7a440b65564a3`
 ```
+

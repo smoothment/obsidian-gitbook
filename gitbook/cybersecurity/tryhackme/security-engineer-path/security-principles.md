@@ -1,33 +1,31 @@
 ---
 sticker: emoji//1f9be
 ---
-
-# SECURITY PRINCIPLES
-
 ```ad-note
 ROOM: https://tryhackme.com/r/room/securityprinciples
 ```
 
 The objective of this room is to:
 
-* Explain the security functions: Confidentiality, Integrity and Availability (CIA).
-* Present the opposite of the security triad, CIA: Disclosure, Alteration, and Destruction/Denial (DAD).
-* Introduce the fundamental concepts of security models, such as the Bell-LaPadula model.
-* Explain security principles such as Defence-in-Depth, Zero Trust, and Trust but Verify.
-* Introduce ISO/IEC 19249.
-* Explain the difference between Vulnerability, Threat, and Risk.
+- Explain the security functions: Confidentiality, Integrity and Availability (CIA).
+- Present the opposite of the security triad, CIA: Disclosure, Alteration, and Destruction/Denial (DAD).
+- Introduce the fundamental concepts of security models, such as the Bell-LaPadula model.
+- Explain security principles such as Defence-in-Depth, Zero Trust, and Trust but Verify.
+- Introduce ISO/IEC 19249.
+- Explain the difference between Vulnerability, Threat, and Risk.
 
-## CIA
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241021133250.png) Before we can describe something as _secure_, we need to consider better what makes up security. When you want to judge the security of a system, you need to think in terms of the security triad: confidentiality, integrity, and availability (CIA).
+# CIA
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241021133250.png)
+Before we can describe something as _secure_, we need to consider better what makes up security. When you want to judge the security of a system, you need to think in terms of the security triad: confidentiality, integrity, and availability (CIA).
 
 ```ad-important
 - **Confidentiality** ensures that only the intended persons or recipients can access the data.
 - **Integrity** aims to ensure that the data cannot be altered; moreover, we can detect any alteration if it occurs.
 - **Availability** aims to ensure that the system or service is available when needed.
 ```
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020241021133427.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241021133427.png)
 
 ```ad-example
 Let’s consider the CIA security triad in the case of placing an order for online shopping:
@@ -44,10 +42,13 @@ Let’s consider the CIA as it relates to patient records and related systems:
 - **Integrity**: If a patient record is accidentally or maliciously altered, it can lead to the wrong treatment being administered, which, in turn, can lead to a life-threatening situation. Hence, the system would be useless and potentially harmful without ensuring the integrity of medical records.
 - **Availability**: When a patient visits a clinic to follow up on their medical condition, the system must be available. An unavailable system would mean that the medical practitioner cannot access the patient’s records and consequently won’t know if any current symptoms are related to the patient’s medical history. This situation can make the medical diagnosis more challenging and error-prone.
 ```
+## BEYOND CIA
 
-### BEYOND CIA
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241021133621.png) Going one more step beyond the CIA security triad, we can think of:
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241021133621.png)
+Going one more step beyond the CIA security triad, we can think of:
 
 ```ad-info
 - **Authenticity**: Authentic means not fraudulent or counterfeit. Authenticity is about ensuring that the document/file/data is from the claimed source.
@@ -56,7 +57,7 @@ Let’s consider the CIA as it relates to patient records and related systems:
 
 In online shopping, depending on your business, you might tolerate attempting to deliver a t-shirt with cash-on-delivery and learn later that the recipient never placed such an order. However, no company can tolerate shipping 1000 cars to discover that the order is fake. In the example of a shopping order, you want to confirm that the said customer indeed placed this order; that’s authenticity. Moreover, you want to ensure they cannot deny placing this order; that’s nonrepudiation.
 
-### PARKERIAN HEXAD
+## PARKERIAN HEXAD
 
 In 1998, Donn Parker proposed the Parkerian Hexad, a set of six security elements. They are:
 
@@ -76,9 +77,10 @@ We have already covered four of the above six elements. Let's discuss the remain
 - **Possession**: This security element requires that we protect the information from unauthorized taking, copying, or controlling. For instance, an adversary might take a backup drive, meaning we lose possession of the information as long as they have the drive. Alternatively, the adversary might succeed in encrypting our data using ransomware; this also leads to the loss of possession of the data.
 ```
 
-## DAD
+# DAD
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241021134052.png) The security of a system is attacked through one of several means. It can be via the disclosure of secret data, alteration of data, or destruction of data.
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241021134052.png)
+The security of a system is attacked through one of several means. It can be via the disclosure of secret data, alteration of data, or destruction of data.
 
 ```
 - **Disclosure** is the opposite of confidentiality. In other words, disclosure of confidential data would be an attack on confidentiality.
@@ -86,7 +88,7 @@ We have already covered four of the above six elements. Let's discuss the remain
 - **Destruction/Denial** is the opposite of Availability.
 ```
 
-The opposite of the CIA Triad would be the DAD Triad: Disclosure, Alteration, and Destruction.
+The opposite of the CIA Triad would be the DAD Triad: Disclosure, Alteration, and Destruction.
 
 Consider the previous example of patient records and related systems:
 
@@ -96,7 +98,8 @@ Consider the previous example of patient records and related systems:
 - Destruction/Denial: Consider the case where a medical facility has gone completely paperless. If an attacker manages to make the database systems unavailable, the facility will not be able to function properly. They can go back to paper temporarily; however, the patient records won’t be available. This denial attack would stall the whole facility.
 ```
 
-## FUNDAMENTAL CONCEPTS OF SECURITY MODELS
+
+# FUNDAMENTAL CONCEPTS OF SECURITY MODELS
 
 We have learned that the security triad is represented by Confidentiality, Integrity, and Availability (CIA). One might ask, how can we create a system that ensures one or more security functions? The answer would be in using security models. In this task, we will introduce three foundational security models:
 
@@ -106,9 +109,9 @@ We have learned that the security triad is represented by Confidentiality, Integ
 - The Clark-Wilson Model
 ```
 
-### BELL-LAPADULA MODEL
+## BELL-LAPADULA MODEL
 
-The Bell-LaPadula Model aims to achieve **confidentiality** by specifying three rules:
+The Bell-LaPadula Model aims to achieve **confidentiality** by specifying three rules:
 
 ```ad-important
 - **Simple Security Property**: This property is referred to as “no read up”; it states that a subject at a lower security level cannot read an object at a higher security level. This rule prevents access to sensitive information above the authorized level.
@@ -116,15 +119,16 @@ The Bell-LaPadula Model aims to achieve **confidentiality** by specifying three 
 - **Discretionary-Security Property**: This property uses an access matrix to allow read and write operations. An example access matrix is shown in the table below and used in conjunction with the first two properties.
 ```
 
-| Subjects                                                                                                           | Object A   | Object B  |
-| ------------------------------------------------------------------------------------------------------------------ | ---------- | --------- |
-| Subject 1                                                                                                          | Write      | No access |
-| Subject 2                                                                                                          | Read/Write | Read      |
-| There are certain limitations to the Bell-LaPadula model. For example, it was not designed to handle file-sharing. |            |           |
+|Subjects|Object A|Object B|
+|---|---|---|
+|Subject 1|Write|No access|
+|Subject 2|Read/Write|Read|
+There are certain limitations to the Bell-LaPadula model. For example, it was not designed to handle file-sharing.
 
-### BIBA MODEL
+## BIBA MODEL
 
-The Biba Model aims to achieve **integrity** by specifying two main rules:
+
+The Biba Model aims to achieve **integrity** by specifying two main rules:
 
 ```ad-info
 - **Simple Integrity Property**: This property is referred to as “no read down”; a higher integrity subject should not read from a lower integrity object.
@@ -135,7 +139,7 @@ These two properties can be summarized as “read up, write down.” This rule i
 
 Biba Model suffers from various limitations. One example is that it does not handle internal threats (insider threat).
 
-### CLARK-WILSON MODEL
+## CLARK-WILSON MODEL
 
 The Clark-Wilson Model also aims to achieve integrity by using the following concepts:
 
@@ -156,19 +160,19 @@ We covered only three security models. The reader can explore many additional se
 - Harrison-Ruzzo-Ullman model
 ```
 
-## DEFENCE IN DEPTH
+# DEFENCE IN DEPTH
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241021142301.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241021142301.png)
 
-**Defence-in-Depth** refers to creating a security system of multiple levels; hence it is also called Multi-Level Security.
+**Defence-in-Depth** refers to creating a security system of multiple levels; hence it is also called Multi-Level Security.
 
 Consider the following analogy: you have a locked drawer where you keep your important documents and pricey stuff. The drawer is locked; however, do you want this drawer lock to be the only thing standing between a thief and your expensive items? If we think of multi-level security, we would prefer that the drawer be locked, the relevant room be locked, the main door of the apartment be locked, the building gate be locked, and you might even want to throw in a few security cameras along the way. Although these multiple levels of security cannot stop every thief, they would block most of them and slow down the others.
 
-## ISO/IEC 19249
+# ISO/IEC 19249
 
-The International Organization for Standardization (ISO) and the International Electrotechnical Commission (IEC) have created the ISO/IEC 19249. In this task, we will brush briefly upon ISO/IEC 19249:2017 _Information technology - Security techniques - Catalogue of architectural and design principles for secure products, systems and applications_. The purpose is to have a better idea of what international organizations would teach regarding security principles.
+The International Organization for Standardization (ISO) and the International Electrotechnical Commission (IEC) have created the ISO/IEC 19249. In this task, we will brush briefly upon ISO/IEC 19249:2017 _Information technology - Security techniques - Catalogue of architectural and design principles for secure products, systems and applications_. The purpose is to have a better idea of what international organizations would teach regarding security principles.
 
-ISO/IEC 19249 lists five _architectural_ principles:
+ISO/IEC 19249 lists five _architectural_ principles:
 
 ```ad-important
 1. **Domain Separation**: Every set of related components is grouped as a single entity; components can be applications, data, or other resources. Each entity will have its own domain and be assigned a common set of security attributes. For example, consider the x86 processor privilege levels: the operating system kernel can run in ring 0 (the most privileged level). In contrast, user-mode applications can run in ring 3 (the least privileged level). Domain separation is included in the Goguen-Meseguer Model.
@@ -178,7 +182,7 @@ ISO/IEC 19249 lists five _architectural_ principles:
 5. **Virtualization**: With the advent of cloud services, virtualization has become more common and popular. The concept of virtualization is sharing a single set of hardware among multiple operating systems. Virtualization provides sandboxing capabilities that improve security boundaries, secure detonation, and observance of malicious programs.
 ```
 
-ISO/IEC 19249 teaches five _design_ principles:
+ISO/IEC 19249 teaches five _design_ principles:
 
 ```ad-important
 1. **Least Privilege**: You can also phrase it informally as “need-to basis” or “need-to-know basis” as you answer the question, “who can access what?” The principle of least privilege teaches that you should provide the least amount of permissions for someone to carry out their task and nothing more. For example, if a user needs to be able to view a document, you should give them read rights without write rights.
@@ -188,7 +192,7 @@ ISO/IEC 19249 teaches five _design_ principles:
 5. **Preparing for Error and Exception Handling**: Whenever we build a system, we should take into account that errors and exceptions do and will occur. For instance, in a shopping application, a customer might try to place an order for an out-of-stock item. A database might get overloaded and stop responding to a web application. This principle teaches that the systems should be designed to fail safe; for example, if a firewall crashes, it should block all traffic instead of allowing all traffic. Moreover, we should be careful that error messages don’t leak information that we consider confidential, such as dumping memory content that contains information related to other customers.
 ```
 
-## ZERO TRUST VS TRUST BUT VERIFY
+# ZERO TRUST VS TRUST BUT VERIFY
 
 Trust is a very complex topic; in reality, we cannot function without trust. If one were to think that the laptop vendor has installed spyware on the laptop, they would most likely end up rebuilding the system. If one were to mistrust the hardware vendor, they would stop using it completely. If we think of trust on a business level, things only become more sophisticated; however, we need some guiding security principles. Two security principles that are of interest to us regarding trust:
 
@@ -203,13 +207,13 @@ Trust is a very complex topic; in reality, we cannot function without trust. If 
 **Zero Trust**: This principle treats trust as a vulnerability, and consequently, it caters to insider-related threats. After considering trust as a vulnerability, zero trust tries to eliminate it. It is teaching indirectly, “never trust, always verify.” In other words, every entity is considered adversarial until proven otherwise. Zero trust does not grant trust to a device based on its location or ownership. This approach contrasts with older models that would trust internal networks or enterprise-owned devices. Authentication and authorization are required before accessing any resource. As a result, if any breach occurs, the damage would be more contained if a zero trust architecture had been implemented.
 ```
 
-Microsegmentation is one of the implementations used for Zero Trust. It refers to the design where a network segment can be as small as a single host. Moreover, communication between segments requires authentication, access control list checks, and other security requirements.
+Microsegmentation is one of the implementations used for Zero Trust. It refers to the design where a network segment can be as small as a single host. Moreover, communication between segments requires authentication, access control list checks, and other security requirements.  
 
 There is a limit to how much we can apply zero trust without negatively impacting a business; however, this does not mean that we should not apply it as long as it is feasible.
 
-## THREAT VERSUS RISK
+# THREAT VERSUS RISK
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241021145120.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241021145120.png)
 
 There are three terms that we need to take note of to avoid any confusion.
 
@@ -219,6 +223,6 @@ There are three terms that we need to take note of to avoid any confusion.
 - **Risk**: The risk is concerned with the likelihood of a threat actor exploiting a vulnerability and the consequent impact on the business.
 ```
 
-Away from information systems, a showroom with doors and windows made of standard glass suffers a weakness, or _vulnerability_, due to the nature of glass. Consequently, there is a _threat_ that the glass doors and windows can be broken. The showroom owners should contemplate the _risk_, i.e. the likelihood that a glass door or window gets broken and the resulting impact on the business.
+Away from information systems, a showroom with doors and windows made of standard glass suffers a weakness, or _vulnerability_, due to the nature of glass. Consequently, there is a _threat_ that the glass doors and windows can be broken. The showroom owners should contemplate the _risk_, i.e. the likelihood that a glass door or window gets broken and the resulting impact on the business.
 
 Consider another example directly related to information systems. You work for a hospital that uses a particular database system to store all the medical records. One day, you are following the latest security news, and you learn that the used database system is not only vulnerable but also a proof-of-concept working exploit code has been released; the released exploit code indicates that the threat is real. With this knowledge, you must consider the resulting risk and decide the next steps.

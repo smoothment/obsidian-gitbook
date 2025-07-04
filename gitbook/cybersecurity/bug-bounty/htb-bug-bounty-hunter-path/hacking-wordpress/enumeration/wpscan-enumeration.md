@@ -1,16 +1,15 @@
 ---
 sticker: emoji//1f43c
 ---
+## Enumerating a Website with WPScan
 
-# WPScan Enumeration
-
-The `--enumerate` flag is used to enumerate various components of the WordPress application such as plugins, themes, and users. By default, WPScan enumerates vulnerable plugins, themes, users, media, and backups. However, specific arguments can be supplied to restrict enumeration to specific components. For example, all plugins can be enumerated using the arguments `--enumerate ap`. Let's run a normal enumeration scan against a WordPress website.
+The `--enumerate` flag is used to enumerate various components of the WordPress application such as plugins, themes, and users. By default, WPScan enumerates vulnerable plugins, themes, users, media, and backups. However, specific arguments can be supplied to restrict enumeration to specific components. For example, all plugins can be enumerated using the arguments `--enumerate ap`. Let's run a normal enumeration scan against a WordPress website.
 
 Note: The default number of threads used is 5, however, this value can be changed using the "-t" flag.
 
-### WPScan Enumeration
+#### WPScan Enumeration
 
-&#x20; WPScan Enumeration
+  WPScan Enumeration
 
 ```shell-session
 smoothment@htb[/htb]$ wpscan --url http://blog.inlanefreight.com --enumerate --api-token Kffr4fdJzy9qVcTk<SNIP>
@@ -80,11 +79,10 @@ smoothment@htb[/htb]$ wpscan --url http://blog.inlanefreight.com --enumerate --a
 
 WPScan uses various passive and active methods to determine versions and vulnerabilities, as shown in the scan output above.
 
-**Question**
+# Question
+----
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250220133445.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220133445.png)
 
 Let's use:
 
@@ -197,6 +195,7 @@ We get this:
  |  - http://94.237.53.112:46761/wp-content/plugins/wp-google-places-review-slider/README.txt
 
 ```
+
 
 Answer is:
 

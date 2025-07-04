@@ -2,30 +2,32 @@
 sticker: emoji//1f513
 ---
 
-# DECRYPTIFY
+# PORT SCAN
+---
 
-## PORT SCAN
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 1337 | HTTP    |
 
-## RECONNAISSANCE
 
-***
+
+
+# RECONNAISSANCE
+---
 
 Let's check the web application:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611130401.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611130401.png)
+
 
 As seen, we can login with the username and an invite code, we can also check the `API` documentation:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611130505.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611130505.png)
 
 We need the password for the API, seems like we need to fuzz in order to find anything that may be hidden:
+
 
 ```
 ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u "http://10.10.28.196:1337/FUZZ" -ic -c -t 200 -e .php,.html,.git
@@ -65,15 +67,16 @@ logs                    [Status: 301, Size: 318, Words: 20, Lines: 10, Duration:
 
 `logs` seem interesting:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611131017.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611131017.png)
 
 We can find that info inside of it, we get an invite code but can't do anything with it, let's go to `js`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611131058.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611131058.png)
 
 We can find `api.js`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611131115.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611131115.png)
 
 We can use `beautifier` to check the contents better:
 
@@ -127,8 +130,8 @@ This defines a function `b()` which:
 
 1. Calls `a()` to get an array of strings
 2. Redefines itself to a new function that:
-   * Adjusts the input index by subtracting `0x165` (357)
-   * Returns the value at the adjusted index from the captured array `e`
+    - Adjusts the input index by subtracting `0x165` (357)
+    - Returns the value at the adjusted index from the captured array `e`
 3. Immediately executes the redefined function with arguments `(c, d)`
 
 Now `a()`:
@@ -187,7 +190,7 @@ This IIFE does the following:
 
 Now the critical part:
 
-```js
+```JS
 const c = j(0x169);
 ```
 
@@ -195,6 +198,7 @@ Since `j = b`, calling `b(0x169)`:
 
 1. Computes index: `0x169 - 0x165 = 4`
 2. Returns `e[4]` from the modified array
+
 
 We can make use of the console to put the obfuscated snippet and do:
 
@@ -204,29 +208,30 @@ j(0x169)
 
 We get:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611133521.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611133521.png)
 
 **Why it returns "H7gY2tJ9wQzD4rS1" instead of "5228dijopu":**
 
-* The IIFE rotates the array until the arithmetic condition is satisfied
-* After rotation, the original `k[3]` ("H7gY2tJ9wQzD4rS1") moves to index 4
-* The original `k[4]` ("5228dijopu") moves to a different position
+- The IIFE rotates the array until the arithmetic condition is satisfied
+- After rotation, the original `k[3]` ("H7gY2tJ9wQzD4rS1") moves to index 4
+- The original `k[4]` ("5228dijopu") moves to a different position
 
 ```
 H7gY2tJ9wQzD4rS1
 ```
 
+
 With this we can now go into the API documentation and begin exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 Once we access the API we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611133729.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611133729.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611133736.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611133736.png)
 
 We can see the way the token is being generated, it uses the following function:
 
@@ -321,16 +326,19 @@ print $token
 ?>
 ```
 
+
 ```
 php get_token.php
 NDYxNTg5ODkx
 ```
 
+
 We got our code, let's login:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611142753.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611142801.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611142753.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611142801.png)
 
 Nice, got our first flag:
 
@@ -340,26 +348,25 @@ THM{CryptographyPwn007}
 
 Let's get our second flag.
 
-## SECOND FLAG
-
-***
+# SECOND FLAG
+---
 
 If we check the source code of the dashboard, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611143233.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611143233.png)
 
 We got a hidden input type named date, if we use it, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611143331.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611143331.png)
 
 The error `Padding error: error:0606506D:digital envelope routines:EVP_DecryptFinal_ex:wrong final block length` indicates that the application is **vulnerable to a Padding Oracle Attack (POA)**. This occurs when the server leaks information about padding validation during decryption.
 
-#### Key Details:
+### Key Details:
 
-* **Cryptography Used**:
-  * The `date` parameter contains encrypted data (likely AES-CBC mode)
-  * Server attempts to decrypt it and reveals padding errors
-  * Error message confirms it's using OpenSSL's EVP functions
+- **Cryptography Used**:
+    - The `date` parameter contains encrypted data (likely AES-CBC mode)
+    - Server attempts to decrypt it and reveals padding errors
+    - Error message confirms it's using OpenSSL's EVP functions
 
 ```mermaid
 graph LR
@@ -369,13 +376,14 @@ B -->|Invalid padding| D[500 Error<br>with padding message]
 D --> A
 ```
 
+
 Now that we know the attack path, we need a tool to perform the attack, we can use this:
 
 PADRE: https://github.com/glebarez/padre
 
 In order to use the tool, we need cookies, let's submit the request to our proxy:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611144442.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611144442.png)
 
 Get both cookies and use padre:
 
@@ -405,7 +413,7 @@ padre -cookie 'PHPSESSID=bvm7a460lof8s58df1cr0kq9cm; role=d057af5933d8acebfe290f
 
 Now, let's try it and check the response:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611145137.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611145137.png)
 
 Nice, as seen we achieved RCE, let's get our final flag then:
 
@@ -422,7 +430,8 @@ padre -cookie 'PHPSESSID=bvm7a460lof8s58df1cr0kq9cm; role=d057af5933d8acebfe290f
 
 We get:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611150141.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611150141.png)
+
 
 Got our flag:
 
@@ -430,4 +439,5 @@ Got our flag:
 THM{GOT_COMMAND_EXECUTION001}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250611150206.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611150206.png)
+

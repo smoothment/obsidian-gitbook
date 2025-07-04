@@ -1,35 +1,34 @@
 ---
 sticker: emoji//1f478
 ---
+# INTRODUCTION
 
-# ESSENTIALS
+Everyone prefers a graphical user interface (GUI) until they master a command-line interface (CLI). There are many reasons for that. One reason is that GUIs are usually intuitive. If someone offers you a GUI interface you are unfamiliar with, you can quickly poke around and discover a non-trivial part. Compare this with dealing with a CLI, i.e., a prompt.
 
-## INTRODUCTION
+CLI interfaces usually have a learning curve; however, as you master the command line, you will find it faster and more efficient. Consider this trivial example: How many clicks do you need to find your IP address using the graphical desktop? Using the command-line interface, you don’t even need to raise your hands off the keyboard. Let’s say you want to recheck your IP address. You need to issue the same command instead of moving the mouse pointer to every corner of your screen.
 
-Everyone prefers a graphical user interface (GUI) until they master a command-line interface (CLI). There are many reasons for that. One reason is that GUIs are usually intuitive. If someone offers you a GUI interface you are unfamiliar with, you can quickly poke around and discover a non-trivial part. Compare this with dealing with a CLI, i.e., a prompt.
+There are many other advantages to using a CLI besides speed and efficiency. We will mention a few:
 
-CLI interfaces usually have a learning curve; however, as you master the command line, you will find it faster and more efficient. Consider this trivial example: How many clicks do you need to find your IP address using the graphical desktop? Using the command-line interface, you don’t even need to raise your hands off the keyboard. Let’s say you want to recheck your IP address. You need to issue the same command instead of moving the mouse pointer to every corner of your screen.
+- **Lower resource usage**: CLIs require fewer system resources than graphics-intensive GUIs. In other words, you can run your CLI system on older hardware or systems with limited memory. If you are using cloud computing, your system will require lower resources, which in turn will lower your bill.
+- **Automation**: While you can automate GUI tasks, creating a batch file or script with the commands you need to repeat is much easier.
+- **Remote management**: CLI makes it very convenient to use SSH to manage a remote system such as a server, router, or an IoT device. This approach works well on slow network speeds and systems with limited resources.
 
-There are many other advantages to using a CLI besides speed and efficiency. We will mention a few:
+## Learning Objectives
 
-* **Lower resource usage**: CLIs require fewer system resources than graphics-intensive GUIs. In other words, you can run your CLI system on older hardware or systems with limited memory. If you are using cloud computing, your system will require lower resources, which in turn will lower your bill.
-* **Automation**: While you can automate GUI tasks, creating a batch file or script with the commands you need to repeat is much easier.
-* **Remote management**: CLI makes it very convenient to use SSH to manage a remote system such as a server, router, or an IoT device. This approach works well on slow network speeds and systems with limited resources.
+The purpose of this room is to teach you how to use MS Windows Command Prompt `cmd.exe`, the default command-line interpreter in the Windows environment. We will learn how to use the command line to:
 
-### Learning Objectives
+- Display basic system information
+- Check and troubleshoot network configuration
+- Manage files and folders
+- Check running processes
 
-The purpose of this room is to teach you how to use MS Windows Command Prompt `cmd.exe`, the default command-line interpreter in the Windows environment. We will learn how to use the command line to:
 
-* Display basic system information
-* Check and troubleshoot network configuration
-* Manage files and folders
-* Check running processes
+# BASIC SYSTEM INFORMATION
 
-## BASIC SYSTEM INFORMATION
 
 ![MS Windows computer screen saying Hi to the user.](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/5f04259cf9bf5b57aed2c476-1718097946516)
 
-Before issuing commands, we should note that we can only issue the commands within the Windows Path. You can issue the command `set` to check your path from the command line. The terminal output below shows the path where MS Windows will execute commands, as indicated by the line starting with `Path=`.
+Before issuing commands, we should note that we can only issue the commands within the Windows Path. You can issue the command `set` to check your path from the command line. The terminal output below shows the path where MS Windows will execute commands, as indicated by the line starting with `Path=`.
 
 Terminal
 
@@ -44,7 +43,7 @@ Path=C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32
 [...]
 ```
 
-Let’s use the `ver` command to determine the operating system (OS) version. The terminal below shows an example output.
+Let’s use the `ver` command to determine the operating system (OS) version. The terminal below shows an example output.
 
 Terminal
 
@@ -53,7 +52,7 @@ C:\>ver
 Microsoft Windows [Version 10.0.17763.1821]
 ```
 
-Enough warming up. Let’s discover more in-depth information about the system. We can run the `systeminfo` command to list various information about the system such as OS information, system details, processor and memory. The terminal below shows a snippet of the displayed output.
+Enough warming up. Let’s discover more in-depth information about the system. We can run the `systeminfo` command to list various information about the system such as OS information, system details, processor and memory. The terminal below shows a snippet of the displayed output.
 
 Terminal
 
@@ -71,18 +70,19 @@ OS Build Type:             Multiprocessor Free
 
 Before moving on, it is good to mention a couple of tricks.
 
-First, you can pipe it through `more` if the output is too long. Then, you can view it page after page by pressing the space bar button. To demonstrate this, try running `driverquery` and compare it with running `driverquery | more`. In the latter, you can display the output page by page and you can exit it using `CTRL + C`.
+First, you can pipe it through `more` if the output is too long. Then, you can view it page after page by pressing the space bar button. To demonstrate this, try running `driverquery` and compare it with running `driverquery | more`. In the latter, you can display the output page by page and you can exit it using `CTRL + C`.
 
-* `help` - Provides help information for a specific command
-* `cls` - Clears the Command Prompt screen.
+- `help` - Provides help information for a specific command
+- `cls` - Clears the Command Prompt screen.
 
-## NETWORK TROUBLESHOOTING
 
-Most of us are used to looking up MS Windows network configuration from the GUI interface. The command-line interface provides many networking-related commands to look up your current configuration, check ongoing connections, and troubleshoot networking issues.
+# NETWORK TROUBLESHOOTING
 
-### Network Configuration
+Most of us are used to looking up MS Windows network configuration from the GUI interface. The command-line interface provides many networking-related commands to look up your current configuration, check ongoing connections, and troubleshoot networking issues.
 
-You can check your network information using `ipconfig`. The terminal output below shows our IP address, subnet mask, and default gateway.
+## Network Configuration
+
+You can check your network information using `ipconfig`. The terminal output below shows our IP address, subnet mask, and default gateway.
 
 Terminal
 
@@ -100,7 +100,7 @@ Ethernet adapter Ethernet:
    Default Gateway . . . . . . . . . : 10.10.0.1
 ```
 
-You can also use `ipconfig /all` for more information about your network configuration. As shown in the terminal below, we can view our DNS servers and confirm that DHCP is enabled.
+You can also use `ipconfig /all` for more information about your network configuration. As shown in the terminal below, we can view our DNS servers and confirm that DHCP is enabled.
 
 Terminal
 
@@ -127,11 +127,11 @@ Ethernet adapter Ethernet 3:
    NetBIOS over Tcpip. . . . . . . . : Enabled
 ```
 
-### Network Troubleshooting
+## Network Troubleshooting
 
-One common troubleshooting task is checking if the server can access a particular server on the Internet. The command syntax is `ping target_name`. Inspired by ping-pong, we send a specific ICMP packet and listen for a response. If a response is received, we know that we can reach the target and that the target can reach us.
+One common troubleshooting task is checking if the server can access a particular server on the Internet. The command syntax is `ping target_name`. Inspired by ping-pong, we send a specific ICMP packet and listen for a response. If a response is received, we know that we can reach the target and that the target can reach us.
 
-Let’s find out if we reach `example.com`. In the terminal output below, we can see that we have successfully received four replies. Furthermore, we got some statistics; for instance, the average round trip time is 78 milliseconds.
+Let’s find out if we reach `example.com`. In the terminal output below, we can see that we have successfully received four replies. Furthermore, we got some statistics; for instance, the average round trip time is 78 milliseconds.
 
 Terminal
 
@@ -150,7 +150,7 @@ Approximate round trip times in milli-seconds:
     Minimum = 78ms, Maximum = 78ms, Average = 78ms
 ```
 
-Another valuable tool for troubleshooting is `tracert`, which stands for _trace route_. The command `tracert target_name` traces the network route traversed to reach the target. Without getting into more details, it expects the routers on the path to notify us if they drop a packet because its time-to-live (TTL) has reached zero. The terminal output below shows that we passed through 15 routers before reaching our target.
+Another valuable tool for troubleshooting is `tracert`, which stands for _trace route_. The command `tracert target_name` traces the network route traversed to reach the target. Without getting into more details, it expects the routers on the path to notify us if they drop a packet because its time-to-live (TTL) has reached zero. The terminal output below shows that we passed through 15 routers before reaching our target.
 
 Terminal
 
@@ -180,9 +180,9 @@ over a maximum of 30 hops:
 Trace complete.
 ```
 
-### More Networking Commands
+## More Networking Commands
 
-One networking command worth knowing is `nslookup`. It looks up a host or domain and returns its IP address. The syntax `nslookup example.com` will look up `example.com` using the default name server; however, `nslookup example.com 1.1.1.1` will use the name server `one.one.one.one`. The terminal below shows the output of both commands. The results are identical; however, you can see that the answers were retrieved from different name servers.
+One networking command worth knowing is `nslookup`. It looks up a host or domain and returns its IP address. The syntax `nslookup example.com` will look up `example.com` using the default name server; however, `nslookup example.com 1.1.1.1` will use the name server `one.one.one.one`. The terminal below shows the output of both commands. The results are identical; however, you can see that the answers were retrieved from different name servers.
 
 Terminal
 
@@ -206,7 +206,7 @@ Addresses:  2606:2800:21f:cb07:6820:80da:af6b:8b2c
           93.184.215.14
 ```
 
-The final networking command we will cover in this room is `netstat`. This command displays current network connections and listening ports. A basic `netstat` command with no arguments will show you established connections, as shown below. In this case, we only have one SSH connection; we figured out it is SSH because it is bound to port 22.
+The final networking command we will cover in this room is `netstat`. This command displays current network connections and listening ports. A basic `netstat` command with no arguments will show you established connections, as shown below. In this case, we only have one SSH connection; we figured out it is SSH because it is bound to port 22.
 
 Terminal
 
@@ -219,14 +219,14 @@ Active Connections
   TCP    10.10.230.237:22       ip-10-11-81-126:53486  ESTABLISHED
 ```
 
-If you are curious about the other options, you can run `netstat -h`, where `-h` displays the help page. We opted for the following options:
+If you are curious about the other options, you can run `netstat -h`, where `-h` displays the help page. We opted for the following options:
 
-* `-a` displays all established connections and listening ports
-* `-b` shows the program associated with each listening port and established connection
-* `-o` reveals the process ID (PID) associated with the connection
-* `-n` uses a numerical form for addresses and port numbers
+- `-a` displays all established connections and listening ports
+- `-b` shows the program associated with each listening port and established connection
+- `-o` reveals the process ID (PID) associated with the connection
+- `-n` uses a numerical form for addresses and port numbers
 
-We combine these four options and execute the `netstat -abon` command. The result is quite long, but we display the first few lines in the terminal below. It is clear now that the executable `sshd.exe` is responsible for listening for incoming connections on port 22, as shown in the first line. We can also see the process ID (PID) associated with each connection.
+We combine these four options and execute the `netstat -abon` command. The result is quite long, but we display the first few lines in the terminal below. It is clear now that the executable `sshd.exe` is responsible for listening for incoming connections on port 22, as shown in the first line. We can also see the process ID (PID) associated with each connection.
 
 Terminal
 
@@ -252,20 +252,20 @@ Active Connections
  [sshd.exe]
  [...]
 ```
+## QUESTIONS
 
-### QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241028150207.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028150207.png)
 
-## FILE AND DISK MANAGEMENT
+# FILE AND DISK MANAGEMENT
 
 You have learned to look up basic system information and check the network configuration. Now, let’s discover how to browse the directories and move files around.
 
-### Working With Directories
+## Working With Directories
 
-You can use `cd` without parameters to display the current drive and directory. It is the equivalent of asking the system, _where am I?_
+You can use `cd` without parameters to display the current drive and directory. It is the equivalent of asking the system, _where am I?_
 
-You can view the child directories using `dir`.
+You can view the child directories using `dir`.
 
 Terminal
 
@@ -294,12 +294,12 @@ C:\Users\strategos>dir
               11 Dir(s)  14,984,953,856 bytes free
 ```
 
-Note that you can use the following options with `dir`:
+Note that you can use the following options with `dir`:
 
-* `dir /a` - Displays hidden and system files as well.
-* `dir /s` - Displays files in the current directory and all subdirectories.
+- `dir /a` - Displays hidden and system files as well.
+- `dir /s` - Displays files in the current directory and all subdirectories.
 
-You can type `tree` to visually represent the child directories and subdirectories.
+You can type `tree` to visually represent the child directories and subdirectories.
 
 Terminal
 
@@ -319,7 +319,7 @@ C:.
 └───Videos
 ```
 
-You can change to any directory by using the command `cd target_directory`; this is equivalent to double-clicking the `target_directory` on your desktop. Furthermore, you can use `cd ..` to go up one level. An example is shown in the terminal output below.
+You can change to any directory by using the command `cd target_directory`; this is equivalent to double-clicking the `target_directory` on your desktop. Furthermore, you can use `cd ..` to go up one level. An example is shown in the terminal output below.
 
 Terminal
 
@@ -338,7 +338,7 @@ C:\>cd
 C:\ 
 ```
 
-To create a directory, use `mkdir directory_name`; `mkdir` stands for _make directory_. To delete a directory, use `rmdir directory_name`; `rmdir` stands for _remove directory_. The terminal output below shows creating and deleting a directory.
+To create a directory, use `mkdir directory_name`; `mkdir` stands for _make directory_. To delete a directory, use `rmdir directory_name`; `rmdir` stands for _remove directory_. The terminal output below shows creating and deleting a directory.
 
 Terminal
 
@@ -365,11 +365,11 @@ C:\example>dir
                2 Dir(s)  14,984,724,480 bytes free
 ```
 
-### Working With Files
+## Working With Files
 
-You are working with the command line. You are curious about the contents of a particular text file. You can easily view text files with the command `type`. This command will dump the contents of the text file on the screen; this is convenient for files that fit within your terminal window. You might want to consider `more` for longer text files. This command will display enough text file contents to fill your terminal window. In other words, for long text files, `more` will display a single page and wait for you to press `Spacebar` to move by one page (flip the page) or `Enter` to move by one line.
+You are working with the command line. You are curious about the contents of a particular text file. You can easily view text files with the command `type`. This command will dump the contents of the text file on the screen; this is convenient for files that fit within your terminal window. You might want to consider `more` for longer text files. This command will display enough text file contents to fill your terminal window. In other words, for long text files, `more` will display a single page and wait for you to press `Spacebar` to move by one page (flip the page) or `Enter` to move by one line.
 
-The `copy` command allows you to copy files from one location to another. The following terminal output provides an example.
+The `copy` command allows you to copy files from one location to another. The following terminal output provides an example.
 
 Terminal
 
@@ -397,7 +397,7 @@ C:\example>dir
                2 Dir(s)  14,983,409,664 bytes free
 ```
 
-Similarly, you can move files using the `move` command. An example is shown in the terminal output below.
+Similarly, you can move files using the `move` command. An example is shown in the terminal output below.
 
 Terminal
 
@@ -425,7 +425,7 @@ C:\example>dir
                2 Dir(s)  14,983,409,664 bytes free
 ```
 
-Finally, we can delete a file using `del` or `erase`.
+Finally, we can delete a file using `del` or `erase`.
 
 Terminal
 
@@ -452,13 +452,14 @@ C:\example>dir
                2 Dir(s)  14,983,409,664 bytes free
 ```
 
-We can use the wildcard character `*` to refer to multiple files. For example, `copy *.md C:\Markdown` will copy all files with the extension `md` to the directory `C:\Markdown`.
+We can use the wildcard character `*` to refer to multiple files. For example, `copy *.md C:\Markdown` will copy all files with the extension `md` to the directory `C:\Markdown`.
 
-## TASK AND PROCESS MANAGEMENT
+
+# TASK AND PROCESS MANAGEMENT
 
 You must be familiar with MS Windows Task Manager and might be familiar with killing non-responsive processes. Let’s discover how to achieve a similar functionality using the command line.
 
-We can list the running processes using `tasklist`.
+We can list the running processes using `tasklist`.
 
 Terminal
 
@@ -482,7 +483,7 @@ fontdrvhost.exe                736 Console                    1      4,256 K
 [...]
 ```
 
-Some filtering is helpful because the output is expected to be very long. You can check all available filters by displaying the help page using `tasklist /?`. Let’s say that we want to search for tasks related to `sshd.exe`, we can do that with the command `tasklist /FI "imagename eq sshd.exe"`. Note that `/FI` is used to set the filter _image name equals_ `sshd.exe`.
+Some filtering is helpful because the output is expected to be very long. You can check all available filters by displaying the help page using `tasklist /?`. Let’s say that we want to search for tasks related to `sshd.exe`, we can do that with the command `tasklist /FI "imagename eq sshd.exe"`. Note that `/FI` is used to set the filter _image name equals_ `sshd.exe`.
 
 Terminal
 
@@ -496,21 +497,22 @@ sshd.exe                      2712 Services                   0      7,668 K
 sshd.exe                      4752 Services                   0      7,372 K
 ```
 
-With the process ID (PID) known, we can terminate any task using `taskkill /PID target_pid`. For example, if we want to kill the process with PID `4567`, we would issue the command `taskkill /PID 4567`.
+With the process ID (PID) known, we can terminate any task using `taskkill /PID target_pid`. For example, if we want to kill the process with PID `4567`, we would issue the command `taskkill /PID 4567`.
 
-### QUESTIONS
+## QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241028150327.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028150327.png)
 
-## OTHER COMMANDS
+# OTHER COMMANDS
 
-* `chkdsk`: checks the file system and disk volumes for errors and bad sectors.
-* `driverquery`: displays a list of installed device drivers.
-* `sfc /scannow`: scans system files for corruption and repairs them if possible.
 
-It is important to remember all the commands covered in the previous tasks; moreover, it is equally important to know that `/?` can be used with most commands to display a help page.
+- `chkdsk`: checks the file system and disk volumes for errors and bad sectors.
+- `driverquery`: displays a list of installed device drivers.
+- `sfc /scannow`: scans system files for corruption and repairs them if possible.
 
-In this room, we used the command `more` in two ways:
+It is important to remember all the commands covered in the previous tasks; moreover, it is equally important to know that `/?` can be used with most commands to display a help page.
 
-* Display text files: `more file.txt`
-* Pipe long output to view it page by page: `some_command | more`
+In this room, we used the command `more` in two ways:
+
+- Display text files: `more file.txt`
+- Pipe long output to view it page by page: `some_command | more`

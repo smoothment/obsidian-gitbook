@@ -1,52 +1,50 @@
 ---
 sticker: emoji//2139-fe0f
 ---
-
-# Digging DNS
-
 Having established a solid understanding of DNS fundamentals and its various record types, let's now transition to the practical. This section will explore the tools and techniques for leveraging DNS for web reconnaissance.
 
-### DNS Tools
+## DNS Tools
 
 DNS reconnaissance involves utilizing specialized tools designed to query DNS servers and extract valuable information. Here are some of the most popular and versatile tools in the arsenal of web recon professionals:
 
-| Tool                       | Key Features                                                                                            | Use Cases                                                                                                                               |
-| -------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `dig`                      | Versatile DNS lookup tool that supports various query types (A, MX, NS, TXT, etc.) and detailed output. | Manual DNS queries, zone transfers (if allowed), troubleshooting DNS issues, and in-depth analysis of DNS records.                      |
-| `nslookup`                 | Simpler DNS lookup tool, primarily for A, AAAA, and MX records.                                         | Basic DNS queries, quick checks of domain resolution and mail server records.                                                           |
-| `host`                     | Streamlined DNS lookup tool with concise output.                                                        | Quick checks of A, AAAA, and MX records.                                                                                                |
-| `dnsenum`                  | Automated DNS enumeration tool, dictionary attacks, brute-forcing, zone transfers (if allowed).         | Discovering subdomains and gathering DNS information efficiently.                                                                       |
-| `fierce`                   | DNS reconnaissance and subdomain enumeration tool with recursive search and wildcard detection.         | User-friendly interface for DNS reconnaissance, identifying subdomains and potential targets.                                           |
-| `dnsrecon`                 | Combines multiple DNS reconnaissance techniques and supports various output formats.                    | Comprehensive DNS enumeration, identifying subdomains, and gathering DNS records for further analysis.                                  |
-| `theHarvester`             | OSINT tool that gathers information from various sources, including DNS records (email addresses).      | Collecting email addresses, employee information, and other data associated with a domain from multiple sources.                        |
-| Online DNS Lookup Services | User-friendly interfaces for performing DNS lookups.                                                    | Quick and easy DNS lookups, convenient when command-line tools are not available, checking for domain availability or basic information |
+|Tool|Key Features|Use Cases|
+|---|---|---|
+|`dig`|Versatile DNS lookup tool that supports various query types (A, MX, NS, TXT, etc.) and detailed output.|Manual DNS queries, zone transfers (if allowed), troubleshooting DNS issues, and in-depth analysis of DNS records.|
+|`nslookup`|Simpler DNS lookup tool, primarily for A, AAAA, and MX records.|Basic DNS queries, quick checks of domain resolution and mail server records.|
+|`host`|Streamlined DNS lookup tool with concise output.|Quick checks of A, AAAA, and MX records.|
+|`dnsenum`|Automated DNS enumeration tool, dictionary attacks, brute-forcing, zone transfers (if allowed).|Discovering subdomains and gathering DNS information efficiently.|
+|`fierce`|DNS reconnaissance and subdomain enumeration tool with recursive search and wildcard detection.|User-friendly interface for DNS reconnaissance, identifying subdomains and potential targets.|
+|`dnsrecon`|Combines multiple DNS reconnaissance techniques and supports various output formats.|Comprehensive DNS enumeration, identifying subdomains, and gathering DNS records for further analysis.|
+|`theHarvester`|OSINT tool that gathers information from various sources, including DNS records (email addresses).|Collecting email addresses, employee information, and other data associated with a domain from multiple sources.|
+|Online DNS Lookup Services|User-friendly interfaces for performing DNS lookups.|Quick and easy DNS lookups, convenient when command-line tools are not available, checking for domain availability or basic information|
 
-### The Domain Information Groper
+## The Domain Information Groper
 
-The `dig` command (`Domain Information Groper`) is a versatile and powerful utility for querying DNS servers and retrieving various types of DNS records. Its flexibility and detailed and customizable output make it a go-to choice.
+The `dig` command (`Domain Information Groper`) is a versatile and powerful utility for querying DNS servers and retrieving various types of DNS records. Its flexibility and detailed and customizable output make it a go-to choice.
 
-#### Common dig Commands
+### Common dig Commands
 
-| Command                         | Description                                                                                                                                                                                          |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dig domain.com`                | Performs a default A record lookup for the domain.                                                                                                                                                   |
-| `dig domain.com A`              | Retrieves the IPv4 address (A record) associated with the domain.                                                                                                                                    |
-| `dig domain.com AAAA`           | Retrieves the IPv6 address (AAAA record) associated with the domain.                                                                                                                                 |
-| `dig domain.com MX`             | Finds the mail servers (MX records) responsible for the domain.                                                                                                                                      |
-| `dig domain.com NS`             | Identifies the authoritative name servers for the domain.                                                                                                                                            |
-| `dig domain.com TXT`            | Retrieves any TXT records associated with the domain.                                                                                                                                                |
-| `dig domain.com CNAME`          | Retrieves the canonical name (CNAME) record for the domain.                                                                                                                                          |
-| `dig domain.com SOA`            | Retrieves the start of authority (SOA) record for the domain.                                                                                                                                        |
-| `dig @1.1.1.1 domain.com`       | Specifies a specific name server to query; in this case 1.1.1.1                                                                                                                                      |
-| `dig +trace domain.com`         | Shows the full path of DNS resolution.                                                                                                                                                               |
-| `dig -x 192.168.1.1`            | Performs a reverse lookup on the IP address 192.168.1.1 to find the associated host name. You may need to specify a name server.                                                                     |
-| `dig +short domain.com`         | Provides a short, concise answer to the query.                                                                                                                                                       |
-| `dig +noall +answer domain.com` | Displays only the answer section of the query output.                                                                                                                                                |
-| `dig domain.com ANY`            | Retrieves all available DNS records for the domain (Note: Many DNS servers ignore `ANY` queries to reduce load and prevent abuse, as per [RFC 8482](https://datatracker.ietf.org/doc/html/rfc8482)). |
+|Command|Description|
+|---|---|
+|`dig domain.com`|Performs a default A record lookup for the domain.|
+|`dig domain.com A`|Retrieves the IPv4 address (A record) associated with the domain.|
+|`dig domain.com AAAA`|Retrieves the IPv6 address (AAAA record) associated with the domain.|
+|`dig domain.com MX`|Finds the mail servers (MX records) responsible for the domain.|
+|`dig domain.com NS`|Identifies the authoritative name servers for the domain.|
+|`dig domain.com TXT`|Retrieves any TXT records associated with the domain.|
+|`dig domain.com CNAME`|Retrieves the canonical name (CNAME) record for the domain.|
+|`dig domain.com SOA`|Retrieves the start of authority (SOA) record for the domain.|
+|`dig @1.1.1.1 domain.com`|Specifies a specific name server to query; in this case 1.1.1.1|
+|`dig +trace domain.com`|Shows the full path of DNS resolution.|
+|`dig -x 192.168.1.1`|Performs a reverse lookup on the IP address 192.168.1.1 to find the associated host name. You may need to specify a name server.|
+|`dig +short domain.com`|Provides a short, concise answer to the query.|
+|`dig +noall +answer domain.com`|Displays only the answer section of the query output.|
+|`dig domain.com ANY`|Retrieves all available DNS records for the domain (Note: Many DNS servers ignore `ANY` queries to reduce load and prevent abuse, as per [RFC 8482](https://datatracker.ietf.org/doc/html/rfc8482)).|
 
 Caution: Some servers can detect and block excessive DNS queries. Use caution and respect rate limits. Always obtain permission before performing extensive DNS reconnaissance on a target.
 
-### Groping DNS
+## Groping DNS
+
 
 ```shell-session
 smoothment@htb[/htb]$ dig google.com
@@ -70,7 +68,7 @@ google.com.             0       IN      A       142.251.47.142
 ;; MSG SIZE  rcvd: 54
 ```
 
-This output is the result of a DNS query using the `dig` command for the domain `google.com`. The command was executed on a system running `DiG` version `9.18.24-0ubuntu0.22.04.1-Ubuntu`. The output can be broken down into four key sections:
+This output is the result of a DNS query using the `dig` command for the domain `google.com`. The command was executed on a system running `DiG` version `9.18.24-0ubuntu0.22.04.1-Ubuntu`. The output can be broken down into four key sections:
 
 ```ad-summary
 1. Header
@@ -102,9 +100,11 @@ This output is the result of a DNS query using the `dig` command for the domain 
         
 ```
 
-An `opt pseudosection` can sometimes exist in a `dig` query. This is due to Extension Mechanisms for DNS (`EDNS`), which allows for additional features such as larger message sizes and DNS Security Extensions (`DNSSEC`) support.
+An `opt pseudosection` can sometimes exist in a `dig` query. This is due to Extension Mechanisms for DNS (`EDNS`), which allows for additional features such as larger message sizes and DNS Security Extensions (`DNSSEC`) support.
 
-If you just want the answer to the question, without any of the other information, you can query `dig` using `+short`:
+If you just want the answer to the question, without any of the other information, you can query `dig` using `+short`:
+
+
 
 ```shell-session
 smoothment@htb[/htb]$ dig +short hackthebox.com
@@ -113,34 +113,33 @@ smoothment@htb[/htb]$ dig +short hackthebox.com
 104.18.21.126
 ```
 
-## Questions
 
-***
+# Questions
+----
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127135909.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127135909.png)
 
-### 1
-
-***
+## 1
+---
 
 We can use dig or ping `inlanefreight.com` to check IP:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127140144.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127140144.png)
 
 IP is: `134.209.24.248`
 
-### 2
+## 2
+---
 
-***
 
-Answer for question number 2 is: \`inlanefreight.com
+Answer for question number 2 is: `inlanefreight.com
 
-### 3
-
-***
+## 3
+---
 
 For question 3, we can use `dnsenum` or `dig facebook.com MX`, we'll get the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250127140801.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250127140801.png)
 
 Answer is: `smtpin.vvv.facebook.com`
+

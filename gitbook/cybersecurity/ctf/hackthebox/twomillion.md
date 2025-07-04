@@ -1,67 +1,65 @@
 ---
 sticker: emoji//1f47d
 ---
+# ENUMERATION
+---
 
-# TWOMILLION
+## OPEN PORTS
+---
 
-## ENUMERATION
-
-***
-
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
 Let's investigate the website:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106160018.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106160018.png)
 
 We need to add `2million.htb` to `/etc/hosts`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106160136.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106160136.png)
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 Source code is normal. Let's proceed with some fuzzing in order to find anything useful, we can also answer the first question of the machine:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106160426.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106160426.png)
 
 We have 2 TCP open ports.
 
 Let's proceed with the fuzzing.
 
-### Fuzzing
 
-***
+## Fuzzing
+---
+
 
 After trying to fuzz for a while, nothing useful came. Let's skip it for now
 
-### Back to the standard page
 
-***
+## Back to the standard page
+---
 
 Once we go back to the page, we can see there's a login page, let's go into it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106160859.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106160859.png)
 
 Seems like we need some credentials in order to get here, XSS and SQLI does not seem to work in the login page.
 
 But we have another interesting thing in the website, a `join` section, when we click on it, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106161050.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106161050.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106161104.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106161104.png)
 
 If we take a look at the source code of this page, we find the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106161218.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106161218.png)
 
 Important things on the code are the following:
 
@@ -73,9 +71,9 @@ Important things on the code are the following:
 
 Let's take a look at the other script:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106161442.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106161442.png)
 
-It's obfuscated, let's use chatgpt to deobfuscate the code:
+It's obfuscated, let's use chatgpt to deobfuscate the code: 
 
 ```ad-hint
 
@@ -89,7 +87,8 @@ It's obfuscated, let's use chatgpt to deobfuscate the code:
 
 ```
 
-So, now we know the normal JS code is this:
+
+So, now we know the normal JS code is this: 
 
 ```js
 function verifyInviteCode(code) {
@@ -153,23 +152,25 @@ We found another interesting point, another POST request to `/api/v1/invite/how/
 
 Nice, we got some data, if we check at the encrypted data, we can know it is encrypted using `ROT13`, let's decrypt:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106162422.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162422.png)
 
 We got the way to generate the invite code, we must do a POST request to `/api/v1/invite/generate`, let's use curl again:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106162524.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162524.png)
 
 This is encoded using `base64`, let's decode:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106162619.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162619.png)
 
 So, our invite code would be: `6BA2T-B3C3I-DCYVB-E5SG4`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106162650.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162650.png)
 
 Nice! We can now register and also answer some questions:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106162856.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162856.png)
 
 Nice, let's proceed with the registration part, let's create a simple account with the following credentials:
 
@@ -185,39 +186,40 @@ password: `password123`
 
 Nice, now we have an initial access:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106163234.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106163234.png)
 
 Let's start with the exploitation part.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 Only a few things work in the website, most important one would be the `access` section, which throws this up:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106165230.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106165230.png)
 
 This page allows users to download and access a VPN file regarding the HTB infrastructure. Let's open up burp and check the request made by the `Connection Pack` section:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106165433.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106165433.png)
 
-We got a request to `/api/v1/user/vpn/generate` if we forward the request, we can download the VPN file.
+We got a request to `/api/v1/user/vpn/generate` if we forward the request, we can download the VPN file. 
 
 Let's try to make a get request to `/api` to check if anything useful comes with it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106165715.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106165715.png)
+
 
 We are getting an unauthorized 401 status code, let's provide our current session cookie and check if anything changes:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106165911.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106165911.png)
 
 Nice, we could make the request, let's keep enumerating that api, let's change the request:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106170019.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106170019.png)
 
 We can see a bunch of endpoints related to that api, most interesting ones are the admin related ones, let's use our cookie to test how this works:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106170213.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106170213.png)
 
 Since the message is false, we know it works, it checked if my cookie relates to a privileged user cookie, we need some sort of way to get admin access exploiting these endpoints:
 
@@ -249,6 +251,7 @@ It seems like we were able to escalate into admin user, let's make another call 
 And we were right, we were able to escalate into admin user.
 
 ```
+
 
 Now, our next step would be getting a reverse shell in some way, for this, let's follow this:
 
@@ -480,9 +483,10 @@ bfd36c19a809981c06a91882b6800549
 </tls-auth>
 ```
 
-Nothing seems really off, but, in case the system is generating this VPN files by using a php function such as `exec` or `system`, we could try \[\[CYBERSECURITY/CHEATSHEET/COMMAND INJECTION|command injection]], let's test with a simple `id`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106172955.png)
+Nothing seems really off, but, in case the system is generating this VPN files by using a php function such as `exec` or `system`, we could try [[CYBERSECURITY/CHEATSHEET/COMMAND INJECTION|command injection]], let's test with a simple `id`:
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106172955.png)
 
 That's right, this endpoint is vulnerable to command injection, we can get a reverse shell in the following way:
 
@@ -501,29 +505,30 @@ Sent payload: `curl -s -X POST http://2million.htb/api/v1/admin/vpn/generate --c
 ![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106173523.png)
 ```
 
-We got our shell, let's \[\[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stabilize it]]:
+We got our shell, let's [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stabilize it]]: 
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106173633.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106173633.png)
 
 Nice, now we have an stable shell!
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
+
 
 In order to perform privilege escalation, let's begin with a simple enumeration of the `/var/www/html` directory we are currently in:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106173802.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106173802.png)
 
 We see a `.env` file, a **`.env` file** is a simple text file used to store environment variables for an application. These files are commonly used in software development to manage configuration settings in a structured and secure way.
 
 Let's read it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106173902.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106173902.png)
 
 Seems like we have an `admin` user in this machine, let's read `/etc/passwd` to check if its true:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106174006.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174006.png)
 
 It is indeed true, now that we know it exists, we can log into ssh using those credentials:
 
@@ -535,19 +540,20 @@ DB_USERNAME=`admin`
 DB_PASSWORD=`SuperDuperPass123`
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106174135.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174135.png)
 
 We are inside ssh, let's check our privileges using `sudo -l`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106174306.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174306.png)
 
 We can not run sudo with this user, what about `find / -perm -4000 2>/dev/null`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106174453.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174453.png)
 
 We found something really interesting, a `CVE-2023-0386` related file, if we read this CVE, this is what its about:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106174601.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174601.png)
 
 Let's find an exploit for this an execute it:
 
@@ -558,7 +564,9 @@ Exploit: [exploit](https://github.com/xkaneiki/CVE-2023-0386)
 ![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174731.png)
 ```
 
+
 I will be using that exploit, let's get it and execute it in the machine in the way the author tells us:
+
 
 ```ad-hint
 1. `git clone https://github.com/xkaneiki/CVE-2023-0386`
@@ -574,25 +582,28 @@ I will be using that exploit, let's get it and execute it in the machine in the 
 
 After reproducing all the steps, we get a root shell:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106175456.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106175456.png)
+
 
 Now we can read the root flag and the user flag:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106175618.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106175618.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106175639.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106175639.png)
 
 ```ad-note
 root flag: `cca8ef6fecc788f8396049dc9a933d62`
 user flag: `d16ba35dd56db9718ba007fbf1e2f0e4`
 ```
 
+
 Just like that, machine is done, here are all the answers:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106180211.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106180211.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106180236.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106180236.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106180250.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106180250.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250106180258.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106180258.png)
+

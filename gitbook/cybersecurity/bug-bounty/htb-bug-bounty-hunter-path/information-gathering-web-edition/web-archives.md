@@ -1,20 +1,17 @@
 ---
 sticker: lucide//file-search
 ---
+In the fast-paced digital world, websites come and go, leaving only fleeting traces of their existence behind. However, thanks to the [Internet Archive's Wayback Machine](https://web.archive.org/), we have a unique opportunity to revisit the past and explore the digital footprints of websites as they once were.
 
-# Web Archives
-
-In the fast-paced digital world, websites come and go, leaving only fleeting traces of their existence behind. However, thanks to the [Internet Archive's Wayback Machine](https://web.archive.org/), we have a unique opportunity to revisit the past and explore the digital footprints of websites as they once were.
-
-#### What is the Wayback Machine?
+### What is the Wayback Machine?
 
 ![](https://academy.hackthebox.com/storage/modules/144/wayback.png)
 
-`The Wayback Machine` is a digital archive of the World Wide Web and other information on the Internet. Founded by the Internet Archive, a non-profit organization, it has been archiving websites since 1996.
+`The Wayback Machine` is a digital archive of the World Wide Web and other information on the Internet. Founded by the Internet Archive, a non-profit organization, it has been archiving websites since 1996.
 
 It allows users to "go back in time" and view snapshots of websites as they appeared at various points in their history. These snapshots, known as captures or archives, provide a glimpse into the past versions of a website, including its design, content, and functionality.
 
-#### How Does the Wayback Machine Work?
+### How Does the Wayback Machine Work?
 
 The Wayback Machine operates by using web crawlers to capture snapshots of websites at regular intervals automatically. These crawlers navigate through the web, following links and indexing pages, much like how search engine crawlers work. However, instead of simply indexing the information for search purposes, the Wayback Machine stores the entire content of the pages, including HTML, CSS, JavaScript, images, and other resources.
 
@@ -30,7 +27,7 @@ The frequency with which the Wayback Machine archives a website varies. Some web
 
 It's important to note that the Wayback Machine does not capture every single webpage online. It prioritizes websites deemed to be of cultural, historical, or research value. Additionally, website owners can request that their content be excluded from the Wayback Machine, although this is not always guaranteed.
 
-### Why the Wayback Machine Matters for Web Reconnaissance
+## Why the Wayback Machine Matters for Web Reconnaissance
 
 The Wayback Machine is a treasure trove for web reconnaissance, offering information that can be instrumental in various scenarios. Its significance lies in its ability to unveil a website's past, providing valuable insights that may not be readily apparent in its current state:
 
@@ -39,82 +36,79 @@ The Wayback Machine is a treasure trove for web reconnaissance, offering informa
 3. `Gathering Intelligence`: Archived content can be a valuable source of OSINT, providing insights into the target's past activities, marketing strategies, employees, and technology choices.
 4. `Stealthy Reconnaissance`: Accessing archived snapshots is a passive activity that doesn't directly interact with the target's infrastructure, making it a less detectable way to gather information.
 
-### Going Wayback on HTB
+## Going Wayback on HTB
 
-We can view the first archived version of HackTheBox by entering the page we are looking for into the Wayback Machine and selecting the earliest available capture date, being `2017-06-10 @ 04h23:01`
+We can view the first archived version of HackTheBox by entering the page we are looking for into the Wayback Machine and selecting the earliest available capture date, being `2017-06-10 @ 04h23:01`
 
-## Questions
 
-***
+# Questions
+---
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128141003.png)
-
-### 1
-
-***
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128141003.png)
+## 1
+---
 
 Let's search up hackthebox, in this case, the provided URL for this task is: `hackthebox.eu`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128141347.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128141347.png)
 
 Let's look up `August 8th 2018`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128141523.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128141523.png)
 
 Answer is `74`
+## 2
+---
 
-### 2
-
-***
 
 Now let's check `10th june 2017`:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128141621.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128141621.png)
 
 Answer is `3054`
 
-### 3
+## 3
+---
 
-***
-
-For third question, once we visit the page, we get redirected to:
+For third question, once we visit the page, we get redirected to: 
 
 `http://site.aboutface.com/`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128144016.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128144016.png)
 
-### 4
+## 4
+---
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128144625.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128144625.png)
 
 Answer is: `Palm 0rganizer`
 
-### 5
 
-***
+## 5
+---
 
 If we search up, we find the following website:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128144441.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128144441.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128144434.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128144434.png)
+
 
 Answer is: `http://google.stanford.edu/`
 
-### 6
+## 6
+---
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128144721.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128144721.png)
 
 Answer is: `17-December-99`
 
-### 7
+## 7
+---
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250128144802.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128144802.png)
 
 Answer is `3000`
+
+

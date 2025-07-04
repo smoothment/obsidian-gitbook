@@ -2,20 +2,16 @@
 sticker: emoji//1f9f0
 ---
 
-# TOOLSRUS
+# ENUMERATION
+---
 
-## ENUMERATION
+## OPEN PORTS
+---
 
-***
-
-### OPEN PORTS
-
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020241119144825.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119144825.png)
 
 | PORT | STATE | SERVICE |
-| ---- | ----- | ------- |
+| :--- | :---- | :------ |
 | 22   | open  | ssh     |
 | 80   | open  | http    |
 | 1234 | open  | http    |
@@ -31,17 +27,17 @@ AJP is a wire protocol. It an optimized version of the HTTP protocol to allow a 
 
 Knowing all this, let's proceed with the fuzzing of both websites.
 
-### FUZZING
+## FUZZING
+---
 
-***
+### Port 80
 
-#### Port 80
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241119150643.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150643.png)
 
 Simple server, page source ain't have anything useful, let's fuzz:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241119150835.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150835.png)
 
 ```ad-hint
 
@@ -63,14 +59,13 @@ Found something useful, seems like a username, let's save it: `bob`
 Login page, seems like we need to brute force the login with hydra, let's leave that for the reconnaissance.
 
 ```
+### Port 1234
 
-#### Port 1234
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020241119150045.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150045.png)
 
 Seems like a simple Apache Tomcat, let's fuzz it
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241119145958.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119145958.png)
 
 ```ad-hint
 
@@ -99,9 +94,10 @@ Nothing useful.
 A prompt asking for credentials is asked in order to log in the site.
 ```
 
-## RECONNAISSANCE
 
-***
+
+# RECONNAISSANCE
+---
 
 Now, we already know we need to brute force the login page using hydra, for that, we need to perform the following scan:
 
@@ -131,7 +127,7 @@ We got our user and password
 
 Once we log into the website, this is shown:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241119152106.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119152106.png)
 
 So, we need to move forward with the other port, `1234`, room tells us to use `nikto` and perform another scan in this port using the credentials we found, so, command would be the following:
 
@@ -166,9 +162,9 @@ Server is running a `apache/2.4.18`, let's look for anything in metasploit
 
 ```
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 ```ad-hint
 #### Metasploit
@@ -197,9 +193,15 @@ We got a shell!
 We got a shell as root!
 ```
 
-## PRIVILEGE ESCALATION
 
-***
+
+
+
+
+
+# PRIVILEGE ESCALATION
+---
+
 
 Since we got a shell as root, there's no need to perform a privilege escalation, let's get our flag and finish the CTF:
 
@@ -209,3 +211,4 @@ Since we got a shell as root, there's no need to perform a privilege escalation,
 
 `flag`: `ff1fc4a81affcc7688cf89ae7dc6e0e1`
 ```
+

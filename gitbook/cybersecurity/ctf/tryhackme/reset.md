@@ -1,18 +1,17 @@
-# RESET
 
-## PORT SCAN
+# PORT SCAN
+---
 
-***
 
 | PORT      | SERVICE       |
-| --------- | ------------- |
+| :-------- | :------------ |
 | 53/tcp    | domain        |
 | 88/tcp    | kerberos-sec  |
 | 135/tcp   | msrpc         |
 | 139/tcp   | netbios-ssn   |
 | 445/tcp   | microsoft-ds  |
 | 464/tcp   | kpasswd5      |
-| 593/tcp   | ncacn\_http   |
+| 593/tcp   | ncacn_http    |
 | 636/tcp   | tcpwrapped    |
 | 3268/tcp  | ldap          |
 | 3389/tcp  | ms-wbt-server |
@@ -21,9 +20,9 @@
 | 49671/tcp | msrpc         |
 | 49673/tcp | msrpc         |
 
-## RECONNAISSANCE
 
-***
+# RECONNAISSANCE
+---
 
 First of all, we need to add the domain and domain controller to `/etc/hosts`:
 
@@ -32,6 +31,7 @@ echo '10.10.79.33 haystack.thm.corp thm.corp' | sudo tee -a /etc/hosts
 ```
 
 Now, let's begin some basic enumeration, we don't have credentials yet so we need to perform anonymous enumeration, let's begin with SMB:
+
 
 ```bash
 smbclient -L //10.10.79.33 -N
@@ -73,7 +73,7 @@ smb: \onboarding\>
 
 We got some files on here, let's get them all and check them:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250625153023.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625153023.png)
 
 On the pdf, we can find this, there seems to be some sort of initial password and we get a name, since we got a name, we can try kerbrute with `username-anarchy` to check if the user exists:
 
@@ -125,13 +125,13 @@ smb: \onboarding\> ls
 
 This means there is an automatic process that changes the files once in a while, we can exploit this by using a tool using `ntlm_theft`, this tool will basically phish the credentials from the user by uploading a file that forces the user to authenticate, since we are in the same network than the domain (`thanks to the vpn`), we can use responder to capture the credentials and attempt to crack the hash. let's proceed with exploitation.
 
-## EXPLOITATION
 
-***
+# EXPLOITATION
+---
 
 First of all, let's grab the tool:
 
-NTLM\_THEFT: https://github.com/Greenwolf/ntlm\_theft
+NTLM_THEFT: https://github.com/Greenwolf/ntlm_theft
 
 Now, we can use it in the following way:
 
@@ -173,7 +173,7 @@ smb: \onboarding\>
 
 Now we just need to wait until the process hits up again:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250625163637.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625163637.png)
 
 As seen, we capture the hash:
 
@@ -210,31 +210,33 @@ DETACH DELETE n
 
 Now, let's check up the data on bloodhound:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250625164749.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625164749.png)
 
 If we search for `AS_REP` roastable users, we can find three, `TABATHA_BRITT` is a pretty interesting users due to its relations:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250625164839.png) ![](gitbook/cybersecurity/images/Pasted%20image%2020250625165012.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625164839.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625165012.png)
 
 We can get to a user named `DARLA_WINTERS`, interesting part about this user is:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250625165050.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625165050.png)
 
 DARLA is allowed to delegate, based on bloodhound's info on this:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250625165124.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625165124.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250625165149.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625165149.png)
 
 Nice, we already goth our attack path:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250625165224.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625165224.png)
 
 Let's proceed to privesc.
 
-## PRIVILEGE ESCALATION
 
-***
+# PRIVILEGE ESCALATION
+---
+
 
 ```mermaid
 flowchart LR
@@ -249,6 +251,7 @@ flowchart LR
     classDef critical fill:#ffcccc,stroke:#cc0000
     class E critical
 ```
+
 
 Nice, now that we already know the attack path, let's reproduce it, first of all, we need to `asrep-roast` Tabatha to get the hash and crack it, we can use `GetNPUsers.py` from impacket for this:
 
@@ -321,11 +324,11 @@ wmiexec.py -k -no-pass Administrator@haystack.thm.corp
 C:\>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250625172707.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625172707.png)
 
 We got our shell, let's get both flags and end the CTF:
 
-```python
+```PYTHON
 C:\>type C:\Users\automate\Desktop\user.txt
 THM{AUTOMATION_WILL_REPLACE_US}
 
@@ -333,4 +336,6 @@ C:\>type C:\Users\Administrator\Desktop\root.txt
 THM{RE_RE_RE_SET_AND_DELEGATE}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020250625172910.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625172910.png)
+

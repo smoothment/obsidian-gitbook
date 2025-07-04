@@ -2,13 +2,11 @@
 sticker: emoji//1f489
 ---
 
-# XPATH INJECTION
-
 To begin with, we must understand what XPATH is, so here is a simple definition:
 
-* \*XPath, or XML Path Language, is a query language used to navigate through elements and attributes in an XML (Extensible Markup Language) document. It allows you to specify paths to select specific parts of an XML document, making it useful for extracting data, filtering content, and performing complex searches within XML.
+* *XPath, or XML Path Language, is a query language used to navigate through elements and attributes in an XML (Extensible Markup Language) document. It allows you to specify paths to select specific parts of an XML document, making it useful for extracting data, filtering content, and performing complex searches within XML.
 
-#### Key Features of XPath:
+### Key Features of XPath:
 
 ```ad-info
 1. **Path Expressions:** XPath uses path expressions to select nodes or node-sets in an XML document. For example, `/bookstore/book` selects all `<book>` elements that are children of the `<bookstore>` element.
@@ -25,8 +23,8 @@ To begin with, we must understand what XPATH is, so here is a simple definition:
     
 5. **Operators:** XPath includes operators such as `=`, `!=`, `<`, `>`, and logical operators (`and`, `or`) to perform comparisons and logical operations within expressions.
 ```
-
-#### Common Use Cases:
+    
+### Common Use Cases:
 
 ```ad-note
 - **Web Scraping:** Extracting data from XML-based web pages.
@@ -36,11 +34,12 @@ To begin with, we must understand what XPATH is, so here is a simple definition:
 
 XPath is often used in combination with other technologies, such as XSLT (Extensible Stylesheet Language Transformations) for transforming XML documents, and with programming languages like Python (using libraries such as `lxml`), Java, or JavaScript for processing XML data programmatically.
 
-#### WHAT IS XPATH INJECTION THEN?
+
+### WHAT IS XPATH INJECTION THEN?
 
 XPath injection is a type of security vulnerability that occurs when an application uses user-supplied input to construct XPath queries for XML data without properly validating or sanitizing the input. Just like SQL injection with databases, XPath injection allows an attacker to manipulate XPath queries to access unauthorized data, bypass authentication, or potentially execute unintended commands within the XML document.
 
-#### How XPath Injection Works
+### How XPath Injection Works
 
 ```ad-summary
 1. **XPath Queries in Applications:** Applications often use XPath queries to retrieve data from XML documents, such as user authentication details. For example:
@@ -68,8 +67,9 @@ XPath injection is a type of security vulnerability that occurs when an applicat
     
     This query always returns true (`'1'='1'`), allowing the attacker to bypass authentication.
 ```
+    
 
-#### Common XPath Injection Techniques
+### Common XPath Injection Techniques
 
 ```ad-summary
 1. **Bypassing Authentication:** Injecting conditions that always evaluate to true (`' or '1'='1`) to gain unauthorized access.
@@ -79,8 +79,9 @@ XPath injection is a type of security vulnerability that occurs when an applicat
     - If the query is `/users/user[username='$username']`, injecting a username like `' or '1'='1' or '1'='2` could extract all usernames.
 3. **Blind XPath Injection:** Similar to blind SQL injection, this technique is used when the response doesn't directly reveal information. Attackers can infer data by injecting queries that cause different application behaviors (e.g., timing differences or error messages).
 ```
+    
 
-#### Preventing XPath Injection
+### Preventing XPath Injection
 
 ```ad-info
 `1. **Input Validation and Sanitization:**
@@ -101,45 +102,53 @@ XPath injection is a type of security vulnerability that occurs when an applicat
     - Avoid exposing detailed error messages to users, as these can provide insights into the structure of XPath queries.`
 ```
 
-## HACKTRICKS
+
+# HACKTRICKS
 
 ```ad-important
 URL: [xpath-injection](https://book.hacktricks.xyz/pentesting-web/xpath-injection)
 ```
 
-## XPATH AUTHENTICATION BYPASS
+
+
+# XPATH AUTHENTICATION BYPASS
+
+<iframe width="969" height="545" src="https://www.youtube.com/embed/xHfO2bgXNJs" title="Curso Bug Bounty  |  XPATH  Authentication Bypass - Capitulo 3-2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
 As seen in the video, the lab has a xpath authentication bypass, it follows this payload:
 
 `'or true() or '`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010143247.png) If we enter the payload, we've bypassed the login page:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143247.png)
+If we enter the payload, we've bypassed the login page:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010143256.png)
-
-#### FIRST WAY
-
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143256.png)
+### FIRST WAY
 But we are not admin user, we need to keep trying payloads until we get it, for example, we can enumerate the positions of the user using:
 
 `'or position()=1 or '`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010143417.png) If we pass in that payload, we will log in as the same user shown previously, but we can keep changing the `position()=` function until we get the user we desire:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143417.png)
+If we pass in that payload, we will log in as the same user shown previously, but we can keep changing the `position()=` function until we get the user we desire:
+
 
 `'or position()=2 or '`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010143522.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143522.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010143532.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143532.png)
 
 `'or position()=3 or '`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010143607.png) ![](gitbook/cybersecurity/images/Pasted%20image%2020241010143623.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143607.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143623.png)
 
 Now we've logged in as super user (admin).
 
 But now, imagine we are performing bug bounty on an enterprise, users would be huge, for this, we could use burp's intruder to try to brute force that `position()=` function until we get the user we desire.
 
-#### OTHER WAY
+### OTHER WAY
 
 Imagine you want to log in as a specific user, using the first way would take a while and maybe, the server would cut our requests out, for this, we can use the following payload:
 
@@ -147,31 +156,40 @@ Imagine you want to log in as a specific user, using the first way would take a 
 
 Now, with this payload, we can actually log in as the user we want, if we know how the username, we can log in:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010144040.png)
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010144053.png)
 
-## XPATH DATA EXFILTRATION
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010144040.png)
+
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010144053.png)
+
+# XPATH DATA EXFILTRATION
 
 We can access to arbitrary data using this xpath vulnerability, let's look at it:
 
-&#x20;As seen in the video, we have a San Francisco street index, as it is shown, we can look up for streets, but, this search bar is vulnerable to XPATH data exfiltration.
+<iframe width="800" height="600" src="https://www.youtube.com/embed/Up5h1BjFGgM" title="Curso Bug Bounty  |  XPATH  Data Exfiltration - Capitulo 3-3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+As seen in the video, we have a San Francisco street index, as it is shown, we can look up for streets, but, this search bar is vulnerable to XPATH data exfiltration.
 
 To begin, we pass the request to our burp:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010172508.png) For example, if we modify the `f` parameter into this:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010172508.png)
+For example, if we modify the `f` parameter into this:
 
 `RAMDOM+|+//text()`
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010172638.png) We get the following response:
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010172638.png)
+We get the following response:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010172649.png) So, seems like it works!
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010172649.png)
+So, seems like it works!
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010172834.png) If we look at the response, we see we are able to read the whole document information, for this exercise, we even got a password and a flag (not shown in the video).
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010172834.png)
+If we look at the response, we see we are able to read the whole document information, for this exercise, we even got a password and a flag (not shown in the video).
 
-### ADVANCED DATA EXFILTRATION
+## ADVANCED DATA EXFILTRATION
 
-We need to modify our payload to iterate through the whole document, if we want to, we can automate the process using a programming language such as python.
+We need to modify our payload to iterate through the whole document, if we want to, we can automate the process using a programming language such as python. 
+
+<iframe width="800" height="600" src="https://www.youtube.com/embed/d7QyaW8nSWI" title="Curso Bug Bounty  |  XPATH  Advanced Data Exfiltration - Capitulo 3-4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 To perform advanced data exfiltration, we can use the following payload, it does not apply to every website, but we can have some sort of guide with it:
 
@@ -179,7 +197,9 @@ To perform advanced data exfiltration, we can use the following payload, it does
 
 To watch the deep of the scheme we need to take that `/*[1]` part seriously, for example, in the video, it is shown that when we add `/*[1]` or `/*[2]` in the query, different results are shown, so, in order to get reach the deepest point, we need to test these payloads, for example:
 
-`fullstreetname | /*[1] ---> First street` fullstreetname | /_\[1]/_\[2] -------> None `fullstreetname | /*[1]/*[2]/*[1] -----> None`
+`fullstreetname | /*[1]  ---> First street
+`fullstreetname | /*[1]/*[2] -------> None
+`fullstreetname | /*[1]/*[2]/*[1] -----> None`
 
 That's the structure, we need to keep testing until reaching the deepest point, we can even use `/*[3]` or `/*[4]` to test.
 
@@ -224,8 +244,10 @@ if __name__ == '__main__':
     parser = parser.parse_args()
 ```
 
-## XPATH BLIND EXPLOITATION
+# XPATH BLIND EXPLOITATION
 
-&#x20;Like \[\[CyberSecurity/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/INJECTIONS/SQL INJECTION (SQLI).md|SQLI]], XPATH injection also have a blind exploitation, for this, we could use the following payloads:
+<iframe width="800" height="545" src="https://www.youtube.com/embed/a8raXmjdSAQ" title="Curso Bug Bounty  |  XPATH  Blind Exploitation - Capitulo 3-5" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+Like [[CyberSecurity/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/INJECTIONS/SQL INJECTION (SQLI).md|SQLI]], XPATH injection also have a blind exploitation, for this, we could use the following payloads:
 
-![](gitbook/cybersecurity/images/Pasted%20image%2020241010180954.png) ![](gitbook/cybersecurity/images/Pasted%20image%2020241010181012.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010180954.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010181012.png)

