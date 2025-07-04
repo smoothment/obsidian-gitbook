@@ -1,2 +1,0 @@
-# njk1dpjr.png
-

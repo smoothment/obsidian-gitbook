@@ -1,22 +1,19 @@
 ---
 sticker: emoji//1f43c
 ---
-
-# Directory Indexing
-
 Active plugins should not be our only area of focus when assessing a WordPress website. Even if a plugin is deactivated, it may still be accessible, and therefore we can gain access to its associated scripts and functions. Deactivating a vulnerable plugin does not improve the WordPress site's security. It is best practice to either remove or keep up-to-date any unused plugins.
 
 The following example shows a disabled plugin.
 
 ![image](https://academy.hackthebox.com/storage/modules/17/plugin-deactivated3.png)
 
-If we browse to the plugins directory, we can see that we still have access to the `Mail Masta` plugin.
+If we browse to the plugins directory, we can see that we still have access to the `Mail Masta` plugin.
 
-&#x20; &#x20;
+   
 
 ![](https://academy.hackthebox.com/storage/modules/17/plugin-mailmasta2.png)
 
-We can also view the directory listing using cURL and convert the HTML output to a nice readable format using `html2text`.
+We can also view the directory listing using cURL and convert the HTML output to a nice readable format using `html2text`.
 
 ```shell-session
 smoothment@htb[/htb]$ curl -s -X GET http://blog.inlanefreight.com/wp-content/plugins/mail-masta/ | html2text
@@ -34,13 +31,12 @@ smoothment@htb[/htb]$ curl -s -X GET http://blog.inlanefreight.com/wp-content/pl
      Apache/2.4.29 (Ubuntu) Server at blog.inlanefreight.com Port 80
 ```
 
-This type of access is called `Directory Indexing`. It allows us to navigate the folder and access files that may contain sensitive information or vulnerable code. It is best practice to disable directory indexing on web servers so a potential attacker cannot gain direct access to any files or folders other than those necessary for the website to function properly.
+This type of access is called `Directory Indexing`. It allows us to navigate the folder and access files that may contain sensitive information or vulnerable code. It is best practice to disable directory indexing on web servers so a potential attacker cannot gain direct access to any files or folders other than those necessary for the website to function properly.
 
-## Question
+# Question
+---
 
-***
-
-!\[]\(Pasted image 20250220130304.png)
+![](Pasted image 20250220130304.png)
 
 Let's use `wpscan`:
 

