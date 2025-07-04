@@ -2,16 +2,15 @@
 sticker: lucide//code
 ---
 
+# Filtering Results
 
-So far, we have not been using any filtering to our `ffuf`, and the results are automatically filtered by default by their HTTP code, which filters out code `404 NOT FOUND`, and keeps the rest. However, as we saw in our previous run of `ffuf`, we can get many responses with code `200`. So, in this case, we will have to filter the results based on another factor, which we will learn in this section.
+So far, we have not been using any filtering to our `ffuf`, and the results are automatically filtered by default by their HTTP code, which filters out code `404 NOT FOUND`, and keeps the rest. However, as we saw in our previous run of `ffuf`, we can get many responses with code `200`. So, in this case, we will have to filter the results based on another factor, which we will learn in this section.
 
+### Filtering
 
+`Ffuf` provides the option to match or filter out a specific HTTP code, response size, or amount of words. We can see that with `ffuf -h`:
 
-## Filtering
-
-`Ffuf` provides the option to match or filter out a specific HTTP code, response size, or amount of words. We can see that with `ffuf -h`:
-
-  Filtering Results
+&#x20; Filtering Results
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -h
@@ -32,9 +31,9 @@ FILTER OPTIONS:
 <...SNIP...>
 ```
 
-In this case, we cannot use matching, as we don't know what the response size from other VHosts would be. We know the response size of the incorrect results, which, as seen from the test above, is `900`, and we can filter it out with `-fs 900`. Now, let's repeat the same previous command, add the above flag, and see what we get:
+In this case, we cannot use matching, as we don't know what the response size from other VHosts would be. We know the response size of the incorrect results, which, as seen from the test above, is `900`, and we can filter it out with `-fs 900`. Now, let's repeat the same previous command, add the above flag, and see what we get:
 
-  Filtering Results
+&#x20; Filtering Results
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:PORT/ -H 'Host: FUZZ.academy.htb' -fs 900
@@ -69,7 +68,7 @@ admin                   [Status: 200, Size: 0, Words: 1, Lines: 1]
 
 We can verify that by visiting the page, and seeing if we can connect to it:
 
-   
+&#x20; &#x20;
 
 ![](https://academy.hackthebox.com/storage/modules/54/web_fnb_blog.jpg)
 
@@ -77,20 +76,21 @@ Note 1: Don't forget to add "admin.academy.htb" to "/etc/hosts".
 
 Note 2: If your exercise has been restarted, ensure you still have the correct port when visiting the website.
 
-We see that we can access the page, but we get an empty page, unlike what we got with `academy.htb`, therefore confirming this is indeed a different VHost. We can even visit `https://admin.academy.htb:PORT/blog/index.php`, and we will see that we would get a `404 PAGE NOT FOUND`, confirming that we are now indeed on a different VHost.
+We see that we can access the page, but we get an empty page, unlike what we got with `academy.htb`, therefore confirming this is indeed a different VHost. We can even visit `https://admin.academy.htb:PORT/blog/index.php`, and we will see that we would get a `404 PAGE NOT FOUND`, confirming that we are now indeed on a different VHost.
 
-Try running a recursive scan on `admin.academy.htb`, and see what pages you can identify.
+Try running a recursive scan on `admin.academy.htb`, and see what pages you can identify.
 
-# Question
----
-![](Pasted image 20250129155945.png)
+## Question
+
+***
+
+!\[]\(Pasted image 20250129155945.png)
 
 We need to run an initial scan first to check the size:
 
 `ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:PORT/ -H 'Host: FUZZ.academy.htb'`
 
-
-![](Pasted image 20250129160058.png)
+!\[]\(Pasted image 20250129160058.png)
 
 Now, let's filter by `-fs 986`:
 
@@ -125,6 +125,4 @@ test                    [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 372
 admin                   [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 4736ms]
 ```
 
-
 We got the answer: `test.academy.htb`
-
