@@ -230,9 +230,9 @@ In such cases, a user is also advised to include the switchÂ `--exclude-sysdbs`Â
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204172820.png)
+![](cybersecurity/images/Pasted%2520image%252020250204172820.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204172853.png)
+![](cybersecurity/images/Pasted%2520image%252020250204172853.png)
 
 Let's save case 1 and do the following command:
 

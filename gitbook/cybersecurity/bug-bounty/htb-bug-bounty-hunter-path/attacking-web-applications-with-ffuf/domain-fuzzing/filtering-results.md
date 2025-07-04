@@ -83,14 +83,14 @@ Try running a recursive scan on `admin.academy.htb`, and see what pages you can
 
 # Question
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250129155945.png)
+![](cybersecurity/images/Pasted%2520image%252020250129155945.png)
 
 We need to run an initial scan first to check the size:
 
 `ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:PORT/ -H 'Host: FUZZ.academy.htb'`
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250129160058.png)
+![](cybersecurity/images/Pasted%2520image%252020250129160058.png)
 
 Now, let's filter by `-fs 986`:
 

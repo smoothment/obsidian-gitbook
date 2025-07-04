@@ -9,27 +9,27 @@ Try to utilize what you learned in this module to understand how the upload form
 Try to note down the main security issues found with the web application and the necessary security measures to mitigate these issues and prevent further exploitation.
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206180714.png)
+![](cybersecurity/images/Pasted%2520image%252020250206180714.png)
 
 Let's take a look at the site:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206180859.png)
+![](cybersecurity/images/Pasted%2520image%252020250206180859.png)
 
 We got some sections that are interesting, the one I'm interested in the most is the contact us one, let's check it out:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206181239.png)
+![](cybersecurity/images/Pasted%2520image%252020250206181239.png)
 
 And there we are, we have an upload feature, let's use burp and check the request:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206182157.png)
+![](cybersecurity/images/Pasted%2520image%252020250206182157.png)
 
 We can `Do Intercept -> Response to this request`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206182227.png)
+![](cybersecurity/images/Pasted%2520image%252020250206182227.png)
 
 We need to erase the `CheckFile()` and change the `accept=`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206182356.png)
+![](cybersecurity/images/Pasted%2520image%252020250206182356.png)
 
 Now we are able to upload any kind of file, without the need of it being an image file, let's test the next thing:
 
@@ -45,11 +45,11 @@ We can now test if its possible to enumerate resources in the back-end server us
 <svg>&xxe;</svg>
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206183458.png)
+![](cybersecurity/images/Pasted%2520image%252020250206183458.png)
 
 If we decode the contents of it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206183516.png)
+![](cybersecurity/images/Pasted%2520image%252020250206183516.png)
 
 It works, we are able to upload a malicious svg file, let's read the contents of `/upload.php`:
 
@@ -116,7 +116,7 @@ Now we are able to see the whitelist and the blacklist of the upload endpoint, w
 
 Let's send an intruder attack in the following way:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206184336.png)
+![](cybersecurity/images/Pasted%2520image%252020250206184336.png)
 
 We were able to identify a valid extension: `.phar.jpeg`. Let's proceed.
 
@@ -140,15 +140,15 @@ AAAA
 
 Now, we need to change the `AAAA` contents using hexeditor:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206185029.png)
+![](cybersecurity/images/Pasted%2520image%252020250206185029.png)
 
 Let's replace them for the JPEG bytes: `FF D8 FF DB`
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206185110.png)
+![](cybersecurity/images/Pasted%2520image%252020250206185110.png)
 
 Nice, now let's try uploading the file:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206185201.png)
+![](cybersecurity/images/Pasted%2520image%252020250206185201.png)
 
 It worked, let's check if the webshell works, in my case, the url would go like this:
 
@@ -158,7 +158,7 @@ http://94.237.54.42:58431/contact/user_feedback_submissions/250206_shell.phar.jp
 
 If we check:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206185927.png)
+![](cybersecurity/images/Pasted%2520image%252020250206185927.png)
 
 We got it, let's send it to burp to be more comfortable, let's list the contents:
 
@@ -190,7 +190,7 @@ var
 
 We got our flag, let's read it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206190133.png)
+![](cybersecurity/images/Pasted%2520image%252020250206190133.png)
 
 Flag is:
 
@@ -199,5 +199,5 @@ HTB{m4573r1ng_upl04d_3xpl0174710n}
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206190210.png)
+![](cybersecurity/images/Pasted%2520image%252020250206190210.png)
 

@@ -68,11 +68,11 @@ We would need to manually reverse engineer the code to understand how it was obf
 
 # Question
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130134330.png)
+![](cybersecurity/images/Pasted%2520image%252020250130134330.png)
 
 If we deobfuscate the code, we get the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250130134345.png)
+![](cybersecurity/images/Pasted%2520image%252020250130134345.png)
 
 Flag is: `HTB{1_4m_7h3_53r14l_g3n3r470r!}`
 

@@ -127,7 +127,7 @@ As we can see, our wanted output of the '`UNION SELECT username from passwords`'
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250131165907.png)
+![](cybersecurity/images/Pasted%2520image%252020250131165907.png)
 
 We can use the following in order to check:
 

@@ -23,7 +23,7 @@ sticker: emoji//1f427
 
 Let's check the web application first:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407133430.png)
+![](cybersecurity/images/Pasted%2520image%252020250407133430.png)
 
 Source code is the default one too, we need to fuzz:
 
@@ -58,13 +58,13 @@ grid                    [Status: 301, Size: 309, Words: 20, Lines: 10, Duration:
 
 We got a `backup` file, let's check it out:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407133732.png)
+![](cybersecurity/images/Pasted%2520image%252020250407133732.png)
 
 We got the `index.php.bak` file, we can visualize the contents of it in order to check for anything unusual:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407134134.png)
+![](cybersecurity/images/Pasted%2520image%252020250407134134.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407134241.png)
+![](cybersecurity/images/Pasted%2520image%252020250407134241.png)
 
 This is highly vulnerable, due to this:
 
@@ -118,7 +118,7 @@ Now, use curl to upload the reverse shell:
 curl "http://10.10.109.3/index.php?debug=GENERATED_PAYLOAD"
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407135556.png)
+![](cybersecurity/images/Pasted%2520image%252020250407135556.png)
 
 It will upload the file successfully and we can get the reverse shell by visiting:
 
@@ -129,7 +129,7 @@ http://TARGET_IP/shell.php
 
 If we check our listener, we get the connection:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407135634.png)
+![](cybersecurity/images/Pasted%2520image%252020250407135634.png)
 
 Let's proceed with privilege escalation.
 
@@ -151,11 +151,11 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407135735.png)
+![](cybersecurity/images/Pasted%2520image%252020250407135735.png)
 
 We can find this inside of `/var/www/html`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407141523.png)
+![](cybersecurity/images/Pasted%2520image%252020250407141523.png)
 
 We got a `.htpasswd` file:
 
@@ -182,7 +182,7 @@ We got credentials, let's go into ssh:
 james:jamaica
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407141902.png)
+![](cybersecurity/images/Pasted%2520image%252020250407141902.png)
 
 ```
 james@osboxes:~$ cat user.txt
@@ -217,7 +217,7 @@ ls -ld /etc/update-motd.d/
 ls -l /etc/update-motd.d/
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407142343.png)
+![](cybersecurity/images/Pasted%2520image%252020250407142343.png)
 
 We can modify any of these files to add either a reverse shell or create a SUID binary `, let's for example modify the `99-esm` file:
 
@@ -261,7 +261,7 @@ Once logged use: /bin/bash -p
 
 We can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407143046.png)
+![](cybersecurity/images/Pasted%2520image%252020250407143046.png)
 
 There we go, we got root, let's read final flag:
 
@@ -271,5 +271,5 @@ bash-4.3# cat /root/root.txt
 ```
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250407143141.png)
+![](cybersecurity/images/Pasted%2520image%252020250407143141.png)
 

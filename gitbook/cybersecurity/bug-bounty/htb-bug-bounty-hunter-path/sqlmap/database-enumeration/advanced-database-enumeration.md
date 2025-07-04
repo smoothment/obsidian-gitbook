@@ -247,7 +247,7 @@ This basically means that everything accessible will be retrieved, potentially r
 # Questions
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250204173240.png)
+![](cybersecurity/images/Pasted%2520image%252020250204173240.png)
 
 ## First
 ---

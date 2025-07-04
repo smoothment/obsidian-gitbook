@@ -98,15 +98,15 @@ As we can see, the devtools show us at a glance the response status (i.e. respon
 
 # Question
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122144213.png)
+![](cybersecurity/images/Pasted%2520image%252020250122144213.png)
 
 We can perform: `curl -I target`
 
 And we should get a response like the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122144240.png)
+![](cybersecurity/images/Pasted%2520image%252020250122144240.png)
 
 So, answer is `2.4.41`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250122144257.png)
+![](cybersecurity/images/Pasted%2520image%252020250122144257.png)
 

@@ -69,5 +69,5 @@ Connection: close
 
 # Question
 ---
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250219172102.png)
+![](cybersecurity/images/Pasted%2520image%252020250219172102.png)
 

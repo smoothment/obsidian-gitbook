@@ -132,7 +132,7 @@ Exploiting LFI vulnerabilities using second-order attacks is similar to what we 
 # Questions
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218141645.png)
+![](cybersecurity/images/Pasted%2520image%252020250218141645.png)
 
 We can submit the request to burp and modify it there, let's read `/etc/passwd`:
 
@@ -140,7 +140,7 @@ We can submit the request to burp and modify it there, let's read `/etc/passwd`:
 ../../../../etc/passwd
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218141916.png)
+![](cybersecurity/images/Pasted%2520image%252020250218141916.png)
 
 We got our username:
 
@@ -154,7 +154,7 @@ Now, let's proceed to read `/usr/share/flags/flag.txt`:
 ../../../../usr/share/flags/flag.txt
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250218142020.png)
+![](cybersecurity/images/Pasted%2520image%252020250218142020.png)
 
 Flag is:
 

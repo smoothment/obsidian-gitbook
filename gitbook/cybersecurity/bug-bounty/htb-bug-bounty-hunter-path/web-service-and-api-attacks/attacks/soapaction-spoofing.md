@@ -298,5 +298,5 @@ $
 
 Answer is: 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250219153436.png)
+![](cybersecurity/images/Pasted%2520image%252020250219153436.png)
 

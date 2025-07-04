@@ -137,7 +137,7 @@ Try to use the tool to repeat other XXE methods we learned.
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250217182232.png)
+![](cybersecurity/images/Pasted%2520image%252020250217182232.png)
 
 We can do the following, first, let's write a `xxe.dtd` file with the following contents:
 

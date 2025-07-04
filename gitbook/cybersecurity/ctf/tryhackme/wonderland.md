@@ -20,11 +20,11 @@ sticker: emoji//1f430
 # RECONNAISSANCE
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410172011.png)
+![](cybersecurity/images/Pasted%2520image%252020250410172011.png)
 
 We can see this on the website, if we extract the data from the image, we can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410172036.png)
+![](cybersecurity/images/Pasted%2520image%252020250410172036.png)
 
 Based on the hint, we can think that, we can find a hidden directory at:
 
@@ -65,12 +65,12 @@ poem                    [Status: 301, Size: 0, Words: 1, Lines: 1, Duration: 169
 
 Using the logic, we know that the directory I thought about, was correct, if we visit it, we can find this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410172251.png)
+![](cybersecurity/images/Pasted%2520image%252020250410172251.png)
 
 
 If we check the source code on here:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410172312.png)
+![](cybersecurity/images/Pasted%2520image%252020250410172312.png)
 
 We got some credentials maybe:
 
@@ -81,7 +81,7 @@ alice:HowDothTheLittleCrocodileImproveHisShiningTail
 
 If we go to ssh and try these credentials, we get the following:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410172532.png)
+![](cybersecurity/images/Pasted%2520image%252020250410172532.png)
 
 They were the credentials for ssh, let's proceed to privilege escalation.
 
@@ -253,7 +253,7 @@ os.system('/bin/bash')
 sudo -u rabbit /usr/bin/python3.6 /home/alice/walrus_and_the_carpenter.py
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410173359.png)
+![](cybersecurity/images/Pasted%2520image%252020250410173359.png)
 
 Nice, we were able to get the shell as `rabbit`, if we check the home of this user, we can find this:
 
@@ -384,7 +384,7 @@ export PATH=.:$PATH
 ./teaParty
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410174605.png)
+![](cybersecurity/images/Pasted%2520image%252020250410174605.png)
 
 We can see we got a shell as `hatter`, let's check our home:
 
@@ -402,11 +402,11 @@ WhyIsARavenLikeAWritingDesk?
 
 We can migrate to ssh with these credentials. Now, let's check our sudo privileges:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410174723.png)
+![](cybersecurity/images/Pasted%2520image%252020250410174723.png)
 
 We got no sudo permissions, weird, maybe we can check more stuff with linpeas:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410175343.png)
+![](cybersecurity/images/Pasted%2520image%252020250410175343.png)
 
 
 We got capabilities set, **Capabilities** in Linux are a way to grant _specific privileges_ to a process or binary **without giving it full root access**. They break down the monolithic "root vs. non-root" model into **granular permissions**, allowing fine-grained control over what a program can do.
@@ -417,7 +417,7 @@ Knowing this, we can exploit it in the following way to get root:
 /usr/bin/perl -e 'use POSIX qw(setuid); setuid(0); exec "/bin/bash";'
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410175608.png)
+![](cybersecurity/images/Pasted%2520image%252020250410175608.png)
 
 There we go, we got root access, we can now read both flags, 
 
@@ -431,5 +431,5 @@ root@wonderland:~# cat /home/alice/root.txt
 thm{Twinkle, twinkle, little bat! How I wonder what you’re at!}
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250410175738.png)
+![](cybersecurity/images/Pasted%2520image%252020250410175738.png)
 

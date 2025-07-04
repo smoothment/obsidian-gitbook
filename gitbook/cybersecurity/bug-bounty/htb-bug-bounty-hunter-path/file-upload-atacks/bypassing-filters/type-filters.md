@@ -126,16 +126,16 @@ We can use a combination of the two methods discussed in this section, which may
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206160927.png)
+![](cybersecurity/images/Pasted%2520image%252020250206160927.png)
 
 Well, let's begin, since the exercise already tells us about all of that, there's no need to check the website, let's send a request and analyze it:
 
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206161128.png)
+![](cybersecurity/images/Pasted%2520image%252020250206161128.png)
 
 We can do the same as the previous section:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206161204.png)
+![](cybersecurity/images/Pasted%2520image%252020250206161204.png)
 
 Now, let's fuzz again following the same rules, but adding another condition:
 
@@ -148,25 +148,25 @@ Now, let's fuzz again following the same rules, but adding another condition:
 
 This would go in the following way:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206161652.png)
+![](cybersecurity/images/Pasted%2520image%252020250206161652.png)
 
 We can see this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206161856.png)
+![](cybersecurity/images/Pasted%2520image%252020250206161856.png)
 
 A lot of extensions work, let's simply go with `.phtml`, we need to upload our file like this:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206162328.png)
+![](cybersecurity/images/Pasted%2520image%252020250206162328.png)
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206161953.png)
+![](cybersecurity/images/Pasted%2520image%252020250206161953.png)
 
 Let's check our webshell:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206162337.png)
+![](cybersecurity/images/Pasted%2520image%252020250206162337.png)
 
 Now we can read `flag.txt`:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250206162403.png)
+![](cybersecurity/images/Pasted%2520image%252020250206162403.png)
 
 ```
 HTB{m461c4l_c0n73n7_3xpl0174710n}

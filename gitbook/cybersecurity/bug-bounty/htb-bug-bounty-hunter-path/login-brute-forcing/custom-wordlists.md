@@ -209,7 +209,7 @@ Once Hydra has completed the attack, log into the website using the discovered c
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250213154452.png)
+![](cybersecurity/images/Pasted%2520image%252020250213154452.png)
 
 Let's begin by creating the usernames list:
 
@@ -302,7 +302,7 @@ Got credentials:
 
 Let's log in:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250213155724.png)
+![](cybersecurity/images/Pasted%2520image%252020250213155724.png)
 
 Got the flag:
 

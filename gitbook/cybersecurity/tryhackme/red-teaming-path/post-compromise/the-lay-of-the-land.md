@@ -428,7 +428,7 @@ True
 
 As a result, we can confirm the inbound connection on port 80 is open and allowed in the firewall. Note that we can also test for remote targets in the same network or domain names by specifying in the -ComputerName argument for the Test-NetConnection.
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250514135057.png)
+![](cybersecurity/images/Pasted%2520image%252020250514135057.png)
 
 #### First Question
 
@@ -1028,7 +1028,7 @@ We got the port number:
 
 Let's visit it:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250514142029.png)
+![](cybersecurity/images/Pasted%2520image%252020250514142029.png)
 
 We got our flag:
 

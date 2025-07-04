@@ -63,7 +63,7 @@ While differences in the web application's response are the simplest and most ob
 # Question
 ---
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214143442.png)
+![](cybersecurity/images/Pasted%2520image%252020250214143442.png)
 
 We need to authenticate with the following credentials:
 
@@ -73,11 +73,11 @@ We need to authenticate with the following credentials:
 
 Before doing that, let's fire up burp and check what happens if we enter a nonexistent user:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214143851.png)
+![](cybersecurity/images/Pasted%2520image%252020250214143851.png)
 
 We get `Unknown User`, which would be the error message in this case, how about if we try to authenticate with the provided username but a wrong password:
 
-![](CYBERSECURITY/IMAGES/Pasted%20image%2020250214143942.png)
+![](cybersecurity/images/Pasted%2520image%252020250214143942.png)
 
 Now we are getting something different, we get `Invalid Credentials`.
 
