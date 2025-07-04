@@ -37,7 +37,7 @@ Let's begin reconnaissance.
 
 By looking at the scan we can check the entrance to `/robots.txt` is enabled, let's check it out:
 
-![](Pasted image 20250306160644.png)
+![](Pasted%20image%2020250306160644.png)
 
 We got credentials and new entries, let's check the `/administrator` one:
 
@@ -45,7 +45,7 @@ We got credentials and new entries, let's check the `/administrator` one:
 admin:c2FubHVpczEyMzQ1
 ```
 
-![](Pasted image 20250306160959.png)
+![](Pasted%20image%2020250306160959.png)
 
 If we try logging into the panel with those credentials, we are unable to do so, that's because the password is encoded using Base64, let's decode:
 
@@ -60,7 +60,7 @@ So, the correct credentials are:
 admin:sanluis12345
 ```
 
-![](Pasted image 20250306161139.png)
+![](Pasted%20image%2020250306161139.png)
 
 We are now inside the admin panel, let's look around for a way to get a shell.
 
@@ -74,17 +74,17 @@ We are now inside the admin panel, let's look around for a way to get a shell.
 
 After exploring the application for a while, we can check the following:
 
-![](Pasted image 20250306161614.png)
+![](Pasted%20image%2020250306161614.png)
 
 We got administrator templates, let's check it out:
 
 
 
-![](Pasted image 20250306161640.png)
+![](Pasted%20image%2020250306161640.png)
 
 We can modify files, let's try uploading a reverse shell in `/index.php`, once uploaded, start a listener and save the changes:
 
-![](Pasted image 20250306161839.png)
+![](Pasted%20image%2020250306161839.png)
 
 We got our shell, let's stabilize it: 
 
@@ -96,7 +96,7 @@ We got our shell, let's stabilize it:
 6. export TERM=xterm
 7. export BASH=bash
 
-![](Pasted image 20250306162017.png)
+![](Pasted%20image%2020250306162017.png)
 
 Nice, now let's look for a way to get root access.
 
@@ -105,11 +105,11 @@ Nice, now let's look for a way to get root access.
 
 We can use linpeas first:
 
-![](Pasted image 20250306162512.png)
+![](Pasted%20image%2020250306162512.png)
 
 We found a user with a console: `luisillo`, we can also find this:
 
-![](Pasted image 20250306162629.png)
+![](Pasted%20image%2020250306162629.png)
 
 We got a backups folder, let's check it out:
 
@@ -162,7 +162,7 @@ User luisillo may run the following commands on ce239478bbd9:
 
 We can check this binary in gtfobins:
 
-![](Pasted image 20250306162918.png)
+![](Pasted%20image%2020250306162918.png)
 
 So, we can escalate privileges with the following:
 
@@ -172,7 +172,7 @@ echo "luisillo ALL=(ALL:ALL) ALL" | sudo /bin/dd of=/etc/sudoers
 
 What we did in here was to edit the `sudoers` file to enable `luisillo` to execute any command while using sudo, let's try:
 
-![](Pasted image 20250306163315.png)
+![](Pasted%20image%2020250306163315.png)
 
 Just like that we got root access.
 

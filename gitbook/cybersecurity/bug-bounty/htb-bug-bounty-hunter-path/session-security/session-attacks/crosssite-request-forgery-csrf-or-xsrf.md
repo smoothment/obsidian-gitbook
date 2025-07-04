@@ -98,7 +98,7 @@ Next, we will cover how we can attack applications that feature anti-CSRF mechan
 # Question
 ---
 
-![](Pasted image 20250219130117.png)
+![](Pasted%20image%2020250219130117.png)
 
 Answer is:
 

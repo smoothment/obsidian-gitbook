@@ -67,11 +67,11 @@ For more details on creating custom wordlists and attacking password-based authe
 # Question
 ---
 
-![](Pasted image 20250214145506.png)
+![](Pasted%20image%2020250214145506.png)
 
 Let's begin by visiting the website:
 
-![](Pasted image 20250214145956.png)
+![](Pasted%20image%2020250214145956.png)
 
 We can see the password policy on top of the web application, it goes the following way:
 

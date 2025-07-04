@@ -63,13 +63,13 @@ As we can see, the only hit we got back has been `deprecated` and appears to b
 ---
 
 
-![](Pasted image 20250129155215.png)
+![](Pasted%20image%2020250129155215.png)
 
 Let's run an initial scan to check the size:
 
 `ffuf -w /opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://admin.academy.htb:49384/admin/admin.php?FUZZ=key -fs xxx`
 
-![](Pasted image 20250129155534.png)
+![](Pasted%20image%2020250129155534.png)
 
 We need to use `-fs 798`:
 

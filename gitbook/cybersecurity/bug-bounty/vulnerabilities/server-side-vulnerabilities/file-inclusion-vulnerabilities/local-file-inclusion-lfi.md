@@ -99,29 +99,29 @@ For this POC we are using dockerlabs machine: "buscalove": https://mega.nz/file/
 
 ### Enumeration
 
-![](Pasted image 20240916144543.png)
-![](Pasted image 20240916144638.png)
-![](Pasted image 20240916144945.png)
+![](Pasted%20image%2020240916144543.png)
+![](Pasted%20image%2020240916144638.png)
+![](Pasted%20image%2020240916144945.png)
 
 So with this simple enumeration of the web application, we realize we've got a WordPress page, if we go into it, we can find this:
 
-![](Pasted image 20240916145226.png)
+![](Pasted%20image%2020240916145226.png)
 
 #### Source code:
-![](Pasted image 20240916145307.png)
+![](Pasted%20image%2020240916145307.png)
 If we keep fuzzing we will not be able to find anything useful like a `wp-admin.php` page, so, why don't we try to test for LFI if we ain't here for it haha:
 
 Lets use the following payload:
 
 If we keep fuzzing, using wfuzz, we can find this:
 
-![](Pasted image 20240916145504.png)
+![](Pasted%20image%2020240916145504.png)
 
 We can now realize, love is the main word to begin with the LFI, so lets introduce this payload:
 
 			index.php?love=../../../../../etc/passwd
 
-![](Pasted image 20240916145638.png)
+![](Pasted%20image%2020240916145638.png)
 
 Just like that, we can find that this web application is vulnerable to LFI, we will keep testing:
 
@@ -130,38 +130,38 @@ Lets use this payload list from GitHub: https://raw.githubusercontent.com/emadsh
 
 						/etc/hosts
 
-![](Pasted image 20240916150545.png)
+![](Pasted%20image%2020240916150545.png)
 					`/etc/ssh/ssh_config
 
-![](Pasted image 20240916150644.png)
+![](Pasted%20image%2020240916150644.png)
 
 We could be testing payloads for many hours, but lets continue with the CTF, when we did /etc/passwd, we found the username `pedro` and `rosa`, now that we now that, lets brute force our way into ssh using hydra:
 
 hydra -l rosa -P /usr/share/wordlists/rockyou.txt 172.17.0.2 ssh -t 10
 
-![](Pasted image 20240916151718.png)
+![](Pasted%20image%2020240916151718.png)
 
 #### PRIVESC
 
-![](Pasted image 20240916152013.png)
+![](Pasted%20image%2020240916152013.png)
 
 We have sudo privilege to use `cat` lets see what GTFOBINS have for us:
-![](Pasted image 20240916152141.png)
+![](Pasted%20image%2020240916152141.png)
 If this CTF consisted in getting a flag, we could use `sudo cat /root/root.txt` and it would be over, but since we want to get root shell, we would keep enumerating until this:
-![](Pasted image 20240916152713.png)
+![](Pasted%20image%2020240916152713.png)
 We could make use of Rosa's sudo permission to enumerate root folder, we found a secret.txt, we can use our cat sudo privilege to read it:
-![](Pasted image 20240916152812.png)
+![](Pasted%20image%2020240916152812.png)
 Looks like hex chain, lets use CyberChef:
 
-![](Pasted image 20240916153033.png)
+![](Pasted%20image%2020240916153033.png)
 Decrypting from hex, getting a base32 result, and decrypting it again, we get the password: `noacertarasosi`
 seems like Pedro password, lets change users:
-![](Pasted image 20240916153150.png)
+![](Pasted%20image%2020240916153150.png)
 And indeed it was Pedro's password, when we perform sudo -l:
-![](Pasted image 20240916153233.png)
+![](Pasted%20image%2020240916153233.png)
 ##### GTFOBINS
-![](Pasted image 20240916153308.png)
-![](Pasted image 20240916153345.png)
+![](Pasted%20image%2020240916153308.png)
+![](Pasted%20image%2020240916153345.png)
 And just like that, we exploited a LFI vulnerability and got root access using PRIVESC.
 
 

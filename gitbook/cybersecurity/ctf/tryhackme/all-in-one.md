@@ -57,12 +57,12 @@ Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
 
 We can see that anonymous login is enabled based on the scan, let's check out FTP:
 
-![](Pasted image 20250321140200.png)
+![](Pasted%20image%2020250321140200.png)
 
 
 Nothing in here, let's proceed to the website then:
 
-![](Pasted image 20250321140441.png)
+![](Pasted%20image%2020250321140441.png)
 
 Simple apache2 page, let's fuzz:
 
@@ -96,15 +96,15 @@ hackathons              [Status: 200, Size: 197, Words: 19, Lines: 64, Duration:
 
 We found `wordpress` and `hackathons`, let's check the last one:
 
-![](Pasted image 20250321141557.png)
+![](Pasted%20image%2020250321141557.png)
 
 We can check the source code:
 
-![](Pasted image 20250321141616.png)
+![](Pasted%20image%2020250321141616.png)
 
 This is talking about vigenere encoding, it's providing the key and the hash so let's decode:
 
-![](Pasted image 20250321155707.png)
+![](Pasted%20image%2020250321155707.png)
 
 Looks like a password:
 
@@ -116,7 +116,7 @@ Let's save this for now, let's check the WordPress one:
 
 
 
-![](Pasted image 20250321141902.png)
+![](Pasted%20image%2020250321141902.png)
 
 We can enumerate some basic stuff with wpscan:
 
@@ -225,7 +225,7 @@ Interesting Finding(s):
 
 As seen, we got the `mail_masta` plugin enabled, this plugin is well known to be susceptible to LFI at version 1.0, we can try a PoC and test:
 
-![](Pasted image 20250321150756.png)
+![](Pasted%20image%2020250321150756.png)
 
 
 # EXPLOITATION
@@ -233,7 +233,7 @@ As seen, we got the `mail_masta` plugin enabled, this plugin is well known to be
 
 Since we have LFI, and the password we found does not work for the user `elyana`, let's try to read `wp-config.php` file, if we do it normally:
 
-![](Pasted image 20250321160057.png)
+![](Pasted%20image%2020250321160057.png)
 
 We get an internal server error, for this, let's use a `php wrapper` in the following way:
 
@@ -242,12 +242,12 @@ php://filter/convert.base64-encode/resource=../../../../../wp-config.php
 ```
 
 
-![](Pasted image 20250321160230.png)
+![](Pasted%20image%2020250321160230.png)
 
 And now we get the contents of the file in the format of base64, let's decode it and analyze it:
 
 
-![](Pasted image 20250321160332.png)
+![](Pasted%20image%2020250321160332.png)
 
 There we go, we got the credentials:
 
@@ -259,19 +259,19 @@ elyana:H@ckme@123
 Let's log into the panel:
 
 
-![](Pasted image 20250321161038.png)
+![](Pasted%20image%2020250321161038.png)
 
 
 From this point, we can get a shell by exploiting the theme editor, let's do it:
 
 
-![](Pasted image 20250321161252.png)
+![](Pasted%20image%2020250321161252.png)
 
 
 
 Let's change the contents of it to a reverse shell:
 
-![](Pasted image 20250321161313.png)
+![](Pasted%20image%2020250321161313.png)
 
 Update, start a listener and visit this url:
 
@@ -279,7 +279,7 @@ Update, start a listener and visit this url:
 http://<target>/wordpress/wp-content/themes/twentyseventeen/404.php
 ```
 
-![](Pasted image 20250321161556.png)
+![](Pasted%20image%2020250321161556.png)
 
 And we got a shell, let's proceed with privesc.
 
@@ -301,15 +301,15 @@ First step is stabilizing our session:
 6. export TERM=xterm
 7. export BASH=bash
 
-![](Pasted image 20250321161700.png)
+![](Pasted%20image%2020250321161700.png)
 
 Once we've established our shell, let's look around for a way to get into root:
 
-![](Pasted image 20250321161942.png)
+![](Pasted%20image%2020250321161942.png)
 
 As seen root is running a script.sh file in the crontab, we cannot write it with `www-data` so, we need either the credentials of `elyana` or look around for other stuff, let's use linpeas:
 
-![](Pasted image 20250321162922.png)
+![](Pasted%20image%2020250321162922.png)
 
 We got a lot of binaries enabled, we can use this to get a root shell:
 
@@ -317,7 +317,7 @@ We got a lot of binaries enabled, we can use this to get a root shell:
 /bin/bash -p
 ```
 
-![](Pasted image 20250321163046.png)
+![](Pasted%20image%2020250321163046.png)
 
 We got a root shell by this, let's read both flags:
 
@@ -347,7 +347,7 @@ echo 'VEhNe3VlbTJ3aWdidWVtMndpZ2I2OHNuMmoxb3NwaTg2OHNuMmoxb3NwaTh9' | base64 -d
 THM{uem2wigbuem2wigb68sn2j1ospi868sn2j1ospi8}
 ```
 
-![](Pasted image 20250321163201.png)
+![](Pasted%20image%2020250321163201.png)
 
 
 sudo apt update && sudo apt full-upgrade -y

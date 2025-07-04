@@ -106,7 +106,7 @@ The query above is like the one from the previous example and returns the row co
 # Question
 ---
 
-![](Pasted image 20250131152753.png)
+![](Pasted%20image%2020250131152753.png)
 
 We can use the following:
 
@@ -132,10 +132,10 @@ We can use the following:
     - Ensures no syntax errors from leftover clauses.
 ```
 
-![](Pasted image 20250131152847.png)
+![](Pasted%20image%2020250131152847.png)
 
 Now we've logged in and we can see the flag:
 
-![](Pasted image 20250131152904.png)
+![](Pasted%20image%2020250131152904.png)
 
 Flag is: `cdad9ecdf6f14b45ff5c4de32909caec`

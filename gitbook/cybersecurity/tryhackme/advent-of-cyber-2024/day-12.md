@@ -93,7 +93,7 @@ We will browse the bank application and perform a sample transaction inside the 
 
 Click on the Transfer button, and you will see the following message indicating that the amount has been transferred:
 
-![](Pasted image 20241212134209.png)
+![](Pasted%20image%2020241212134209.png)
 
 
 Now, let's review the fund transfer `HTTP POST` request logged in the Burp Suite's `HTTP history` option under the `Proxy` tab. 
@@ -108,7 +108,7 @@ Now, navigate to the `Repeater` tab, where you will find the `POST` request 
 
 Place the mouse cursor inside the request inside the Repeater tab in Burp Suite and press `Ctrl+R` to duplicate the tab. Press `Ctrl+R` ten times to have 10 duplicate requests ready for testing.
 
-![](Pasted image 20241212134355.png)
+![](Pasted%20image%2020241212134355.png)
 Now that we have 10 requests ready, we want to send them simultaneously. While one option is to manually click the `Send` button in each tab individually, we aim to send them all in parallel. To do this, click the `+` icon next to `Request #10` and select Create tab group. This will allow us to group all the requests together for easier management and execution in parallel.
 
 ![Creating tab group in Burp suite](https://tryhackme-images.s3.amazonaws.com/user-uploads/62a7685ca6e7ce005d3f3afe/room-content/62a7685ca6e7ce005d3f3afe-1728628589380.png)  
@@ -122,7 +122,7 @@ Now, we are ready to launch multiple copies of our HTTP POST requests simultan
 Once all the requests have been sent, navigate to the `tester` account in the browser and check the current balance. You will notice that the tester's balance is negative because we successfully transferred more funds than were available in the account, exploiting the race condition vulnerability.
 
 
-![](Pasted image 20241212134521.png)
+![](Pasted%20image%2020241212134521.png)
 
 
 
@@ -162,7 +162,7 @@ processed them simultaneously without ensuring proper synchronization. This resu
 - **Apply Rate Limits**: The developer should have implemented rate limiting on critical functions like funds transfers and withdrawals. This would limit the number of requests processed within a specific time frame, reducing the risk of abuse through rapid, repeated requests.
 ```
 
-![](Pasted image 20241212134755.png)
+![](Pasted%20image%2020241212134755.png)
 
 
 ## Transferring over $2000 from Glitch's account
@@ -170,20 +170,20 @@ processed them simultaneously without ensuring proper synchronization. This resu
 
 
 
-![](Pasted image 20241212134958.png)
+![](Pasted%20image%2020241212134958.png)
 
 Once we've sent the request to burp, let's create a tab group and send the requests at the same time to send more money that's on the account:
 
-![](Pasted image 20241212135059.png)
+![](Pasted%20image%2020241212135059.png)
 
 Let's send the requests:
 
 
-![](Pasted image 20241212135127.png)
+![](Pasted%20image%2020241212135127.png)
 
 Once sent, let's check the amount of money in glitch's account:
 
 
-![](Pasted image 20241212135802.png)
+![](Pasted%20image%2020241212135802.png)
 
 Nice, we were able to exploit the race condition, flag is: `THM{WON_THE_RACE_007}`

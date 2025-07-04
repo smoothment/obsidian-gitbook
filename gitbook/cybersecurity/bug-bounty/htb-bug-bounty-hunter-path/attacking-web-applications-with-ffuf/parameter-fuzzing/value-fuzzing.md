@@ -78,13 +78,13 @@ We see that we get a hit right away. We can finally send another `POST` reques
 
 # Question
 ---
-![](Pasted image 20250129160543.png)
+![](Pasted%20image%2020250129160543.png)
 
 So, we need to create the `ids.txt` wordlist, let's use the following command:
 
 `for i in $(seq 1 1000); do echo $i >> ids.txt; done`
 
-![](Pasted image 20250129160645.png)
+![](Pasted%20image%2020250129160645.png)
 
 We can do `wc -l ids.txt` to check that indeed it has 1000 elements. 
 
@@ -92,7 +92,7 @@ Let's proceed with the fuzzing:
 
 `ffuf -w ids.txt:FUZZ -u http://admin.academy.htb:49384/admin/admin.php -X POST -d 'id=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded'`
 
-![](Pasted image 20250129160803.png)
+![](Pasted%20image%2020250129160803.png)
 
 Let's filter out by size 768: `-fs 768`:
 

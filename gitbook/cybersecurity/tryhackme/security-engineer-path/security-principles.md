@@ -17,7 +17,7 @@ The objective of this room is to:
 
 # CIA
 
-![](Pasted image 20241021133250.png)
+![](Pasted%20image%2020241021133250.png)
 Before we can describe something as _secure_, we need to consider better what makes up security. When you want to judge the security of a system, you need to think in terms of the security triad: confidentiality, integrity, and availability (CIA).
 
 ```ad-important
@@ -25,7 +25,7 @@ Before we can describe something as _secure_, we need to consider better what m
 - **Integrity** aims to ensure that the data cannot be altered; moreover, we can detect any alteration if it occurs.
 - **Availability** aims to ensure that the system or service is available when needed.
 ```
-![](Pasted image 20241021133427.png)
+![](Pasted%20image%2020241021133427.png)
 
 ```ad-example
 Let’s consider the CIA security triad in the case of placing an order for online shopping:
@@ -47,7 +47,7 @@ Let’s consider the CIA as it relates to patient records and related systems:
 
 
 
-![](Pasted image 20241021133621.png)
+![](Pasted%20image%2020241021133621.png)
 Going one more step beyond the CIA security triad, we can think of:
 
 ```ad-info
@@ -79,7 +79,7 @@ We have already covered four of the above six elements. Let's discuss the remain
 
 # DAD
 
-![](Pasted image 20241021134052.png)
+![](Pasted%20image%2020241021134052.png)
 The security of a system is attacked through one of several means. It can be via the disclosure of secret data, alteration of data, or destruction of data.
 
 ```
@@ -162,7 +162,7 @@ We covered only three security models. The reader can explore many additional se
 
 # DEFENCE IN DEPTH
 
-![](Pasted image 20241021142301.png)
+![](Pasted%20image%2020241021142301.png)
 
 **Defence-in-Depth** refers to creating a security system of multiple levels; hence it is also called Multi-Level Security.
 
@@ -213,7 +213,7 @@ There is a limit to how much we can apply zero trust without negatively impactin
 
 # THREAT VERSUS RISK
 
-![](Pasted image 20241021145120.png)
+![](Pasted%20image%2020241021145120.png)
 
 There are three terms that we need to take note of to avoid any confusion.
 

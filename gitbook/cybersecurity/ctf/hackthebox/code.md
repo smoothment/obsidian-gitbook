@@ -39,11 +39,11 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 We can begin by going into the web application:
 
-![](Pasted image 20250324224713.png)
+![](Pasted%20image%2020250324224713.png)
 
 We got a python code execution, let's check the behavior:
 
-![](Pasted image 20250324225113.png)
+![](Pasted%20image%2020250324225113.png)
 
 For example, if we try sending ourselves a reverse shell, we are unable to do it, so, let's search around, for another way to get a shell.
 
@@ -73,11 +73,11 @@ Explanation of this code would be the following:
 
 If we run the code, we can see this:
 
-![](Pasted image 20250324225905.png)
+![](Pasted%20image%2020250324225905.png)
 
 We got the reverse shell, issue is that after some time, it gets closed automatically:
 
-![](Pasted image 20250324230045.png)
+![](Pasted%20image%2020250324230045.png)
 
 To solve this issue, let's stabilize our shell:
 
@@ -105,19 +105,19 @@ Let's begin privilege escalation.
 
 Looking around we can find a `database.db` file:
 
-![](Pasted image 20250324230546.png)
+![](Pasted%20image%2020250324230546.png)
 
 Let's download it in our machine and look at the contents with `sqlitebrowser`:
 
-![](Pasted image 20250324230620.png)
+![](Pasted%20image%2020250324230620.png)
 
 We got two users, but, looking at `/etc/passwd` we can see that `martin` is the user with a shell:
 
-![](Pasted image 20250324230723.png)
+![](Pasted%20image%2020250324230723.png)
 
 Let's crack the md5 hash:
 
-![](Pasted image 20250324230746.png)
+![](Pasted%20image%2020250324230746.png)
 
 
 We got martin's credentials:
@@ -128,11 +128,11 @@ martin:nafeelswordsmaster
 
 Let's go into ssh:
 
-![](Pasted image 20250324230841.png)
+![](Pasted%20image%2020250324230841.png)
 
 Let's check our sudo privileges:
 
-![](Pasted image 20250324230915.png)
+![](Pasted%20image%2020250324230915.png)
 
 We can run something called `backy.sh`, let's check this file:
 
@@ -216,7 +216,7 @@ sudo /usr/bin/backy.sh task.json
 
 If we check the folder this happens:
 
-![](Pasted image 20250324233308.png)
+![](Pasted%20image%2020250324233308.png)
 
 We get a permission denied, seems like we cannot backup the whole root folder using this method, let's try doing something else, for example, we now that the script restricts the path to `/var` or `/home`, so, what if we use this and try to use `path traversal` to get the contents of the `root` folder:
 
@@ -235,18 +235,18 @@ With this, we are using path traversal to backup the root folder:
 sudo /usr/bin/backy.sh task.json
 ```
 
-![](Pasted image 20250324234117.png)
+![](Pasted%20image%2020250324234117.png)
 
 Nice, it worked, let's check if we're able to access the contents of it:
 
-![](Pasted image 20250324234139.png)
+![](Pasted%20image%2020250324234139.png)
 
 ```
 cat root.txt
 3ad1ddf89c85abaae7bf403ea906156a
 ```
 
-![](Pasted image 20250324234355.png)
+![](Pasted%20image%2020250324234355.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/653
 

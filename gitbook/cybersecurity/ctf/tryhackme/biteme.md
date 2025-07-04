@@ -16,7 +16,7 @@ sticker: emoji//1f444
 # RECONNAISSANCE
 ---
 
-![](Pasted image 20250609145216.png)
+![](Pasted%20image%2020250609145216.png)
 
 Simple apache2 page, source code is normal too, let's fuzz:
 
@@ -48,20 +48,20 @@ console                 [Status: 301, Size: 314, Words: 20, Lines: 10, Duration:
 
 We got `console`, let's check it out:
 
-![](Pasted image 20250609145432.png)
+![](Pasted%20image%2020250609145432.png)
 
 
 We got a login page, if we check the source code we find this:
 
-![](Pasted image 20250609145512.png)
+![](Pasted%20image%2020250609145512.png)
 
 There is a packed javascript function, let's unpack it:
 
-![](Pasted image 20250609145600.png)
+![](Pasted%20image%2020250609145600.png)
 
 We got two possible users: `fred` and `jason`, also the note is saying he turned `file syntax highlighting`, let's check this out:
 
-![](Pasted image 20250609145848.png)
+![](Pasted%20image%2020250609145848.png)
 
 That means we should be able to read the source code of `.phps` files, let's fuzz to confirm which files we can read:
 
@@ -263,13 +263,13 @@ BLONDIE
 Ok, a bunch of passwords can be used for `jason_test_account`, let's use `raiden`:
 
 
-![](Pasted image 20250609152202.png)
+![](Pasted%20image%2020250609152202.png)
 
-![](Pasted image 20250609152210.png)
+![](Pasted%20image%2020250609152210.png)
 
 Now we got another issue, we need some way to bypass MFA, let's send the request to a proxy and check it:
 
-![](Pasted image 20250609152348.png)
+![](Pasted%20image%2020250609152348.png)
 
 The vulnerable aspect of this MFA code is that we can submit as many pins as we want, we can brute force it exploiting this, let's create a wordlist first:
 
@@ -280,34 +280,34 @@ seq -w 0 9999 > mfa_codes.txt
 Once we got our wordlist, we can either use a fuzzing tool like `wfuzz` or an intruder such as caido's one or burp's:
 
 
-![](Pasted image 20250609152639.png)
+![](Pasted%20image%2020250609152639.png)
 
 With Caido automate functionality, the brute force will take a couple minutes to finish, let's wait until it finishes and we filter for length:
 
-![](Pasted image 20250609152951.png)
+![](Pasted%20image%2020250609152951.png)
 
 Ok, we got our `mfa` code, let's go into the panel:
 
-![](Pasted image 20250609153036.png)
+![](Pasted%20image%2020250609153036.png)
 
 We got a `file browser` and `file viewer` functionality, the first one let's us list the files in the directory we specify:
 
-![](Pasted image 20250609162434.png)
+![](Pasted%20image%2020250609162434.png)
 
 The file viewer, let us read the specific files, let's check if we can read `id_rsa`:
 
 
-![](Pasted image 20250609162511.png)
+![](Pasted%20image%2020250609162511.png)
 
 We got fred and jason:
 
-![](Pasted image 20250609162543.png)
+![](Pasted%20image%2020250609162543.png)
 
-![](Pasted image 20250609162521.png)
+![](Pasted%20image%2020250609162521.png)
 
 Only Jason has `.ssh`:
 
-![](Pasted image 20250609162601.png)
+![](Pasted%20image%2020250609162601.png)
 
 There it is, let's get it:
 
@@ -363,7 +363,7 @@ ssh jason@IP -i id_rsa
 ```
 
 
-![](Pasted image 20250609162846.png)
+![](Pasted%20image%2020250609162846.png)
 
 
 We can now begin privilege escalation.
@@ -392,7 +392,7 @@ We can run any commands as fred without a password, let's switch users then:
 sudo -u fred /bin/bash
 ```
 
-![](Pasted image 20250609163806.png)
+![](Pasted%20image%2020250609163806.png)
 
 Let's check our privileges then:
 
@@ -409,12 +409,12 @@ We can restart the fail2ban service, let's check info on how to escalate privile
 
 PRIVESC: https://exploit--notes-hdks-org.translate.goog/exploit/linux/privilege-escalation/sudo/sudo-fail2ban-privilege-escalation/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc
 
-![](Pasted image 20250609164244.png)
+![](Pasted%20image%2020250609164244.png)
 
 
-![](Pasted image 20250609164300.png)
+![](Pasted%20image%2020250609164300.png)
 
-![](Pasted image 20250609164312.png)
+![](Pasted%20image%2020250609164312.png)
 
 Basically, we need to modify the configuration file, restart the service and trigger the `fail2ban` action to get a shell as root, let's modify:
 
@@ -422,7 +422,7 @@ Basically, we need to modify the configuration file, restart the service and tri
 /etc/fail2ban/action.d/iptables-multiport.conf
 ```
 
-![](Pasted image 20250609164528.png)
+![](Pasted%20image%2020250609164528.png)
 
 On here, we need to modify the `actionban` to match a reverse shell, we can do:
 
@@ -442,7 +442,7 @@ We now need to set up a listener and trigger `fail2ban` since it is an anti-brut
 hydra -l random -P /usr/share/wordlists/rockyou.txt ssh://10.10.64.184 -t 40
 ```
 
-![](Pasted image 20250609164917.png)
+![](Pasted%20image%2020250609164917.png)
 
 There we go, as seen we receive the reverse shell as root, let's read both flags and end the CTF:
 
@@ -455,7 +455,7 @@ THM{0e355b5c907ef7741f40f4a41cc6678d}
 ```
 
 
-![](Pasted image 20250609165033.png)
+![](Pasted%20image%2020250609165033.png)
 
 
 
