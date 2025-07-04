@@ -63,7 +63,7 @@ In the following sections, we will cover how you can mount the most common sessi
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250219122007.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219122007.png)
 
 
 Answer for this question is:

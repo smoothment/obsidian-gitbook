@@ -20,7 +20,7 @@ sticker: lucide//code
 If we check the web application, we can see this:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250617123928.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617123928.png)
 
 As seen, we can convert markdown to pdf, this is highly vulnerable since at its core it blindly hands our Markdown straight off to a server‑side renderer, whether that’s a headless browser or Pandoc+LaTeX with no filtering or authentication. 
 
@@ -57,7 +57,7 @@ admin                   [Status: 403, Size: 166, Words: 15, Lines: 5, Duration: 
 
 We can find an admin resource on here, if we try accessing it, this happens:
 
-![](cybersecurity/images/Pasted%2520image%252020250617124337.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617124337.png)
 
 Based on that, we now we can exploit the md2pdf site to achieve access to the admin resource, let's do it.
 
@@ -75,9 +75,9 @@ We use iframe to achieve `SSRF`, basically the pdf engine will render the intern
 
 
 
-![](cybersecurity/images/Pasted%2520image%252020250617125048.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125048.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250617125056.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125056.png)
 
 It works, let's read admin resource then:
 
@@ -88,9 +88,9 @@ It works, let's read admin resource then:
 </iframe>
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250617125137.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125137.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250617125144.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125144.png)
 
 We got our flag:
 
@@ -98,5 +98,5 @@ We got our flag:
 flag{1f4a2b6ffeaf4707c43885d704eaee4b}
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250617125225.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250617125225.png)
 

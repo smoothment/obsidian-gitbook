@@ -127,7 +127,7 @@ Code: json
 
 
 
-![](cybersecurity/images/Pasted%2520image%252020250122185309.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250122185309.png)
 
 We can use curl for this: `curl 'http://94.237.62.3:33241/index.php?id=1'`
 

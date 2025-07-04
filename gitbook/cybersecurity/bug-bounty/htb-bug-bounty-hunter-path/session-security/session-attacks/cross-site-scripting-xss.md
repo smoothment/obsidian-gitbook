@@ -176,7 +176,7 @@ It is about time we jump to another session attack called Cross-Site Request For
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250219124916.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219124916.png)
 
 Answer is:
 

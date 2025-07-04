@@ -115,13 +115,13 @@ getent hosts thmdc.za.tryhackme.loc
 
 If everything goes right, we should get:
 
-![](cybersecurity/images/Pasted%2520image%252020250527225117.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527225117.png)
 
 Something similar to that, now let's get our credentials:
 
 http://distributor.za.tryhackme.loc/creds
 
-![](cybersecurity/images/Pasted%2520image%252020250527231419.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527231419.png)
 
 In this case I got:
 
@@ -273,7 +273,7 @@ lsadump::dcsync /domain:za.tryhackme.loc /user:OUR_PROVIDED_USER
 
 Nice, we will get something like this:
 
-![](cybersecurity/images/Pasted%2520image%252020250527231618.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527231618.png)
 
 We need to enable logging on mimikatz:
 
@@ -301,7 +301,7 @@ scp administrator@za.tryhackme.loc@thmwrk1.za.tryhackme.loc:C:/Users/Administrat
 
 We can use a code editor to check for the hash:
 
-![](cybersecurity/images/Pasted%2520image%252020250527232844.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527232844.png)
 
 Or we can use grep:
 
@@ -317,7 +317,7 @@ We got our hash:
 16f9af38fca3ada405386b3b57366082
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250527232945.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527232945.png)
 
 # Persistence through Tickets
 
@@ -538,7 +538,7 @@ kerberos::golden /admin:ReallyNotALegitAccount /domain:za.tryhackme.loc /id:500 
 
 We will see this:
 
-![](cybersecurity/images/Pasted%2520image%252020250527233805.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527233805.png)
 
 As seen, we got a `Golden Ticket`, we can also generate a silver ticket with:
 
@@ -546,7 +546,7 @@ As seen, we got a `Golden Ticket`, we can also generate a silver ticket with:
 kerberos::golden /admin:StillNotALegitAccount /domain:za.tryhackme.loc /id:500 /sid:<Domain SID> /target:<Hostname of server being targeted> /rc4:<NTLM Hash of machine account of target> /service:cifs /ptt
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250527234013.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527234013.png)
 
 
 # Persistence through Certificates
@@ -819,7 +819,7 @@ Certificate persistence is significantly harder to defend against. Even if you r
 
 So what's the only solution to remove the persistence? Well, this is why we are no longer friends. They will have to revoke the root CA certificate. But revoking this certificate means that all certificates issued by AD CS would all of a sudden be invalid. Meaning they will have to generate a new certificate for every system that uses AD CS. You should start to see why this type of persistence is incredibly dangerous and would require full rebuilds of systems if performed.
 
-![](cybersecurity/images/Pasted%2520image%252020250527234545.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527234545.png)
 
 
 # Persistence through SID History
@@ -940,7 +940,7 @@ However, before you can even think about removing malicious SID history attribut
 
 Imagine that you are the blue team dealing with an incident where you have just performed a domain takeback. You rotated the krbtgt account's password twice, removed golden and silver tickets, and rebuilt your entire CA server from scratch, just to see that the attacker is still performing DA commands with a low-privileged account. This would not be a great day.
 
-![](cybersecurity/images/Pasted%2520image%252020250527234814.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527234814.png)
 
 # Persistence through Group Membership
 
@@ -1055,7 +1055,7 @@ SID               : S-1-5-21-3885271727-2693558621-2658995185-6163
 If this was a real organization, we would not be creating new groups to nest. Instead, we would make use of the existing groups to perform nesting. However, this is something you would never do on a normal red team assessment and almost always dechain at this point since it breaks the organization's AD structure, and if we sufficiently break it, they would not be able to recover. At this point, even if the blue team was able to kick us out, the organization would more than likely still have to rebuild their entire AD structure from scratch, resulting in significant damages.
 
 
-![](cybersecurity/images/Pasted%2520image%252020250527235218.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527235218.png)
 
 
 # Persistence through ACLs
@@ -1125,7 +1125,7 @@ However, using our new permissions, we can add ourselves to this group:
 
 Imagine combining this with the nesting groups of the previous task. Just as the blue team finished revoking your access through numerous group changes, 60 minutes later, you can just do it all again. Unless the blue team understands that the permissions are being altered through the AdminSDHolder group, they would be scratching their heads every 60 minutes. Since the persistence propagates through a legitimate AD service, they would most likely be none the wiser every time it happens. If you really want to persist, you can grant full control to the Domain Users group in the AdminSDHolder group, which means any low-privileged user would be granted full control over all Protected Groups. Combining this with a full DC Sync means the blue team will have to reset every single credential in the domain to flush us out completely.
 
-![](cybersecurity/images/Pasted%2520image%252020250527235402.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527235402.png)
 
 
 # Persistence through GPOs
@@ -1267,7 +1267,7 @@ You can also see on the sidebar that we can no longer read this policy:
 By performing these steps, we can ensure that even with the highest level of permissions, the blue team would not be able to remove our GPO unless they impersonated the machine account of a Domain Controller. This makes it extra hard to firstly discover, and even if they discover the GPO, it would be incredibly hard to remove. We don't even have the required permissions to interface with our policy anymore, so one will have to stay there until a network reset is performed. You can verify that the GPO is still applied by RDPing into one of the THMSERVERS.
 
 
-![](cybersecurity/images/Pasted%2520image%252020250527235559.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250527235559.png)
 
 
 # Conclusion

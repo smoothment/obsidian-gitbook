@@ -26,7 +26,7 @@ sticker: emoji//1f9d1-200d-1f3eb
 | 5985 | http         |
 | 9389 | mc-nmf       |
 
-![](cybersecurity/images/Pasted%2520image%252020250312100202.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250312100202.png)
 
 
 
@@ -86,12 +86,12 @@ LDAP        10.10.11.41     389    DC01             Compressing output into /hom
 
 Now, let's analyze the data with bloodhound:
 
-![](cybersecurity/images/Pasted%2520image%252020250312104456.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250312104456.png)
 
 For all kerberoastable accounts we find `management_svc`, let's keep on searching:
 
-![](cybersecurity/images/Pasted%2520image%252020250312104920.png)
-![](cybersecurity/images/Pasted%2520image%252020250312110254.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250312104920.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250312110254.png)
 
 So, after enumerating all, we can point out these key features:
 
@@ -378,7 +378,7 @@ There we go, we successfully pwned this machine, let's read both flags:
 e0b8d6567066b1694c8c65817163a553
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250312125720.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250312125720.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/633
 

@@ -2,10 +2,10 @@
 sticker: emoji//1f9c0
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020240927153835.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927153835.png)
 This CTF contains a port scanning "block" method, since it show a lot of open ports in which most of services, are unavailable, for our luck, port 80 is open and has a login page:
 
-![](cybersecurity/images/Pasted%2520image%252020240927153919.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927153919.png)
 I tried different things such as `XSS` `LFI` `PATH TRAVERSAL` `BRUTEFORCE` and more, then when i tried `SQLI` I found a path to exploit, after trying multiple payloads, got with this one that worked for me:
 
 `' || '1'='1';-- -`
@@ -16,24 +16,24 @@ Had to URL encode it:
 
 And it showed the following output:
 
-![](cybersecurity/images/Pasted%2520image%252020240927154104.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927154104.png)
 
 That location seems fun, lets visit it:
 
 We got admin panel even without credentials:
 
-![](cybersecurity/images/Pasted%2520image%252020240927154210.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927154210.png)
 After looking for a while, I found that the request for messages, got me this message:
 
-![](cybersecurity/images/Pasted%2520image%252020240927154349.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927154349.png)
 
 Let's visit it:
 
-![](cybersecurity/images/Pasted%2520image%252020240927154523.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927154523.png)
 
 Nothing too useful, but then, looking at the URL I thought about a `LFI`, when i sent the request, i got this:
 
-![](cybersecurity/images/Pasted%2520image%252020240927154621.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927154621.png)
 I was able to read `etc/passwd` file, this website is vulnerable to `LFI`, let's get a reverse shell:
 
 For this, i will be using the following tool:
@@ -53,51 +53,51 @@ Now, let's send the reverse shell and establish a connection to our machine:
 ###### Sending the payload
 `curl "http://10.10.142.162/secret-script.php?file=$(cat payload.txt)"`
 
-![](cybersecurity/images/Pasted%2520image%252020240927160128.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927160128.png)
 
 
-![](cybersecurity/images/Pasted%2520image%252020240927160136.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927160136.png)
 We got our reverse shell, let's make it stable using the [[STABLE SHELL|shell tricks]]::
 
-![](cybersecurity/images/Pasted%2520image%252020240927160349.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927160349.png)
 Now, we have an stable shell, let's look for privesc:
 
-![](cybersecurity/images/Pasted%2520image%252020240927160513.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927160513.png)
 We cannot read user.txt contents neither use sudo -l due to the lack of the password for the user, let's look at SUID files:
 
-![](cybersecurity/images/Pasted%2520image%252020240927160551.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927160551.png)
 
 Nothing useful too, let's keep enumerating the machine:
 
-![](cybersecurity/images/Pasted%2520image%252020240927160737.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927160737.png)
 in `/home/comte/.ssh` we can read and write authorized keys, let's put ours:
 
-![](cybersecurity/images/Pasted%2520image%252020240927161025.png)
-![](cybersecurity/images/Pasted%2520image%252020240927161221.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927161025.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927161221.png)
 I could enter ssh using my own key, let's read that `user.txt` file:
 
-![](cybersecurity/images/Pasted%2520image%252020240927161301.png)\
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927161301.png)\
 
 For privilege escalation we have this sudo permissions:
 
-![](cybersecurity/images/Pasted%2520image%252020240927161701.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927161701.png)
 When i read the `exploit.timer` file, I see this:
 
-![](cybersecurity/images/Pasted%2520image%252020240927161722.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927161722.png)
 Let's change the `OnBootSec` to 5 seconds and enable the service to see what it does:
 
-![](cybersecurity/images/Pasted%2520image%252020240927161803.png)
-![](cybersecurity/images/Pasted%2520image%252020240927162007.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927161803.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927162007.png)
 Once I did this, I found that a new binary was added to the 4000 UID binaries, let's exploit `xxd` to gain root shell:
 
-![](cybersecurity/images/Pasted%2520image%252020240927162104.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927162104.png)
 
-![](cybersecurity/images/Pasted%2520image%252020240927162740.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927162740.png)
 Now, i got root authorized key access:
 
-![](cybersecurity/images/Pasted%2520image%252020240927162817.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927162817.png)
 just like that, machine is done:
 
-![](cybersecurity/images/Pasted%2520image%252020240927162856.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020240927162856.png)
 
 

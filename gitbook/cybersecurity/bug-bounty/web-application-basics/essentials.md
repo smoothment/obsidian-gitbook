@@ -104,7 +104,7 @@ The **query string** is the part of the URL that starts with a question mark (
 The **fragment** starts with a hash symbol (#) and helps point to a specific section of a webpage—like jumping directly to a particular heading or table. Users can modify this too, so like with query strings, it’s important to check and clean up any data here to avoid issues like injection attacks.
 
 ## QUESTIONS
-![](cybersecurity/images/Pasted%2520image%252020241028174655.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028174655.png)
 
 
 
@@ -226,7 +226,7 @@ Although HTTP/2 and HTTP/3 offer better speed and security, many systems still
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241028175054.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028175054.png)
 
 # HTTP REQUEST: HEADERS AND BODY
 
@@ -338,7 +338,7 @@ Content-Length: 124
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241028175524.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028175524.png)
 
 # HTTP RESPONSE: STATUS LINE AND STATUS CODES
 
@@ -399,7 +399,7 @@ Something went wrong on the server’s end, and it couldn’t process your reque
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241028175825.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028175825.png)
 
 # HTTP RESPONSE: HEADERS AND BODY
 
@@ -451,7 +451,7 @@ The **HTTP response body** is where the actual data lives—things like HTML,
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241028180013.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028180013.png)
 
 # SECURITY HEADERS
 
@@ -551,5 +551,5 @@ Here’s a breakdown of the Referrer-Policy header by directives:
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241028180157.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241028180157.png)
 

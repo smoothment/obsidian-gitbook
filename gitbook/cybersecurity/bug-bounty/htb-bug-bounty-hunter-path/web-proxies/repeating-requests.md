@@ -68,11 +68,11 @@ Finally, we can see in our previous POST request that the data is URL-encoded. T
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250124101727.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124101727.png)
 
 As shown in the lesson, we can use command injection in order to retrieve data from the server, let's use `1;ls+-la;` to check the files:
 
-![](cybersecurity/images/Pasted%2520image%252020250124101809.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124101809.png)
 
 But this is the flag from a previous exercise, we need to look around the other flag, let's follow these steps:
 
@@ -84,14 +84,14 @@ But this is the flag from a previous exercise, we need to look around the other 
 
 If we follow these steps we can see the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250124102326.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124102326.png)
 
 As expected, we are in `/var/www/html`, other flag must be in a different directory, my next step would be verifying what does `/` contain:
 
-![](cybersecurity/images/Pasted%2520image%252020250124102434.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124102434.png)
 
 We have the flag, let's simply read it:
 
-![](cybersecurity/images/Pasted%2520image%252020250124102457.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250124102457.png)
 
 Flag is `HTB{qu1ckly_r3p3471n6_r3qu3575}`

@@ -229,7 +229,7 @@ You are installing the modules from an untrusted repository. If you trust this r
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101143009.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101143009.png)
 
 
 # NAVIGATING THE FILE SYSTEM AND WORKING WITH FILES
@@ -338,7 +338,7 @@ Don't touch my hat!
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101143227.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101143227.png)
 
 
 # PIPING, FILTERING AND SORTING DATA
@@ -449,7 +449,7 @@ The `Select-String` cmdlet fully supports the use of regular expressions ([reg
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101143407.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101143407.png)
 
 
 # SYSTEM AND NETWORK INFORMATION
@@ -553,7 +553,7 @@ These cmdlets give IT professionals the ability to quickly access crucial system
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101143556.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101143556.png)
 
 # REAL-TIME SYSTEM ANALYSIS
 
@@ -635,7 +635,7 @@ These cmdlets collectively provide a comprehensive set of tools for real-time sy
 ## QUESTIONS
 
 
-![](cybersecurity/images/Pasted%2520image%252020241101143652.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101143652.png)
 
 # SCRIPTING
 
@@ -698,7 +698,7 @@ The second example demonstrates that we don't need to know how to script to bene
 
 ## QUESTION
 
-![](cybersecurity/images/Pasted%2520image%252020241101143924.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101143924.png)
 
 
 

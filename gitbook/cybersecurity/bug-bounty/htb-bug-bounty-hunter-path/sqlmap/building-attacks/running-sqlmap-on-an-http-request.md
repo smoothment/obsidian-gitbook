@@ -187,18 +187,18 @@ JSON data found in HTTP body. Do you want to process it? [Y/n/q]
 # Questions
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250204150310.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204150310.png)
 
 ## Case 2
 ---
 
 If we go to `case 2`, we will see the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250204150350.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204150350.png)
 
 Let's capture the request with burp and use sqlmap:
 
-![](cybersecurity/images/Pasted%2520image%252020250204150548.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204150548.png)
 
 
 We can do the following sqlmap command:
@@ -225,7 +225,7 @@ Got the flag: `HTB{700_much_c0n6r475_0n_p057_r3qu357}`
 
 For case 3 we find the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250204151814.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204151814.png)
 
 Let's intercept the request and send it to sqlmap:
 
@@ -279,7 +279,7 @@ Got the flag: `HTB{c00k13_m0n573r_15_7h1nk1n6_0f_6r475}`
 
 Let's finish the task with case 4:
 
-![](cybersecurity/images/Pasted%2520image%252020250204152421.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250204152421.png)
 
 Let's save the request:
 

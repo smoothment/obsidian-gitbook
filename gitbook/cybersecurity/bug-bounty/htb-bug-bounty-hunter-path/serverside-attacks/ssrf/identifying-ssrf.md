@@ -74,23 +74,23 @@ The results show that the web server runs a service on port `3306`, typically u
 # Question
 ----
 
-![](cybersecurity/images/Pasted%2520image%252020250210181120.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250210181120.png)
 
 Let's check the website:
 
-![](cybersecurity/images/Pasted%2520image%252020250210181150.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250210181150.png)
 
 We find this is we check the website for a while:
 
-![](cybersecurity/images/Pasted%2520image%252020250210181131.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250210181131.png)
 
 Let's check the request in burp:
 
-![](cybersecurity/images/Pasted%2520image%252020250210182951.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250210182951.png)
 
 We can see something weird in the request, a `dateserver` parameter that makes a call to a resource called `availabilty.php`, let's try changing that to make a call to the localhost and check if the request gets passed through us:
 
-![](cybersecurity/images/Pasted%2520image%252020250211142012.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250211142012.png)
 
 
 We got a flag surprisingly, flag is: 

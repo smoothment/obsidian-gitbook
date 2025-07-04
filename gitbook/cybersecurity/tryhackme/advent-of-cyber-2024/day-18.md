@@ -1,7 +1,7 @@
 ---
 sticker: emoji//1f384
 ---
-![](cybersecurity/images/Pasted%2520image%252020241218124441.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241218124441.png)
 
 ## Storyline
 
@@ -159,24 +159,24 @@ Then, on the WareWise application, let's provide a command that will lead to the
 _Please note, the reverse shell **may** take a few attempts to successfully connect back._
 
 
-![](cybersecurity/images/Pasted%2520image%252020241218133023.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241218133023.png)
 
 We got the shell, let's answer the questions:
 
-![](cybersecurity/images/Pasted%2520image%252020241218133549.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241218133549.png)
 
 Once we got the shell, let's try to [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stabilize]] it and look up for the flag:
 
-![](cybersecurity/images/Pasted%2520image%252020241218133615.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241218133615.png)
 
 Now, let's use `find / -name flag.txt 2>/dev/null`:
 
 
-![](cybersecurity/images/Pasted%2520image%252020241218133725.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241218133725.png)
 
 Flag is located at `/home/analyst/flag.txt`
 
-![](cybersecurity/images/Pasted%2520image%252020241218133752.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241218133752.png)
 
 Flag is: `THM{WareW1se_Br3ach3d}`
 

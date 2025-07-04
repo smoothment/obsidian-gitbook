@@ -95,7 +95,7 @@ The script's output will show the progression of the brute-force attack, display
 # Question
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250213134207.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250213134207.png)
 
 Let's use the python script provided to us, let's modify it a bit for it to run faster:
 

@@ -21,7 +21,7 @@ You may have seen hacking scenes in movies that show cool terminals with many co
 - [Linux Fundamentals module](https://tryhackme.com/module/linux-fundamentals)
 
 
-![](cybersecurity/images/Pasted%2520image%252020241101144155.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101144155.png)
 
 
 # HOW TO INTERACT WITH A SHELL
@@ -92,7 +92,7 @@ The flag is THM
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101144308.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101144308.png)
 
 # TYPES OF LINUX SHELLS
 
@@ -182,7 +182,7 @@ Selecting the best Linux shell depends on your usage and its features. The she
 ## QUESTIONS
 
 
-![](cybersecurity/images/Pasted%2520image%252020241101144639.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101144639.png)
 
 # SHELL SCRIPTING AND COMPONENTS
 
@@ -344,7 +344,7 @@ See how easy a script looks with comments. Comments don’t affect the working o
 
 ## QUESTIONS
 
-![](cybersecurity/images/Pasted%2520image%252020241101144821.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101144821.png)
 
 # THE LOCKER SCRIPT
 

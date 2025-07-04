@@ -21,12 +21,12 @@ sticker: emoji//1f93c
 # RECONNAISSANCE
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250319153505.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250319153505.png)
 
 We are dealing with a simple apache2 server, let's check source code:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250319153549.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250319153549.png)
 
 We found a subdomain, let's add `team.thm` to `/etc/hosts`:
 
@@ -35,7 +35,7 @@ echo '10.10.66.89 team.thm' | sudo tee -a /etc/hosts
 ```
 
 
-![](cybersecurity/images/Pasted%2520image%252020250319160218.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250319160218.png)
 
 We can do a little bit of directory fuzzing:
 
@@ -74,11 +74,11 @@ robots.txt              [Status: 200, Size: 5, Words: 1, Lines: 2, Duration: 158
 
 We found hidden directories and an allowed entrance to `robots.txt`, we get `403` status code on the last two but on the `images` one we can find this:
 
-![](cybersecurity/images/Pasted%2520image%252020250319160355.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250319160355.png)
 
 Let's check `robots.txt`:
 
-![](cybersecurity/images/Pasted%2520image%252020250319165903.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250319165903.png)
 
 We got a user: `dale`, let's save it for now.
 
@@ -116,7 +116,7 @@ script.txt              [Status: 200, Size: 597, Words: 52, Lines: 22, Duration:
 
 We got a file, there's a file called `script.txt` which we are able to read:
 
-![](cybersecurity/images/Pasted%2520image%252020250319170006.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250319170006.png)
 
 This is revealing that an old script exists in the server, it includes some credentials on it, let's fuzz for it, for this, let's do a minimal change to the `extension-test.txt` wordlist in SecLists:
 
@@ -155,7 +155,7 @@ txt                     [Status: 200, Size: 597, Words: 52, Lines: 22, Duration:
 
 We found it, let's read it:
 
-![](cybersecurity/images/Pasted%2520image%252020250320153453.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320153453.png)
 
 A file gets downloaded:
 
@@ -183,15 +183,15 @@ quit
 
 We got credentials, let's go into ftp:
 
-![](cybersecurity/images/Pasted%2520image%252020250320153627.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320153627.png)
 
 We got a `workshare` directory, this is what's inside of it:
 
-![](cybersecurity/images/Pasted%2520image%252020250320153757.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320153757.png)
 
 We got a `New_site.txt` file, let's read it:
 
-![](cybersecurity/images/Pasted%2520image%252020250320154014.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320154014.png)
 
 
 We got a lot of valuable info, let's try to fuzz for subdomains to check if this is true:
@@ -228,20 +228,20 @@ www.dev                 [Status: 200, Size: 187, Words: 20, Lines: 10, Duration:
 
 And there we are, it is true, let's check this subdomain:
 
-![](cybersecurity/images/Pasted%2520image%252020250320154354.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320154354.png)
 
 
 If we go to the link, we can see this:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250320154411.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320154411.png)
 
 
 The `page=` parameter is directly used to fetch a file. The application does not validate or restrict the input, allowing an attacker to specify arbitrary file paths. Let's read `/etc/passwd` to test:
 
-![](cybersecurity/images/Pasted%2520image%252020250320154709.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320154709.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250320154734.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320154734.png)
 
 
 # EXPLOITATION
@@ -249,12 +249,12 @@ The `page=` parameter is directly used to fetch a file. The application does n
 
 We already found the LFI, calling back from the note, `id_rsa` files may exist, let's try to read `dale` file:
 
-![](cybersecurity/images/Pasted%2520image%252020250320155431.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320155431.png)
 
 Nothing happens, this is because as the note said, we need to find a `relevant config` file, for example, the ssh config file is located at `/etc/ssh/sshd_config`, let's try to read it:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250320155547.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320155547.png)
 And there it is, there's our `id_rsa` file:
 
 ```id_rsa
@@ -300,7 +300,7 @@ cnJvdEBwYXJyb3QBAgMEBQYH
 
 Let's log into dale's ssh:
 
-![](cybersecurity/images/Pasted%2520image%252020250320155928.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320155928.png)
 
 We can read `user.txt` at this point but let's proceed with privesc.
 
@@ -312,11 +312,11 @@ We can read `user.txt` at this point but let's proceed with privesc.
 
 We got sudo permissions on the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250320160024.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320160024.png)
 
 We can run `/home/gyles/admin_checks` as `gyles`, let's read the file to know what we're dealing with:
 
-![](cybersecurity/images/Pasted%2520image%252020250320160152.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320160152.png)
 
 The script unsafely executes `$error` without validation:
 
@@ -336,7 +336,7 @@ sudo -u gyles /home/gyles/admin_checks
 /bin/bash
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250320160722.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320160722.png)
 
 As we can see, we got a shell as `gyles`, we can use this to gain a stable shell:
 
@@ -344,19 +344,19 @@ As we can see, we got a shell as `gyles`, we can use this to gain a stable shell
 python3 -c 'import pty;pty.spawn("/bin/bash")'
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250320161545.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320161545.png)
 
 There we go, let's look around, it's a good time to use linpeas:
 
-![](cybersecurity/images/Pasted%2520image%252020250320162004.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320162004.png)
 
 We can write on a weird script, maybe we are missing something, let's use `pspy` to check on the processes:
 
-![](cybersecurity/images/Pasted%2520image%252020250320162821.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320162821.png)
 
 We can check root is running some scripts, let's try to modify the `script.sh` file:
 
-![](cybersecurity/images/Pasted%2520image%252020250320163042.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320163042.png)
 
 We cannot write on this file directly but we can on the `main_backup.sh` one, let's send this to that file:
 
@@ -374,7 +374,7 @@ chmod +s /bin/bash
 
 Now, after a minute, we can enter a privileged bash session as root:
 
-![](cybersecurity/images/Pasted%2520image%252020250320164122.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320164122.png)
 
 Let's read both flags:
 
@@ -388,5 +388,5 @@ bash-4.4# cat /root/root.txt
 THM{fhqbznavfonq}
 ```
 
-![](cybersecurity/images/Pasted%2520image%252020250320164209.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250320164209.png)
 

@@ -83,19 +83,19 @@ We are unlikely to find any XSS vulnerabilities through payload lists or XSS too
 # Questions
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250130170252.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130170252.png)
 
 If we go to the site, we encounter the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250130170348.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130170348.png)
 
 If we do a simple register, we can see the following URL:
 
-![](cybersecurity/images/Pasted%2520image%252020250130170629.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130170629.png)
 
 Let's use XSStrike:
 
-![](cybersecurity/images/Pasted%2520image%252020250130170807.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250130170807.png)
 
 We got it, the vulnerable parameter is `email`, and we already checked that the type of XSS is `reflected`.
 

@@ -92,7 +92,7 @@ Another variant of session tokens contains the result of an encryption of a data
 # Questions
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250215132610.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250215132610.png)
 
 First answer is:
 
@@ -102,7 +102,7 @@ entropy
 
 If we log into the panel with our normal account, we are unable to get admin privileges, this is where manipulating the session token comes in handy, let's look at the request:
 
-![](cybersecurity/images/Pasted%2520image%252020250215133056.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250215133056.png)
 
 We can see our cookie session in hex-encoding, let's decode it and look at it:
 
@@ -123,11 +123,11 @@ echo -n 'user=htb-stdnt;role=admin' | xxd -p
 
 Now, let's change our cookie in the request:
 
-![](cybersecurity/images/Pasted%2520image%252020250215133726.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250215133726.png)
 
 And we got access to the admin panel:
 
-![](cybersecurity/images/Pasted%2520image%252020250215133742.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250215133742.png)
 
 Flag is:
 

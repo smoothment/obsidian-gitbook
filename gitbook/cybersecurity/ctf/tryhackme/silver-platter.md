@@ -24,18 +24,18 @@ We have two websites, let's visit them both
 ### Port 80
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250111142532.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250111142532.png)
 
 Source code is normal too, let's visit the other one.
 
 ### Port 8080
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250111142600.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250111142600.png)
 
 Weird, if we watch the source code, we can see the following:
 
-![](cybersecurity/images/Pasted%2520image%252020250111142812.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250111142812.png)
 So, I think fuzzing in both websites would be useful in this case, let's proceed.
 
 
@@ -45,38 +45,38 @@ So, I think fuzzing in both websites would be useful in this case, let's proceed
 ### 80
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250111142908.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250111142908.png)
 
 We got `assets` and `images`, if we visit them, we get status code `403`, which means we don't have enough permissions to read them. Let's fuzz other port
 
 ### 8080
 ----
 
-![](cybersecurity/images/Pasted%2520image%252020250111143018.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250111143018.png)
 
 
 Once we visit `/website`, this happens:
 
-![](cybersecurity/images/Pasted%2520image%252020250111143118.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250111143118.png)
 
 Tried fuzzing but nothing useful came from it, let's visit `/console`
 
-![](cybersecurity/images/Pasted%2520image%252020250111144530.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250111144530.png)
 
 We get a redirect but nothing else.
 
 
 That's when I knew I needed a different approach, so, I went back to the site on port 80 and explored further:
 
-![](cybersecurity/images/Pasted%2520image%252020250113153001.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113153001.png)
 
 If we go to `/contact`, we can see something interesting written on there, it is talking about something called `silverpeas` and it gives us an username: `scr1ptkiddy`, after a research, I found the following: 
 
-![](cybersecurity/images/Pasted%2520image%252020250113153158.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113153158.png)
 
 Silverpeas usually runs on port 8080, let's check if that's the case for this machine:
 
-![](cybersecurity/images/Pasted%2520image%252020250113153247.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113153247.png)
 
 That's right, let's begin exploitation.
 
@@ -86,36 +86,36 @@ That's right, let's begin exploitation.
 
 We already know we have `silverpeas` running on port 8080, let's search any sort of exploit to bypass the login panel:
 
-![](cybersecurity/images/Pasted%2520image%252020250113153358.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113153358.png)
 
 Found this GitHub page which talks about `Authentication Bypass` in the `silverpeas` CRM, let's check the PoC:
 
-![](cybersecurity/images/Pasted%2520image%252020250113153444.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113153444.png)
 
 Let's fire up burp and try:
 
-![](cybersecurity/images/Pasted%2520image%252020250113153608.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113153608.png)
 
 Let's follow the PoC and delete the password field:
 
-![](cybersecurity/images/Pasted%2520image%252020250113153636.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113153636.png)
 
-![](cybersecurity/images/Pasted%2520image%252020250113153653.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113153653.png)
 
 We get a GET request, let's forward:
 
-![](cybersecurity/images/Pasted%2520image%252020250113153801.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113153801.png)
 
 We got in, time to explore:
 
-![](cybersecurity/images/Pasted%2520image%252020250113154552.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113154552.png)
 
 
-![](cybersecurity/images/Pasted%2520image%252020250113153844.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113153844.png)
 
 Found an unread notification, if we read it, we find there's 2 more users: `Manager` and `Administrateur` let's log into both accounts following the same PoC from earlier:
 
-![](cybersecurity/images/Pasted%2520image%252020250113154718.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113154718.png)
 
 In `Manager`, we find ssh credentials:
 
@@ -130,7 +130,7 @@ In `Manager`, we find ssh credentials:
 
 We are unable to log into `Administrateur` account using the same method, but we don't need to, let's log into ssh:
 
-![](cybersecurity/images/Pasted%2520image%252020250113154929.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113154929.png)
 
 ```ad-important
  User: `THM{c4ca4238a0b923820dcc509a6f75849b}`
@@ -144,16 +144,16 @@ Time to start with privilege escalation.
 We already have initial access on Tim's account, let's use linpeas to enumerate possible PE vectors:
 
 
-![](cybersecurity/images/Pasted%2520image%252020250113162507.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113162507.png)
 
 
 `Tim`is part of the `adm` group, let's check that:
 
-![](cybersecurity/images/Pasted%2520image%252020250113162540.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113162540.png)
 
 It is indeed right, let's check `/etc/passwd`:
 
-![](cybersecurity/images/Pasted%2520image%252020250113162609.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113162609.png)
 
 We have another user, `tyler`, we can perform the following:
 
@@ -165,25 +165,25 @@ We have another user, `tyler`, we can perform the following:
 #### Output
 ---
 
-![](cybersecurity/images/Pasted%2520image%252020250113162806.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113162806.png)
 
 We are able to see we got a password: `_Zd_zx7N823/`, let's switch:
 
-![](cybersecurity/images/Pasted%2520image%252020250113162843.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113162843.png)
 
 ```
 
 Nice, we got a shell as `tyler`, let's check the sudo permissions:
 
-![](cybersecurity/images/Pasted%2520image%252020250113162921.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113162921.png)
 
 Lucky, we can just perform `sudo bash -p` and get a root as shell:
 
-![](cybersecurity/images/Pasted%2520image%252020250113162947.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113162947.png)
 
 Just like that, CTF is done:
 
-![](cybersecurity/images/Pasted%2520image%252020250113163008.png)
+![](gitbook/cybersecurity/images/Pasted%252520image%25252020250113163008.png)
 
 ```ad-important
 Root: `THM{098f6bcd4621d373cade4e832627b4f6}`
