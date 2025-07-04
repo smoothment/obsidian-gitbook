@@ -78,7 +78,7 @@ user@TryHackMe$ tshark -r dns-query.pcapng -Nn
 ## QUESTIONS
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101150222.png)
+![](Pasted image 20241101150222.png)
 
 # WHOIS
 
@@ -116,7 +116,7 @@ Registrant Street: DomainsByProxy.com
 
 ## QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101150323.png)
+![](Pasted image 20241101150323.png)
 
 # HTTP(S): ACCESSING THE WEB
 
@@ -262,7 +262,7 @@ Now that we have covered some basic HTTP, FTP, and SMTP commands, you should h
 ## QUESTIONS
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101150625.png)
+![](Pasted image 20241101150625.png)
 
 # POP3: RECEIVING EMAIL
 
@@ -342,7 +342,7 @@ Connecting to a POP3 server requires authentication. Use the following login c
 
 ## QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101150738.png)
+![](Pasted image 20241101150738.png)
 
 # IMAP: SYNCHRONIZING EMAIL
 
@@ -411,5 +411,5 @@ The screenshot below shows the exchanged messages between the client and the ser
 
 ## QUESTION
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101150835.png)
+![](Pasted image 20241101150835.png)
 

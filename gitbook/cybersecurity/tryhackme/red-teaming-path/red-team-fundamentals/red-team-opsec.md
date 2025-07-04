@@ -46,7 +46,7 @@ To identify critical information, the red team needs to use an adversarial appro
 - Hosted websites, such as phishing websites, for adversary emulation.
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250511140615.png)
+![](Pasted image 20250511140615.png)
 
 
 # Threat Analysis
@@ -94,7 +94,7 @@ Another example of an OPSEC vulnerability would be an unsecured database that'
 Lax OPSEC could also result in less sophisticated vulnerabilities. For instance, consider a case where one of your red team members posts on social media revealing your client's name. If the blue team monitors such information, it will trigger them to learn more about your team and your approaches to better prepare against expected penetration attempts.
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250511140744.png)
+![](Pasted image 20250511140744.png)
 
 # Risk Assessment
 ---
@@ -114,7 +114,7 @@ Let’s revisit the two examples from the previous task. In the first example, w
 Let’s consider the second example of an unsecured database used to store data received from a phishing page. Based on data collected from several research groups using honeypots, we can expect various malicious bots to actively target random IP addresses on the Internet. Therefore, it is only a matter of time before a system with weak security is discovered and exploited.
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250511140813.png)
+![](Pasted image 20250511140813.png)
 
 # Countermeasures
 ---
@@ -150,7 +150,7 @@ Example: The figure below shows the User-Agent that will be logged by the remote
 
 ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/685031520972adc1c1a02ceac499f62c.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250511141229.png)
+![](Pasted image 20250511141229.png)
 
 # Summary
 ---

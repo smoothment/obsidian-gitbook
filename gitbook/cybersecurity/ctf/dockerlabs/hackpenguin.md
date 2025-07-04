@@ -6,7 +6,7 @@ sticker: emoji//1f427
 
 ## OPEN PORTS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025170752.png)
+![](Pasted image 20241025170752.png)
 
 ```ad-hint
 OPEN PORTS
@@ -20,24 +20,24 @@ So, seems like a simple machine with only 2 open ports, let's enumerate our webs
 ## FUZZING
 ### GOBUSTER FUZZING:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025170908.png)
+![](Pasted image 20241025170908.png)
 
 Let's look at the page and its source code:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025171151.png)
+![](Pasted image 20241025171151.png)
 Simple Apache page, source code ain't got something useful too, let's search within the directories found by gobuster:
 
 ### PENGUIN.HTML
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025171257.png)
+![](Pasted image 20241025171257.png)
 
 #### SOURCE CODE:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025171316.png)
+![](Pasted image 20241025171316.png)
 
 Nothing interesting too, except from the `penguin.jpg` file, let's download it and try to use [steghide](https://steghide.sourceforge.net/) to get any important info out of it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025171924.png)
+![](Pasted image 20241025171924.png)
 
 We lack the passphrase, let's crack it using [stegseek](https://github.com/RickdeJager/stegseek):
 
@@ -46,10 +46,10 @@ stegseek command: `stegseek penguin.jpg /usr/share/wordlists/rockyou.txt`
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025172143.png)
+![](Pasted image 20241025172143.png)
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025172227.png)
+![](Pasted image 20241025172227.png)
 
 Seems like we got a `keepass password database 2.x` inside of the image, let's keep with the exploitation
 
@@ -69,7 +69,7 @@ used: `john penguin.txt --wordlist=/usr/share/wordlists/rockyou.txt`
 
 OUTPUT:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025172655.png)
+![](Pasted image 20241025172655.png)
 
 ```
 
@@ -80,7 +80,7 @@ command: `keepass penguin.kdbx`
 
 OUTPUT (After passing in password):
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025172958.png)
+![](Pasted image 20241025172958.png)
 
 
 
@@ -94,7 +94,7 @@ So, we found user `pinguino` and its password, being the following:
 
 Let's go inside of ssh and begin our privilege escalation:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025173238.png)
+![](Pasted image 20241025173238.png)
 Oops, we cannot log in, this is because, the password is not for user `pinguino` but user `penguin`, so, correct credentials would be the following:
 
 ```ad-note
@@ -103,7 +103,7 @@ CORRECT CREDENTIALS:
 `penguin`:`pinguinomaravilloso123`
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025173357.png)
+![](Pasted image 20241025173357.png)
 
 And now we're in, let's proceed with PRIVESC
 
@@ -112,7 +112,7 @@ And now we're in, let's proceed with PRIVESC
 
 When we first log in, we find two files:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025173540.png)
+![](Pasted image 20241025173540.png)
 
 `archivo.txt` and `script.sh`, first files says:
 
@@ -167,7 +167,7 @@ This command is useful for checking which `root` processes are active, especiall
 
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025174633.png)
+![](Pasted image 20241025174633.png)
 
 User root, actually runs the script seen previously, so, in order to get our privileged shell, we would need to edit the `script.sh` file in the following way:
 
@@ -194,7 +194,7 @@ The command `chmod u+s /bin/bash` sets the **SUID** (Set User ID) bit on the `/b
 
 Once we've added this into the file, we would only need to do `bash -p` to get our shell:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241025174906.png)
+![](Pasted image 20241025174906.png)
 
 Nice, now the CTF is done!
 

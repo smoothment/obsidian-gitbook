@@ -15,20 +15,20 @@ sticker: lucide//external-link
 
 Let's visit the website:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104153239.png)
+![](Pasted image 20250104153239.png)
 
 We need to add `linkvortex.htb` to `/etc/hosts`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104153434.png)
+![](Pasted image 20250104153434.png)
 
 Seems like a simple page, let's take a look at source code:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104153824.png)
+![](Pasted image 20250104153824.png)
 
 Nothing useful, but, we know this machine has `robots.txt` so, let's check it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104162318.png)
+![](Pasted image 20250104162318.png)
 
 We found useful stuff, let's begin with fuzzing
 
@@ -51,7 +51,7 @@ When we try to fuzz in the standard way, we encounter that we are unable to fuzz
 
 Let's fuzz:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104154221.png)
+![](Pasted image 20250104154221.png)
 
 We found something interesting!
 
@@ -64,7 +64,7 @@ Let's visit the page and start with reconnaissance
 
 # RECONNAISSANCE
 ---
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104154412.png)
+![](Pasted image 20250104154412.png)
 
 Let's use dirsearch on the `linkvortex.htb/ghost/#/signin` page, in order to find anything useful, we can use it in the following way:
 
@@ -72,11 +72,11 @@ Let's use dirsearch on the `linkvortex.htb/ghost/#/signin` page, in order to fin
 
 `python3 dirsearch.py -u linkvortex.htb -t 50 -i 200`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104162434.png)
+![](Pasted image 20250104162434.png)
 
 We found the same as before, we already know this website has `ghost`, if we deep in further, we find this page has `ghost 5.58`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104162522.png)
+![](Pasted image 20250104162522.png)
 ```
 
 
@@ -90,11 +90,11 @@ This will attempt to download a bunch of git files, after the process is done, w
 
 `dev.linkvortex.htb/ghost/core/test/regression/api/admin`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104163216.png)
+![](Pasted image 20250104163216.png)
 
 We found an `authentication.test.js` file, let's read it: 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104163311.png)
+![](Pasted image 20250104163311.png)
 
 We found some credentials, since this is the admin api, we must think that the email is structured in the following way: `Username@linkvortex.htb`, so, our credentials would be: 
 
@@ -103,7 +103,7 @@ We found some credentials, since this is the admin api, we must think that the e
 
 Let's log into the signin site we found:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104163833.png)
+![](Pasted image 20250104163833.png)
 # EXPLOITATION
 ---
 
@@ -137,11 +137,11 @@ So, we need an authenticated user in order to be able to use the exploit, how lu
 
 Once we've used it, we get the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104164435.png)
+![](Pasted image 20250104164435.png)
 
 We can now read files, after i read `/etc/passwd` file, nothing useful was in it, so, after a exhausting search, I found that at `/var/lib/config.production.json` some essential info was on it, which was the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104165622.png)
+![](Pasted image 20250104165622.png)
 
 
 ```
@@ -150,9 +150,9 @@ We found some ssh credentials!: `bob@linkvortex.htb`:`fibber-talented-worth`
 
 Let's log in and read the user flag:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104165752.png)
+![](Pasted image 20250104165752.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104165804.png)
+![](Pasted image 20250104165804.png)
 
 User flag is: `5048fa21aa685472d4bb3b6dbf5e59d4`
 
@@ -167,11 +167,11 @@ Now, let's proceed with privilege escalation.
 
 We can run sudo on the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104165954.png)
+![](Pasted image 20250104165954.png)
 
 Let's read the file to know what we're dealing with:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104170040.png)
+![](Pasted image 20250104170040.png)
 
 We can use the following in order to read root flag:
 
@@ -184,7 +184,7 @@ We can use the following in order to read root flag:
 
 ### PoC
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250104170945.png)
+![](Pasted image 20250104170945.png)
 
 We were able to read the root flag, which is: `dd348008c17143e2472558713ca807f1`
 ```

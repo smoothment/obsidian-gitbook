@@ -1139,9 +1139,6 @@
         * [Commands](cybersecurity/commands/commands.md)
 
     * [IMAGES](cybersecurity/images/README.md)
-        * [.space](cybersecurity/images/space/README.md)
-            * [contextb](cybersecurity/images/space/context.mdb)
-
         * [1718437823264 3.pdf](cybersecurity/images/1718437823264-3.pdf)
         * [1718437823264.pdf](cybersecurity/images/1718437823264.pdf)
         * [1729058419325.pdf](cybersecurity/images/1729058419325.pdf)
@@ -1152,7 +1149,6 @@
         * [5f04259cf9bf5b57aed2c476-1731561346191.svg](cybersecurity/images/5f04259cf9bf5b57aed2c4761731561346191.svg)
         * [AoC Day 24 - Reverse engineering animation.gif](cybersecurity/images/aoc-day-24-reverse-engineering-animation.gif)
         * [AoC-Day-11---Wifi-Animation-2.gif](cybersecurity/images/aocday11wifianimation2.gif)
-        * [Arbitrary File Upload](cybersecurity/images/arbitrary-file-upload.md)
         * [BUG_BOUNTY_HUNTING_ESSENTIALS.pdf](cybersecurity/images/bugbountyhuntingessentials.pdf)
         * [Black Hat Python, 2nd Edition by Justin Seitz  Tim Arnold [Justin Seitz].pdf](cybersecurity/images/black-hat-python-2nd-edition-by-justin-seitz-tim-arnold-justin-seitz.pdf)
         * [Dafydd Stuttard, Marcus Pinto - The web application hacker's handbook_ finding and exploiting security flaws-Wiley (2011) 1.pdf](cybersecurity/images/dafydd-stuttard-marcus-pinto-the-web-application-hackers-handbook-finding-and-exploiting-security-flawswiley-2011-1.pdf)

@@ -44,7 +44,7 @@ XPath injection is a type of security vulnerability that occurs when an applicat
 ```ad-summary
 1. **XPath Queries in Applications:** Applications often use XPath queries to retrieve data from XML documents, such as user authentication details. For example:
     
-    ![](gitbook/cybersecurity/images/Pasted%252520image%25252020240906200719.png)
+    ![](Pasted image 20240906200719.png)
     
 
     
@@ -120,29 +120,29 @@ As seen in the video, the lab has a xpath authentication bypass, it follows this
 
 `'or true() or '`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143247.png)
+![](Pasted image 20241010143247.png)
 If we enter the payload, we've bypassed the login page:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143256.png)
+![](Pasted image 20241010143256.png)
 ### FIRST WAY
 But we are not admin user, we need to keep trying payloads until we get it, for example, we can enumerate the positions of the user using:
 
 `'or position()=1 or '`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143417.png)
+![](Pasted image 20241010143417.png)
 If we pass in that payload, we will log in as the same user shown previously, but we can keep changing the `position()=` function until we get the user we desire:
 
 
 `'or position()=2 or '`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143522.png)
+![](Pasted image 20241010143522.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143532.png)
+![](Pasted image 20241010143532.png)
 
 `'or position()=3 or '`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143607.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010143623.png)
+![](Pasted image 20241010143607.png)
+![](Pasted image 20241010143623.png)
 
 Now we've logged in as super user (admin).
 
@@ -158,9 +158,9 @@ Now, with this payload, we can actually log in as the user we want, if we know h
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010144040.png)
+![](Pasted image 20241010144040.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010144053.png)
+![](Pasted image 20241010144053.png)
 
 # XPATH DATA EXFILTRATION
 
@@ -171,18 +171,18 @@ As seen in the video, we have a San Francisco street index, as it is shown, we c
 
 To begin, we pass the request to our burp:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010172508.png)
+![](Pasted image 20241010172508.png)
 For example, if we modify the `f` parameter into this:
 
 `RAMDOM+|+//text()`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010172638.png)
+![](Pasted image 20241010172638.png)
 We get the following response:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010172649.png)
+![](Pasted image 20241010172649.png)
 So, seems like it works!
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010172834.png)
+![](Pasted image 20241010172834.png)
 If we look at the response, we see we are able to read the whole document information, for this exercise, we even got a password and a flag (not shown in the video).
 
 ## ADVANCED DATA EXFILTRATION
@@ -249,5 +249,5 @@ if __name__ == '__main__':
 <iframe width="800" height="545" src="https://www.youtube.com/embed/a8raXmjdSAQ" title="Curso Bug Bounty  |  XPATH  Blind Exploitation - Capitulo 3-5" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 Like [[CyberSecurity/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/INJECTIONS/SQL INJECTION (SQLI).md|SQLI]], XPATH injection also have a blind exploitation, for this, we could use the following payloads:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010180954.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241010181012.png)
+![](Pasted image 20241010180954.png)
+![](Pasted image 20241010181012.png)

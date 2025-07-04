@@ -43,14 +43,14 @@ echo '10.10.11.57 cypher.htb' | sudo tee -a /etc/hosts
 
 We can start by checking the web application:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313140843.png)
+![](Pasted image 20250313140843.png)
 
 
 Source code's got this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313140938.png)
+![](Pasted image 20250313140938.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313140946.png)
+![](Pasted image 20250313140946.png)
 
 If we go to `/data.json`, we can see a bunch of data, nothing useful yet, let's try to fuzz for subdomains and hidden directories:
 
@@ -75,12 +75,12 @@ ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u h
 
 Nothing came for subdomains, so, let's proceed with our directories, we got a `testing` page, let's check out its contents:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313150146.png)
+![](Pasted image 20250313150146.png)
 
 We got a `.jar` file, let's analyze it, we can use `jd-gui` a a standalone graphical utility that displays Java sources from `CLASS` files:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313154856.png)
+![](Pasted image 20250313154856.png)
 
 We got this, let's analyze the code better:
 
@@ -176,7 +176,7 @@ We need to do the following:
 3. Use the payload at the `username` section on the login page.
 4. Get our reverse shell.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313161304.png)
+![](Pasted image 20250313161304.png)
 
 There we go, but why does this work?
 
@@ -230,7 +230,7 @@ First thing is stabilizing our shell:
 5. export TERM=xterm
 6. export BASH=bash
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313161553.png)
+![](Pasted image 20250313161553.png)
 
 There we go, we got ourselves a nice stable shell, let's search for other users:
 
@@ -303,11 +303,11 @@ We can try that password on `graphasm`, let's go into ssh:
 graphasm:cU4btyib.20xtCMCXkBmerhK
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313162915.png)
+![](Pasted image 20250313162915.png)
 
 It worked, we're inside of graphasm's account, let's proceed and read both flags at the end, we can use linpeas as always:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313163602.png)
+![](Pasted image 20250313163602.png)
 
 We can run sudo on a binary called `bbot`, let's check it out:
 
@@ -385,7 +385,7 @@ fi
 
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313165653.png)
+![](Pasted image 20250313165653.png)
 ### **1. How It’s Supposed to Work**
 
 #### **Step 1-3: Prepare Malicious BBOT Module**
@@ -426,7 +426,7 @@ a20b1c69392473307deb62309474c70c
 
 Just like that, machine is done.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250313165846.png)
+![](Pasted image 20250313165846.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/650
 

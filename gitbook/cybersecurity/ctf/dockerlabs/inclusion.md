@@ -18,16 +18,16 @@ Seems like a simple machine in terms of open ports, let's fuzz
 ## FUZZING
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226164136.png)
+![](Pasted image 20241226164136.png)
 
 We found a `/shop` directory, let's visit the standard page and this one:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226164213.png)
+![](Pasted image 20241226164213.png)
 
 Standard apache2 installation, source code is normal too, let's visit the found directory:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226164307.png)
+![](Pasted image 20241226164307.png)
 
 
 
@@ -36,12 +36,12 @@ Standard apache2 installation, source code is normal too, let's visit the found 
 
 We found something interesting in the page, this appears right when we enter the site:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226164337.png)
+![](Pasted image 20241226164337.png)
 
 This seems like the server is vulnerable to [[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/FILE INCLUSION VULNERABILITIES/LOCAL FILE INCLUSION (LFI).md|LFI]], let's test some payloads to check if its true:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226170019.png)
+![](Pasted image 20241226170019.png)
 
 After testing for a while, I couldn't get anything useful, so, I thought that we already have the name of the file, it is called `archivo`, so let's fuzz for this in order to find anything useful:
 
@@ -54,15 +54,15 @@ After testing for a while, I couldn't get anything useful, so, I thought that we
 
 I'm using a different wordlist this time, once used, this is what I found:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226170452.png)
+![](Pasted image 20241226170452.png)
 
 It was too big to fit, so, let's try to `grep` for something like the `/etc/passwd` file:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226170549.png)
+![](Pasted image 20241226170549.png)
 
 Indeed, it works, I'm able to see some techniques such as a null byte injection and many more, let's read our file, which is located at: `../../../../etc/passwd`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226170718.png)
+![](Pasted image 20241226170718.png)
 
 
 ```
@@ -82,11 +82,11 @@ We found some interesting usernames such as `manchi` and `seller`, let's try to 
 
 `hydra -l manchi -P /usr/share/wordlists/rockyou.txt 172.17.0.2 ssh -t 10`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226171505.png)
+![](Pasted image 20241226171505.png)
 
 We found some credentials, let's log in:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226171627.png)
+![](Pasted image 20241226171627.png)
 
 
 ```
@@ -113,13 +113,13 @@ And now the script:
 
 `scp Linux-Su-Force.sh manchi@172.17.0.2:/home/manchi/Linux-Su-Force.sh`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226172916.png)
+![](Pasted image 20241226172916.png)
 
 Once we've download it, let's run the script inside the ssh machine:
 
 `./Linux-Su-Force.sh seller rockyou.txt`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226173125.png)
+![](Pasted image 20241226173125.png)
 
 Nice, password was found!
 
@@ -128,17 +128,17 @@ Nice, password was found!
 
 Let's switch into `seller`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226173234.png)
+![](Pasted image 20241226173234.png)
 
 Now, let's try to escalate into root user:
 
 ### sudo -l
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226173256.png)
+![](Pasted image 20241226173256.png)
 
 We can run sudo on `/usr/bin/php`, let's search gtfobins:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226173351.png)
+![](Pasted image 20241226173351.png)
 
 So, let's escalate into root:
 
@@ -150,7 +150,7 @@ So, let's escalate into root:
 `sudo php -r "system('$CMD');"`
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241226173506.png)
+![](Pasted image 20241226173506.png)
 
 ```
 

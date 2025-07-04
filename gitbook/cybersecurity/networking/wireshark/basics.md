@@ -97,7 +97,7 @@ Knowing the file details is helpful. Especially when working with multiple pcap 
 
 ## QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101152132.png)
+![](Pasted image 20241101152132.png)
 
 # PACKET DISSECTION
 
@@ -191,7 +191,7 @@ Now that we understand what a general packet is composed of, let's look at vario
 ## QUESTIONS
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101152435.png)
+![](Pasted image 20241101152435.png)
 
 
 # PACKET NAVIGATION
@@ -290,7 +290,7 @@ You can use the **"lower left bottom section"** in the status bar or **"Analy
 
 ## QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101152659.png)
+![](Pasted image 20241101152659.png)
 
 # PACKET FILTERING
 
@@ -353,4 +353,4 @@ Once you follow a stream, Wireshark automatically creates and applies the requir
 
 ## QUESTIONS
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241101152845.png)
+![](Pasted image 20241101152845.png)

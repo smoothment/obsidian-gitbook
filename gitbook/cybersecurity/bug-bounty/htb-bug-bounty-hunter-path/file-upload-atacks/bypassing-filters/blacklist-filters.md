@@ -86,25 +86,25 @@ As we can see, our file seems to have indeed been uploaded. The final step is to
 # Question
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206152513.png)
+![](Pasted image 20250206152513.png)
 
 Let's check the website:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206152555.png)
+![](Pasted image 20250206152555.png)
 
 If we try to upload a simple `.php` file, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206152627.png)
+![](Pasted image 20250206152627.png)
 
 So, let's upload an image and modify its contents using burp:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206152734.png)
+![](Pasted image 20250206152734.png)
 
 If we try uploading with the `.php` extension, we get an error telling us the extension is not allowed, let's send the request to `intruder` and modify it in the following way:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206152915.png)
+![](Pasted image 20250206152915.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206152920.png)
+![](Pasted image 20250206152920.png)
 
 We can use the following list of extensions:
 
@@ -150,15 +150,15 @@ We can use the following list of extensions:
 
 Let's start the attack and check the responses:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206153151.png)
+![](Pasted image 20250206153151.png)
 
 A lot of them work, let's go with `.phar`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206153555.png)
+![](Pasted image 20250206153555.png)
 
 We are able to execute commands, let's read our flag:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250206153619.png)
+![](Pasted image 20250206153619.png)
 
 ```
 HTB{1_c4n_n3v3r_b3_bl4ckl1573d} 

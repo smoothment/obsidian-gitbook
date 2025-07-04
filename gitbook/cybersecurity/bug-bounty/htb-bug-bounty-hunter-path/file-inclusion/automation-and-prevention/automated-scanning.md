@@ -193,7 +193,7 @@ Unfortunately, most of these tools are not maintained and rely on the outdated 
 # Question
 ----
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250218171815.png)
+![](Pasted image 20250218171815.png)
 
 Let's start by fuzzing parameters:
 

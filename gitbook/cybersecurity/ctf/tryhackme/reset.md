@@ -73,7 +73,7 @@ smb: \onboarding\>
 
 We got some files on here, let's get them all and check them:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625153023.png)
+![](Pasted image 20250625153023.png)
 
 On the pdf, we can find this, there seems to be some sort of initial password and we get a name, since we got a name, we can try kerbrute with `username-anarchy` to check if the user exists:
 
@@ -173,7 +173,7 @@ smb: \onboarding\>
 
 Now we just need to wait until the process hits up again:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625163637.png)
+![](Pasted image 20250625163637.png)
 
 As seen, we capture the hash:
 
@@ -210,26 +210,26 @@ DETACH DELETE n
 
 Now, let's check up the data on bloodhound:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625164749.png)
+![](Pasted image 20250625164749.png)
 
 If we search for `AS_REP` roastable users, we can find three, `TABATHA_BRITT` is a pretty interesting users due to its relations:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625164839.png)
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625165012.png)
+![](Pasted image 20250625164839.png)
+![](Pasted image 20250625165012.png)
 
 We can get to a user named `DARLA_WINTERS`, interesting part about this user is:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625165050.png)
+![](Pasted image 20250625165050.png)
 
 DARLA is allowed to delegate, based on bloodhound's info on this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625165124.png)
+![](Pasted image 20250625165124.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625165149.png)
+![](Pasted image 20250625165149.png)
 
 Nice, we already goth our attack path:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625165224.png)
+![](Pasted image 20250625165224.png)
 
 Let's proceed to privesc.
 
@@ -324,7 +324,7 @@ wmiexec.py -k -no-pass Administrator@haystack.thm.corp
 C:\>
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625172707.png)
+![](Pasted image 20250625172707.png)
 
 We got our shell, let's get both flags and end the CTF:
 
@@ -337,5 +337,5 @@ THM{RE_RE_RE_SET_AND_DELEGATE}
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250625172910.png)
+![](Pasted image 20250625172910.png)
 

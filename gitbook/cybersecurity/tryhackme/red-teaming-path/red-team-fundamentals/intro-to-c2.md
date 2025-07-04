@@ -253,7 +253,7 @@ Because HTTPS requests are encrypted, extracting specific headers (ex: X-C2-Serv
 In task 7, we will explain and explore another technique called "Redirectors". We will gain hands-on experience configuring Metasploit and Apache 2 to demonstrate how a redirector is set up.
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512122559.png)
+![](Pasted image 20250512122559.png)
 
 
 # Common C2 Frameworks
@@ -745,7 +745,7 @@ DNS Listeners are a popular technique specifically used in the exfiltration sta
 Communicating via SMB named pipes is a popular method of choice, especially when dealing with a restricted network; it often enables more flexible pivoting with multiple devices talking to each other and only one device reaching back out over a more common protocol like HTTP/HTTPS. Metasploit has support for Named Pipes.
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512125248.png)
+![](Pasted image 20250512125248.png)
 
 
 # Command, Control, and Conquer
@@ -953,7 +953,7 @@ Host script results:
 As seen, we are dealing with an old version of windows: `Windows 7 Home Basic 7600`, we can use `eternalblue` exploit in `metasploit` to get a shell as `nt authority/system:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512130804.png)
+![](Pasted image 20250512130804.png)
 
 We need to run it a couple times for it to work, we now got a shell:
 
@@ -1215,7 +1215,7 @@ After this has all been set up, running your Meterpreter Reverse Shell should 
 
  ![](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d5a2b006986bf3508047664/room-content/267a18249f3b9f9ad07e0b9e429bd942.png)
  
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250512131444.png)
+![](Pasted image 20250512131444.png)
 
 
 # Wrapping Up

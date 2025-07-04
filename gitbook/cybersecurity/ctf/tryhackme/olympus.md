@@ -26,7 +26,7 @@ We need to add `olympus.thm` to `/etc/hosts`:
 echo 'IP olympus.thm' | sudo tee -a /etc/hosts
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501133051.png)
+![](Pasted image 20250501133051.png)
 
 It says the old version of the website is still accessible on the domain, let's perform subdomain fuzzing and directory fuzzing:
 
@@ -114,24 +114,24 @@ GENERATED WORDS: 4612
 We got a directory named `~webmaster/`, let's check it out:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501133745.png)
+![](Pasted image 20250501133745.png)
 
 If we click `credentials`, it redirects us to a `404` status code site, if go down on the website, we can see this:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501133940.png)
+![](Pasted image 20250501133940.png)
 
 
 We got a search bar and a login page, let's use the search bar to test `XSS` and `SQLI`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501134143.png)
+![](Pasted image 20250501134143.png)
 
 What about `SQLI`:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501134223.png)
+![](Pasted image 20250501134223.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501134235.png)
+![](Pasted image 20250501134235.png)
 
 As we can see, there's an error in our SQL syntax, this is vulnerable to `SQLI`, let's submit the request to `sqlmap` and begin exploitation phase.
 
@@ -148,9 +148,9 @@ sqlmap -r "$(pwd)/req.req" -p search --level=5 --risk=3 --threads=10 --dump
 
 We will get some interesting tables:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501135053.png)
+![](Pasted image 20250501135053.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501135102.png)
+![](Pasted image 20250501135102.png)
 
 Got our first flag:
 
@@ -159,7 +159,7 @@ flag{Sm4rt!_k33P_d1gGIng}
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501135150.png)
+![](Pasted image 20250501135150.png)
 
 We got some hashes, let's get them to a file and use john:
 
@@ -179,7 +179,7 @@ summertime       (prometheus)
 We got credentials for `prometheus`, let's go inside the admin panel:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501135943.png)
+![](Pasted image 20250501135943.png)
 
 
 If we recall the `sqlmap` output, we can see the following emails:
@@ -191,11 +191,11 @@ zeus@chat.olympus.thm
 
 This means there could be a `chat.olympus.thm` subdomain, let's add it and check it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501140604.png)
+![](Pasted image 20250501140604.png)
 
 We can go with our found credentials:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501140629.png)
+![](Pasted image 20250501140629.png)
 
 Since there needs to be an `uploads` directory, we need to fuzz to check if it was changed to another name:
 
@@ -235,18 +235,18 @@ http://chat.olympus.thm/uploads/47c3210d51761686f3af40a875eeaaea.txt
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501141005.png)
+![](Pasted image 20250501141005.png)
 
 Damn, we need another method to exploit this, let's go back to the chat:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501141026.png)
+![](Pasted image 20250501141026.png)
 
 The most interesting part on here is that we can upload files, let's try uploading a reverse shell, there may not be any kind of blacklist of file extensions so we can upload it without restrictions, if not, we need to bypass this, let's try:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501141218.png)
+![](Pasted image 20250501141218.png)
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501141227.png)
+![](Pasted image 20250501141227.png)
 
 It attached, the issue is that, as the chat says, there is a random file name function that automatically changes the name of every file, we need some way to figure out which name our file got.
 
@@ -258,7 +258,7 @@ sqlmap -r "$(pwd)/req.req" -p search --level=5 --risk=3 --threads=10 --dump -T c
 
 If we check the table again:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501141700.png)
+![](Pasted image 20250501141700.png)
 
 Nice, we got the name of our file, let's visit it:
 
@@ -268,7 +268,7 @@ http://chat.olympus.thm/uploads/d8ab3d48244503df9c33b162b43fe698.php
 
 If we have our listener ready, we will receive the connection:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501141752.png)
+![](Pasted image 20250501141752.png)
 
 Let's proceed to privilege escalation.
 
@@ -288,11 +288,11 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501141935.png)
+![](Pasted image 20250501141935.png)
 
 Let's use `linpeas`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501142701.png)
+![](Pasted image 20250501142701.png)
 
 We got a binary called `cputils`, let's use it and check what it does:
 
@@ -347,7 +347,7 @@ snowflake
 
 We got it, let's go into ssh now:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501145659.png)
+![](Pasted image 20250501145659.png)
 
 We can now read second flag:
 
@@ -435,7 +435,7 @@ So, in order to get a shell as root, we can do this:
 uname -a; w; /lib/defended/libc.so.99
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501150356.png)
+![](Pasted image 20250501150356.png)
 
 There we go, we got root, let's find the 2 flags we are missing and finish the CTF:
 
@@ -464,6 +464,6 @@ etc/ssl/private/.b0nus.fl4g:flag{Y0u_G0t_m3_g00d!}
 We can submit both flags and end the CTF.
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250501151712.png)
+![](Pasted image 20250501151712.png)
 
 

@@ -144,7 +144,7 @@ Finished
 # Questions
 ----
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128123138.png)
+![](Pasted image 20250128123138.png)
 
 
 ```ad-hint
@@ -185,10 +185,10 @@ Found: browse.inlanefreight.htb:45825 Status: 200 [Size: 102]
 Found: web17611.inlanefreight.htb:45825 Status: 200 [Size: 106]
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128123828.png)
+![](Pasted image 20250128123828.png)
 
 
 We got all of the answers, they would be the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250128123910.png)
+![](Pasted image 20250128123910.png)
 

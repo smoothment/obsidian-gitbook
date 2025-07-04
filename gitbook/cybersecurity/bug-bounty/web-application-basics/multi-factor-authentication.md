@@ -520,6 +520,6 @@ Replace the PHPSESSID value with the PHPSESSID from your terminal.
 Once done, go to http://mfa.thm/labs/third/dashboard.
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241118145910.png)
+![](Pasted image 20241118145910.png)
 
 

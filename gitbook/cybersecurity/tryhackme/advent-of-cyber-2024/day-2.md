@@ -176,7 +176,7 @@ McSkidy knows that Encoded PowerShell commands are generally Base64 Encoded and 
 
 Since it is a Base64 encoded command, McSkidy used two recipes, named `FromBase64` and `Decode text` from the left pane. Note that McSkidy configured the **Decode text** to **UTF-16LE (1200)** since it is the encoding used by PowerShell for Base64.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202123543.png)
+![](Pasted image 20241202123543.png)
 
 
 
@@ -191,6 +191,6 @@ This meant that the people of Wareville had misunderstood Glitch, who was just t
 
 ## Questions
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241202123324.png)
+![](Pasted image 20241202123324.png)
 
 

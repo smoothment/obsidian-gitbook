@@ -50,20 +50,20 @@ if(!$_SESSION['active']) {
 ----
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214180955.png)
+![](Pasted image 20250214180955.png)
 
 
 Let's browse to `/admin.php` and see the request:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214181248.png)
+![](Pasted image 20250214181248.png)
 
 Let's `Do intercept -> Response to this request`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214181316.png)
+![](Pasted image 20250214181316.png)
 
 Now, let's simply change the status code to `200`:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250214181340.png)
+![](Pasted image 20250214181340.png)
 
 We were able to bypass the login page, flag is:
 

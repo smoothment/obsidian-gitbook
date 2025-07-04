@@ -6,14 +6,14 @@ You are contracted to perform a penetration test for a company, and through your
 Use the various techniques presented in this module to detect a command injection vulnerability and then exploit it, evading any filters in place.
 
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205145850.png)
+![](Pasted image 20250205145850.png)
 
 ## Reconnaissance
 ---
 
 Once we've authenticated, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205145916.png)
+![](Pasted image 20250205145916.png)
 
 We got a lot of functions in this page, being:
 
@@ -26,7 +26,7 @@ We got a lot of functions in this page, being:
 
 After checking each of them, I found the following in the `Copy to` function:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205150700.png)
+![](Pasted image 20250205150700.png)
 
 We have a `Copy` and `Move` function in this page, they go by the following parameters:
 
@@ -43,7 +43,7 @@ Move:
 
 In the move URL, if we modify the to value to empty, we can see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205153325.png)
+![](Pasted image 20250205153325.png)
 
 Which means, it could be vulnerable to command injection, let's try sending a simple payload like:
 
@@ -53,7 +53,7 @@ Which means, it could be vulnerable to command injection, let's try sending a si
 
 We will see the following:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205153433.png)
+![](Pasted image 20250205153433.png)
 
 This is indeed vulnerable to command injection, let's craft our payload to read the flag.
 
@@ -164,9 +164,9 @@ http://94.237.54.42:31196/index.php?to=%7C%7Cbash<<<$(base64%09-d<<<Y2F0ICR7UEFU
 
 We will see the following output:
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205153914.png)
+![](Pasted image 20250205153914.png)
 
 Flag is `HTB{c0mm4nd3r_1nj3c70r}`
 
-![](gitbook/cybersecurity/images/Pasted%252520image%25252020250205154011.png)
+![](Pasted image 20250205154011.png)
 
