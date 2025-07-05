@@ -2,17 +2,18 @@
 sticker: emoji//1f40d
 ---
 
-# ETHICAL HACKING WITH PYTHON, A PRACTICAL GUIDE
 
-!\[\[1729058419325.pdf]]
+![[1729058419325.pdf]]
 
-## NOTES
 
-### FIRST SECTION
+# NOTES
 
-#### Why Python for Ethical Hacking?
 
-Advantages of Using Python in Cybersecurity Python has become one of the most popular programming languages for ethical hacking and cybersecurity due to its numerous advantages:
+## FIRST SECTION
+
+### Why Python for Ethical Hacking?
+
+Advantages of Using Python in Cybersecurity Python has become one of the most popular programming languages for ethical hacking and cybersecurity due to its numerous advantages: 
 
 ```ad-summary
 1. Ease of Learning and Use: Python's simple and readable syntax makes it easy for beginners to learn and for experienced programmers to write code quickly. 
@@ -26,17 +27,16 @@ Advantages of Using Python in Cybersecurity Python has become one of the most po
 8. Strong Community Support: The large and active Python community provides extensive resources, documentation, and support for cybersecurity professionals
 ```
 
-### THIRD SECTION
+## THIRD SECTION
+---
 
-***
+### Buffer Overflow
+---
 
-#### Buffer Overflow
-
-***
 
 A buffer overflow occurs when a program writes more data to a buffer than it can hold, causing the excess data to overflow into adjacent memory locations. This can lead to program crashes, data corruption, or even arbitrary code execution.
 
-Key concepts in buffer overflow exploitation:
+Key concepts in buffer overflow exploitation: 
 
 ```ad-important
 1. Buffer: A temporary storage area in memory. 
@@ -46,7 +46,7 @@ Key concepts in buffer overflow exploitation:
 5. Return address: The address to which the program should return after executing a function.
 ```
 
-Steps to create a buffer overflow exploit:
+Steps to create a buffer overflow exploit: 
 
 ```ad-summary
 1. Identify the vulnerable function and input. 
@@ -84,7 +84,7 @@ with open("exploit.bin", "wb") as f:
 print(f'Exploit payload written to exploit.bin (size: {len(payload)} bytes')
 ```
 
-This script generates a payload that includes:
+This script generates a payload that includes: 
 
 ```ad-summary
 1. Padding to fill the buffer 
@@ -95,11 +95,11 @@ This script generates a payload that includes:
 
 The payload is then written to a file, which can be used as input to the vulnerable program.
 
-#### Case study: writing a custom exploit for a known vulnerability
+### Case study: writing a custom exploit for a known vulnerability
+---
 
-***
 
-Let's consider a case study of writing a custom exploit for a known vulnerability. We'll use the EternalBlue vulnerability (CVE-2017-0144) as an example. EternalBlue is a vulnerability in Microsoft's implementation of the SMB protocol that can lead to remote code execution.
+Let's consider a case study of writing a custom exploit for a known vulnerability. We'll use the EternalBlue vulnerability (CVE-2017-0144) as an example. EternalBlue is a vulnerability in Microsoft's implementation of the SMB protocol that can lead to remote code execution. 
 
 Steps to develop a custom EternalBlue exploit:
 
@@ -188,28 +188,28 @@ if __name__ == '__main__':
 
 This example is greatly simplified and does not include the full complexity of the EternalBlue exploit. In practice, developing such an exploit requires in-depth knowledge of the SMB protocol, Windows internals, and exploit development techniques.
 
-#### Exploiting Web Applications
+### Exploiting Web Applications
+---
 
-***
 
 Web applications are a common target for attackers due to their widespread use and potential for containing sensitive data. Understanding and exploiting web application vulnerabilities is a crucial skill for ethical hackers and penetration testers.
 
-Introduction to web application vulnerabilities Some common web application vulnerabilities include:
+Introduction to web application vulnerabilities Some common web application vulnerabilities include: 
 
-1. SQL Injection: Occurs when user input is not properly sanitized and is directly included in SQL queries, allowing attackers to manipulate the database
-2. Cross-Site Scripting: Allows attackers to inject malicious scripts into web pages viewed by other users, potentially stealing sensitive information or performing actions on behalf of the victim.
-3. Cross-Site Request Forgery: Tricks the victim into performing unintended actions on a web application where they're authenticated.
-4. Insecure Direct Object References : Allows attackers to access or manipulate resources by modifying object references in requests
+1. SQL Injection ([[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/INJECTIONS/SQLI/SQL INJECTION (SQLI).md|SQLi]]): Occurs when user input is not properly sanitized and is directly included in SQL queries, allowing attackers to manipulate the database
+2. Cross-Site Scripting ([[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/CROSS SITE SCRIPTING/CROSS SITE SCRIPTING (XSS).md|XSS]]): Allows attackers to inject malicious scripts into web pages viewed by other users, potentially stealing sensitive information or performing actions on behalf of the victim.
+3. Cross-Site Request Forgery ([[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/CROSS SITE REQUEST FORGERY/CROSS SITE REQUEST FORGERY (CSRF).md|CSRF]]): Tricks the victim into performing unintended actions on a web application where they're authenticated.
+4. Insecure Direct Object References ([[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/IDOR/IDOR BASICS.md|IDOR]]): Allows attackers to access or manipulate resources by modifying object references in requests
 5. XML External Entity (XXE) Injection: Exploits poorly configured XML parsers to access internal files or perform denial of service attacks.
-6. Server-Side Request Forgery: Allows attackers to make the server perform unintended network requests.
+6. Server-Side Request Forgery ([[CYBERSECURITY/Bug Bounty/Vulnerabilities/SERVER SIDE VULNERABILITIES/SERVER SIDE/SERVER SIDE REQUEST FORGERY (SSRF).md|SSRF]]): Allows attackers to make the server perform unintended network requests.
 
-**Automating web exploits with Python**
+#### Automating web exploits with Python
+---
 
-***
 
 Python provides powerful libraries for web scraping, HTTP requests, and HTML parsing, making it an excellent choice for automating web application exploits. Two commonly used libraries are `requests` for making HTTP requests and `BeautifulSoup` for parsing HTML. Here are some examples of how Python can be used to automate web exploits:
 
-**SQL INJECTION**
+##### SQL INJECTION
 
 ```python
 import requests
@@ -251,7 +251,7 @@ if __name__ == '__main__':
 
 This script sends a request to a potentially vulnerable URL with a SQL injection payload. It then checks the response for signs of a successful injection
 
-**Cross-Site Scripting (XSS)**
+##### Cross-Site Scripting (XSS)
 
 ```python
 import requests
@@ -308,9 +308,8 @@ if __name__ == '__main__':
 
 This script searches for forms on a web page, then tests each input field for XSS vulnerabilities by submitting a test payload and checking if it's reflected in the response
 
-**CSRF Token Bypass**
-
-***
+##### CSRF Token Bypass
+---
 
 ```python
 import requests
@@ -373,9 +372,9 @@ if __name__ == '__main__':
 
 This script attempts to bypass CSRF protection by extracting and using any CSRF tokens present in the login form. If login is successful without a valid CSRF token, it may indicate a vulnerability.
 
-**Insecure Direct Object References (IDOR)**
 
-***
+##### Insecure Direct Object References (IDOR)
+---
 
 ```python
 import requests
@@ -420,9 +419,8 @@ if __name__ == '__main__':
 
 This script tests for IDOR vulnerabilities by attempting to access resources with different IDs and checking if they're accessible without proper authorization.
 
-**XML External Entity (XXE) Injection**
-
-***
+##### XML External Entity (XXE) Injection
+---
 
 ```python
 import requests
@@ -463,9 +461,8 @@ if __name__ == '__main__':
 
 This script attempts to exploit an XXE vulnerability by sending a crafted XML payload that tries to read the /etc/passwd file on the server.
 
-**Server-Side Request Forgery (SSRF)**
-
-***
+##### Server-Side Request Forgery (SSRF)
+----
 
 ```python
 import requests
@@ -501,11 +498,11 @@ if __name__ == '__main__':
     main()
 ```
 
+
 This script tests for SSRF vulnerabilities by attempting to make the server fetch a potentially internal URL.
 
-#### Best Practices for Web Application Security
-
-***
+### Best Practices for Web Application Security
+---
 
 While it's important to understand how to exploit web application vulnerabilities, it's equally crucial to know how to prevent them. Here are some best practices for securing web applications:
 
@@ -524,19 +521,19 @@ While it's important to understand how to exploit web application vulnerabilitie
 12. Logging and Monitoring: Implement comprehensive logging and monitoring to detect and respond to potential security incidents.
 ```
 
-### FOURTH SECTION
 
-***
+## FOURTH SECTION
+---
 
-### Cracking Passwords with Python
-
-***
+## Cracking Passwords with Python
+---
 
 Password cracking is the process of attempting to gain unauthorized access to a system or account by systematically guessing or determining the correct password. While this can be used for malicious purposes, it's also an important skill for security professionals to understand in order to test and improve system security.
 
-#### Techniques for Password Cracking
+### Techniques for Password Cracking
+---
 
-***
+
 
 ```ad-important
 
@@ -547,9 +544,8 @@ Password cracking is the process of attempting to gain unauthorized access to a 
 5. Social Engineering: While not a technical method, gathering information about the target through social means can often provide clues to likely passwords.
 ```
 
-**Building a Python-based Password Cracker**
-
-***
+#### Building a Python-based Password Cracker
+---
 
 Let's create a simple Python script that demonstrates both brute force and dictionary attacks. This script is for educational purposes only and should not be used for unauthorized access attempts.
 
@@ -621,24 +617,24 @@ if __name__ == '__main__':
 
 ```
 
-This script includes two functions:
+This script includes two functions: 
 
-1. `brute_force_attack`: This function attempts to crack the password by trying all possible combinations of lowercase letters and digits up to a specified maximum length.
+1. `brute_force_attack`: This function attempts to crack the password by trying all possible combinations of lowercase letters and digits up to a specified maximum length. 
 2. `dictionary_attack`: This function reads words from a specified wordlist file and compares each word to the target password.
 
-Both functions keep track of the number of attempts and the time taken to crack the password. To use this script effectively, you would need to create a file named `common_passwords.txt` containing a list of common passwords, one per line.
+
+Both functions keep track of the number of attempts and the time taken to crack the password. To use this script effectively, you would need to create a file named `common_passwords.txt` containing a list of common passwords, one per line. 
 
 Remember that in real-world scenarios, passwords are typically stored as hashes, not in plain text. A more realistic password cracker would need to hash each guess and compare it to the stored hash.
 
-#### Wireless Network Hacking
 
-***
+### Wireless Network Hacking
+---
 
 Wireless network hacking involves exploiting vulnerabilities in Wi-Fi networks to gain unauthorized access or intercept data. Understanding these techniques is crucial for network administrators and security professionals to protect against such attacks.
 
-**Overview of Wireless Security and Common Vulnerabilities**
-
-***
+#### Overview of Wireless Security and Common Vulnerabilities
+---
 
 Wireless networks use various security protocols to protect against unauthorized access:
 
@@ -660,13 +656,13 @@ Common vulnerabilities in wireless networks include:
 - Deauthentication attacks
 ```
 
-**Writing Python Scripts for Wi-Fi Scanning, Deauthentication Attacks, and More**
+#### Writing Python Scripts for Wi-Fi Scanning, Deauthentication Attacks, and More
+
 
 Python, combined with libraries like `Scapy`, can be a powerful tool for wireless network analysis and testing. Here are some examples of what you can do
 
-**Wi-Fi Scanning**
-
-***
+##### Wi-Fi Scanning
+---
 
 This script uses `Scapy` to scan for nearby Wi-Fi networks:
 
@@ -707,9 +703,9 @@ if __name__ == '__main__':
 
 This script will scan for Wi-Fi networks for 30 seconds and print out the BSSID (MAC address), SSID (network name), and channel for each detected network.
 
-**Deauthentication Attack**
+##### Deauthentication Attack
+----
 
-***
 
 ```python
 from scapy.all import *
@@ -753,17 +749,18 @@ if __name__ == '__main__':
     main()
 ```
 
-This script sends deauthentication packets to a specified client MAC address, pretending to be from the access point. This can disconnect the client from the network.
+
+This script sends deauthentication packets to a specified client MAC address, pretending to be from the access point. This can disconnect the client from the network. 
 
 ```ad-note
 Note: Running deauthentication attacks without permission is illegal in many jurisdictions and can disrupt network services. This script is for educational purposes only.
 ```
 
-**Cracking WPA/WPA2 Passwords with Python**
-
-***
+##### Cracking WPA/WPA2 Passwords with Python
+----
 
 Cracking WPA/WPA2 passwords typically involves capturing a handshake and then using a wordlist to try to determine the password. Here's a high-level overview of the process:
+
 
 ```ad-summary
 1. Put the wireless interface into monitor mode 
@@ -824,12 +821,13 @@ if __name__ == '__main__':
     main()
 ```
 
-This script does the following:
+This script does the following: 
 
 ```ad-summary
 1. Uses `airodump-ng` to capture the WPA handshake 
 2. Uses `aircrack-ng` to attempt to crack the password using a specified wordlist 
 ```
+
 
 Note that this script assumes you have already put your wireless interface into monitor mode and have the necessary tools (`airodump-ng`, `aircrack-ng`) installed. It also requires root privileges to run.
 
@@ -837,13 +835,12 @@ Note that this script assumes you have already put your wireless interface into 
 Remember, attempting to crack Wi-Fi passwords without permission is illegal and unethical. This information is provided for educational purposes only, to help understand and improve wireless security.
 ```
 
-**Ethical Considerations and Legal Implications**
+#### Ethical Considerations and Legal Implications
+----
 
-***
+It's crucial to emphasize that the techniques and tools discussed in this chapter should only be used in ethical, authorized contexts. Unauthorized attempts to access computer systems or networks are illegal in many jurisdictions and can result in severe penalties. 
 
-It's crucial to emphasize that the techniques and tools discussed in this chapter should only be used in ethical, authorized contexts. Unauthorized attempts to access computer systems or networks are illegal in many jurisdictions and can result in severe penalties.
-
-Ethical uses of these techniques include:
+Ethical uses of these techniques include: 
 
 ```ad-important
 1. Penetration testing with explicit permission from the system owner 
@@ -853,10 +850,9 @@ Ethical uses of these techniques include:
 
 Always ensure you have proper authorization before attempting any of these techniques on systems you don't own or have explicit permission to test.
 
-**Defensive Measures**
 
-***
-
+#### Defensive Measures
+----
 Understanding these attack techniques is valuable for developing effective defenses. Here are some ways to protect against password cracking and wireless network attacks:
 
 ```ad-summary
@@ -870,20 +866,18 @@ Understanding these attack techniques is valuable for developing effective defen
 8. Employee Education: Train employees on security best practices, including how to identify and report potential security threats.
 ```
 
-### FIFTH SECTION
 
-***
+## FIFTH SECTION
+---
 
-### Malware Analysis and Reverse Engineering
+## Malware Analysis and Reverse Engineering
+---
 
-***
+### Types of Malware and Their Behavior
+---
 
-#### Types of Malware and Their Behavior
 
-***
-
-Malware comes in various forms, each with distinct characteristics and behaviors:
-
+Malware comes in various forms, each with distinct characteristics and behaviors: 
 ```ad-important
 1. Viruses: Self-replicating programs that attach themselves to legitimate files or programs. Example: The ILOVEYOU virus, which spread through email attachments in 2000. 
 2. Worms: Self-propagating malware that spreads across networks without user intervention. Example: The WannaCry ransomware worm, which exploited vulnerabilities in Windows systems. 
@@ -897,11 +891,11 @@ Malware comes in various forms, each with distinct characteristics and behaviors
 10. Fileless Malware: Malware that operates in memory without writing files to disk. Example: PowerShell-based attacks that exploit legitimate system tools.
 ```
 
-#### The Role of Python in Malware Analysis
-
-***
+### The Role of Python in Malware Analysis
+---
 
 Python has become an invaluable tool in malware analysis due to its versatility, ease of use, and extensive library ecosystem. Here are some key roles Python plays in this field:
+
 
 1. Automation of Analysis Tasks: Python scripts can automate repetitive tasks in malware analysis, such as file parsing, network traffic analysis, and log processing.
 
@@ -1050,6 +1044,7 @@ run_in_sandbox("/path/to/suspicious_file.exe")
 
 8. Report Generation: Python can automate the creation of detailed analysis reports.
 
+
 ```python
 import jinja2 
 
@@ -1081,13 +1076,13 @@ with open("report.html", "w") as f:
 
 These examples demonstrate the versatility of Python in malware analysis, from low-level file parsing to high-level report generation. The language's extensive library ecosystem and ease of use make it an ideal choice for both rapid prototyping of analysis tools and development of comprehensive malware analysis frameworks.
 
-**Writing Simple Python-Based Malware**
 
-***
+#### Writing Simple Python-Based Malware
+---
 
-**Simple Keylogger**
+##### Simple Keylogger
+---
 
-***
 
 ```python
 from pynput import keyboard
@@ -1105,12 +1100,11 @@ with keyboard.Listener(on_press=on_press) as listener:
 
 ```
 
+
 This script uses the `pynput` library to capture keystrokes and logs them to a file named `keylog.txt` In a real-world scenario, an attacker might use more sophisticated methods to hide the log file or transmit the data to a remote server.
 
-**Simple Backdoor**
-
-***
-
+##### Simple Backdoor
+----
 ```python
 import socket
 import subprocess
@@ -1162,9 +1156,8 @@ if __name__ == '__main__':
 
 This script creates a simple server that listens for incoming connections. When a connection is established, it allows the remote user to execute shell commands on the host system. This type of backdoor could be used by attackers to maintain persistent access to a compromised system.
 
-**Remote Access Tools (RATs)**
-
-***
+##### Remote Access Tools (RATs)
+---
 
 A Remote Access Tool (RAT) is a type of malware that provides comprehensive control over a target system. Here's a basic example of a RAT-like program in Python:
 
@@ -1229,17 +1222,16 @@ if __name__ == '__main__':
     main()
 ```
 
+
 This RAT allows remote command execution and can take screenshots of the infected system. In a real-world scenario, a RAT would likely have many more features, such as keylogging, file transfer, and webcam access
 
-#### Reverse Engineering Python Code
 
-***
-
+### Reverse Engineering Python Code
+----
 Reverse engineering is the process of analyzing a system or program to understand its inner workings, often with the goal of identifying vulnerabilities, improving security, or developing compatible systems. When it comes to Python code, reverse engineering can be particularly challenging due to the dynamic nature of the language and the various obfuscation techniques that can be employed.
 
-**Techniques for Analyzing and Deconstructing Python-based Malware**
-
-***
+#### Techniques for Analyzing and Deconstructing Python-based Malware
+---
 
 1. Static Analysis: Static analysis involves examining the code without executing it. For Python, this often starts with analyzing the source code if available, or decompiling bytecode if only the `.pyc` files are present.
 
@@ -1253,6 +1245,7 @@ a) Source Code Analysis: If you have access to the source code, you can directly
 ```
 
 Example of a simple static analysis tool:
+
 
 ```python
 import ast
@@ -1289,7 +1282,8 @@ decompile_pyc("suspicious_file.pyc")
 
 2. Dynamic Analysis: Dynamic analysis involves running the code in a controlled environment to observe its behavior.
 
-a) Debugging: Use Python's built-in `pdb` debugger or more advanced tools like `pudb` to step through the code execution:
+a) Debugging:
+Use Python's built-in `pdb` debugger or more advanced tools like `pudb` to step through the code execution:
 
 ```python
 import pdb
@@ -1305,6 +1299,8 @@ analyze_suspicious_code()
 ```
 
 b) Logging and Tracing: Insert logging statements or use the `sys.settrace()` function to track function calls and variable changes:
+
+
 
 ```python
 import sys
@@ -1339,5 +1335,9 @@ def run_in_sandbox(script_path):
 
 
 run_in_sandbox("/path/to/suspicious_script.py")
+```
+
+```ad-danger
+I'm at page 98.
 ```
 

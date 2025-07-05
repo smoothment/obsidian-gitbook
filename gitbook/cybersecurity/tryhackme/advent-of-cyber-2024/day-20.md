@@ -1,50 +1,44 @@
 ---
 sticker: emoji//1f384
 ---
-
-# DAY 20
-
 ![Task banner for day DAY 20](https://tryhackme-images.s3.amazonaws.com/user-uploads/63588b5ef586912c7d03c4f0/room-content/63588b5ef586912c7d03c4f0-1731076103117.png)
 
-_Glitch snuck through the shadows, swift as a breeze,_\
-&#xNAN;_&#x48;e captured the traffic with delicate ease._\
-&#xNAN;_&#x41; PCAP file from a system gone bad,_\
-&#xNAN;_&#x4D;ayor Malware's tricks made everything mad!_
+_Glitch snuck through the shadows, swift as a breeze,  
+He captured the traffic with delicate ease.  
+A PCAP file from a system gone bad,  
+Mayor Malware's tricks made everything mad!_
 
 McSkidy sat at her desk, staring at the PCAP file Glitch had just sent over. It was from Marta May Ware's computer, the latest victim of Mayor Malware's long-running schemes.
 
-She smiled, glancing at Byte. _"Looks like we'd have to use Wireshark again, eh boy?"_
+She smiled, glancing at Byte. _"Looks like we'd have to use Wireshark again, eh boy?"_
 
-Glitch's voice crackled over the comms. _"Need any help analyzing it?"_
+Glitch's voice crackled over the comms. _"Need any help analyzing it?"_
 
 McSkidy smiled. "_Thanks, Glitch, but I've got this._"
 
-This is the continuation of \[\[CYBERSECURITY/TRYHACKME/ADVENT OF CYBER 2024/DAY 19.md|day 19]]
+This is the continuation of [[CYBERSECURITY/TRYHACKME/ADVENT OF CYBER 2024/DAY 19.md|day 19]]
 
-### Learning Objectives
-
-***
-
+## Learning Objectives
+----
 ```ad-summary
 - Investigate network traffic using Wireshark
 - Identify indicators of compromise (IOCs) in captured network traffic
 - Understand how C2 servers operate and communicate with compromised systems
 ```
 
-### Investigating the Depths
 
-***
+## Investigating the Depths
+----
+_McSkidy peered at the PCAP with care,  
+"What secrets," she wondered, "are hiding in there?"  
+With Wireshark, she'll dig through each Byte,  
+Hoping to shed some much-needed light._
 
-_McSkidy peered at the PCAP with care,_\
-&#xNAN;_"What secrets," she wondered, "are hiding in there?"_\
-&#xNAN;_&#x57;ith Wireshark, she'll dig through each Byte,_\
-&#xNAN;_&#x48;oping to shed some much-needed light._
-
-Before we dig deeper into Mayor Malware's intentions, we must learn a few essential things about C2 communication. Whenever a machine is compromised, the command and control server (C2) drops its secret agent (payload) into the target machine. This secret agent is meant to obey the instructions of the C2 server. These instructions include executing malicious commands inside the target, exfiltrating essential files from the system, and much more. Interestingly, after getting into the system, the secret agent, in addition to obeying the instructions sent by the C2, has a way to keep the C2 updated on its current status. It sends a packet to the C2 every few seconds or even minutes to let it know it is active and ready to blast anything inside the target machine that the C2 aims to. These packets are known as beacons.
+Before we dig deeper into Mayor Malware's intentions, we must learn a few essential things about C2 communication. Whenever a machine is compromised, the command and control server (C2) drops its secret agent (payload) into the target machine. This secret agent is meant to obey the instructions of the C2 server. These instructions include executing malicious commands inside the target, exfiltrating essential files from the system, and much more. Interestingly, after getting into the system, the secret agent, in addition to obeying the instructions sent by the C2, has a way to keep the C2 updated on its current status. It sends a packet to the C2 every few seconds or even minutes to let it know it is active and ready to blast anything inside the target machine that the C2 aims to. These packets are known as beacons.
 
 ![](images/Pasted%20image%2020241220114947.png)
 
-For this room, we will be using Wireshark, an open-source tool that captures and inspects network traffic saved as a PCAP file. It's a powerful tool, and you'll encounter it frequently in your journey in cyber security. It is beneficial for understanding the communications between a compromised machine and a C2 server.
+For this room, we will be using Wireshark, an open-source tool that captures and inspects network traffic saved as a PCAP file. It's a powerful tool, and you'll encounter it frequently in your journey in cyber security. It is beneficial for understanding the communications between a compromised machine and a C2 server.
 
 If you are unfamiliar with it, here are some key capabilities you’ll see in this room:
 
@@ -63,23 +57,22 @@ Of course, Wireshark has more capabilities. If you want to learn more, we sugges
 - [Wireshark: Traffic Analysis](https://tryhackme.com/r/room/wiresharktrafficanalysis)    
 ```
 
-### Diving Deeper
+## Diving Deeper
+---
 
-***
+Now that we have a better idea of what C2 traffic looks like and how to use Wireshark, double-click on the file “_C2_Traffic_Analysis_” on the Desktop. This will automatically open the PCAP file using Wireshark.  
 
-Now that we have a better idea of what C2 traffic looks like and how to use Wireshark, double-click on the file “_C2\_Traffic\_Analysis_” on the Desktop. This will automatically open the PCAP file using Wireshark.
+That's traffic! Yes, and this would take us to the truth about Mayor Malware.
 
-That's traffic! Yes, and this would take us to the truth about Mayor Malware.
+We already suspect that this machine is compromised. So, let’s narrow down our list so that it will only show traffic coming from the IP address of Marta May Ware’s machine. To do this, click inside the **Display Filter Bar** on the top, type `ip.src == 10.10.229.217`, and press **Enter**.
 
-We already suspect that this machine is compromised. So, let’s narrow down our list so that it will only show traffic coming from the IP address of Marta May Ware’s machine. To do this, click inside the **Display Filter Bar** on the top, type `ip.src == 10.10.229.217`, and press **Enter**.
-
-![Display Filter Bar](https://tryhackme-images.s3.amazonaws.com/user-uploads/63588b5ef586912c7d03c4f0/room-content/63588b5ef586912c7d03c4f0-1729246743949.png)
+![Display Filter Bar](https://tryhackme-images.s3.amazonaws.com/user-uploads/63588b5ef586912c7d03c4f0/room-content/63588b5ef586912c7d03c4f0-1729246743949.png)  
 
 It’s still a lot, but at least we can now focus our analysis on outbound traffic.
 
-If you scroll down a bit, you will find some interesting packets, specifically those highlighted with an arrow, as shown below.
+If you scroll down a bit, you will find some interesting packets, specifically those highlighted with an arrow, as shown below.
 
-![Highlighted packets](https://tryhackme-images.s3.amazonaws.com/user-uploads/63588b5ef586912c7d03c4f0/room-content/63588b5ef586912c7d03c4f0-1729246982740.png)
+![Highlighted packets](https://tryhackme-images.s3.amazonaws.com/user-uploads/63588b5ef586912c7d03c4f0/room-content/63588b5ef586912c7d03c4f0-1729246982740.png)  
 
 Initial? Command? Exfiltrate? That is sure to be something!
 
@@ -87,13 +80,14 @@ Let’s dive deeper.
 
 We can filter these packets by using: `ip.src == 10.10.229.217 && http`
 
-### Message Received
+## Message Received
 
 If you click on the POST /initial packet (Frame 440), more details will be shown on the bottom panes. These panes will show more detailed information about the packet frame. It shows relevant details such as frame number (440), the destination IP (10.10.123.224), and more.
 
 You can expand each detail if you want, but the critical area to focus on is the lower-right view, the “Packet Bytes” pane.
 
-Packet Bytes pane ![](images/Pasted%20image%2020241220115757.png)
+Packet Bytes pane
+![](images/Pasted%20image%2020241220115757.png)
 
 This pane shows the bytes used in the communication in hexadecimal and ASCII character formats. The latter format shows readable text, which can be helpful in investigations.
 
@@ -102,6 +96,7 @@ The screenshot above shows something interesting: “I am in Mayor!”. This pie
 If we right-click on the POST /initial packet (Frame 440) and select Follow > HTTP Stream, a new pop-up window will appear containing the back-and-forth HTTP communication relevant to the specific session.
 
 ![](images/Pasted%20image%2020241220115826.png)
+
 
 This feature is useful when you need to view all requests and responses between the client and the server, as it helps you understand the complete context of the communication.
 
@@ -122,28 +117,29 @@ Usually, the reply from a C2 server contains the command, instructing the malici
 
 Exfiltrate sounds familiar, right?
 
-### Exfiltrating the Package
-
-***
+## Exfiltrating the Package
+---
 
 Picture of McSkidy
 
-If we follow the HTTP Stream for the POST /exfiltrate packet (Frame 476) sent to the same destination IP, we will see a file exfiltrated to the C2 server. We can also find some clues inside this file.
+If we follow the HTTP Stream for the POST /exfiltrate packet (Frame 476) sent to the same destination IP, we will see a file exfiltrated to the C2 server. We can also find some clues inside this file. 
 
 If you check the rest of the PCAP, you’ll find that more interesting packets were captured. Let’s break these down and dive deeper into what we’ve uncovered.
 
 ![](images/Pasted%20image%2020241220120145.png)
 
-### What’s in the Beacon
 
-***
+## What’s in the Beacon
+----
 
 A typical C2 beacon returns regular status updates from the compromised machine to its C2 server. The beacons may be sent after regular or irregular intervals to the C2 as a heartbeat. Here’s how this exchange might look:
 
-* **Secret agent (payload)**: “I am still alive. Awaiting any instructions. Over.”
-* **C2 server**: “Glad to hear that! Stand by for any further instructions. Over.”
+
+- **Secret agent (payload)**: “I am still alive. Awaiting any instructions. Over.”
+- **C2 server**: “Glad to hear that! Stand by for any further instructions. Over.”
 
 In this scenario, Mayor Malware’s agent (payload) inside Marta May Ware’s computer has sent a message that is sent inside all the beacons. Since the content is highly confidential, the secret agent encrypts it inside all the beacons, leaving a clue for the Mayor’s C2 to decrypt it. In the current scenario, we can identify the beacons by the multiple requests sent to the C2 from the target machine after regular intervals of time.
+
 
 The exfiltrated file's content hints at how these encrypted beacons can be decrypted. Using the encryption algorithm with the provided key, we now have a potential way to unlock the beacon’s message and uncover what Mayor Malware's agent is communicating to the C2 server.
 
@@ -155,6 +151,7 @@ This link will open the CyberChef tool in your browser. Note that you will have 
 
 From the tool's dashboard, you would be utilizing the following panes for decrypting your beacon:
 
+
 ```ad-summary
 1. Operations: Search for AES Decrypt and drag it to the Recipe area, which is in the second pane.
 2. Recipe: This is the area where you would select the mode of encryption, ECB, and enter the decryption key you have. Keep the other options as they are.
@@ -162,25 +159,31 @@ From the tool's dashboard, you would be utilizing the following panes for decryp
 4. Output: Once you have completed the above steps, you need to click the "Bake" button in the Recipe area. Your encrypted string will be decrypted using the AES ECB decryption with the key you provided, and the output will be displayed in the Output area.
 ```
 
+
 If you want to learn more about CyberChef, check out our CyberChef: The Basics room from the Cyber Security 101 path.
 
-### The End
+## The End
+--- 
 
-***
-
-As McSkidy opened the file with a click, She saw all the data—this wasn’t a wasn't The storm was brewing, much bigger to come, Mayor Malware’s agent is far from done!
+As McSkidy opened the file with a click,
+She saw all the data—this wasn’t a wasn't
+The storm was brewing, much bigger to come,
+Mayor Malware’s agent is far from done!
 
 “This isn't just another breach,” McSkidy muttered to Byte, a grim realization dawning. “We’re going to need a bigger firewall."
 
-### Questions
 
-***
+## Questions
+---
 
 ![](images/Pasted%20image%2020241220120354.png)
 
+
 Let's go step by step:
 
+
 As we've checked, we are already following the stream of this http packet sent by mayor malware, let's keep on following the stream and check what it has for us:
+
 
 ![](images/Pasted%20image%2020241220120624.png)
 
@@ -194,12 +197,17 @@ We got `AES ECB` data, let's use CyberChef and decrypt it, for this, we need the
 
 Indeed it was, now, let's decrypt:
 
+
+
 ![](images/Pasted%20image%2020241220121158.png)
 
 We got the output: `THM_Secret_101`
 
+
 Nice, now we've got all of our answers, they would be the following:
+
 
 ![](images/Pasted%20image%2020241220121351.png)
 
 Just like that, day 20 is done!
+

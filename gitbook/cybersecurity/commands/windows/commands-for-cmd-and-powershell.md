@@ -1,12 +1,9 @@
 ---
 sticker: emoji//1f41a
 ---
-
-# COMMANDS FOR CMD AND POWERSHELL
-
 These are basic commands, so, no need to go any further:
 
-```powershell
+```
 1. ipconfig - Get-NetIPAddress 
 2. ipconfig /all - Get-NetIPConfiguration (only shows DNS-Server and Gateway) 
 3. findstr - Select-String 

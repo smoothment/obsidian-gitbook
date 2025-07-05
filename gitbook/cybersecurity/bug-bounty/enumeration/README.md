@@ -1,6 +1,1 @@
----
-hidden: true
----
-
 # Enumeration
-
