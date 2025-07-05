@@ -1,20 +1,18 @@
 ---
 sticker: emoji//1f976
 ---
-<div style="text-align: center;">
-	TCP CLIENT AND SERVER
-</div>
 
+# TCP
+
+TCP CLIENT AND SERVER
 
 Para iniciar con esta sección de Python para pentesters, hablaremos un poco de como realizar un cliente y un servidor en TCP usando Python y mas especificamente su modulo socket.
 
 Primero, hay que entender que el modulo socket es usado en python para el manejo de redes, este modulo contiene todas las piezas necesarias para escribir de manera rapida y efetiva el protocolo TCP y UDP, en repetidas ocasiones, al realizar un pentest, tenemos que tener un cliente TCP para testear servicios, enviar datos "basura" o realizar multiples tareas, si estamos trabajando en los confines de una empresa, no tendremos el lujo de usar herramientas de redes o compiladores, en casos mas extremos, no tendremos ni siquiera la habilidad para copiar y pegar o conectarnos al internet, es entonces cuando crear un cliente de TCP es bastante util, este es el ejemplo de un cliente TCP sencillo:
 
+TCP CLIENT
 
-<div style="text-align: center;"> TCP CLIENT
-</div>
-
-```run-python
+```python
 import socket # Empezaremos importando el modulo, este viene instalado por                    defecto en python.
 
 TARGET_HOST = '0.0.0.0' # Especificaremos el HOST de nuestro target.
@@ -33,8 +31,7 @@ print(response.decode()) # Decodificamos la respuesta para que peuda ser leida e
 client.close() # Cerramos la conexión.
 ```
 
-
-A simple vista, parece un codigo algo complicado y no hay muchas bases que nos digan que significa cada cosa, por lo que, desglosaremos este codigo paso a paso: 
+A simple vista, parece un codigo algo complicado y no hay muchas bases que nos digan que significa cada cosa, por lo que, desglosaremos este codigo paso a paso:
 
 1. Se crea un objeto de la clase socket con el parametro `AF_INET` el cual se encarga de especificar que usaremos una dirección estandar IPV4 o un hostname, el parametro `SOCK_STREAM` se encarga de indicar que estamos usando un cliente TCP.
 2. Nos conectamos al cliente.
@@ -43,10 +40,9 @@ A simple vista, parece un codigo algo complicado y no hay muchas bases que nos d
 
 Esta es la forma mas sencilla de un cliente TCP, pero es el que se codea mas frecuentemente.
 
-
 Procederemos ahora a codear un servidor TCP que nos puede ser de utilidad al momento de escribir command shells, crear proxies y demás, creemos un servidor TCP multihilo:
 
-```run-python
+```python
 import socket
 import threading
 
@@ -76,7 +72,6 @@ if __name__ == '__main__':
     main()
 ```
 
-
 EXPLICACION:
 
 1. Pasamos la IP y el Puerto en el que queremos escuchar.
@@ -89,7 +84,7 @@ EXPLICACION:
 
 Si usamos el cliente TCP de la sección anterior, podemos enviar algunos paquetes al servidor, al probarlo, obtenemos un output de este modo:
 
-```
+```python
 [*] Listening on 0.0.0.0:9998
 [*] Accepted connection from: 127.0.0.1:62512
 [*] Received: ABCDEF

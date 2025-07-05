@@ -1,10 +1,12 @@
 ---
 sticker: lucide//database-backup
 ---
+
+# Getting Started with SQLMAP
+
 Upon starting using SQLMap, the first stop for new users is usually the program's help message. To help new users, there are two levels of help message listing:
 
-- `Basic Listing` shows only the basic options and switches, sufficient in most cases (switch `-h`):
-
+* `Basic Listing` shows only the basic options and switches, sufficient in most cases (switch `-h`):
 
 ```shell-session
 smoothment@htb[/htb]$ sqlmap -h
@@ -32,8 +34,7 @@ Options:
 ...SNIP...
 ```
 
-- `Advanced Listing` shows all options and switches (switch `-hh`):
-
+* `Advanced Listing` shows all options and switches (switch `-hh`):
 
 ```shell-session
 smoothment@htb[/htb]$ sqlmap -hh
@@ -77,14 +78,13 @@ Options:
 ...SNIP...
 ```
 
-For more details, users are advised to consult the project's [wiki](https://github.com/sqlmapproject/sqlmap/wiki/Usage), as it represents the official manual for SQLMap's usage.
+For more details, users are advised to consult the project's [wiki](https://github.com/sqlmapproject/sqlmap/wiki/Usage), as it represents the official manual for SQLMap's usage.
 
----
+***
 
-## Basic Scenario
+### Basic Scenario
 
-In a simple scenario, a penetration tester accesses the web page that accepts user input via a `GET` parameter (e.g., `id`). They then want to test if the web page is affected by the SQL injection vulnerability. If so, they would want to exploit it, retrieve as much information as possible from the back-end database, or even try to access the underlying file system and execute OS commands. An example SQLi vulnerable PHP code for this scenario would look as follows:
-
+In a simple scenario, a penetration tester accesses the web page that accepts user input via a `GET` parameter (e.g., `id`). They then want to test if the web page is affected by the SQL injection vulnerability. If so, they would want to exploit it, retrieve as much information as possible from the back-end database, or even try to access the underlying file system and execute OS commands. An example SQLi vulnerable PHP code for this scenario would look as follows:
 
 ```php
 $link = mysqli_connect($host, $username, $password, $database, 3306);
@@ -96,11 +96,11 @@ if (!$result)
 
 As error reporting is enabled for the vulnerable SQL query, there will be a database error returned as part of the web-server response in case of any SQL query execution problems. Such cases ease the process of SQLi detection, especially in case of manual parameter value tampering, as the resulting errors are easily recognized:
 
-   
+&#x20; &#x20;
 
 ![](https://academy.hackthebox.com/storage/modules/58/rOrm8tC.png)
 
-To run SQLMap against this example, located at the example URL `http://www.example.com/vuln.php?id=1`, would look like the following:
+To run SQLMap against this example, located at the example URL `http://www.example.com/vuln.php?id=1`, would look like the following:
 
 ```shell-session
 smoothment@htb[/htb]$ sqlmap -u "http://www.example.com/vuln.php?id=1" --batch
