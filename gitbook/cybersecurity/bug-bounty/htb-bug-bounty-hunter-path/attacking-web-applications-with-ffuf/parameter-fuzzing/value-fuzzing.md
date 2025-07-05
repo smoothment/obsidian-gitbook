@@ -1,22 +1,19 @@
 ---
 sticker: lucide//code
 ---
+After fuzzing a working parameter, we now have to fuzz the correct value that would return the `flag` content we need. This section will discuss fuzzing for parameter values, which should be fairly similar to fuzzing for parameters, once we develop our wordlist.
 
-# Value Fuzzing
+---
 
-After fuzzing a working parameter, we now have to fuzz the correct value that would return the `flag` content we need. This section will discuss fuzzing for parameter values, which should be fairly similar to fuzzing for parameters, once we develop our wordlist.
-
-***
-
-### Custom Wordlist
+## Custom Wordlist
 
 When it comes to fuzzing parameter values, we may not always find a pre-made wordlist that would work for us, as each parameter would expect a certain type of value.
 
-For some parameters, like usernames, we can find a pre-made wordlist for potential usernames, or we may create our own based on users that may potentially be using the website. For such cases, we can look for various wordlists under the `seclists` directory and try to find one that may contain values matching the parameter we are targeting. In other cases, like custom parameters, we may have to develop our own wordlist. In this case, we can guess that the `id` parameter can accept a number input of some sort. These ids can be in a custom format, or can be sequential, like from 1-1000 or 1-1000000, and so on. We'll start with a wordlist containing all numbers from 1-1000.
+For some parameters, like usernames, we can find a pre-made wordlist for potential usernames, or we may create our own based on users that may potentially be using the website. For such cases, we can look for various wordlists under the `seclists` directory and try to find one that may contain values matching the parameter we are targeting. In other cases, like custom parameters, we may have to develop our own wordlist. In this case, we can guess that the `id` parameter can accept a number input of some sort. These ids can be in a custom format, or can be sequential, like from 1-1000 or 1-1000000, and so on. We'll start with a wordlist containing all numbers from 1-1000.
 
 There are many ways to create this wordlist, from manually typing the IDs in a file, or scripting it using Bash or Python. The simplest way is to use the following command in Bash that writes all numbers from 1-1000 to a file:
 
-&#x20; Value Fuzzing
+  Value Fuzzing
 
 ```shell-session
 smoothment@htb[/htb]$ for i in $(seq 1 1000); do echo $i >> ids.txt; done
@@ -24,7 +21,7 @@ smoothment@htb[/htb]$ for i in $(seq 1 1000); do echo $i >> ids.txt; done
 
 Once we run our command, we should have our wordlist ready:
 
-&#x20; Value Fuzzing
+  Value Fuzzing
 
 ```shell-session
 smoothment@htb[/htb]$ cat ids.txt
@@ -40,13 +37,13 @@ smoothment@htb[/htb]$ cat ids.txt
 
 Now we can move on to fuzzing for values.
 
-***
+---
 
-### Value Fuzzing
+## Value Fuzzing
 
-Our command should be fairly similar to the `POST` command we used to fuzz for parameters, but our `FUZZ` keyword should be put where the parameter value would be, and we will use the `ids.txt` wordlist we just created, as follows:
+Our command should be fairly similar to the `POST` command we used to fuzz for parameters, but our `FUZZ` keyword should be put where the parameter value would be, and we will use the `ids.txt` wordlist we just created, as follows:
 
-&#x20; Value Fuzzing
+  Value Fuzzing
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -w ids.txt:FUZZ -u http://admin.academy.htb:PORT/admin/admin.php -X POST -d 'id=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs xxx
@@ -77,12 +74,10 @@ ________________________________________________
 <...SNIP...>                      [Status: xxx, Size: xxx, Words: xxx, Lines: xxx]
 ```
 
-We see that we get a hit right away. We can finally send another `POST` request using `curl`, as we did in the previous section, use the `id` value we just found, and collect the flag.
+We see that we get a hit right away. We can finally send another `POST` request using `curl`, as we did in the previous section, use the `id` value we just found, and collect the flag.
 
-## Question
-
-***
-
+# Question
+---
 ![](images/Pasted%20image%2020250129160543.png)
 
 So, we need to create the `ids.txt` wordlist, let's use the following command:
@@ -91,7 +86,7 @@ So, we need to create the `ids.txt` wordlist, let's use the following command:
 
 ![](images/Pasted%20image%2020250129160645.png)
 
-We can do `wc -l ids.txt` to check that indeed it has 1000 elements.
+We can do `wc -l ids.txt` to check that indeed it has 1000 elements. 
 
 Let's proceed with the fuzzing:
 
@@ -101,7 +96,7 @@ Let's proceed with the fuzzing:
 
 Let's filter out by size 768: `-fs 768`:
 
-`ffuf -w ids.txt:FUZZ -u http://admin.academy.htb:49384/admin/admin.php -X POST -d 'id=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs 768 -ic`
+`ffuf -w ids.txt:FUZZ -u http://admin.academy.htb:49384/admin/admin.php -X POST -d 'id=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs 768 -ic `
 
 ```
 ffuf -w ids.txt:FUZZ -u http://admin.academy.htb:49384/admin/admin.php -X POST -d 'id=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs 768 -ic -c 
@@ -142,3 +137,4 @@ curl http://admin.academy.htb:49384/admin/admin.php -X POST -d 'id=73' -H 'Conte
 ```
 
 Flag is: `HTB{p4r4m373r_fuzz1n6_15_k3y!}`
+

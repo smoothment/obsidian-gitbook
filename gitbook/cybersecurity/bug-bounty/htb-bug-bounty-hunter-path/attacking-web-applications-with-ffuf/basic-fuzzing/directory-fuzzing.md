@@ -1,14 +1,12 @@
 ---
 sticker: lucide//code
 ---
+Now that we understand the concept of Web Fuzzing and know our wordlist, we should be ready to start using `ffuf` to find website directories.
 
-# Directory Fuzzing
+---
 
-Now that we understand the concept of Web Fuzzing and know our wordlist, we should be ready to start using `ffuf` to find website directories.
+## Ffuf
 
-***
-
-### Ffuf
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -h
@@ -48,21 +46,22 @@ EXAMPLE USAGE:
 ...SNIP...
 ```
 
-As we can see, the `help` output is quite large, so we only kept the options that may become relevant for us in this module.
+As we can see, the `help` output is quite large, so we only kept the options that may become relevant for us in this module.
 
-***
+---
 
-### Directory Fuzzing
+## Directory Fuzzing
 
-As we can see from the example above, the main two options are `-w` for wordlists and `-u` for the URL. We can assign a wordlist to a keyword to refer to it where we want to fuzz. For example, we can pick our wordlist and assign the keyword `FUZZ` to it by adding `:FUZZ` after it:
+As we can see from the example above, the main two options are `-w` for wordlists and `-u` for the URL. We can assign a wordlist to a keyword to refer to it where we want to fuzz. For example, we can pick our wordlist and assign the keyword `FUZZ` to it by adding `:FUZZ` after it:
 
-&#x20; Directory Fuzzing
+  Directory Fuzzing
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ
 ```
 
-Next, as we want to be fuzzing for web directories, we can place the `FUZZ` keyword where the directory would be within our URL, with:
+Next, as we want to be fuzzing for web directories, we can place the `FUZZ` keyword where the directory would be within our URL, with:
+
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -w <SNIP> -u http://SERVER_IP:PORT/FUZZ
@@ -70,7 +69,7 @@ smoothment@htb[/htb]$ ffuf -w <SNIP> -u http://SERVER_IP:PORT/FUZZ
 
 Now, let's start our target in the question below and run our final command on it:
 
-&#x20; Directory Fuzzing
+  Directory Fuzzing
 
 ```shell-session
 smoothment@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://SERVER_IP:PORT/FUZZ
@@ -101,19 +100,19 @@ blog                    [Status: 301, Size: 326, Words: 20, Lines: 10]
 :: Progress: [87651/87651] :: Job [1/1] :: 9739 req/sec :: Duration: [0:00:09] :: Errors: 0 ::
 ```
 
-We see that `ffuf` tested for almost 90k URLs in less than 10 seconds. This speed may vary depending on your internet speed and ping if you used `ffuf` on your machine, but it should still be extremely fast.
+We see that `ffuf` tested for almost 90k URLs in less than 10 seconds. This speed may vary depending on your internet speed and ping if you used `ffuf` on your machine, but it should still be extremely fast.
 
-We can even make it go faster if we are in a hurry by increasing the number of threads to 200, for example, with `-t 200`, but this is not recommended, especially when used on a remote site, as it may disrupt it, and cause a `Denial of Service`, or bring down your internet connection in severe cases. We do get a couple of hits, and we can visit one of them to verify that it exists:
+We can even make it go faster if we are in a hurry by increasing the number of threads to 200, for example, with `-t 200`, but this is not recommended, especially when used on a remote site, as it may disrupt it, and cause a `Denial of Service`, or bring down your internet connection in severe cases. We do get a couple of hits, and we can visit one of them to verify that it exists:
 
-&#x20; &#x20;
+   
 
 ![](https://academy.hackthebox.com/storage/modules/54/web_fnb_blog.jpg)
 
-We get an empty page, indicating that the directory does not have a dedicated page, but also shows that we do have access to it, as we do not get an HTTP code `404 Not Found` or `403 Access Denied`. In the next section, we will look for pages under this directory to see whether it is really empty or has hidden files and pages.
+We get an empty page, indicating that the directory does not have a dedicated page, but also shows that we do have access to it, as we do not get an HTTP code `404 Not Found` or `403 Access Denied`. In the next section, we will look for pages under this directory to see whether it is really empty or has hidden files and pages.
 
-## Question
 
-***
+# Question
+---
 
 ![](images/Pasted%20image%2020250129141123.png)
 
@@ -122,3 +121,4 @@ If we fuzz we find the following directory:
 ![](images/Pasted%20image%2020250129141134.png)
 
 Answer is `forum`
+
