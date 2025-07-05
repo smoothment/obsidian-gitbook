@@ -1,24 +1,27 @@
 ---
 sticker: emoji//1f512
 ---
+
+# Cross-Site Request Forgery (GET-based)
+
 Similar to how we can extract session cookies from applications that do not utilize SSL encryption, we can do the same regarding CSRF tokens included in unencrypted requests.
 
 Let us see an example.
 
-Proceed to the end of this section and click on `Click here to spawn the target system!` or the `Reset Target` icon, then use the provided Pwnbox or a local VM with the supplied VPN key to be able to reach the target application and follow along. Then, configure the specified vhost (`csrf.htb.net`) to access the application.
+Proceed to the end of this section and click on `Click here to spawn the target system!` or the `Reset Target` icon, then use the provided Pwnbox or a local VM with the supplied VPN key to be able to reach the target application and follow along. Then, configure the specified vhost (`csrf.htb.net`) to access the application.
 
-Navigate to `http://csrf.htb.net` and log in to the application using the credentials below:
+Navigate to `http://csrf.htb.net` and log in to the application using the credentials below:
 
-- Email: heavycat106
-- Password: rocknrol
+* Email: heavycat106
+* Password: rocknrol
 
 This is an account that we created to look at the application's functionality.
 
-Now, browse Julie Rogers' profile and click _Save_. You should see the below. 
+Now, browse Julie Rogers' profile and click _Save_. You should see the below.&#x20;
 
 ![image](https://academy.hackthebox.com/storage/modules/153/32.png)
 
-Activate burp suite's proxy (_Intercept On_) and configure your browser to go through it. Now click _Save_ again.
+Activate burp suite's proxy (_Intercept On_) and configure your browser to go through it. Now click _Save_ again.
 
 You should see the below.
 
@@ -28,8 +31,7 @@ The CSRF token is included in the GET request.
 
 Let us simulate an attacker on the local network that sniffed the abovementioned request and wants to deface Julie Rogers' profile through a CSRF attack. Of course, they could have just performed a session hijacking attack using the sniffed session cookie.
 
-First, create and serve the below HTML page. Save it as `notmalicious_get.html`
-
+First, create and serve the below HTML page. Save it as `notmalicious_get.html`
 
 ```html
 <html>
@@ -51,22 +53,23 @@ First, create and serve the below HTML page. Save it as `notmalicious_get.html`
 
 Notice that the CSRF token's value above is the same as the CSRF token's value in the captured/"sniffed" request.
 
-If you are wondering how we came up with the above form based on the intercepted GET request, please study the following resource [Sending form data](https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_and_retrieving_form_data)
+If you are wondering how we came up with the above form based on the intercepted GET request, please study the following resource [Sending form data](https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_and_retrieving_form_data)
 
 You can serve the page above from your attacking machine as follows.
-
 
 ```shell-session
 smoothment@htb[/htb]$ python -m http.server 1337
 Serving HTTP on 0.0.0.0 port 1337 (http://0.0.0.0:1337/) ...
 ```
 
-While still logged in as Julie Rogers, open a new tab and visit the page you are serving from your attacking machine `http://<VPN/TUN Adapter IP>:1337/notmalicious_get.html`. You will notice that Julie Rogers' profile details will change to the ones we specified in the HTML page you are serving.
+While still logged in as Julie Rogers, open a new tab and visit the page you are serving from your attacking machine `http://<VPN/TUN Adapter IP>:1337/notmalicious_get.html`. You will notice that Julie Rogers' profile details will change to the ones we specified in the HTML page you are serving.
 
 ![image](https://academy.hackthebox.com/storage/modules/153/34.png)
 
 In the next section, we will attack an application submitting the CSRF token via POST without having to reside in the local network.
 
-# Question
-----
+## Question
+
+***
+
 ![](images/Pasted%20image%2020250219130218.png)
